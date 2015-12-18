@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2015-12-16
+ * Date: 2015-12-18
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -1241,7 +1241,7 @@
 				}
 			}
 		},
-		getEditedValue: function ($dataFiled, cm, editable, valueText) {
+		getEditedValue: function ($dataFiled, cm, valueText, editable) {
 			var result, checkBoxValues, newformat, $field, values, texts,
 				formatoptions = cm.formatoptions || {}, editoptions = cm.editoptions || {},
 				customValue = editoptions.custom_value,

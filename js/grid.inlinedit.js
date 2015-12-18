@@ -244,7 +244,7 @@
 					var cm = options.cm, formatter = cm.formatter, editoptions = cm.editoptions || {},
 						formatoptions = cm.formatoptions || {}, valueText = {},
 						savedRow = ($.jgrid.detectRowEditing.call($t, rowid) || {}).savedRow,
-						v = jgrid.getEditedValue.call($t, $(options.dataElement), cm, options.editable, valueText);
+						v = jgrid.getEditedValue.call($t, $(options.dataElement), cm, valueText, options.editable);
 
 					if (cm.edittype === "select" && cm.formatter !== "select") {
 						tmp2[cm.name] = valueText.text;

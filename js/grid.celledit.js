@@ -328,7 +328,9 @@
 								}
 							}
 							if (p.cellsubmit === "clientArray") {
-								$self.jqGrid("setCell", rowid, iCol, v, false, false, true);
+								$self.jqGrid("setCell", rowid, iCol,
+									cm.edittype === "select" && cm.formatter !== "select" ? valueText.text : v,
+									false, false, true);
 								cc.addClass("dirty-cell");
 								$tr.addClass("edited");
 								feedback.call($t, "afterSaveCell", rowid, nm, v, iRow, iCol);

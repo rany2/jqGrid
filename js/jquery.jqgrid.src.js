@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2015-12-16
+ * Date: 2015-12-18
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -1241,7 +1241,7 @@
 				}
 			}
 		},
-		getEditedValue: function ($dataFiled, cm, editable, valueText) {
+		getEditedValue: function ($dataFiled, cm, valueText, editable) {
 			var result, checkBoxValues, newformat, $field, values, texts,
 				formatoptions = cm.formatoptions || {}, editoptions = cm.editoptions || {},
 				customValue = editoptions.custom_value,
@@ -7114,7 +7114,9 @@
 								}
 							}
 							if (p.cellsubmit === "clientArray") {
-								$self.jqGrid("setCell", rowid, iCol, v, false, false, true);
+								$self.jqGrid("setCell", rowid, iCol,
+									cm.edittype === "select" && cm.formatter !== "select" ? valueText.text : v,
+									false, false, true);
 								cc.addClass("dirty-cell");
 								$tr.addClass("edited");
 								feedback.call($t, "afterSaveCell", rowid, nm, v, iRow, iCol);
@@ -14055,7 +14057,7 @@
 					var cm = options.cm, formatter = cm.formatter, editoptions = cm.editoptions || {},
 						formatoptions = cm.formatoptions || {}, valueText = {},
 						savedRow = ($.jgrid.detectRowEditing.call($t, rowid) || {}).savedRow,
-						v = jgrid.getEditedValue.call($t, $(options.dataElement), cm, options.editable, valueText);
+						v = jgrid.getEditedValue.call($t, $(options.dataElement), cm, valueText, options.editable);
 
 					if (cm.edittype === "select" && cm.formatter !== "select") {
 						tmp2[cm.name] = valueText.text;
