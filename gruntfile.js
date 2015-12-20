@@ -52,6 +52,10 @@
 					process: function (src, filepath) {
 						// see https://github.com/gruntjs/grunt-contrib-concat#custom-process-function
 						grunt.log.writeln("concat begin process the file " + filepath);
+						// the below code is tested with Windows encoding of the files CRLF (\r\n for new line),
+						// but it work with UNIX encoding LF (\n for new line) too.
+						// One should modify the code to support other end-line characters (Macintosh CR,
+						// Unicode line separator LS and Unicode pharagraph separator PS).
 						var iBeginModule = src.indexOf("// begin module "), iLicenseEnd = 0, iBeginModuleStartLine,
 							licenseComment = "", moduleCode = "", iRowStart, iRowEnd, margin = "";
 						if (iBeginModule >= 0) {
@@ -62,9 +66,9 @@
 							iBeginModuleStartLine = src.lastIndexOf("\n", iBeginModule);
 							margin = src.substring(iBeginModuleStartLine + 1, iBeginModule);
 							//grunt.log.writeln("margin: '" + margin + "'");
-							iBeginModule = iBeginModuleStartLine;
+							iBeginModule = iBeginModuleStartLine + 1;
 							if (iLicenseEnd > 0) {
-								iLicenseEnd += 2;
+								iLicenseEnd = src.indexOf("\n", iLicenseEnd);
 								for (iRowStart = 0; iRowStart < iLicenseEnd; iRowStart = iRowEnd + 1) {
 									iRowEnd = src.indexOf("\n", iRowStart);
 									licenseComment += (iRowStart + 1 !== iRowEnd ? margin : "") + src.substring(iRowStart, iRowEnd + 1);
@@ -74,7 +78,7 @@
 							var iEndModule = src.lastIndexOf("// end module ");
 							if (iEndModule >= 0) {
 								iEndModule = src.indexOf("\n", iEndModule);
-								moduleCode = licenseComment + src.substring(iBeginModule, iEndModule);
+								moduleCode = licenseComment + src.substring(iBeginModule, iEndModule + 1);
 							}
 						}
 						if (filepath.lastIndexOf("grid.base.js") >= 0) {
