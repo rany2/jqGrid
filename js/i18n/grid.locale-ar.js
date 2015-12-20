@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @license jqGrid Arabic Translation
  *
  * http://trirand.com/blog/
@@ -66,6 +66,10 @@ var locInfo = {
 			{ op: "مع", text: "الكل" },
 			{ op: "أو",  text: "لا أحد" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -117,7 +121,11 @@ var locInfo = {
 		alertcap: "تحذير",
 		alerttext: "يرجى إختيار السطر",
 		viewtext: "",
-		viewtitle: "إظهار السطر المختار"
+		viewtitle: "إظهار السطر المختار",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "إظهار/إخفاء الأعمدة",

@@ -65,6 +65,10 @@ var locInfo = {
 			{ op: "I", text: "sve" },
 			{ op: "ILI",  text: "bilo koji" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -118,7 +122,11 @@ var locInfo = {
 		alertcap: "Upozorenje",
 		alerttext: "Molim, odaberi red",
 		viewtext: "",
-		viewtitle: "Pregled obilježenog reda"
+		viewtitle: "Pregled obilježenog reda",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Obilježi kolonu",

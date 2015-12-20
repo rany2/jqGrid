@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "VÀ", text: "tất cả" },
 			{ op: "HOẶC",  text: "bất kỳ" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -90,7 +94,6 @@ var locInfo = {
 			novalue: " giá trị trả về bắt buộc phải có!",
 			customarray: "Hàm nên trả về một mảng!",
 			customfcheck: "Custom function should be present in case of custom checking!"
-
 		}
 	},
 	view: {
@@ -117,7 +120,11 @@ var locInfo = {
 		alertcap: "Cảnh báo",
 		alerttext: "Hãy chọn một dòng",
 		viewtext: "",
-		viewtitle: "Xem dòng đã chọn"
+		viewtitle: "Xem dòng đã chọn",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Chọn cột",

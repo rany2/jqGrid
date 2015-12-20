@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "VE", text: "tüm" },
 			{ op: "VEYA",  text: "herhangi" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -115,7 +119,11 @@ var locInfo = {
 		alertcap: "Uyarı",
 		alerttext: "Lütfen bir satır seçiniz",
 		viewtext: "",
-		viewtitle: "Seçilen satırı görüntüle"
+		viewtitle: "Seçilen satırı görüntüle",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Sütunları göster/gizle",

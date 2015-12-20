@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "все" },
 			{ op: "OR", text: "любой" }
 		],
+		addGroupTitle: "Добавить группу",
+		deleteGroupTitle: "Удалить группу",
+		addRuleTitle: "Добавить правило",
+		deleteRuleTitle: "Удалить правило",
 		operandTitle: "Выбрать операцию поиска",
 		resetTitle: "Сбросить"
 	},
@@ -116,7 +120,11 @@ var locInfo = {
 		alertcap: "Внимание",
 		alerttext: "Пожалуйста, выберите запись",
 		viewtext: "",
-		viewtitle: "Просмотреть выбранную запись"
+		viewtitle: "Просмотреть выбранную запись",
+		savetext: "",
+		savetitle: "Сохранить запись",
+		canceltext: "",
+		canceltitle: "Отмена изменений"
 	},
 	col: {
 		caption: "Показать/скрыть столбцы",

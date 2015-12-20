@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "הכל" },
 			{ op: "OR",  text: "אחד מ" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -116,7 +120,11 @@ var locInfo = {
 		alertcap: "אזהרה",
 		alerttext: "אנא, בחר שורה",
 		viewtext: "",
-		viewtitle: "הצג שורה מסומנת"
+		viewtitle: "הצג שורה מסומנת",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "הצג/הסתר עמודות",

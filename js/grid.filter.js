@@ -93,7 +93,11 @@
 				},
 				getGuiStyles = function (path) {
 					//return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path), jqClasses || "");
-					return jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path);
+					//return jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path);
+					return $(getGrid()).jqGrid("getGuiStyles", path);
+				},
+				getRes = function (property) {
+					return $(getGrid()).jqGrid("getGridRes", "search." + property);
 				},
 				errorClass = getGuiStyles("states.error"),
 				dialogContentClass = getGuiStyles("dialog.content");
@@ -226,7 +230,7 @@
 				// button for adding a new subgroup
 				var inputAddSubgroup = "<span></span>";
 				if (p.groupButton) {
-					inputAddSubgroup = $("<input type='button' value='+ {}' title='Add subgroup' class='add-group'/>");
+					inputAddSubgroup = $("<input type='button' value='+ {}' title='" + getRes("addGroupTitle") + "' class='add-group'/>");
 					inputAddSubgroup.bind("click", function () {
 						if (group.groups === undefined) {
 							group.groups = [];
@@ -247,7 +251,7 @@
 				th.append(inputAddSubgroup);
 				if (p.ruleButtons === true) {
 					// button for adding a new rule
-					var inputAddRule = $("<input type='button' value='+' title='Add rule' class='add-rule ui-add'/>"), cm;
+					var inputAddRule = $("<input type='button' value='+' title='" + getRes("addRuleTitle") + "' class='add-rule ui-add'/>"), cm;
 					inputAddRule.bind("click", function () {
 						var searchable, hidden, ignoreHiding;
 						//if(!group) { group = {};}
@@ -292,7 +296,7 @@
 
 				// button for delete the group
 				if (parentgroup !== null) { // ignore the first group
-					var inputDeleteGroup = $("<input type='button' value='-' title='Delete group' class='delete-group'/>");
+					var inputDeleteGroup = $("<input type='button' value='-' title='" + getRes("deleteGroupTitle") + "' class='delete-group'/>");
 					th.append(inputDeleteGroup);
 					inputDeleteGroup.bind("click", function () {
 						// remove group from parent
@@ -542,7 +546,7 @@
 
 				// create button for: delete rule
 				if (p.ruleButtons === true) {
-					var ruleDeleteInput = $("<input type='button' value='-' title='Delete rule' class='delete-rule ui-del'/>");
+					var ruleDeleteInput = $("<input type='button' value='-' title='" + getRes("deleteRuleTitle") + "' class='delete-rule ui-del'/>");
 					ruleDeleteTd.append(ruleDeleteInput);
 					//$(ruleDeleteInput).html("").height(20).width(30).button({icons: {  primary: "ui-icon-minus", text:false}});
 					ruleDeleteInput.bind("click", function () {

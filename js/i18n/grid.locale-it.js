@@ -59,6 +59,10 @@ var locInfo = {
 			{ op: "AND", text: "tutto" },
 			{ op: "OR", text: "almeno uno" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -111,7 +115,11 @@ var locInfo = {
 		alertcap: "Attenzione",
 		alerttext: "Per favore, seleziona un record",
 		viewtext: "",
-		viewtitle: "Visualizza riga selezionata"
+		viewtitle: "Visualizza riga selezionata",
+		savetext: "",
+		savetitle: "Salva riga",
+		canceltext: "",
+		canceltitle: "Annulla modifica riga"
 	},
 	col: {
 		caption: "Mostra/Nascondi Colonne",

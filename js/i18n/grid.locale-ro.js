@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "toate" },
 			{ op: "OR",  text: "oricare" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -116,7 +120,11 @@ var locInfo = {
 		alertcap: "Avertisment",
 		alerttext: "Vă rugăm să selectați un rând",
 		viewtext: "",
-		viewtitle: "Vizualizează rândul selectat"
+		viewtitle: "Vizualizează rândul selectat",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Arată/Ascunde coloanele",

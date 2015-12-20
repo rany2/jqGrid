@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @license jqGrid (fi) Finnish Translation
  * Jukka Inkeri  awot.fi  2010-05-19
  * Alex Grönholm  alex.gronholm@nextday.fi  2011-05-18
@@ -28,7 +28,7 @@ var locInfo = {
 	isRTL: false,
 	defaults: {
 		recordtext: "Rivit {0} - {1} / {2}",
-		emptyrecords: "Ei n&auml;ytett&auml;vi&auml;",
+		emptyrecords: "Ei näytettäviä",
 		loadtext: "Haetaan...",
 		pgtext: "Sivu {0} / {1}",
 		pgfirst: "First Page",
@@ -42,61 +42,65 @@ var locInfo = {
 	search: {
 		caption: "Etsi...",
 		Find: "Etsi",
-		Reset: "Tyhjenn&auml;",
+		Reset: "Tyhjennä",
 		odata: [
 			{ oper: "eq", text: "on" },
 			{ oper: "ne", text: "ei ole" },
 			{ oper: "lt", text: "pienempi" },
-			{ oper: "le", text: "pienempi tai yht&auml;suuri" },
+			{ oper: "le", text: "pienempi tai yhtäsuuri" },
 			{ oper: "gt", text: "suurempi" },
-			{ oper: "ge", text: "suurempi tai yht&auml;suuri" },
+			{ oper: "ge", text: "suurempi tai yhtäsuuri" },
 			{ oper: "bw", text: "alkaa" },
 			{ oper: "bn", text: "ei ala" },
 			{ oper: "in", text: "joukossa" },
 			{ oper: "ni", text: "ei joukossa" },
 			{ oper: "ew", text: "loppuu" },
 			{ oper: "en", text: "ei lopu" },
-			{ oper: "cn", text: "sis&auml;lt&auml;&auml;" },
-			{ oper: "nc", text: "ei sis&auml;ll&auml;" },
-			{ oper: "nu", text: "on tyhj&auml;" },
-			{ oper: "nn", text: "ei ole tyhj&auml;" },
+			{ oper: "cn", text: "sisältää" },
+			{ oper: "nc", text: "ei sisällä" },
+			{ oper: "nu", text: "on tyhjä" },
+			{ oper: "nn", text: "ei ole tyhjä" },
 			{ oper: "nu", text: "is null" },
 			{ oper: "nn", text: "is not null" }
 		],
 		groupOps: [
 			{ op: "AND", text: "kaikki" },
-			{ op: "OR", text: "mik&auml; tahansa" }
+			{ op: "OR", text: "mikä tahansa" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
 	edit: {
 		addCaption: "Uusi rivi",
-		editCaption: "Muokkaa rivi&auml;",
+		editCaption: "Muokkaa riviä",
 		bSubmit: "OK",
 		bCancel: "Peru",
 		bClose: "Sulje",
 		saveData: "Tietoja muutettu! Tallennetaanko?",
-		bYes: "Kyll&auml;",
+		bYes: "Kyllä",
 		bNo: "Ei",
 		bExit: "Peru",
 		msg: {
 			required: "pakollinen",
 			number: "Anna kelvollinen nro",
-			minValue: "arvon oltava suurempi tai yht&auml;suuri kuin ",
-			maxValue: "arvon oltava pienempi tai yht&auml;suuri kuin ",
-			email: "ei ole kelvollinen s&auml;postiosoite",
+			minValue: "arvon oltava suurempi tai yhtäsuuri kuin ",
+			maxValue: "arvon oltava pienempi tai yhtäsuuri kuin ",
+			email: "ei ole kelvollinen säpostiosoite",
 			integer: "Anna kelvollinen kokonaisluku",
 			date: "Anna kelvollinen pvm",
 			url: "Ei ole kelvollinen linkki(URL). Alku oltava ('http://' tai 'https://')",
-			nodefined: " ei ole m&auml;&auml;ritelty!",
+			nodefined: " ei ole määritelty!",
 			novalue: " paluuarvo vaaditaan!",
 			customarray: "Oman funktion tulee palauttaa jono!",
-			customfcheck: "Oma funktio on m&auml;&auml;ritelt&auml;v&auml; r&auml;&auml;t&auml;l&ouml;ity&auml; tarkastusta varten!"
+			customfcheck: "Oma funktio on määriteltävä räätälöityä tarkastusta varten!"
 		}
 	},
 	view: {
-		caption: "N&auml;yt&auml; rivi",
+		caption: "Näytä rivi",
 		bClose: "Sulje"
 	},
 	del: {
@@ -107,7 +111,7 @@ var locInfo = {
 	},
 	nav: {
 		edittext: "",
-		edittitle: "Muokkaa valittua rivi&auml;",
+		edittitle: "Muokkaa valittua riviä",
 		addtext: "",
 		addtitle: "Uusi rivi",
 		deltext: "",
@@ -119,7 +123,11 @@ var locInfo = {
 		alertcap: "Varoitus",
 		alerttext: "Valitse rivi",
 		viewtext: "",
-		viewtitle: "N&auml;yta valitut rivit"
+		viewtitle: "Näyta valitut rivit",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Valitse sarakkeet",
@@ -143,7 +151,7 @@ var locInfo = {
 			],
 			monthNames: [
 				"Tam", "Hel", "Maa", "Huh", "Tou", "Kes", "Hei", "Elo", "Syy", "Lok", "Mar", "Jou",
-				"Tammikuu", "Helmikuu", "Maaliskuu", "Huhtikuu", "Toukokuu", "Kes&auml;kuu", "Hein&auml;kuu", "Elokuu", "Syyskuu", "Lokakuu", "Marraskuu", "Joulukuu"
+				"Tammikuu", "Helmikuu", "Maaliskuu", "Huhtikuu", "Toukokuu", "Kesäkuu", "Heinäkuu", "Elokuu", "Syyskuu", "Lokakuu", "Marraskuu", "Joulukuu"
 			],
 			AmPm: ["am", "pm", "AM", "PM"],
 			S: function (j) {

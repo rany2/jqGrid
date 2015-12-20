@@ -69,6 +69,10 @@ var locInfo = {
 			{ op: "AND", text: "oraz" },
 			{ op: "OR",  text: "lub" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -121,7 +125,11 @@ var locInfo = {
 		alertcap: "Uwaga",
 		alerttext: "Proszę wybrać wiersz",
 		viewtext: "",
-		viewtitle: "Pokaż wybrany wiersz"
+		viewtitle: "Pokaż wybrany wiersz",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Pokaż/Ukryj kolumny",

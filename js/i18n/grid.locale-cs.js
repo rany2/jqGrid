@@ -65,6 +65,10 @@ var locInfo = {
 			{ op: "AND", text: "všech" },
 			{ op: "OR",  text: "některého z" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -117,7 +121,11 @@ var locInfo = {
 		alertcap: "Varování",
 		alerttext: "Prosím, vyberte řádek",
 		viewtext: "",
-		viewtitle: "Zobrazit vybraný řádek"
+		viewtitle: "Zobrazit vybraný řádek",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Zobrazit/Skrýt sloupce",

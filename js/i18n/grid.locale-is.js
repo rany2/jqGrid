@@ -63,6 +63,10 @@ var locInfo = {
 			{ op: "AND", text: "allt" },
 			{ op: "OR",  text: "eða" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -115,7 +119,11 @@ var locInfo = {
 		alertcap: "Viðvörun",
 		alerttext: "Vinsamlega veldu færslu",
 		viewtext: "",
-		viewtitle: "Skoða valda færslu"
+		viewtitle: "Skoða valda færslu",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Sýna / fela dálka",

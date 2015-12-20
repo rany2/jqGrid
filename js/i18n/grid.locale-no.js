@@ -52,6 +52,10 @@
 				{ oper: "nu", text: "is null" },
 				{ oper: "nn", text: "is not null" }
 			],
+			addGroupTitle: "Add subgroup",
+			deleteGroupTitle: "Delete group",
+			addRuleTitle: "Add rule",
+			deleteRuleTitle: "Delete rule",
 			operandTitle: "Click to select search operation.",
 			resetTitle: "Reset Search Value"
 		},
@@ -102,7 +106,11 @@
 			alertcap: "Advarsel",
 			alerttext: "Velg rad",
 			viewtext: "",
-			viewtitle: "Åpne valgt rad"
+			viewtitle: "Åpne valgt rad",
+			savetext: "",
+			savetitle: "Save row",
+			canceltext: "",
+			canceltitle: "Cancel row editing"
 		},
 		col: {
 			caption: "Vis/skjul kolonner",

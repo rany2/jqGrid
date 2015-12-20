@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "all" },
 			{ op: "OR",  text: "any" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -90,7 +94,6 @@ var locInfo = {
 			novalue: " visszatérési érték kötelező!!",
 			customarray: "Custom function should return array!",
 			customfcheck: "Custom function should be present in case of custom checking!"
-
 		}
 	},
 	view: {
@@ -117,7 +120,11 @@ var locInfo = {
 		alertcap: "Figyelmeztetés",
 		alerttext: "Kérem válasszon tételt.",
 		viewtext: "",
-		viewtitle: "Tétel megtekintése"
+		viewtitle: "Tétel megtekintése",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Oszlopok kiválasztása",

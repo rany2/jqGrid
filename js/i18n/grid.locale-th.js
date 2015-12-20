@@ -62,6 +62,10 @@ var locInfo = {
 			{ op: "และ", text: "ทั้งหมด" },
 			{ op: "หรือ",  text: "ใดๆ" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -88,7 +92,6 @@ var locInfo = {
 			novalue: "ต้องการการคืนค่า!",
 			customarray: "ฟังก์ชันที่สร้างขึ้นต้องส่งค่ากลับเป็นแบบแอเรย์",
 			customfcheck: "ระบบต้องการฟังก์ชันที่สร้างขึ้นสำหรับการตรวจสอบ!"
-
 		}
 	},
 	view: {
@@ -115,7 +118,11 @@ var locInfo = {
 		alertcap: "คำเตือน",
 		alerttext: "กรุณาเลือกข้อมูล",
 		viewtext: "",
-		viewtitle: "ดูรายละเอียดข้อมูล"
+		viewtitle: "ดูรายละเอียดข้อมูล",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "กรุณาเลือกคอลัมน์",

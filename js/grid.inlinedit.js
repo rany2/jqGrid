@@ -643,8 +643,8 @@
 				}
 				if (o.save) {
 					$self.jqGrid("navButtonAdd", elem, {
-						caption: o.savetext || "",
-						title: o.savetitle || "Save row",
+						caption: o.savetext,
+						title: o.savetitle,
 						commonIconClass: o.commonIconClass,
 						buttonicon: o.saveicon,
 						iconsOverText: o.iconsOverText,
@@ -674,8 +674,8 @@
 				}
 				if (o.cancel) {
 					$self.jqGrid("navButtonAdd", elem, {
-						caption: o.canceltext || "",
-						title: o.canceltitle || "Cancel row editing",
+						caption: o.canceltext,
+						title: o.canceltitle,
 						commonIconClass: o.commonIconClass,
 						buttonicon: o.cancelicon,
 						iconsOverText: o.iconsOverText,

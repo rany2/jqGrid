@@ -59,6 +59,10 @@ var locInfo = {
 			{ op: "AND", text: "전부" },
 			{ op: "OR",  text: "임의" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -85,7 +89,6 @@ var locInfo = {
 			novalue: " 반환값이 필요합니다!",
 			customarray: "사용자정의 함수는 배열을 반환해야 합니다!",
 			customfcheck: "Custom function should be present in case of custom checking!"
-
 		}
 	},
 	view: {
@@ -112,7 +115,11 @@ var locInfo = {
 		alertcap: "경고",
 		alerttext: "행을 선택하세요",
 		viewtext: "",
-		viewtitle: "선택된 행 조회"
+		viewtitle: "선택된 행 조회",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "열을 선택하세요",

@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "所有" },
 			{ op: "OR",  text: "任一" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -116,7 +120,11 @@ var locInfo = {
 		alertcap: "注意",
 		alerttext: "请选择记录",
 		viewtext: "",
-		viewtitle: "查看所选记录"
+		viewtitle: "查看所选记录",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "选择列",

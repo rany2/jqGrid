@@ -75,6 +75,10 @@ var locInfo = {
 			{ op: "AND", text: "alle" },
 			{ op: "OR", text: "mindestens eine" }
 		],
+		addGroupTitle: "Gruppe hinzufügen",
+		deleteGroupTitle: "Gruppe löschen",
+		addRuleTitle: "Regel hinzufügen",
+		deleteRuleTitle: "Regel löschen",
 		operandTitle: "Klicken Sie, um die Suchoperation zu wählen.",
 		resetTitle: "Suchwert zurücksetzen"
 	},
@@ -115,7 +119,7 @@ var locInfo = {
 	},
 	nav: {
 		edittext: "",
-		edittitle: "Ausgewählte Zeile editieren",
+		edittitle: "Ausgewählte Zeile bearbeiten",
 		addtext: "",
 		addtitle: "Neue Zeile einfügen",
 		deltext: "",
@@ -127,7 +131,11 @@ var locInfo = {
 		alertcap: "Warnung",
 		alerttext: "Bitte Zeile auswählen",
 		viewtext: "",
-		viewtitle: "Ausgewählte Zeile anzeigen"
+		viewtitle: "Ausgewählte Zeile anzeigen",
+		savetext: "",
+		savetitle: "Änderungen speichern",
+		canceltext: "",
+		canceltitle: "Bearbeitung der Zeile abbrechen"
 	},
 	col: {
 		caption: "Spalten auswählen",

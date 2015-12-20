@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "все" },
 			{ op: "OR",  text: "будь-який" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -116,7 +120,11 @@ var locInfo = {
 		alertcap: "Попередження",
 		alerttext: "Будь ласка, виберіть запис",
 		viewtext: "",
-		viewtitle: "Переглянути обраний запис"
+		viewtitle: "Переглянути обраний запис",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Показати/Приховати стовпці",

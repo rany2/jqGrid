@@ -65,6 +65,10 @@ var locInfo = {
 			{ op: "AND", text: "所有" },
 			{ op: "OR",  text: "任一" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -91,7 +95,6 @@ var locInfo = {
 			novalue: " 需要傳回值！",
 			customarray: "自訂函數應傳回陣列！",
 			customfcheck: "自訂檢查應有自訂函數！"
-
 		}
 	},
 	view: {
@@ -118,7 +121,11 @@ var locInfo = {
 		alertcap: "警告",
 		alerttext: "請選擇列",
 		viewtext: "",
-		viewtitle: "檢視已選列"
+		viewtitle: "檢視已選列",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "選擇欄",

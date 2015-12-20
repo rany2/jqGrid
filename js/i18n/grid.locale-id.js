@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "all" },
 			{ op: "OR",  text: "any" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -90,7 +94,6 @@ var locInfo = {
 			novalue: " return value is required!",
 			customarray: "Custom function should return array!",
 			customfcheck: "Custom function should be present in case of custom checking!"
-
 		}
 	},
 	view: {
@@ -117,7 +120,11 @@ var locInfo = {
 		alertcap: "Warning",
 		alerttext: "Harap pilih baris",
 		viewtext: "",
-		viewtitle: "Tampilkan baris terpilih"
+		viewtitle: "Tampilkan baris terpilih",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Pilih Kolom",

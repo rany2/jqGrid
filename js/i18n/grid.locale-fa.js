@@ -62,6 +62,10 @@
 				{ op: "AND", text: "کل" },
 				{ op: "OR",  text: "مجموع" }
 			],
+			addGroupTitle: "Add subgroup",
+			deleteGroupTitle: "Delete group",
+			addRuleTitle: "Add rule",
+			deleteRuleTitle: "Delete rule",
 			operandTitle: "Click to select search operation.",
 			resetTitle: "تنظیم مجدد مقدار جستجو"
 		},
@@ -114,7 +118,11 @@
 			alertcap: "اخطار",
 			alerttext: "لطفا يک رديف انتخاب کنيد",
 			viewtext: "",
-			viewtitle: "نمایش رکورد های انتخاب شده"
+			viewtitle: "نمایش رکورد های انتخاب شده",
+			savetext: "",
+			savetitle: "Save row",
+			canceltext: "",
+			canceltitle: "Cancel row editing"
 		},
 		col: {
 			caption: "نمايش/عدم نمايش ستون",

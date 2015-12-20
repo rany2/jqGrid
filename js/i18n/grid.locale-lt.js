@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "visi" },
 			{ op: "OR",  text: "bet kuris" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -117,7 +121,11 @@ var locInfo = {
 		alertcap: "Įspėjimas",
 		alerttext: "Pasirinkite eilutę",
 		viewtext: "",
-		viewtitle: "Peržiūrėti pasirinktą eilutę"
+		viewtitle: "Peržiūrėti pasirinktą eilutę",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Pasirinkti stulpelius",

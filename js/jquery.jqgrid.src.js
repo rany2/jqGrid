@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2015-12-18
+ * Date: 2015-12-20
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -6838,7 +6838,6 @@
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	**/
-
 	// begin module grid.celledit
 	var getGuiStateStyles = function (path, moreClasses) {
 			return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[this.p.guiStyle], "states." + path), moreClasses || "");
@@ -7394,7 +7393,8 @@
 			return ret;
 		}
 	});
-	// end module grid.celledit
+	// end module grid.celledit
+
 	/**
 	 * jqGrid common function
 	 * Tony Tomov tony@trirand.com, http://trirand.com/blog/
@@ -7403,7 +7403,6 @@
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	*/
-
 	// begin module grid.common
 	var getGridRes = jgrid.getMethod("getGridRes"),
 		getGuiStyles = function (path, jqClasses) {
@@ -8193,6 +8192,7 @@
 		}
 	});
 	// end module grid.common
+
 	/**
 	 * jqGrid extension for custom methods
 	 * Tony Tomov tony@trirand.com, http://trirand.com/blog/
@@ -8203,7 +8203,6 @@
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	**/
-
 	// begin module grid.custom
 	jgrid.extend({
 		getColProp: function (colname) {
@@ -9578,7 +9577,8 @@
 			});
 		}
 	});
-	// end module grid.custom
+	// end module grid.custom
+
 	/**
 	 * jqFilter  jQuery jqGrid filter addon.
 	 * Copyright (c) 2011, Tony Tomov, tony@trirand.com
@@ -9606,7 +9606,6 @@
 		  ]
 	}
 	*/
-
 	// begin module grid.filter
 	$.fn.jqFilter = function (arg) {
 		if (typeof arg === "string") {
@@ -9656,7 +9655,11 @@
 				},
 				getGuiStyles = function (path) {
 					//return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path), jqClasses || "");
-					return jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path);
+					//return jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path);
+					return $(getGrid()).jqGrid("getGuiStyles", path);
+				},
+				getRes = function (property) {
+					return $(getGrid()).jqGrid("getGridRes", "search." + property);
 				},
 				errorClass = getGuiStyles("states.error"),
 				dialogContentClass = getGuiStyles("dialog.content");
@@ -9789,7 +9792,7 @@
 				// button for adding a new subgroup
 				var inputAddSubgroup = "<span></span>";
 				if (p.groupButton) {
-					inputAddSubgroup = $("<input type='button' value='+ {}' title='Add subgroup' class='add-group'/>");
+					inputAddSubgroup = $("<input type='button' value='+ {}' title='" + getRes("addGroupTitle") + "' class='add-group'/>");
 					inputAddSubgroup.bind("click", function () {
 						if (group.groups === undefined) {
 							group.groups = [];
@@ -9810,7 +9813,7 @@
 				th.append(inputAddSubgroup);
 				if (p.ruleButtons === true) {
 					// button for adding a new rule
-					var inputAddRule = $("<input type='button' value='+' title='Add rule' class='add-rule ui-add'/>"), cm;
+					var inputAddRule = $("<input type='button' value='+' title='" + getRes("addRuleTitle") + "' class='add-rule ui-add'/>"), cm;
 					inputAddRule.bind("click", function () {
 						var searchable, hidden, ignoreHiding;
 						//if(!group) { group = {};}
@@ -9855,7 +9858,7 @@
 
 				// button for delete the group
 				if (parentgroup !== null) { // ignore the first group
-					var inputDeleteGroup = $("<input type='button' value='-' title='Delete group' class='delete-group'/>");
+					var inputDeleteGroup = $("<input type='button' value='-' title='" + getRes("deleteGroupTitle") + "' class='delete-group'/>");
 					th.append(inputDeleteGroup);
 					inputDeleteGroup.bind("click", function () {
 						// remove group from parent
@@ -10105,7 +10108,7 @@
 
 				// create button for: delete rule
 				if (p.ruleButtons === true) {
-					var ruleDeleteInput = $("<input type='button' value='-' title='Delete rule' class='delete-rule ui-del'/>");
+					var ruleDeleteInput = $("<input type='button' value='-' title='" + getRes("deleteRuleTitle") + "' class='delete-rule ui-del'/>");
 					ruleDeleteTd.append(ruleDeleteInput);
 					//$(ruleDeleteInput).html("").height(20).width(30).button({icons: {  primary: "ui-icon-minus", text:false}});
 					ruleDeleteInput.bind("click", function () {
@@ -10343,7 +10346,8 @@
 			});
 		}
 	});
-	// end module grid.filter
+	// end module grid.filter
+
 	/**
 		The below work is licensed under Creative Commons GNU LGPL License.
 
@@ -10365,7 +10369,6 @@
 					 so it will be easy to write characters that cause some problems when convert
 		Author:      Tony Tomov
 	*/
-
 	// begin module jsonxml
 	var xmlJsonClass = {
 			// Param "xml": Element or document DOM node.
@@ -10642,7 +10645,8 @@
 			}
 		};
 	window.xmlJsonClass = xmlJsonClass;
-	// end module jsonxml
+	// end module jsonxml
+
 	/**
 	 * jqGrid extension for form editing Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
@@ -10651,7 +10655,6 @@
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	**/
-
 	// begin module grid.formedit
 	var jgridFeedback = jgrid.feedback, fullBoolFeedback = jgrid.fullBoolFeedback,
 		hideModal = jgrid.hideModal, viewModal = jgrid.viewModal, createModal = jgrid.createModal, infoDialog = jgrid.info_dialog,
@@ -12971,7 +12974,7 @@
 			});
 		}
 	});
-	// end module grid.formedit
+	// end module grid.formedit
 
 	// begin module grid.grouping
 	jgrid.extend({
@@ -13610,7 +13613,8 @@
 			}
 		}
 	});
-	// end module grid.grouping
+	// end module grid.grouping
+
 	/**
 	 * jqGrid extension for constructing Grid Data from external file
 	 * Tony Tomov tony@trirand.com, http://trirand.com/blog/
@@ -13618,7 +13622,6 @@
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	**/
-
 	// begin module grid.import
 	$.jgrid.extend({
 		jqGridImport: function (o) {
@@ -13830,7 +13833,8 @@
 			});
 		}
 	});
-	// end module grid.import
+	// end module grid.import
+
 	/**
 	 * jqGrid extension for manipulating Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com,  http://trirand.com/blog/
@@ -13839,7 +13843,6 @@
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	**/
-
 	// begin module grid.inlinedit
 	var editFeedback = function (o) {
 			var args = $.makeArray(arguments).slice(1);
@@ -14456,8 +14459,8 @@
 				}
 				if (o.save) {
 					$self.jqGrid("navButtonAdd", elem, {
-						caption: o.savetext || "",
-						title: o.savetitle || "Save row",
+						caption: o.savetext,
+						title: o.savetitle,
 						commonIconClass: o.commonIconClass,
 						buttonicon: o.saveicon,
 						iconsOverText: o.iconsOverText,
@@ -14487,8 +14490,8 @@
 				}
 				if (o.cancel) {
 					$self.jqGrid("navButtonAdd", elem, {
-						caption: o.canceltext || "",
-						title: o.canceltitle || "Cancel row editing",
+						caption: o.canceltext,
+						title: o.canceltitle,
 						commonIconClass: o.commonIconClass,
 						buttonicon: o.cancelicon,
 						iconsOverText: o.iconsOverText,
@@ -14539,7 +14542,8 @@
 			});
 		}
 	});
-	// end module grid.inlinedit
+	// end module grid.inlinedit
+
 	/**
 	 * jqGrid addons using jQuery UI
 	 * Author: Mark Williams
@@ -14549,7 +14553,6 @@
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	 * depends on jQuery UI
 	**/
-
 	// begin module grid.jqueryui
 	var $UiMultiselect = $.ui != null ? $.ui.multiselect : null;
 	if (jgrid.msie && jgrid.msiever() === 8) {
@@ -15173,7 +15176,8 @@
 			});
 		}
 	});
-	// end module grid.jqueryui
+	// end module grid.jqueryui
+
 	/**
 	 * jqGrid pivot functions
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
@@ -15184,7 +15188,6 @@
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	*/
-
 	// begin module grid.pivot
 	function Aggregation(aggregator, context, pivotOptions) {
 		if (!(this instanceof Aggregation)) {
@@ -15970,7 +15973,8 @@
 			});
 		}
 	});
-	// end module grid.pivot
+	// end module grid.pivot
+
 	/**
 	 * jqGrid extension for SubGrid Data
 	 * Tony Tomov, tony@trirand.com, http://trirand.com/blog/
@@ -15979,7 +15983,6 @@
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	**/
-
 	// begin module grid.subgrid
 	var subGridFeedback = function () {
 			var args = $.makeArray(arguments);
@@ -16269,14 +16272,14 @@
 			return collapseOrExpand.call(this, rowid, "ui-sgcollapsed");
 		}
 	});
-	// end module grid.subgrid
+	// end module grid.subgrid
+
 	/**
 	 Transform a table to a jqGrid.
 	 Peter Romianowski <peter.romianowski@optivo.de>
 	 If the first column of the table contains checkboxes or
 	 radiobuttons then the jqGrid is made selectable.
 	*/
-
 	// begin module grid.tbltogrid
 	window.tableToGrid = function (selector, options) {
 		$(selector).each(function () {
@@ -16372,7 +16375,8 @@
 			}
 		});
 	};
-	// end module grid.tbltogrid
+	// end module grid.tbltogrid
+
 	/**
 	 * jqGrid extension - Tree Grid
 	 * Tony Tomov tony@trirand.com, http://trirand.com/blog/
@@ -16381,7 +16385,6 @@
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl.html
 	**/
-
 	// begin module grid.treegrid
 	var treeGridFeedback = function () {
 			var args = $.makeArray(arguments);
@@ -16976,7 +16979,8 @@
 			//});
 		}
 	});
-	// end module grid.treegrid
+	// end module grid.treegrid
+
 	/**
 	 * jqDnR - Minimalistic Drag'n'Resize for jQuery.
 	 *
@@ -16988,7 +16992,6 @@
 	 * Updated by Oleg Kiriljuk to support touch devices
 	 * Copyright (c) 2014-2015, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 */
-
 	// begin module jqdnr
 	var namespace = ".jqGrid", mouseDown = "mousedown", mouseMove = "mousemove", mouseUp = "mouseup",
 		getMouseCoordinates = function (e) {
@@ -17129,7 +17132,8 @@
 	$.fn.jqResize = function (handle, alsoResize) {
 		return init(this, handle, "resize", alsoResize);
 	};
-	// end module jqdnr
+	// end module jqdnr
+
 	/**
 	 * jqModal - Minimalist Modaling with jQuery
 	 *   (http://dev.iceburg.net/jquery/jqmodal/)
@@ -17143,7 +17147,6 @@
 	 * Changed by Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Copyright (c) 2014-2015, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 */
-
 	// begin module jqmodal
 	var jqmHashLength = 0,
 		jqmHash,
@@ -17383,7 +17386,8 @@
 		params: {}
 	};
 	jqmHash = $.jqm.hash;
-	// end module jqmodal
+	// end module jqmodal
+
 	/**
 	 * formatter for values but most of the values if for jqGrid
 	 * Some of this was inspired and based on how YUI does the table datagrid but in jQuery fashion
@@ -17398,7 +17402,6 @@
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	 *
 	**/
-
 	// begin module jquery.fmatter
 	$.fmatter = $.fmatter || {};
 	var fmatter = $.fmatter;
@@ -18300,4 +18303,5 @@
 				jgrid.parseDate.call(this, op.newformat, cellval, op.srcformat, op) :
 				"";
 	};
-	// end module jquery.fmatter}));
+	// end module jquery.fmatter
+}));

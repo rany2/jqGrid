@@ -59,6 +59,10 @@
 				{ op: "AND", text: "alle" },
 				{ op: "OR", text: "een van de" }
 			],
+			addGroupTitle: "Add subgroup",
+			deleteGroupTitle: "Delete group",
+			addRuleTitle: "Add rule",
+			deleteRuleTitle: "Delete rule",
 			operandTitle: "Klik om de zoekterm te selecteren.",
 			resetTitle: "Herstel zoekterm"
 		},
@@ -111,7 +115,11 @@
 			alertcap: "Waarschuwing",
 			alerttext: "Selecteer a.u.b. een regel",
 			viewtext: "",
-			viewtitle: "Openen"
+			viewtitle: "Openen",
+			savetext: "",
+			savetitle: "Save row",
+			canceltext: "",
+			canceltitle: "Cancel row editing"
 		},
 		col: {
 			caption: "Tonen/verbergen kolommen",

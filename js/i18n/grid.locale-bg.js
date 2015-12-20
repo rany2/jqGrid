@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "&nbsp;И " },
 			{ op: "OR", text: "ИЛИ" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Натисни за избор на операнд.",
 		resetTitle: "Изчисти стойността"
 	},
@@ -116,7 +120,11 @@ var locInfo = {
 		alertcap: "Предупреждение",
 		alerttext: "Моля, изберете запис",
 		viewtext: "",
-		viewtitle: "Преглед избран запис"
+		viewtitle: "Преглед избран запис",
+		savetext: "",
+		savetitle: "Съхрани запис",
+		canceltext: "",
+		canceltitle: "Отказ редакция"
 	},
 	col: {
 		caption: "Избери колони",

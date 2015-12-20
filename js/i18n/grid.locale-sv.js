@@ -64,6 +64,10 @@ var locInfo = {
 			{ op: "AND", text: "alla" },
 			{ op: "OR",  text: "eller" }
 		],
+		addGroupTitle: "Add subgroup",
+		deleteGroupTitle: "Delete group",
+		addRuleTitle: "Add rule",
+		deleteRuleTitle: "Delete rule",
 		operandTitle: "Click to select search operation.",
 		resetTitle: "Reset Search Value"
 	},
@@ -116,7 +120,11 @@ var locInfo = {
 		alertcap: "Varning",
 		alerttext: "Ingen rad är markerad",
 		viewtext: "",
-		viewtitle: "Visa markerad rad"
+		viewtitle: "Visa markerad rad",
+		savetext: "",
+		savetitle: "Save row",
+		canceltext: "",
+		canceltitle: "Cancel row editing"
 	},
 	col: {
 		caption: "Välj Kolumner",
