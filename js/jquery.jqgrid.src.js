@@ -12908,26 +12908,39 @@
 				}
 			});
 		},
-		navSeparatorAdd: function (elem, p) {
-			p = $.extend({
+		navSeparatorAdd: function (elem, o) {
+			o = $.extend({
 				sepclass: "ui-separator",
 				sepcontent: "",
 				position: "last"
-			}, p || {});
+			}, o || {});
 			return this.each(function () {
 				if (!this.grid) { return; }
-				if (typeof elem === "string" && elem.indexOf("#") !== 0) { elem = "#" + jqID(elem); }
-				var findnav = $(".navtable", elem)[0];
-				if (findnav.length > 0) {
-					var sep = "<div class='ui-pg-button " + getGuiStateStyles.call(this, "disabled") + "'><span class='" + p.sepclass + "'></span>" + p.sepcontent + "</div>";
-					if (p.position === "first") {
-						if ($(">div.ui-pg-button", findnav).length === 0) {
-							findnav.append(sep);
+				var $t = this, p = $t.p;
+				if (elem === undefined) {
+					if (p.pager) {
+						base.navSeparatorAdd.call($($t), p.pager, o);
+						if (p.toppager) {
+							elem = p.toppager;
 						} else {
-							$(">div.ui-pg-button", findnav).first().before(sep);
+							return;
+						}
+					} else if (p.toppager) {
+						elem = p.toppager;
+					}
+				}
+				if (typeof elem === "string" && elem.indexOf("#") !== 0) { elem = "#" + jqID(elem); }
+				var $nav = $(".navtable", elem);
+				if ($nav.length > 0) {
+					var sep = "<div class='ui-pg-button " + getGuiStateStyles.call($t, "disabled") + "'><span class='" + o.sepclass + "'></span>" + o.sepcontent + "</div>";
+					if (o.position === "first") {
+						if ($nav.children("div.ui-pg-button").length === 0) {
+							$nav.append(sep);
+						} else {
+							$nav.children("div.ui-pg-button").first().before(sep);
 						}
 					} else {
-						findnav.append(sep);
+						$nav.append(sep);
 					}
 				}
 			});
@@ -14355,6 +14368,8 @@
 						$self.jqGrid("getGridRes", "nav"),
 						jgrid.nav || {},
 						p.navOptions || {},
+						jgrid.inlineNav || {},
+						p.inlineNavOptions || {},
 						oMuligrid || {}
 					),
 					viewModalAlert = function () {
