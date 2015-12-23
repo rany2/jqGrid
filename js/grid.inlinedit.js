@@ -539,6 +539,8 @@
 						$self.jqGrid("getGridRes", "nav"),
 						jgrid.nav || {},
 						p.navOptions || {},
+						jgrid.inlineNav || {},
+						p.inlineNavOptions || {},
 						oMuligrid || {}
 					),
 					viewModalAlert = function () {
