@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2015-12-20
+ * Date: 2015-12-24
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -1603,19 +1603,15 @@
 							ab = by !== "" ? jgrid.getAccessor(v, by) : v;
 							if (ab === undefined) { ab = ""; }
 							ab = findSortKey(ab, v);
-							_sortData.push({ vSort: ab, index: i });
+							_sortData.push({ vSort: ab, data: v, index: i });
 						});
 						if ($.isFunction(sfunc)) {
 							_sortData.sort(function (a, b) {
-								a = a.vSort;
-								b = b.vSort;
-								return sfunc.call(this, a, b, newDir);
+								return sfunc.call(context, a.vSort, b.vSort, newDir, a.data, b.data);
 							});
 						} else {
 							_sortData.sort(function (a, b) {
-								a = a.vSort;
-								b = b.vSort;
-								return self._compare(a, b, newDir);
+								return self._compare(a.vSort, b.vSort, newDir);
 							});
 						}
 						var j = 0, nrec = data.length;
