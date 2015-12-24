@@ -3584,11 +3584,14 @@
 					finalizationFormatters.call(self);
 				},
 				addLocalData = function () {
-					var $self = $(this), st = p.multiSort ? [] : "", sto = [], fndsort = false, cmtypes = {}, grtypes = [], grindexes = [],
+					var $self = $(this), st = p.multiSort ? [] : "", sto = {}, fndsort = false, cmtypes = {}, grtypes = [], grindexes = [],
 						defSrcFormat = getRes("formatter.date.srcformat"),
 						defNewFormat = getRes("formatter.date.newformat");
 					if (!isArray(p.data)) {
 						return {};
+					}
+					if (p.multiSort) {
+						getSortNames(st, sto);
 					}
 					var grpview = p.grouping ? p.groupingView : false, lengrp, gin;
 					each(p.colModel, function (iCol) {
@@ -3622,13 +3625,7 @@
 								}
 							}
 						}
-						if (p.multiSort) {
-							if (cm.lso) {
-								st.push(cm.name);
-								var tmplso = cm.lso.split("-");
-								sto.push(tmplso[tmplso.length - 1]);
-							}
-						} else {
+						if (!p.multiSort) {
 							if (!fndsort && (cm.index === p.sortname || cm.name === p.sortname)) {
 								st = cm.name; // ???
 								fndsort = true;
@@ -3731,8 +3728,8 @@
 						}
 					}
 					if (p.multiSort) {
-						each(st, function (i) {
-							query.orderBy(this, sto[i], cmtypes[this].stype, cmtypes[this].srcfmt, cmtypes[this].sfunc);
+						each(st, function () {
+							query.orderBy(this, sto[this], cmtypes[this].stype, cmtypes[this].srcfmt, cmtypes[this].sfunc);
 						});
 					} else if (st && p.sortorder && fndsort) {
 						query.orderBy(p.sortname, p.sortorder.toUpperCase() === "DESC" ? "d" : "a", cmtypes[st].stype, cmtypes[st].srcfmt, cmtypes[st].sfunc);
@@ -4240,67 +4237,72 @@
 						}
 					});
 				},
+				getSortNames = function (sortNames, sortDirs, cm) {
+					// sortNames, sortDirs MUST be initialized to [] and {} before
+					// process sortname
+					each((p.sortname + " " + p.sortorder).split(","), function () {
+						var s = $.trim(this).split(" ");
+						if (s.length === 2) {
+							sortNames.push(s[0]);
+						}
+					});
+					if (cm != null) {
+						var i = $.inArray(cm.index || cm.name, sortNames);
+						if (cm.lso !== "" && i < 0) {
+							// new column is clicked
+							sortNames.push(cm.index || cm.name);
+						} else if (cm.lso === "" && i >= 0) {
+							// remove column
+							sortNames.splice(i, 1);
+						}
+					}
+					each(p.colModel, function () {
+						var sortName = this.index || this.name, splas;
+						if (this.lso) {
+							splas = this.lso.split("-");
+							if ($.inArray(sortName, sortNames) < 0) {
+								sortNames.push(sortName);
+							}
+							sortDirs[sortName] = splas[splas.length - 1];
+						}
+					});
+				},
 				multiSort = function (iCol, obj) {
-					var splas, sort = "", colModel = p.colModel, cm = colModel[iCol], fs = false, so = "",
+					var sort = "", cm = p.colModel[iCol], so = "",
 						disabledClasses = getGuiStyles("states.disabled"),
 						$selTh = p.frozenColumns ? $(obj) : $(ts.grid.headers[iCol].el),
 						$iconsSpan = $selTh.find("span.s-ico"),
 						$iconAsc = $iconsSpan.children("span.ui-icon-asc"),
 						$iconDesc = $iconsSpan.children("span.ui-icon-desc"),
-						$iconsActive = $iconAsc, $iconsInictive = $iconDesc;
+						$iconsActive = $iconAsc, $iconsInictive = $iconDesc, sortNames = [], sortDirs = {};
 
 					$selTh.find("span.ui-grid-ico-sort").addClass(disabledClasses); // for both icons
 					$selTh.attr("aria-selected", "false");
 
-					// first set new value of lso:
-					// "asc" -> "asc-desc", new sorting to "desc"
-					// "desc" -> "desc-asc", new sorting to "asc"
-					// "asc-desc" or "desc-asc" -> "", no new sorting ""
-					// "" -> cm.firstsortorder || "asc"
 					if (cm.lso) {
-						if (cm.lso === "asc") {
-							cm.lso += "-desc";
-							so = "desc";
+						$iconsSpan.show();
+						so = cm.lso.split("-");
+						so = so[so.length - 1];
+						if (so === "desc") {
 							$iconsActive = $iconDesc;
 							$iconsInictive = $iconAsc;
-						} else if (cm.lso === "desc") {
-							cm.lso += "-asc";
-							so = "asc";
-						} else if (cm.lso === "asc-desc" || cm.lso === "desc-asc") {
-							cm.lso = "";
-							if (!p.viewsortcols[0]) {
-								$iconsSpan.hide();
-							}
 						}
-					} else {
-						cm.lso = so = cm.firstsortorder || "asc";
-						$iconsActive = $iconAsc;
-						$iconsInictive = $iconDesc;
-					}
-
-					if (so) {
-						$iconsSpan.show();
 						$iconsActive.removeClass(disabledClasses).css("display", ""); // show;
 						if (p.showOneSortIcon) {
 							$iconsInictive.hide();
 						}
 						$selTh.attr("aria-selected", "true");
+					} else if (!p.viewsortcols[0]) {
+						$iconsSpan.hide();
 					}
-					p.sortorder = "";
-					each(colModel, function (i) {
-						if (this.lso) {
-							if (i > 0 && fs) {
-								sort += ", ";
-							}
-							splas = this.lso.split("-");
-							sort += colModel[i].index || colModel[i].name;
-							sort += " " + splas[splas.length - 1];
-							fs = true;
-							p.sortorder = splas[splas.length - 1];
-						}
+
+					getSortNames(sortNames, sortDirs, cm);
+					each(sortNames, function () {
+						if (sort.length > 0) { sort += ", "; }
+						sort += this + " " + sortDirs[this];
+						p.sortorder = sortDirs[this];
 					});
-					sort = sort.substring(0, sort.lastIndexOf(p.sortorder));
-					p.sortname = sort;
+					p.sortname = sort.substring(0, sort.length - p.sortorder.length - 1);
 				},
 				sortData = function (index, idxcol, reload, sor, obj) {
 					var self = this, mygrid = self.grid, cm = p.colModel[idxcol], disabledClasses = getGuiStyles("states.disabled");
@@ -4315,6 +4317,11 @@
 							} else {
 								p.sortorder = cm.firstsortorder || "asc";
 							}
+							// first set new value of lso:
+							// "asc" -> "asc-desc", new sorting to "desc"
+							// "desc" -> "desc-asc", new sorting to "asc"
+							// "asc-desc" or "desc-asc" -> "", no new sorting ""
+							// "" -> cm.firstsortorder || "asc"
 							if (cm.lso) {
 								if (cm.lso === "asc") {
 									cm.lso += "-desc";
