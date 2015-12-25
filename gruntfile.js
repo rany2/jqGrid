@@ -112,27 +112,31 @@
 			}
 		},
 		jshint: {
-			files: ["js/jquery.jqgrid.src.js"],
-			options: {
-				//'-W069': false
-				//"-W041": false,
-				"boss": true,
-				"curly": true,
-				"eqeqeq": true,
-				"eqnull": true,
-				"expr": true,
-				"immed": true,
-				"noarg": true,
-				//"quotmark": "double",
-				"undef": true,
-				"unused": true,
-				"node": true
+			all: {
+				src: ["js/jquery.jqgrid.src.js"],
+				options: {
+					//'-W069': false
+					//"-W041": false,
+					"boss": true,
+					"curly": true,
+					"eqeqeq": true,
+					"eqnull": true,
+					"expr": true,
+					"immed": true,
+					"noarg": true,
+					//"quotmark": "double",
+					"undef": true,
+					"unused": true,
+					"node": true
+				}
 			}
 		},
 		jscs: {
-			src: ["gruntfile.js", "js/*.js", "!js/*.min.js"],
-			options: {
-				config: ".jscsrc"
+			all: {
+				src: ["gruntfile.js", "js/*.js", "!js/*.min.js"],
+				options: {
+					config: ".jscsrc"
+				}
 			}
 		},
 		cssmin: {
@@ -251,6 +255,7 @@
 	grunt.loadNpmTasks("grunt-replace");
 	grunt.loadNpmTasks("grunt-file-append");
 	grunt.loadNpmTasks("grunt-jscs");
+	grunt.loadNpmTasks("grunt-newer");
 
 	var closureCompilerTasks = [],
 		regClosureCompilerTask = function (filePath, fileMinDir, fileMapDir) {
@@ -300,14 +305,15 @@
 			}
 			fileDirectory += "/";
 
-			var taskName = "closureCompiler_" + filePath.split("\/").join("_");
+			var taskSuffix = "_" + filePath.split("\/").join("_"),
+				taskName = "closureCompiler" + taskSuffix;
 			grunt.registerTask(taskName, function () {
 				// run "closureCompiler" task
 				grunt.config.set("closureCompiler.options.compilerOpts.create_source_map", filePathMap);
 				grunt.config.set("closureCompiler.targetName.src", filePath);
 				grunt.config.set("closureCompiler.targetName.dest", filePathMin);
 				grunt.log.writeln("    compiling '" + filePath + "' to '" + filePathMin + "' with '" + filePathMap + "' by google closure compiler...");
-				grunt.task.run("closureCompiler");
+				grunt.task.run("newer:closureCompiler:targetName");
 
 				// run "replace" task
 				//grunt.log.writeln(" ### regExp0=" + regExp0);
@@ -337,19 +343,46 @@
 
 				grunt.config.set("replace.dist.files.0.dest", fileDirectory + (fileMinDir || ""));
 				grunt.log.writeln("    patching 'sources' and 'file' properties of '" + filePathMap + "'");
-				grunt.task.run("replace");
 
 				// run "file_append" task
+				// consider to use grunt.file.write directly to prevent appending f
 				grunt.config.set("file_append.default_options.files", [
 					function () {
-						return {
-							append: "/*\n//# sourceMappingURL=" + fileNameMap + "\n*/",
-							input: filePathMin
-						};
+						var strToAppend = "/*\n//# sourceMappingURL=" + fileNameMap + "\n*/";
+						//grunt.log.writeln(" ### !!!  filePathMin=" + filePathMin);
+						var input = grunt.file.read(filePathMin);
+						//grunt.log.writeln(" ### !!!  typeof input=" + (typeof input));
+						//grunt.log.writeln(" ### !!!  input.length=" + input.length);
+						if (input.lastIndexOf(strToAppend) < 0) {
+							return {
+								append: "/*\n//# sourceMappingURL=" + fileNameMap + "\n*/",
+								input: filePathMin
+							};
+						} else {
+							//grunt.log.writeln(" ### !!!  skip append because the text already exist");
+							return {
+								append: "",
+								input: filePathMin
+							};
+						}
 					}
 				]);
 				grunt.log.writeln("    appending '//# sourceMappingURL=" + fileNameMap + "' at the end of 'file' properties of '" + filePathMin + "'");
-				grunt.task.run("file_append");
+
+				// TODO: register new task for file_append, which use grunt.task.requires("replace")
+				grunt.registerTask("replace" + taskSuffix, function () {
+					grunt.task.requires("closureCompiler" + taskSuffix);
+					grunt.task.run("replace");
+				});
+				grunt.registerTask("replace" + taskSuffix, function () {
+					grunt.task.requires("closureCompiler" + taskSuffix);
+					grunt.task.run("replace");
+				});
+				grunt.registerTask("file_append" + taskSuffix, function () {
+					grunt.task.requires("replace" + taskSuffix);
+					grunt.task.run("file_append");
+				});
+				grunt.task.run(["replace" + taskSuffix, "file_append" + taskSuffix]);
 			});
 			closureCompilerTasks.push(taskName);
 		};
@@ -377,5 +410,6 @@
 	grunt.registerTask("closureCompilerAll", closureCompilerTasks);
 
 	grunt.registerTask("all", ["clean", "concat", "jshint", "jscs", "closureCompilerAll", "cssmin", "copy"]);
-	grunt.registerTask("default", ["concat", "jshint", "jscs", "closureCompiler_js_jquery.jqgrid.src.js", "cssmin", "copy"]);
+	//grunt.registerTask("default", ["concat", "jshint", "jscs", "closureCompiler_js_jquery.jqgrid.src.js", "cssmin", "copy"]);
+	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:jscs:all", "closureCompilerAll", "cssmin", "copy"]);
 };
