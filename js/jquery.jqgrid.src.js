@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2015-12-24
+ * Date: 2015-12-25
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -2272,6 +2272,7 @@
 					onHeaderClick: null,
 					viewrecords: false,
 					loadonce: false,
+					forceClientSorting: false,
 					multiselect: false,
 					multikey: false,
 					editurl: "clientArray",
@@ -3525,6 +3526,10 @@
 							p._index[rd[locid]] = p.data.length - 1;
 						}
 					}
+					if (readAllInputData && p.forceClientSorting && p.treeGrid !== true) {
+						// don't display the data, just read it.
+						return;
+					}
 
 					// of rd items plus array cells items (almost the same as drows).
 					// The second loop (from 0 till min(len,rn)) will build rowData from the both arrays
@@ -3902,11 +3907,11 @@
 								adjust = npage - 1;
 								npage = 1;
 							} else {
-								lc = function (req) {
+								lc = function (data) {
 									p.page++;
 									gridSelf.hDiv.loading = false;
 									if (lcf) {
-										p.loadComplete.call(self, req);
+										p.loadComplete.call(self, data);
 									}
 									populate.call(self, npage - 1);
 								};
@@ -3976,6 +3981,11 @@
 								if (pvis) { gridSelf.populateVisible.call(self); }
 								if (npage === 1) { endReq.call(self); }
 								fixDisplayingHorizontalScrollbar();
+							},
+							readLocal = function () {
+								var req = addLocalData.call(self);
+								readInput.call(self, req, rcnt, npage > 1, adjust);
+								finalReportVirtual(req);
 							};
 						if (!feedback.call(self, "beforeRequest")) { return; }
 						if (isFunction(p.datatype)) { p.datatype.call(self, p.postData, "load_" + p.id, rcnt, npage, adjust); return; }
@@ -4004,6 +4014,7 @@
 									if (p.loadonce || p.treeGrid) {
 										p.dataTypeOrg = p.datatype;
 										p.datatype = "local";
+										if (p.forceClientSorting) { readLocal(); }
 									}
 								},
 								error: function (jqXHR, textStatus, errorThrown) {
@@ -4030,20 +4041,20 @@
 							dstr = typeof p.datastr === "string" ? $.parseXML(p.datastr) : p.datastr;
 							readInput.call(self, dstr);
 							finalReportSteps();
+							if (p.forceClientSorting) { readLocal(); }
 							break;
 						case "jsonstring":
 							beginReq.call(self);
 							dstr = typeof p.datastr === "string" ? jgrid.parse(p.datastr) : p.datastr;
 							readInput.call(self, dstr);
 							finalReportSteps();
+							if (p.forceClientSorting) { readLocal(); }
 							break;
 						case "local":
 						case "clientside":
 							beginReq.call(self);
 							p.datatype = "local";
-							var req = addLocalData.call(self);
-							readInput.call(self, req, rcnt, npage > 1, adjust);
-							finalReportVirtual(req);
+							readLocal();
 							break;
 						}
 					}
