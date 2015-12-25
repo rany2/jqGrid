@@ -42,6 +42,29 @@
 						dest: "dist/",
 						expand: true,
 						flatten: true
+					},
+					{
+						src: [
+							"js/*.js",
+							"!js/min/*.js",
+							"!js/jquery.jqgrid.*.js"
+						],
+						dest: "dist/modules/",
+						//timestamp: true,
+						expand: true,
+						filter: "isFile",
+						flatten: true
+					},
+					{
+						src: [
+							"js/min/*.js",
+							"js/min/*.map"
+						],
+						dest: "dist/modules/min",
+						//timestamp: true,
+						expand: true,
+						filter: "isFile",
+						flatten: true
 					}
 				]
 			}
@@ -411,5 +434,5 @@
 
 	grunt.registerTask("all", ["clean", "concat", "jshint", "jscs", "closureCompilerAll", "cssmin", "copy"]);
 	//grunt.registerTask("default", ["concat", "jshint", "jscs", "closureCompiler_js_jquery.jqgrid.src.js", "cssmin", "copy"]);
-	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:jscs:all", "closureCompilerAll", "cssmin", "copy"]);
+	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:jscs:all", "closureCompilerAll", "newer:cssmin:target", "copy"]);
 };
