@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2015-12-25
+ * Date: 2015-12-26
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -3598,44 +3598,62 @@
 					if (p.multiSort) {
 						getSortNames(st, sto);
 					}
-					var grpview = p.grouping ? p.groupingView : false, lengrp, gin;
+					var grpview = p.grouping ? p.groupingView : false, lengrp, gin,
+						processColModel = function (cm, iCol, isAddProp) {
+							var srcformat, newformat,
+								grindex = cm.index || cm.name,
+								sorttype = cm.sorttype || "text";
+							cmtypes[cm.name] = {
+								reader: !p.dataTypeOrg ? cm.jsonmap || cm.name : cm.name,
+								iCol: iCol,
+								stype: sorttype,
+								srcfmt: "",
+								newfmt: "",
+								sfunc: cm.sortfunc || null,
+								isAddProp: isAddProp === true ? true : false
+							};
+							if (sorttype === "date" || sorttype === "datetime") {
+								if (cm.formatter && typeof cm.formatter === "string" && cm.formatter === "date") {
+									if (cm.formatoptions && cm.formatoptions.srcformat) {
+										srcformat = cm.formatoptions.srcformat;
+									} else {
+										srcformat = defSrcFormat;
+									}
+									if (cm.formatoptions && cm.formatoptions.newformat) {
+										newformat = cm.formatoptions.newformat;
+									} else {
+										newformat = defNewFormat;
+									}
+								} else {
+									srcformat = newformat = cm.datefmt || "Y-m-d";
+								}
+								cmtypes[cm.name].srcfmt = srcformat;
+								cmtypes[cm.name].newfmt = newformat;
+							}
+							if (p.grouping) {
+								for (gin = 0, lengrp = grpview.groupField.length; gin < lengrp; gin++) {
+									if (cm.name === grpview.groupField[gin]) {
+										grtypes[gin] = cmtypes[grindex];
+										grindexes[gin] = grindex;
+									}
+								}
+							}
+							if (!p.multiSort) {
+								if (!fndsort && (cm.index === p.sortname || cm.name === p.sortname)) {
+									st = cm.name; // ???
+									fndsort = true;
+								}
+							}
+						};
 					each(p.colModel, function (iCol) {
-						var cm = this, srcformat, newformat,
-							grindex = cm.index || cm.name,
-							sorttype = cm.sorttype || "text";
-						cmtypes[cm.name] = { reader: !p.dataTypeOrg ? cm.jsonmap || cm.name : cm.name, iCol: iCol, stype: sorttype, srcfmt: "", newfmt: "", sfunc: cm.sortfunc || null };
-						if (sorttype === "date" || sorttype === "datetime") {
-							if (cm.formatter && typeof cm.formatter === "string" && cm.formatter === "date") {
-								if (cm.formatoptions && cm.formatoptions.srcformat) {
-									srcformat = cm.formatoptions.srcformat;
-								} else {
-									srcformat = defSrcFormat;
-								}
-								if (cm.formatoptions && cm.formatoptions.newformat) {
-									newformat = cm.formatoptions.newformat;
-								} else {
-									newformat = defNewFormat;
-								}
-							} else {
-								srcformat = newformat = cm.datefmt || "Y-m-d";
-							}
-							cmtypes[cm.name].srcfmt = srcformat;
-							cmtypes[cm.name].newfmt = newformat;
-						}
-						if (p.grouping) {
-							for (gin = 0, lengrp = grpview.groupField.length; gin < lengrp; gin++) {
-								if (cm.name === grpview.groupField[gin]) {
-									grtypes[gin] = cmtypes[grindex];
-									grindexes[gin] = grindex;
-								}
-							}
-						}
-						if (!p.multiSort) {
-							if (!fndsort && (cm.index === p.sortname || cm.name === p.sortname)) {
-								st = cm.name; // ???
-								fndsort = true;
-							}
-						}
+						processColModel(this, iCol);
+					});
+					each(p.additionalProperties, function (iCol) {
+						processColModel(
+							typeof this === "string" ? { name: this } : this,
+							iCol,
+							true
+						);
 					});
 					if (p.treeGrid) {
 						$j.SortTree.call($self, st, p.sortorder,
@@ -4855,7 +4873,7 @@
 										$iconsSpan.children("span.ui-icon-" + notSortOrder).hide();
 									}
 								}
-							} else if (j === p.lastsort && p.sortname !== "") {
+							} else if (j === p.lastsort && cm.lso !== "") { // p.sortname === (cm.index || nm)
 								$iconsSpan.css("display", "");
 								$iconsSpan.children("span.ui-icon-" + p.sortorder).removeClass(disabledStateClasses);
 								if (showOneSortIcon) {
@@ -5896,9 +5914,13 @@
 							}
 						}
 						for (i = 0; i < additionalProperties.length; i++) {
-							v = getAccessor(data, additionalProperties[i]);
+							nm = additionalProperties[i];
+							if (typeof nm === "object" && nm.hasOwnProperty("name")) {
+								nm = nm.name;
+							}
+							v = getAccessor(data, nm);
 							if (v !== undefined) {
-								lcdata[additionalProperties[i]] = v;
+								lcdata[nm] = v;
 							}
 						}
 
