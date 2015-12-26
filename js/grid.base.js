@@ -2606,9 +2606,10 @@
 						var self = this, resizing = self.resizing;
 						if (resizing) {
 							var diff = x.pageX + resizing.delta - resizing.startX, headers = self.headers, h = headers[resizing.idx],
-								newWidth = p.direction === "ltr" ? h.width + diff : h.width - diff, hn, nWn;
+								newWidth = p.direction === "ltr" ? h.width + diff : h.width - diff, hn, nWn,
+								minResizingWidth = ((p.colModel[resizing.idx] || {}).autoResizing || {}).minColWidth || p.minResizingWidth;
 							resizing.moved = true;
-							if (newWidth > p.minResizingWidth) {
+							if (newWidth > minResizingWidth) {
 								if (self.curGbox == null) {
 									self.curGbox = $(p.rs);
 								}
