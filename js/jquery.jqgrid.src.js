@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2015-12-26
+ * Date: 2015-12-28
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -2802,16 +2802,6 @@
 			// TODO: replace altclass : "ui-priority-secondary",
 			// set default buttonicon : "ui-icon-newwin" of navButtonAdd: fa-external-link, fa-desktop or other
 			// change the order in $.extend to allows to set icons using $.jgrid (for example $.jgrid.nav). It will be ovewritten currently by p.navOptions which we set above.
-			var iCol, dir;
-			if (p.colNames.length === 0) {
-				for (iCol = 0; iCol < p.colModel.length; iCol++) {
-					p.colNames[iCol] = p.colModel[iCol].label !== undefined ? p.colModel[iCol].label : p.colModel[iCol].name;
-				}
-			}
-			if (p.colNames.length !== p.colModel.length) {
-				fatalErrorFunction(getRes("errors.model"));
-				return;
-			}
 			var gv = $("<div class='ui-jqgrid-view' role='grid' aria-multiselectable='" + !!p.multiselect + "'></div>"),
 				isMSIE = jgrid.msie,
 				isMSIE7 = isMSIE && jgrid.msiever() < 8;
@@ -4543,7 +4533,7 @@
 			p.keyName = false;
 			p.sortorder = p.sortorder.toLowerCase();
 			jgrid.cell_width = jgrid.cellWidth();
-			var jgridCmTemplate = jgrid.cmTemplate;
+			var jgridCmTemplate = jgrid.cmTemplate, iCol, dir;
 			for (iCol = 0; iCol < p.colModel.length; iCol++) {
 				colTemplate = typeof p.colModel[iCol].template === "string" ?
 						(jgridCmTemplate != null && (typeof jgridCmTemplate[p.colModel[iCol].template] === "object" || $.isFunction(jgridCmTemplate[p.colModel[iCol].template])) ?
@@ -4556,6 +4546,15 @@
 				if (p.keyName === false && p.colModel[iCol].key === true) {
 					p.keyName = p.colModel[iCol].name;
 				}
+			}
+			if (p.colNames.length === 0) {
+				for (iCol = 0; iCol < p.colModel.length; iCol++) {
+					p.colNames[iCol] = p.colModel[iCol].label !== undefined ? p.colModel[iCol].label : p.colModel[iCol].name;
+				}
+			}
+			if (p.colNames.length !== p.colModel.length) {
+				fatalErrorFunction(getRes("errors.model"));
+				return;
 			}
 			if (p.grouping === true) {
 				p.scroll = false;
@@ -10773,7 +10772,6 @@
 						searchOnEnter: false,
 						multipleSearch: false,
 						multipleGroup: false,
-						//cloneSearchRowOnAdd: true,
 						// we can't use srort names like resetIcon because of conflict with existing "x" of filterToolbar
 						top: 0,
 						left: 0,
@@ -10808,7 +10806,8 @@
 
 				var fid = "fbox_" + p.id, commonIconClass = o.commonIconClass,
 					ids = { themodal: "searchmod" + fid, modalhead: "searchhd" + fid, modalcontent: "searchcnt" + fid, resizeAlso: fid },
-					themodalSelector = "#" + jqID(ids.themodal), gboxSelector = p.gBox, gviewSelector = p.gView,
+					themodalSelector = "#" + jqID(ids.themodal), gboxSelector = p.gBox, gviewSelector = p.gView, each = $.each,
+
 					defaultFilters = p.postData[o.sFilter],
 					searchFeedback = function () {
 						var args = $.makeArray(arguments);
@@ -10856,10 +10855,21 @@
 						bQ = builderFmButon.call($t, fid + "_query", "Query", mergeCssClasses(commonIconClass, o.queryDialogIcon), "left") +
 							"&#160;";
 					}
+					if (o.searchForAdditionalProperties) {
+						each(p.additionalProperties, function () {
+							var cm = typeof this === "string" ? { name: this } : this;
+							if (!cm.label) {
+								cm.label = cm.name;
+							}
+							cm.isAddProp = true,
+							columns.push(cm);
+						});
+					}
+
 					if (!o.columns.length) {
-						$.each(columns, function (i, n) {
+						each(columns, function (i, n) {
 							if (!n.label) {
-								n.label = p.colNames[i];
+								n.label = n.isAddProp ? n.name : p.colNames[i];
 							}
 							// find first searchable column and set it if no default filter
 							if (!found) {
@@ -10894,7 +10904,7 @@
 						tmpl = o.tmplLabel;
 						tmpl += "<select class='ui-template'>";
 						tmpl += "<option value='default'>Default</option>";
-						$.each(o.tmplNames, function (i, n) {
+						each(o.tmplNames, function (i, n) {
 							tmpl += "<option value='" + i + "'>" + n + "</option>";
 						});
 						tmpl += "</select>";
@@ -11001,12 +11011,12 @@
 							}
 							if (typeof res === "string") {
 								sdata[o.sFilter] = res;
-								$.each([o.sField, o.sValue, o.sOper], function () { sdata[this] = ""; });
+								each([o.sField, o.sValue, o.sOper], function () { sdata[this] = ""; });
 							}
 						} else {
 							if (o.multipleSearch) {
 								sdata[o.sFilter] = filters;
-								$.each([o.sField, o.sValue, o.sOper], function () { sdata[this] = ""; });
+								each([o.sField, o.sValue, o.sOper], function () { sdata[this] = ""; });
 							} else {
 								sdata[o.sField] = filters.rules[0].field;
 								sdata[o.sValue] = filters.rules[0].data;
@@ -16536,6 +16546,7 @@
 						if ($.inArray(prop, boolProp) >= 0) {
 							p.additionalProperties.push({
 								name: name,
+								search: false,
 								convert: function (data) {
 									return data === true || String(data).toLowerCase() === "true" || String(data) === "1" ? true : data;
 								}

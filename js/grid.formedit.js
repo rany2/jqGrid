@@ -114,7 +114,6 @@
 						searchOnEnter: false,
 						multipleSearch: false,
 						multipleGroup: false,
-						//cloneSearchRowOnAdd: true,
 						// we can't use srort names like resetIcon because of conflict with existing "x" of filterToolbar
 						top: 0,
 						left: 0,
@@ -149,7 +148,8 @@
 
 				var fid = "fbox_" + p.id, commonIconClass = o.commonIconClass,
 					ids = { themodal: "searchmod" + fid, modalhead: "searchhd" + fid, modalcontent: "searchcnt" + fid, resizeAlso: fid },
-					themodalSelector = "#" + jqID(ids.themodal), gboxSelector = p.gBox, gviewSelector = p.gView,
+					themodalSelector = "#" + jqID(ids.themodal), gboxSelector = p.gBox, gviewSelector = p.gView, each = $.each,
+
 					defaultFilters = p.postData[o.sFilter],
 					searchFeedback = function () {
 						var args = $.makeArray(arguments);
@@ -197,10 +197,21 @@
 						bQ = builderFmButon.call($t, fid + "_query", "Query", mergeCssClasses(commonIconClass, o.queryDialogIcon), "left") +
 							"&#160;";
 					}
+					if (o.searchForAdditionalProperties) {
+						each(p.additionalProperties, function () {
+							var cm = typeof this === "string" ? { name: this } : this;
+							if (!cm.label) {
+								cm.label = cm.name;
+							}
+							cm.isAddProp = true,
+							columns.push(cm);
+						});
+					}
+
 					if (!o.columns.length) {
-						$.each(columns, function (i, n) {
+						each(columns, function (i, n) {
 							if (!n.label) {
-								n.label = p.colNames[i];
+								n.label = n.isAddProp ? n.name : p.colNames[i];
 							}
 							// find first searchable column and set it if no default filter
 							if (!found) {
@@ -235,7 +246,7 @@
 						tmpl = o.tmplLabel;
 						tmpl += "<select class='ui-template'>";
 						tmpl += "<option value='default'>Default</option>";
-						$.each(o.tmplNames, function (i, n) {
+						each(o.tmplNames, function (i, n) {
 							tmpl += "<option value='" + i + "'>" + n + "</option>";
 						});
 						tmpl += "</select>";
@@ -342,12 +353,12 @@
 							}
 							if (typeof res === "string") {
 								sdata[o.sFilter] = res;
-								$.each([o.sField, o.sValue, o.sOper], function () { sdata[this] = ""; });
+								each([o.sField, o.sValue, o.sOper], function () { sdata[this] = ""; });
 							}
 						} else {
 							if (o.multipleSearch) {
 								sdata[o.sFilter] = filters;
-								$.each([o.sField, o.sValue, o.sOper], function () { sdata[this] = ""; });
+								each([o.sField, o.sValue, o.sOper], function () { sdata[this] = ""; });
 							} else {
 								sdata[o.sField] = filters.rules[0].field;
 								sdata[o.sValue] = filters.rules[0].data;

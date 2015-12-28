@@ -125,6 +125,7 @@
 						if ($.inArray(prop, boolProp) >= 0) {
 							p.additionalProperties.push({
 								name: name,
+								search: false,
 								convert: function (data) {
 									return data === true || String(data).toLowerCase() === "true" || String(data) === "1" ? true : data;
 								}
