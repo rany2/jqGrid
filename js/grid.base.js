@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2015-12-26
+ * Date: 2015-12-28
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -2802,16 +2802,6 @@
 			// TODO: replace altclass : "ui-priority-secondary",
 			// set default buttonicon : "ui-icon-newwin" of navButtonAdd: fa-external-link, fa-desktop or other
 			// change the order in $.extend to allows to set icons using $.jgrid (for example $.jgrid.nav). It will be ovewritten currently by p.navOptions which we set above.
-			var iCol, dir;
-			if (p.colNames.length === 0) {
-				for (iCol = 0; iCol < p.colModel.length; iCol++) {
-					p.colNames[iCol] = p.colModel[iCol].label !== undefined ? p.colModel[iCol].label : p.colModel[iCol].name;
-				}
-			}
-			if (p.colNames.length !== p.colModel.length) {
-				fatalErrorFunction(getRes("errors.model"));
-				return;
-			}
 			var gv = $("<div class='ui-jqgrid-view' role='grid' aria-multiselectable='" + !!p.multiselect + "'></div>"),
 				isMSIE = jgrid.msie,
 				isMSIE7 = isMSIE && jgrid.msiever() < 8;
@@ -4543,7 +4533,7 @@
 			p.keyName = false;
 			p.sortorder = p.sortorder.toLowerCase();
 			jgrid.cell_width = jgrid.cellWidth();
-			var jgridCmTemplate = jgrid.cmTemplate;
+			var jgridCmTemplate = jgrid.cmTemplate, iCol, dir;
 			for (iCol = 0; iCol < p.colModel.length; iCol++) {
 				colTemplate = typeof p.colModel[iCol].template === "string" ?
 						(jgridCmTemplate != null && (typeof jgridCmTemplate[p.colModel[iCol].template] === "object" || $.isFunction(jgridCmTemplate[p.colModel[iCol].template])) ?
@@ -4556,6 +4546,15 @@
 				if (p.keyName === false && p.colModel[iCol].key === true) {
 					p.keyName = p.colModel[iCol].name;
 				}
+			}
+			if (p.colNames.length === 0) {
+				for (iCol = 0; iCol < p.colModel.length; iCol++) {
+					p.colNames[iCol] = p.colModel[iCol].label !== undefined ? p.colModel[iCol].label : p.colModel[iCol].name;
+				}
+			}
+			if (p.colNames.length !== p.colModel.length) {
+				fatalErrorFunction(getRes("errors.model"));
+				return;
 			}
 			if (p.grouping === true) {
 				p.scroll = false;
