@@ -38,6 +38,14 @@
 						flatten: true
 					},
 					{
+						src: ["css/*"],
+						dest: "dist/css/",
+						//timestamp: true,
+						expand: true,
+						filter: "isFile",
+						flatten: true
+					},
+					{
 						src: ["js/jquery.jqgrid.src.js", "js/jquery.jqgrid.min.js", "js/jquery.jqgrid.min.map"],
 						dest: "dist/",
 						expand: true,
