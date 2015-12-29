@@ -9,14 +9,17 @@
         "js/jquery.jqgrid.min.js",
         "js/jquery.jqgrid.min.map",
         "js/jquery.jqgrid.src.js",
+		"js/*.js",
         "js/i18n/*.js",
         "js/i18n/*.map",
+        "js/min/*.js",
+        "js/min/*.map",
         "plugins/*"
       ]
     }
   ],
   "title": "free jqGrid",
-  "version": "4.12.0-pre",
+  "version": "4.12.0",
   "description": "grid as jQuery plugin - fork of jqGrid before licensing change",
   "main": "js/jquery.jqgrid.src.js",
   "filename": "js/jquery.jqgrid.src.js",

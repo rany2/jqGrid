@@ -2,7 +2,7 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.12.0-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.12.0 - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2015, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
@@ -345,7 +345,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.12.0-pre",
+		version: "4.12.0",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
