@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.12.0 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.12.1-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
- * Copyright (c) 2014-2015, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ * Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2015-12-28
+ * Date: 2016-01-03
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -345,7 +345,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.12.0",
+		version: "4.12.1-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -3281,7 +3281,7 @@
 					}
 
 					var i, cells, len, drows, idName, idIndex, rd = {}, idr,
-						colModel = p.colModel, nCol = colModel.length, cm, cmName,
+						colModel = p.colModel, nCol = colModel.length, cmName,
 						iChild, children, nChildren, child,
 						// TODO: consider to introduce preloadedAttributes in the same way
 						//       like we use to preloadedNodes below and to cache .attributes[i]
@@ -3331,7 +3331,7 @@
 
 					// fill colReader and
 					fillOrClearCellBuilder();
-					var colReader = {}, nameReader, isArrayCells, v, addProp, items,
+					var colReader = {}, isArrayCells, v, addProp, items,
 						additionalProperties = p.additionalProperties,
 						setSimpleColReaderIfPossible = function (propName, nameReaderOrAddProp) {
 							if (isXML && typeof nameReaderOrAddProp === "string") {
@@ -3341,32 +3341,35 @@
 									colReader[propName] = attrReader(nameReaderOrAddProp.substring(1, nameReaderOrAddProp.length - 1));
 								}
 							}
-						};
-					for (i = 0; i < nCol; i++) {
-						cm = colModel[i];
-						cmName = cm.name;
-						if (cmName !== "cb" && cmName !== "subgrid" && cmName !== "rn") {
-							nameReader = isXML ?
-									cm.xmlmap || cmName :
-									(datatype === "local" && !p.dataTypeOrg) || datatype === "json" || datatype === "jsonp" ? cm.jsonmap || cmName : cmName;
-							if (p.keyName !== false && cm.key === true) {
-								p.keyName = cmName; // TODO: replace nameReader to cmName if we don't will read it at the second time
+						},
+						colReaderFilling = function (colOrAddProp) {
+							var colOrAddPropName = colOrAddProp.name,
+								nameReader = isXML ?
+									colOrAddProp.xmlmap || colOrAddPropName :
+									(datatype === "local" && !p.dataTypeOrg) || datatype === "json" || datatype === "jsonp" ? colOrAddProp.jsonmap || colOrAddPropName : colOrAddPropName;
+
+							if (p.keyName !== false && colOrAddProp.key === true) {
+								p.keyName = colOrAddPropName; // TODO: replace nameReader to colOrAddPropName if we don't will read it at the second time
 							}
 							if (typeof nameReader === "string" || isFunction(nameReader)) {
-								colReader[cmName] = nameReader;
+								colReader[colOrAddPropName] = nameReader;
 							}
 							if (!isFunction(nameReader)) {
-								setSimpleColReaderIfPossible(cmName, nameReader);
+								setSimpleColReaderIfPossible(colOrAddPropName, nameReader);
 							}
-						}
+						};
+					for (i = 0; i < nCol; i++) {
+						colReaderFilling(colModel[i]);
 					}
 					nCol = additionalProperties.length;
 					for (i = 0; i < nCol; i++) {
 						addProp = additionalProperties[i];
+
 						if (typeof addProp === "object" && addProp != null) {
-							addProp = addProp.name;
+							colReaderFilling(addProp);
+						} else {
+							setSimpleColReaderIfPossible(addProp, addProp);
 						}
-						setSimpleColReaderIfPossible(addProp, addProp);
 					}
 					// TODO: Consider to allow to specify key:true property in additionalProperties
 					// in the case the item of additionalProperties should looks not like
@@ -3383,19 +3386,9 @@
 
 					if (!isNaN(idName)) {
 						idIndex = Number(idName);
-						/*for (cmName in arrayReaderInfos) {
-							if (arrayReaderInfos.hasOwnProperty(cmName)) {
-								info = arrayReaderInfos[cmName];
-								if (info.order === idIndex) {
-									idName = info.name;
-									break;
-								}
-							}
-						}*/
 					} else if (!isFunction(idName)) {
-						//if (p.iColByName[idName] !== undefined || p.iPropByName[idName] !== undefined) {
-						if (arrayReaderInfos[cmName]) {
-							idIndex = arrayReaderInfos[cmName].order;
+						if (arrayReaderInfos[idName]) {
+							idIndex = arrayReaderInfos[idName].order;
 						}
 						if (isXML) {
 							if (typeof idName === "string" && /^\[\w+\]$/.test(idName)) {
@@ -4535,16 +4528,24 @@
 			jgrid.cell_width = jgrid.cellWidth();
 			var jgridCmTemplate = jgrid.cmTemplate, iCol, dir;
 			for (iCol = 0; iCol < p.colModel.length; iCol++) {
-				colTemplate = typeof p.colModel[iCol].template === "string" ?
-						(jgridCmTemplate != null && (typeof jgridCmTemplate[p.colModel[iCol].template] === "object" || $.isFunction(jgridCmTemplate[p.colModel[iCol].template])) ?
-								jgridCmTemplate[p.colModel[iCol].template] : {}) :
-						p.colModel[iCol].template;
+				cmi = p.colModel[iCol];
+				colTemplate = typeof cmi.template === "string" ?
+						(jgridCmTemplate != null && (typeof jgridCmTemplate[cmi.template] === "object" || $.isFunction(jgridCmTemplate[cmi.template])) ?
+								jgridCmTemplate[cmi.template] : {}) :
+						cmi.template;
 				if (isFunction(colTemplate)) {
-					colTemplate = colTemplate.call(ts, { cm: p.colModel[iCol], iCol: iCol });
+					colTemplate = colTemplate.call(ts, { cm: cmi, iCol: iCol });
 				}
-				p.colModel[iCol] = extend(true, {}, p.cmTemplate, colTemplate || {}, p.colModel[iCol]);
-				if (p.keyName === false && p.colModel[iCol].key === true) {
-					p.keyName = p.colModel[iCol].name;
+				cmi = extend(true, {}, p.cmTemplate, colTemplate || {}, cmi);
+				if (p.keyName === false && cmi.key === true) {
+					p.keyName = cmi.name;
+				}
+				p.colModel[iCol] = cmi;
+			}
+			for (iCol = 0; iCol < p.additionalProperties.length; iCol++) {
+				cmi = p.additionalProperties[iCol];
+				if (p.keyName === false && cmi.key === true) {
+					p.keyName = cmi.name;
 				}
 			}
 			if (p.colNames.length === 0) {
