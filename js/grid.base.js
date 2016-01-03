@@ -4786,7 +4786,7 @@
 						pageX = $(this).data("pageX"),
 						cm = p.colModel[iColIndex];
 
-					if (pageX == null) {
+					if (pageX == null || cm == null) {
 						return false;
 					}
 					var arPageX = String(pageX).split(";"),
@@ -4795,9 +4795,10 @@
 					if (arPageX.length === 2 && (Math.abs(pageX1 - pageX2) > 5 || Math.abs(e.pageX - pageX1) > 5 || Math.abs(e.pageX - pageX2) > 5)) {
 						return false;
 					}
-					if (feedback.call(ts, "resizeDblClick", iColIndex, cm, e) && cm != null && cm.autoResizable) {
+					if (feedback.call(ts, "resizeDblClick", iColIndex, cm, e) && cm.autoResizable) {
 						$j.autoResizeColumn.call($self0, iColIndex);
 					}
+					feedback.call(ts, "afterResizeDblClick", { iCol: iColIndex, cm: cm, cmName: cm.name });
 
 					return false; // stop propagate
 				});
@@ -5294,7 +5295,7 @@
 						cm = p.colModel[iColIndex],
 						pageX = $(this).data("pageX") || $resizer.data("pageX");
 
-					if (pageX == null) {
+					if (pageX == null || cm == null) {
 						return false;
 					}
 					var arPageX = String(pageX).split(";"),
@@ -5305,9 +5306,10 @@
 					}
 
 					if (feedback.call(ts, "resizeDblClick", iColIndex, cm) &&
-							(resizerOffset.left - 1 <= e.pageX + delta && e.pageX + delta <= resizerOffset.left + $resizer.outerWidth() + 1) && cm != null && cm.autoResizable) {
+							(resizerOffset.left - 1 <= e.pageX + delta && e.pageX + delta <= resizerOffset.left + $resizer.outerWidth() + 1) && cm.autoResizable) {
 						$j.autoResizeColumn.call($self0, iColIndex);
 					}
+					feedback.call(ts, "afterResizeDblClick", { iCol: iColIndex, cm: cm, cmName: cm.name });
 					return false;
 				});
 			if (!p.pager) {
