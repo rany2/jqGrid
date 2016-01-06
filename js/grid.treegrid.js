@@ -1,10 +1,10 @@
 /**
  * jqGrid extension - Tree Grid
- * Tony Tomov tony@trirand.com, http://trirand.com/blog/
- * Changed by Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
+ * Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
+ * http://www.gnu.org/licenses/gpl-2.0.html
 **/
 
 /*jshint eqeqeq:false */
@@ -530,16 +530,23 @@
 					parentindex = p._index[parentid];
 					parentdata = p.data[parentindex];
 					parentid = parentdata[p.localReader.id];
+					i = getInd.call($self, parentid);
 					parentlevel = parseInt(parentdata[level], 10) + 1;
 					var childs = base.getFullTreeNode.call($self, parentdata);
 					// if there are child nodes get the last index of it
 					if (childs.length) {
-						i = childs[childs.length - 1][p.localReader.id];
-						rowind = i;
-						i = getInd.call($self, rowind) + 1;
-					} else {
-						i = getInd.call($self, parentid) + 1;
+						// find the max rowIndex of the children
+						var iChild, iChildRow, childId;
+						for (iChild = 0; iChild < childs.length; iChild++) {
+							childId = childs[iChild][p.localReader.id];
+							iChildRow = getInd.call($self, childId);
+							if (iChildRow > i) {
+								i = iChildRow;
+								rowind = childId;
+							}
+						}
 					}
+					i++; // the next row after the parent or the last child
 					// if the node is leaf
 					if (parentdata[isLeaf]) {
 						leaf = true;
