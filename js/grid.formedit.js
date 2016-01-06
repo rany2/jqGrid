@@ -42,29 +42,19 @@
 			return v.indexOf("px") >= 0 ? parseFloat(v) : v;
 		},
 		savePositionOnHide = function (propName, frmgr, h) {
-			var $w = h.w, $form = $(frmgr), $gbox = this.closest(".ui-jqgrid"), top, left;
-			if ($.contains($gbox[0], $w[0])) {
-				// we use below .style.height and .style.width to save correctly "auto" and "100%" values
-				// the "px" suffix will be saved too, but it's not a problem
-				top = getCssStyleOrFloat($w, "top");
-				left = getCssStyleOrFloat($w, "left");
-			} else {
-				top = $w.offset().top -
-						($gbox.offsetParent().offset().top +
-						$gbox.offset().top +
-						$gbox.position().top +
-						parseFloat($gbox.css("border-top-width") || 0));
-				left = $w.offset().left -
-						($gbox.offsetParent().offset().left +
-						$gbox.offset().left +
-						$gbox.position().left +
-						parseFloat($gbox.css("border-left-width") || 0));
-			}
+			var $w = h.w, $form = $(frmgr), $gbox = this.closest(".ui-jqgrid"),
+				getTopOrLeftRelativeToGbox = function (topOrLeft) {
+					return $w.offset()[topOrLeft] -
+						($gbox.offsetParent().offset()[topOrLeft] +
+						$gbox.offset()[topOrLeft] +
+						$gbox.position()[topOrLeft] +
+						parseFloat($gbox.css("border-" + topOrLeft + "-width") || 0));
+				};
 			this.data(propName, {
-				top: top,                 //parseFloat($w.css("top")),
-				left: left,               //parseFloat($w.css("left")),
-				width: getCssStyleOrFloat($w, "width"),             //$(h.w).width(),
-				height: getCssStyleOrFloat($w, "height"),           //$(h.w).height(),
+				top: getTopOrLeftRelativeToGbox("top"),
+				left: getTopOrLeftRelativeToGbox("left"),
+				width: getCssStyleOrFloat($w, "width"),
+				height: getCssStyleOrFloat($w, "height"),
 				dataheight: getCssStyleOrFloat($form, "height") || "auto",
 				datawidth: getCssStyleOrFloat($form, "width") || "auto"
 			});
