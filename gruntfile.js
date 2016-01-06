@@ -180,10 +180,14 @@
 					{
 						src: "css/ui.jqgrid.css",
 						dest: "css/ui.jqgrid.min.css"
+						// "sources":["css/ui.jqgrid.css"] in ui.jqgrid.min.css.map is wrong!!!
+						// one have to fix it to "sources":["ui.jqgrid.css"]
 					},
 					{
 						src: "plugins/ui.multiselect.css",
 						dest: "plugins/ui.multiselect.min.css"
+						// "sources":["plugins/ui.multiselect.css"] in ui.multiselect.min.css.map is wrong!!!
+						// one have to fix it to "sources":["ui.multiselect.css"]
 					}
 				]
 			}
