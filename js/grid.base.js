@@ -2182,35 +2182,55 @@
 						var $errorDiv = $(this.grid.eDiv),
 							contentType = jqXHR.getResponseHeader ("Content-Type"),
 							$errorSpan = $errorDiv.children(".ui-jqgrid-error"),
-							message = jqXHR.responseText || "";
-						if (contentType === "text/html") {
-							var div = document.createElement("div"), scripts, i, bodyMatch;
-							// get body only and strip all scripts
-							bodyMatch = /<body[^>]*>([\s\S]*)<\/body\s*>/gim.exec(message);
-							div.innerHTML = bodyMatch != null && bodyMatch.length === 2 ?
-									bodyMatch[1] : message;
-							scripts = div.getElementsByTagName("script");
-							i = scripts.length;
-							while (i--) {
-								scripts[i].parentNode.removeChild(scripts[i]);
-							}
-							// strip html headers and get the body only
-							message = div.innerHTML;
-						} else if (contentType === "application/json") {
-							try {
-								var errorInfo = $.parseJSON(message), errorMessages = [], errorProp;
-								for (errorProp in errorInfo) {
-									if (errorProp !== "StackTrace") {
-										errorMessages.push(errorProp + ": " + errorInfo[errorProp]);
+							message = jqXHR.responseText || "",
+							processHtmlError = function (msg) {
+								var div = document.createElement("div"), scripts, i, bodyMatch;
+								// get body only and strip all scripts
+								bodyMatch = /<body[^>]*>([\s\S]*)<\/body\s*>/gim.exec(msg);
+								div.innerHTML = bodyMatch != null && bodyMatch.length === 2 ?
+										bodyMatch[1] : msg;
+								scripts = div.getElementsByTagName("script");
+								i = scripts.length;
+								while (i--) {
+									scripts[i].parentNode.removeChild(scripts[i]);
+								}
+								// strip html headers and get the body only
+								msg = div.innerHTML;
+								try {
+									// remove HTML, if it has no text
+									if ($.trim($(msg).text()) === "") {
+										msg = "";
 									}
 								}
-								message = errorMessages.join("<br />");
-							}
-							catch (ignore) {}
+								catch (ignore) {}
+							},
+							processJsonError = function (msg) {
+								try {
+									var errorInfo = $.parseJSON(msg), errorMessages = [], errorProp;
+									for (errorProp in errorInfo) {
+										if (errorProp !== "StackTrace") {
+											errorMessages.push(errorProp + ": " + errorInfo[errorProp]);
+										}
+									}
+									msg = errorMessages.join("<br />");
+								}
+								catch (ignore) {}
+								return msg;
+							};
+						if (contentType === "text/html") {
+							message = processHtmlError(message);
+						} else if (contentType === "application/json") {
+							message = processJsonError(message);
+						} else if (contentType === "text/plain") {
+							// try to process as JSON
+							message = processJsonError(message);
 						}
 						if (jqXHR.status !== 500 && jqXHR.status !== 0) {
-							message = (textStatus || errorThrown) + " " + jqXHR.status + " " + jqXHR.statusText +
-									($.trim($(message).text()) !== "" ? "<hr />" + message : "");
+							// add the header
+							message = (textStatus || errorThrown) +
+								(errorThrown && (errorThrown !== textStatus) ? errorThrown : "") +
+								" " + jqXHR.status + " " + jqXHR.statusText +
+								($.trim($(message).text()) !== "" ? "<hr />" + message : "");
 						}
 						$errorSpan.html(message || textStatus || errorThrown);
 						$errorDiv.show();
