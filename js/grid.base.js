@@ -2230,7 +2230,8 @@
 							message = (textStatus || errorThrown) +
 								(errorThrown && (errorThrown !== textStatus) ? errorThrown : "") +
 								" " + jqXHR.status + " " + jqXHR.statusText +
-								($.trim($(message).text()) !== "" ? "<hr />" + message : "");
+								(message !== "" ? "<hr />" : "") +
+								message;
 						}
 						$errorSpan.html(message || textStatus || errorThrown);
 						$errorDiv.show();
