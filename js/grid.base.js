@@ -2229,7 +2229,7 @@
 						if (jqXHR.status !== 500 && jqXHR.status !== 0) {
 							// add the header
 							message = (textStatus || errorThrown) +
-								(errorThrown && (errorThrown !== textStatus) ? errorThrown : "") +
+								(errorThrown && (errorThrown !== textStatus) ? " " + errorThrown : "") +
 								" " + jqXHR.status + " " + jqXHR.statusText +
 								(message !== "" ? "<hr />" : "") +
 								message;
