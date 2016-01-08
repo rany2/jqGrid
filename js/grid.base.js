@@ -2203,6 +2203,7 @@
 									}
 								}
 								catch (ignore) {}
+								return msg;
 							},
 							processJsonError = function (msg) {
 								try {
