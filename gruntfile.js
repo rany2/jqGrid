@@ -88,7 +88,7 @@
 						// One should modify the code to support other end-line characters (Macintosh CR,
 						// Unicode line separator LS and Unicode pharagraph separator PS).
 						var iBeginModule = src.indexOf("// begin module "), iLicenseEnd = 0, iBeginModuleStartLine,
-							licenseComment = "", moduleCode = "", iRowStart, iRowEnd, margin = "";
+							iEndModule, licenseComment = "", moduleCode = "", iRowStart, iRowEnd, margin = "";
 						if (iBeginModule >= 0) {
 							//grunt.log.writeln("first 3 characters are: '" + src.substring(0, 3) + "'");
 							if (src.substring(0, 3) === "/**") {
@@ -106,7 +106,7 @@
 								}
 								//grunt.log.writeln("License:\n" + licenseComment);
 							}
-							var iEndModule = src.lastIndexOf("// end module ");
+							iEndModule = src.lastIndexOf("// end module ");
 							if (iEndModule >= 0) {
 								iEndModule = src.indexOf("\n", iEndModule);
 								moduleCode = licenseComment + src.substring(iBeginModule, iEndModule + 1);
@@ -211,6 +211,26 @@
 			}
 		},
 		replace: {
+			cssmin_jqgrid: {
+				src: "css/ui.jqgrid.min.css.map",
+				dest: "./",
+				options: {
+					patterns: [{
+						match: /\"sources\":\[\"css\/ui\.jqgrid\.css\"\],/,
+						replacement: "\"sources\":[\"ui.jqgrid.css\"],"
+					}]
+				}
+			},
+			cssmin_multiselect: {
+				src: "plugins/ui.multiselect.min.css.map",
+				dest: "./",
+				options: {
+					patterns: [{
+						match: /\"sources\":\[\"plugins\/ui\.multiselect\.css\"\],/,
+						replacement: "\"sources\":[\"ui.multiselect.css\"],"
+					}]
+				}
+			},
 			dist: {
 				options: {
 					patterns: [
@@ -304,7 +324,7 @@
 
 			if (fileNameParts[fileNameParts.length - 1].toLowerCase() !== "js" || fileNameParts.length < 2) { return; }
 			if (fileNameParts[fileNameParts.length - 2].toLowerCase() !== "src") {
-				if (fileMinDir == undefined) {
+				if (fileMinDir === undefined) {
 					fileNameParts[fileNameParts.length - 1] = "min";
 					fileNameParts.push("js");
 				}
@@ -405,19 +425,15 @@
 				grunt.log.writeln("    appending '//# sourceMappingURL=" + fileNameMap + "' at the end of 'file' properties of '" + filePathMin + "'");
 
 				// TODO: register new task for file_append, which use grunt.task.requires("replace")
-				grunt.registerTask("replace" + taskSuffix, function () {
+				grunt.registerTask("replace" + taskSuffix + ":dist", function () {
 					grunt.task.requires("closureCompiler" + taskSuffix);
-					grunt.task.run("replace");
-				});
-				grunt.registerTask("replace" + taskSuffix, function () {
-					grunt.task.requires("closureCompiler" + taskSuffix);
-					grunt.task.run("replace");
+					grunt.task.run("replace:dist");
 				});
 				grunt.registerTask("file_append" + taskSuffix, function () {
-					grunt.task.requires("replace" + taskSuffix);
+					grunt.task.requires("replace" + taskSuffix + ":dist");
 					grunt.task.run("file_append");
 				});
-				grunt.task.run(["replace" + taskSuffix, "file_append" + taskSuffix]);
+				grunt.task.run(["replace" + taskSuffix + ":dist", "file_append" + taskSuffix]);
 			});
 			closureCompilerTasks.push(taskName);
 		};
@@ -444,7 +460,8 @@
 
 	grunt.registerTask("closureCompilerAll", closureCompilerTasks);
 
-	grunt.registerTask("all", ["clean", "concat", "jshint", "jscs", "closureCompilerAll", "cssmin", "copy"]);
-	//grunt.registerTask("default", ["concat", "jshint", "jscs", "closureCompiler_js_jquery.jqgrid.src.js", "cssmin", "copy"]);
-	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:jscs:all", "closureCompilerAll", "newer:cssmin:target", "copy"]);
+	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:jscs:all", "closureCompilerAll",
+		"newer:cssmin:target", "newer:replace:cssmin_jqgrid", "newer:replace:cssmin_multiselect",
+		"copy"]);
+	grunt.registerTask("all", ["clean", "default"]);
 };
