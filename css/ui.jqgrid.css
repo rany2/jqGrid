@@ -1,6 +1,6 @@
 /**
  * jqGrid 4.12.1-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2016-01-06
+ * Date: 2016-01-08
  */
 
 /*Grid*/
@@ -44,6 +44,7 @@
 
 /* caption of grid and title of ui-jqdialog */
 .ui-jqgrid .ui-jqgrid-titlebar,
+.ui-jqgrid .ui-jqgrid-errorbar,
 .ui-jqdialog .ui-jqdialog-titlebar {
 	padding: .3em .3em .3em .3em;
 	position: relative;
@@ -52,10 +53,12 @@
 	border-right: 0 none;
 	border-top: 0 none;
 }
-.ui-jqgrid .ui-jqgrid-caption {
+.ui-jqgrid .ui-jqgrid-caption,
+.ui-jqgrid .ui-jqgrid-errorbar-ltr {
 	text-align: left;
 }
-.ui-jqgrid .ui-jqgrid-caption-rtl {
+.ui-jqgrid .ui-jqgrid-caption-rtl,
+.ui-jqgrid .ui-jqgrid-errorbar-rtl {
 	text-align: right;
 }
 .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close ,
@@ -80,11 +83,13 @@
 	left: 2px;
 }
 .ui-jqgrid  .ui-jqgrid-caption .ui-jqgrid-title,
+.ui-jqgrid  .ui-jqgrid-errorbar-ltr .ui-jqgrid-error,
 .ui-jqdialog  .ui-jqdialog-titlebar-ltr .ui-jqdialog-title {
 	position: relative;
 	left: .1em;
 }
 .ui-jqgrid  .ui-jqgrid-caption-rtl .ui-jqgrid-title,
+.ui-jqgrid  .ui-jqgrid-errorbar-rtl .ui-jqgrid-error,
 .ui-jqdialog  .ui-jqdialog-titlebar-rtl .ui-jqdialog-title {
 	position: relative;
 	right: .1em;

@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-01-06
+ * Date: 2016-01-08
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -544,6 +544,7 @@
 				gridFooter: "",
 				rowFooter: "ui-widget-content",
 				gridTitle: "ui-widget-header ui-corner-top",
+				gridError: "ui-state-error",
 				titleButton: "ui-corner-all",
 				toolbarUpper: "ui-state-default",
 				toolbarBottom: "ui-state-default",
@@ -2175,6 +2176,51 @@
 				},
 				getGuiStyles = function (path, jqClasses) {
 					return mergeCssClasses(jgrid.getRes(jgrid.guiStyles[guiStyle], path), jqClasses || "");
+				},
+				stdLoadError = function (jqXHR, textStatus, errorThrown) {
+					if (textStatus !== "abort" && errorThrown !== "abort") {
+						var $errorDiv = $(this.grid.eDiv),
+							contentType = jqXHR.getResponseHeader ("Content-Type"),
+							$errorSpan = $errorDiv.children(".ui-jqgrid-error"),
+							message = jqXHR.responseText || "";
+						if (contentType === "text/html") {
+							var div = document.createElement("div"), scripts, i, bodyMatch;
+							// get body only and strip all scripts
+							bodyMatch = /<body[^>]*>([\s\S]*)<\/body\s*>/gim.exec(message);
+							div.innerHTML = bodyMatch != null && bodyMatch.length === 2 ?
+									bodyMatch[1] : message;
+							scripts = div.getElementsByTagName("script");
+							i = scripts.length;
+							while (i--) {
+								scripts[i].parentNode.removeChild(scripts[i]);
+							}
+							// strip html headers and get the body only
+							message = div.innerHTML;
+						} else if (contentType === "application/json") {
+							try {
+								var errorInfo = $.parseJSON(message), errorMessages = [], errorProp;
+								for (errorProp in errorInfo) {
+									if (errorProp !== "StackTrace") {
+										errorMessages.push(errorProp + ": " + errorInfo[errorProp]);
+									}
+								}
+								message = errorMessages.join("<br />");
+							}
+							catch (ignore) {}
+						}
+						if (jqXHR.status !== 500 && jqXHR.status !== 0) {
+							message = (textStatus || errorThrown) + " " + jqXHR.status + " " + jqXHR.statusText +
+									($.trim($(message).text()) !== "" ? "<hr />" + message : "");
+						}
+						$errorSpan.html(message || textStatus || errorThrown);
+						$errorDiv.show();
+						if (p.errorDisplayTimeout) {
+							setTimeout(function () {
+								$errorSpan.empty();
+								$errorDiv.hide();
+							}, p.errorDisplayTimeout);
+						}
+					}
 				};
 			if (pin == null) {
 				pin = { datatype: "local" };
@@ -2264,7 +2310,7 @@
 					onInitGrid: null,
 					loadComplete: null,
 					gridComplete: null,
-					loadError: null,
+					loadError: stdLoadError,
 					loadBeforeSend: null,
 					afterInsertRow: null,
 					beforeRequest: null,
@@ -4005,6 +4051,7 @@
 								data: jgrid.serializeFeedback.call(ts, p.serializeGridData, "jqGridSerializeGridData", p.postData),
 								success: function (data, textStatus, jqXHR) {
 									p.jqXhr = null;
+									$(grid.eDiv).hide();
 									if (isFunction(p.beforeProcessing)) {
 										if (p.beforeProcessing.call(self, data, textStatus, jqXHR) === false) {
 											endReq.call(self);
@@ -5285,6 +5332,9 @@
 				$(grid.cDiv).nextAll("div:visible").first().addClass("ui-corner-top"); // set on top toolbar or toppager or on hDiv
 			}
 			$(grid.hDiv).after(grid.bDiv);
+			grid.eDiv = $("<div class='" + getGuiStyles("gridError", "ui-jqgrid-errorbar ui-jqgrid-errorbar-" + dir) +
+				"' style='display:none;'><span class='ui-jqgrid-error'></span></div>")[0];
+			$(grid.hDiv).after(grid.eDiv);
 			$(eg)
 				.click(myResizerClickHandler)
 				.dblclick(function (e) { // it's still needed for Firefox
