@@ -82,7 +82,7 @@
 				options: {
 					process: function (src, filepath) {
 						// see https://github.com/gruntjs/grunt-contrib-concat#custom-process-function
-						grunt.log.writeln("concat begin process the file " + filepath);
+						grunt.verbose.writeln("concat begin process the file " + filepath);
 						// the below code is tested with Windows encoding of the files CRLF (\r\n for new line),
 						// but it work with UNIX encoding LF (\n for new line) too.
 						// One should modify the code to support other end-line characters (Macintosh CR,
@@ -210,6 +210,24 @@
 				dest: "js/jquery.jqgrid.min.js"
 			}
 		},
+		watch: {
+			files: [
+				"js/*.js",
+				"plugins/*.js",
+				"css/*.css",
+				"plugins/*.css",
+				"!css/*.min.css",
+				"!js/*.min.js",
+				"!js/min/*.js",
+				"!js/jquery.jqgrid.*.js",
+				"!plugins/*.min.js",
+				"!plugins/*.min.css",
+				"!js/i18n/grid.locale-*.min.js",
+				"!dist/**",
+				'!node_modules/**'
+				],
+			tasks: ["default"]
+		},
 		replace: {
 			cssmin_jqgrid: {
 				src: "css/ui.jqgrid.min.css.map",
@@ -310,6 +328,7 @@
 	grunt.loadNpmTasks("grunt-replace");
 	grunt.loadNpmTasks("grunt-file-append");
 	grunt.loadNpmTasks("grunt-jscs");
+	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-newer");
 
 	var closureCompilerTasks = [],
@@ -365,9 +384,10 @@
 			grunt.registerTask(taskName, function () {
 				// run "closureCompiler" task
 				grunt.config.set("closureCompiler.options.compilerOpts.create_source_map", filePathMap);
+				//grunt.config.set("closureCompiler.options.compilerOpts.output_wrapper", '"%output%//# sourceMappingURL=' + fileNameMap + '"');
 				grunt.config.set("closureCompiler.targetName.src", filePath);
 				grunt.config.set("closureCompiler.targetName.dest", filePathMin);
-				grunt.log.writeln("    compiling '" + filePath + "' to '" + filePathMin + "' with '" + filePathMap + "' by google closure compiler...");
+				grunt.verbose.writeln("    compiling '" + filePath + "' to '" + filePathMin + "' with '" + filePathMap + "' by google closure compiler...");
 				grunt.task.run("newer:closureCompiler:targetName");
 
 				// run "replace" task
@@ -397,7 +417,7 @@
 				grunt.config.set("replace.dist.files.0.src", [filePathMap]);
 
 				grunt.config.set("replace.dist.files.0.dest", fileDirectory + (fileMinDir || ""));
-				grunt.log.writeln("    patching 'sources' and 'file' properties of '" + filePathMap + "'");
+				grunt.verbose.writeln("    patching 'sources' and 'file' properties of '" + filePathMap + "'");
 
 				// run "file_append" task
 				// consider to use grunt.file.write directly to prevent appending f
@@ -410,7 +430,7 @@
 						//grunt.log.writeln(" ### !!!  input.length=" + input.length);
 						if (input.lastIndexOf(strToAppend) < 0) {
 							return {
-								append: "/*\n//# sourceMappingURL=" + fileNameMap + "\n*/",
+								append: grunt.util.linefeed + "//# sourceMappingURL=" + fileNameMap + grunt.util.linefeed,
 								input: filePathMin
 							};
 						} else {
@@ -422,7 +442,7 @@
 						}
 					}
 				]);
-				grunt.log.writeln("    appending '//# sourceMappingURL=" + fileNameMap + "' at the end of 'file' properties of '" + filePathMin + "'");
+				grunt.verbose.writeln("    appending '//# sourceMappingURL=" + fileNameMap + "' at the end of 'file' properties of '" + filePathMin + "'");
 
 				// TODO: register new task for file_append, which use grunt.task.requires("replace")
 				grunt.registerTask("replace" + taskSuffix + ":dist", function () {
