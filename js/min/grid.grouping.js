@@ -16,6 +16,13 @@ a+=f(x,p,y[l.idx-p],0),a+="</tr>");e=F}}});this.unbind("jqGridShowHideCol.groupi
 m){return this.each(function(){var f=this.p,a=f.groupingView,c,k;"string"===typeof b&&(b=[b]);f.grouping=!0;a._locgr=!1;void 0===a.visibiltyOnNextGrouping&&(a.visibiltyOnNextGrouping=[]);for(c=0;c<a.groupField.length;c++)k=f.colModel[f.iColByName[a.groupField[c]]],!a.groupColumnShow[c]&&a.visibiltyOnNextGrouping[c]&&null!=k&&!0===k.hidden&&x.showCol.call(d(this),a.groupField[c]);for(c=0;c<b.length;c++)a.visibiltyOnNextGrouping[c]=d(f.idSel+"_"+C.jqID(b[c])).is(":visible");f.groupingView=d.extend(f.groupingView,
 m||{});a.groupField=b;d(this).trigger("reloadGrid")})},groupingRemove:function(b){return this.each(function(){var m=this.p,f=this.tBodies[0],a=m.groupingView;void 0===b&&(b=!0);m.grouping=!1;if(!0===b){for(m=0;m<a.groupField.length;m++)!a.groupColumnShow[m]&&a.visibiltyOnNextGrouping[m]&&x.showCol.call(d(this),a.groupField);d("tr.jqgroup, tr.jqfoot",f).remove();d("tr.jqgrow",f).filter(":hidden").show()}else d(this).trigger("reloadGrid")})},groupingCalculations:{handler:function(b,d,f,a,c,k){var e=
 {sum:function(){return parseFloat(d||0)+parseFloat(k[f]||0)},min:function(){return""===d?parseFloat(k[f]||0):Math.min(parseFloat(d),parseFloat(k[f]||0))},max:function(){return""===d?parseFloat(k[f]||0):Math.max(parseFloat(d),parseFloat(k[f]||0))},count:function(){""===d&&(d=0);return k.hasOwnProperty(f)?d+1:0},avg:function(){return e.sum()}};if(!e[b])throw"jqGrid Grouping No such method: "+b;b=e[b]();null!=a&&("fixed"===c?b=b.toFixed(a):(a=Math.pow(10,a),b=Math.round(b*a)/a));return b}}})});
-/*
+
 //# sourceMappingURL=grid.grouping.map
-*/
+
+//# sourceMappingURL=grid.grouping.map
+
+//# sourceMappingURL=grid.grouping.map
+
+//# sourceMappingURL=grid.grouping.map
+
+//# sourceMappingURL=grid.grouping.map

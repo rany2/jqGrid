@@ -237,6 +237,5 @@ t=Math.max(t,e.outerWidth()+m+c.children(".tree-wrap").outerWidth()))):b(e).hasC
 autoResizeColumn:function(d,c){return this.each(function(){var f=b(this),e=this.p,h=e.colModel[d],g,l=b(this.grid.headers[d].el);g=E.getAutoResizableWidth.call(f,d);null==h||0>g||g===h.width||(E.setColWidth.call(f,d,g,e.autoResizing.adjustGridWidth&&!e.autoResizing.fixWidthOnShrink&&!c,c),e.autoResizing.fixWidthOnShrink&&e.shrinkToFit&&!c&&(h.fixed=!0,g=h.widthOrg,h.widthOrg=h.width,E.setGridWidth.call(f,e.width,!0),h.widthOrg=g,h.fixed=!1),l.data("autoResized","true"))})},autoResizeAllColumns:function(){return this.each(function(){var d=
 b(this),c=this.p,f=c.colModel,e=f.length,h,g,l=c.shrinkToFit,k=c.autoResizing.adjustGridWidth,m=c.autoResizing.fixWidthOnShrink,n=parseInt(c.widthOrg,10),p=this.grid,r=E.autoResizeColumn;c.shrinkToFit=!1;c.autoResizing.adjustGridWidth=!0;c.autoResizing.fixWidthOnShrink=!1;for(h=0;h<e;h++)g=f[h],g.autoResizable&&"actions"!==g.formatter&&r.call(d,h,!0);p.hDiv.scrollLeft=p.bDiv.scrollLeft;c.footerrow&&(p.sDiv.scrollLeft=p.bDiv.scrollLeft);this.fixScrollOffsetAndhBoxPadding();isNaN(n)?k&&E.setGridWidth.call(d,
 p.newWidth+c.scrollOffset,!1):E.setGridWidth.call(d,n,!1);c.autoResizing.fixWidthOnShrink=m;c.autoResizing.adjustGridWidth=k;c.shrinkToFit=l})}})});
-/*
+
 //# sourceMappingURL=grid.base.map
-*/

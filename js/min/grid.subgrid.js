@@ -10,6 +10,13 @@ l=1;c.each(b.colModel,function(){!0!==this.hidden&&"rn"!==this.name&&"cb"!==this
 k+"' class='tablediv'></div></td></tr>");c(f).triggerHandler("jqGridSubGridRowExpanded",[k,g]);c.isFunction(b.subGridRowExpanded)?b.subGridRowExpanded.call(f,k,g):F(d)}else c(e).show();c(this).html("<a style='cursor:pointer;'><span class='"+h("minusicon")+"'></span></a>").removeClass("sgcollapsed").addClass("sgexpanded");b.subGridOptions.selectOnExpand&&c(f).jqGrid("setSelection",g)}else if(c(this).hasClass("sgexpanded")){if(!y.call(f,"beforeCollapse",k,g))return;!0===b.subGridOptions.reloadOnExpand?
 c(e).remove(".ui-subgrid"):c(e).hasClass("ui-subgrid")&&c(e).hide();c(this).html("<a style='cursor:pointer;'><span class='"+h("plusicon")+"'></span></a>").removeClass("sgexpanded").addClass("sgcollapsed");b.subGridOptions.selectOnCollapse&&c(f).jqGrid("setSelection",g)}return!1},w,l,u=1;if(f.grid){w=f.rows.length;void 0!==d&&0<d&&(u=d,w=d+1);for(;u<w;)l=f.rows[u],c(l).hasClass("jqgrow")&&(l=c(l.cells[a]),l.hasClass("ui-sgcollapsed")&&(b.scroll&&l.unbind("click"),l.bind("click",e))),u++;!0===b.subGridOptions.expandOnLoad&&
 c(f.rows).filter(".jqgrow").each(function(a,b){c(b.cells[0]).click()});f.subGridXml=function(a,b){t(a,b,A)};f.subGridJson=function(a,b){t(a,b,B)}}})},expandSubGridRow:function(a){return q.call(this,a,"sgcollapsed")},collapseSubGridRow:function(a){return q.call(this,a,"sgexpanded")},toggleSubGridRow:function(a){return q.call(this,a,"ui-sgcollapsed")}})});
-/*
+
 //# sourceMappingURL=grid.subgrid.map
-*/
+
+//# sourceMappingURL=grid.subgrid.map
+
+//# sourceMappingURL=grid.subgrid.map
+
+//# sourceMappingURL=grid.subgrid.map
+
+//# sourceMappingURL=grid.subgrid.map

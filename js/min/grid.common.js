@@ -27,6 +27,13 @@ b)return[!0,"",""];f=d[b];c=f.editrules;null!=f.formoptions&&(g=f.formoptions.la
 parseFloat(c.maxValue))return[!1,g+": "+m.maxValue+" "+c.maxValue,""];var q;if(!(!0!==c.email||!1===h&&k(e)||(q=/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i,
 q.test(e))))return[!1,g+": "+m.email,""];if(!(!0!==c.integer||!1===h&&k(e)||!isNaN(e)&&0===e%1&&-1===e.indexOf(".")))return[!1,g+": "+m.integer,""];if(!(!0!==c.date||!1===h&&k(e)||(f.formatoptions&&f.formatoptions.newformat?(d=f.formatoptions.newformat,r.hasOwnProperty(d)&&(d=r[d])):d=d[b].datefmt||"Y-m-d",n.checkDate(d,e))))return[!1,g+": "+m.date+" - "+d,""];if(!0===c.time&&!(!1===h&&k(e)||n.checkTime(e)))return[!1,g+": "+m.date+" - hh:mm (am/pm)",""];if(!(!0!==c.url||!1===h&&k(e)||(q=/^(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i,
 q.test(e))))return[!1,g+": "+m.url,""];if(!0===c.custom){if(!1!==h||!k(e))return a.isFunction(c.custom_func)?(e=c.custom_func.call(this,e,g,b),a.isArray(e)?e:[!1,m.customarray,""]):[!1,m.customfcheck,""]}else if(a.isFunction(c.custom)&&(!1!==h||!k(e)))return e=c.custom.call(this,l),a.isArray(e)?e:[!1,m.customarray,""]}return[!0,"",""]}})});
-/*
+
 //# sourceMappingURL=grid.common.map
-*/
+
+//# sourceMappingURL=grid.common.map
+
+//# sourceMappingURL=grid.common.map
+
+//# sourceMappingURL=grid.common.map
+
+//# sourceMappingURL=grid.common.map
