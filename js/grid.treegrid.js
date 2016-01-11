@@ -60,7 +60,7 @@
 							if ($target.is("div.treeclick")) {
 								expendOrCollaps(rowid);
 							} else if (p.ExpandColClick) {
-								if ($td.length > 0 && $target.closest("span.ui-jqgrid-cell-wrapper", $td).length > 0) {
+								if ($td.length > 0 && $target.closest("span.cell-wrapper", $td).length > 0) {
 									expendOrCollaps(rowid);
 								}
 							}
