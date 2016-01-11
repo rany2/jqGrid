@@ -23,11 +23,3 @@ appendTo:"#jqgrid_dnd",zIndex:5E3},dragcopy:!1,dropbyname:!1,droppos:"first",aut
 g.fixScrollOffsetAndhBoxPadding&&g.fixScrollOffsetAndhBoxPadding();a._stop_&&a._stop_.call(g,c,n)};k=f;"auto"!==l&&"100%"!==l||void 0!==a.handles||(a.handles="e,w");if(a.handles){var c=b.map(String(a.handles).split(","),function(a){return b.trim(a)});2===c.length&&("e"===c[0]&&"w"===c[1]||"e"===c[1]&&"w"===c[1])&&(k=d.gView+">div:not(.frozen-div)",h=!0,d.pager&&(k+=","+d.pager))}a.alsoResize=a._alsoResize_?k+","+a._alsoResize_:k;delete a._alsoResize_;b(d.gBox).resizable(a)}})}})});
 
 //# sourceMappingURL=grid.jqueryui.map
-
-//# sourceMappingURL=grid.jqueryui.map
-
-//# sourceMappingURL=grid.jqueryui.map
-
-//# sourceMappingURL=grid.jqueryui.map
-
-//# sourceMappingURL=grid.jqueryui.map

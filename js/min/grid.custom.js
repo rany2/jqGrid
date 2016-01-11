@@ -51,11 +51,3 @@ if(b&&!0===c.frozenColumns){a(b.fhDiv).remove();a(b.fbDiv).remove();b.fhDiv=null
 b.sortable("destroy"),e.jqGrid("setGridParam",{sortable:{options:{items:">th:not(:has(#jqgh_"+d+"_cb,#jqgh_"+d+"_rn,#jqgh_"+d+"_subgrid),:hidden)"}}}),e.jqGrid("sortableColumns",b))}})}})});
 
 //# sourceMappingURL=grid.custom.map
-
-//# sourceMappingURL=grid.custom.map
-
-//# sourceMappingURL=grid.custom.map
-
-//# sourceMappingURL=grid.custom.map
-
-//# sourceMappingURL=grid.custom.map

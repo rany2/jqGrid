@@ -4,11 +4,3 @@ a&&q.css({width:Math.max(b.x-a.pX+a.W,0),height:Math.max(b.y-a.pY+a.H,0)}));retu
 (d+=".jqGrid pointerdown.jqGrid",g+=".jqGrid pointermove.jqGrid",h+=".jqGrid pointerup.jqGrid"):window.MSPointerEvent?(d+=".jqGrid mspointerdown.jqGrid",g+=".jqGrid mspointermove.jqGrid",h+=".jqGrid mspointerup"):(d+=".jqGrid touchstart.jqGrid",g+=".jqGrid touchmove.jqGrid",h+=".jqGrid touchend.jqGrid");c.jqDnR=m;c.fn.jqDrag=function(b){return l(this,b,"move")};c.fn.jqResize=function(b,a){return l(this,b,"resize",a)}});
 
 //# sourceMappingURL=jqdnr.map
-
-//# sourceMappingURL=jqdnr.map
-
-//# sourceMappingURL=jqdnr.map
-
-//# sourceMappingURL=jqdnr.map
-
-//# sourceMappingURL=jqdnr.map

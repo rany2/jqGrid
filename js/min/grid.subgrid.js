@@ -12,11 +12,3 @@ c(e).remove(".ui-subgrid"):c(e).hasClass("ui-subgrid")&&c(e).hide();c(this).html
 c(f.rows).filter(".jqgrow").each(function(a,b){c(b.cells[0]).click()});f.subGridXml=function(a,b){t(a,b,A)};f.subGridJson=function(a,b){t(a,b,B)}}})},expandSubGridRow:function(a){return q.call(this,a,"sgcollapsed")},collapseSubGridRow:function(a){return q.call(this,a,"sgexpanded")},toggleSubGridRow:function(a){return q.call(this,a,"ui-sgcollapsed")}})});
 
 //# sourceMappingURL=grid.subgrid.map
-
-//# sourceMappingURL=grid.subgrid.map
-
-//# sourceMappingURL=grid.subgrid.map
-
-//# sourceMappingURL=grid.subgrid.map
-
-//# sourceMappingURL=grid.subgrid.map

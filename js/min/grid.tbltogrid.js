@@ -3,11 +3,3 @@ index:"__selection__",width:0,hidden:!0}),k.push("__selection__")):(f.push({name
 d.attr("value")}else c[f[b].name]=a(this).html();b++});0<b&&g.push(c)});d.empty();d.jqGrid(a.extend({datatype:"local",width:b,colNames:k,colModel:f,multiselect:e},p||{}));for(b=0;b<g.length;b++)c=null,0<l.length&&(c=l[b])&&c.replace&&(c=encodeURIComponent(c).replace(/[.\-%]/g,"_")),null===c&&(c=a.jgrid.randId()),d.jqGrid("addRowData",c,g[b]);for(b=0;b<m.length;b++)d.jqGrid("setSelection",m[b])}})}});
 
 //# sourceMappingURL=grid.tbltogrid.map
-
-//# sourceMappingURL=grid.tbltogrid.map
-
-//# sourceMappingURL=grid.tbltogrid.map
-
-//# sourceMappingURL=grid.tbltogrid.map
-
-//# sourceMappingURL=grid.tbltogrid.map

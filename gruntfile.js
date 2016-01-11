@@ -423,14 +423,14 @@
 				// consider to use grunt.file.write directly to prevent appending f
 				grunt.config.set("file_append.default_options.files", [
 					function () {
-						var strToAppend = "/*\n//# sourceMappingURL=" + fileNameMap + "\n*/";
+						var strToAppend = "\n//# sourceMappingURL=" + fileNameMap + "\n";
 						//grunt.log.writeln(" ### !!!  filePathMin=" + filePathMin);
 						var input = grunt.file.read(filePathMin);
 						//grunt.log.writeln(" ### !!!  typeof input=" + (typeof input));
 						//grunt.log.writeln(" ### !!!  input.length=" + input.length);
 						if (input.lastIndexOf(strToAppend) < 0) {
 							return {
-								append: grunt.util.linefeed + "//# sourceMappingURL=" + fileNameMap + grunt.util.linefeed,
+								append: "\n//# sourceMappingURL=" + fileNameMap + "\n",
 								input: filePathMin
 							};
 						} else {

@@ -9,11 +9,3 @@ l,e+f,c));d+=(b?":{":"{")+(1<m.length?k+e+f+m.join(","+k+e+f)+k+e:m.join(""))+"}
 b=e):(1===b.nodeType&&this.removeWhite(b),b=b.nextSibling);return a}}});
 
 //# sourceMappingURL=jsonxml.map
-
-//# sourceMappingURL=jsonxml.map
-
-//# sourceMappingURL=jsonxml.map
-
-//# sourceMappingURL=jsonxml.map
-
-//# sourceMappingURL=jsonxml.map

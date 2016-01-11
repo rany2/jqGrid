@@ -22,11 +22,3 @@ e.p.columns.length;h++)if(e.p.columns[h].name===d.field){m=e.p.columns[h];break}
 this.p[a]:this.p},resetFilter:function(){return this.each(function(){this.resetFilter()})},addFilter:function(a){"string"===typeof a&&(a=m.parse(a));this.each(function(){this.p.filter=a;this.reDraw();this.onchange()})}})});
 
 //# sourceMappingURL=grid.filter.map
-
-//# sourceMappingURL=grid.filter.map
-
-//# sourceMappingURL=grid.filter.map
-
-//# sourceMappingURL=grid.filter.map
-
-//# sourceMappingURL=grid.filter.map

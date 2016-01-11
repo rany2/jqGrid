@@ -6,11 +6,3 @@ if(b.a)return!1;b.t=g;b.a=!0;b.w.css("z-index",f);e.modal?(l[0]||setTimeout(func
 f=parseFloat(b.w.css("left")||0),k=parseFloat(b.w.css("top")||0),b.w.before('<span id="jqmP'+b.w[0]._jqm+'"></span>').insertAfter(b.o),b.w.css({top:d.top+k,left:d.left+f}));if(e.onShow)e.onShow(b);else b.w.show();n(b);return!1},close:function(a){a=h[a];if(!a.a)return!1;a.a=!1;l[0]&&(l.pop(),l[0]||p("unbind"));a.c.toTop&&a.o&&c("#jqmP"+a.w[0]._jqm).after(a.w).remove();if(a.c.onHide)a.c.onHide(a);else a.w.hide(),a.o&&a.o.remove();return!1},params:{}};h=c.jqm.hash});
 
 //# sourceMappingURL=jqmodal.map
-
-//# sourceMappingURL=jqmodal.map
-
-//# sourceMappingURL=jqmodal.map
-
-//# sourceMappingURL=jqmodal.map
-
-//# sourceMappingURL=jqmodal.map

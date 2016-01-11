@@ -36,11 +36,3 @@ f?e(a).text():p.htmlDecode(e(a).html())};e.unformat.select=function(a,b,c,f){c=[
 a,c.srcformat,c)}});
 
 //# sourceMappingURL=jquery.fmatter.map
-
-//# sourceMappingURL=jquery.fmatter.map
-
-//# sourceMappingURL=jquery.fmatter.map
-
-//# sourceMappingURL=jquery.fmatter.map
-
-//# sourceMappingURL=jquery.fmatter.map

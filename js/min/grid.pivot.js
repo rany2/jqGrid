@@ -20,11 +20,3 @@ a.rows);var p;if(c.skipSortByX)for(p=0;p<n.groupField.length;p++)h.orderBy(n.gro
 0;p<b.length;p++)b[p]&&b[p].groupHeaders.length&&g.setGroupHeaders.call(x,b[p]);c.frozenStaticCols&&g.setFrozenColumns.call(x)}var f=this,x=m(f),g=m.fn.jqGrid;"string"===typeof d?m.ajax(m.extend({url:d,dataType:"json",success:function(c){n(Q.getAccessor(c,l&&l.reader?l.reader:"rows"))}},l||{})):n(d)})}})});
 
 //# sourceMappingURL=grid.pivot.map
-
-//# sourceMappingURL=grid.pivot.map
-
-//# sourceMappingURL=grid.pivot.map
-
-//# sourceMappingURL=grid.pivot.map
-
-//# sourceMappingURL=grid.pivot.map

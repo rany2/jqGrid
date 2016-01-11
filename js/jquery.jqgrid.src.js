@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-01-08
+ * Date: 2016-01-11
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -16546,7 +16546,7 @@
 							if ($target.is("div.treeclick")) {
 								expendOrCollaps(rowid);
 							} else if (p.ExpandColClick) {
-								if ($td.length > 0 && $target.closest("span.ui-jqgrid-cell-wrapper", $td).length > 0) {
+								if ($td.length > 0 && $target.closest("span.cell-wrapper", $td).length > 0) {
 									expendOrCollaps(rowid);
 								}
 							}

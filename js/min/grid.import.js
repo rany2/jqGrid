@@ -7,11 +7,3 @@ f.datatype="jsonstring",f.datastr=e,c(d).jqGrid(f).jqGrid("setGridParam",{dataty
 excelExport:function(a){a=c.extend({exptype:"remote",url:null,oper:"oper",tag:"excel",exportOptions:{}},a||{});return this.each(function(){var d;this.grid&&"remote"===a.exptype&&(d=c.extend({},this.p.postData,a.exportOptions),d[a.oper]=a.tag,d=jQuery.param(d),d=-1!==a.url.indexOf("?")?a.url+"&"+d:a.url+"?"+d,window.location=d)})}})});
 
 //# sourceMappingURL=grid.import.map
-
-//# sourceMappingURL=grid.import.map
-
-//# sourceMappingURL=grid.import.map
-
-//# sourceMappingURL=grid.import.map
-
-//# sourceMappingURL=grid.import.map

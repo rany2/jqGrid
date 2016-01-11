@@ -18,11 +18,3 @@ m||{});a.groupField=b;d(this).trigger("reloadGrid")})},groupingRemove:function(b
 {sum:function(){return parseFloat(d||0)+parseFloat(k[f]||0)},min:function(){return""===d?parseFloat(k[f]||0):Math.min(parseFloat(d),parseFloat(k[f]||0))},max:function(){return""===d?parseFloat(k[f]||0):Math.max(parseFloat(d),parseFloat(k[f]||0))},count:function(){""===d&&(d=0);return k.hasOwnProperty(f)?d+1:0},avg:function(){return e.sum()}};if(!e[b])throw"jqGrid Grouping No such method: "+b;b=e[b]();null!=a&&("fixed"===c?b=b.toFixed(a):(a=Math.pow(10,a),b=Math.round(b*a)/a));return b}}})});
 
 //# sourceMappingURL=grid.grouping.map
-
-//# sourceMappingURL=grid.grouping.map
-
-//# sourceMappingURL=grid.grouping.map
-
-//# sourceMappingURL=grid.grouping.map
-
-//# sourceMappingURL=grid.grouping.map
