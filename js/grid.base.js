@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-01-11
+ * Date: 2016-01-12
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -3793,7 +3793,15 @@
 							tojLinq(srules);
 						} else {
 							try {
-								query = compareFnMap[p.postData.searchOper](query)(p.postData.searchField, p.postData.searchString, cmtypes[p.postData.searchField]);
+								cmi = cmtypes[p.postData.searchField];
+								query = compareFnMap[p.postData.searchOper](query)(
+									//p.postData.searchField,
+									isFunction(cmi.reader) ?
+											"jQuery.jgrid.getAccessor(this,jQuery(\"" + p.idSel + "\")[0].p.colModel[" + cmi.iCol + "].jsonmap)" :
+											"jQuery.jgrid.getAccessor(this,'" + cmi.reader + "')",
+									p.postData.searchString,
+									cmtypes[p.postData.searchField]
+								);
 							} catch (ignore) { }
 						}
 					}
