@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-01-12
+ * Date: 2016-01-13
  */
 //jsHint options
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
@@ -14206,7 +14206,7 @@
 					if (cm.edittype === "select" && cm.formatter !== "select") {
 						tmp2[cm.name] = valueText.text;
 					}
-					cv = jgrid.checkValues.call($t, v, options.iCol, cm.editrules, undefined,
+					cv = jgrid.checkValues.call($t, v, options.iCol, undefined, undefined,
 							$.extend(options, {
 								oldValue: savedRow != null ? savedRow[cm.name] : null,
 								newValue: v,

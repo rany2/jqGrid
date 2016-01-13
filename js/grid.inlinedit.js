@@ -249,7 +249,7 @@
 					if (cm.edittype === "select" && cm.formatter !== "select") {
 						tmp2[cm.name] = valueText.text;
 					}
-					cv = jgrid.checkValues.call($t, v, options.iCol, cm.editrules, undefined,
+					cv = jgrid.checkValues.call($t, v, options.iCol, undefined, undefined,
 							$.extend(options, {
 								oldValue: savedRow != null ? savedRow[cm.name] : null,
 								newValue: v,
