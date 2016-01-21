@@ -555,7 +555,8 @@
 							}
 						}
 						if (!isSelected) {
-							for (i = 0; i < optionInfo.length; i++) {
+							for (i = 0; i < optionInfos.length; i++) {
+								optionInfo = optionInfos[i];
 								if (!msl && optionInfo.selectText === $.trim(vl)) {
 									ov.selected = "selected";
 								}
