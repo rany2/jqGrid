@@ -853,11 +853,14 @@
 							onClickSubmitResult = o.onclickSubmit.call($t, o, postdata, editOrAdd) || {};
 						}
 						ret = $self.triggerHandler("jqGridAddEditBeforeSubmit", [postdata, $(frmgr), editOrAdd]);
-						if (ret === undefined) {
+						if (ret == null) {
 							ret = [true, "", ""];
 						}
 						if (ret[0] && $.isFunction(o.beforeSubmit)) {
 							ret = o.beforeSubmit.call($t, postdata, $(frmgr), editOrAdd);
+							if (ret == null) {
+								ret = [true, "", ""];
+							}
 						}
 					}
 
@@ -926,11 +929,14 @@
 										// data is posted successful
 										// execute aftersubmit with the returned data from server
 										ret = $self.triggerHandler("jqGridAddEditAfterSubmit", [jqXHR, postdata, editOrAdd]);
-										if (ret === undefined) {
+										if (ret == null) {
 											ret = [true, "", ""];
 										}
 										if (ret[0] && $.isFunction(o.afterSubmit)) {
 											ret = o.afterSubmit.call($t, jqXHR, postdata, editOrAdd);
+											if (ret == null) {
+												ret = [true, "", ""];
+											}
 										}
 									}
 									if (ret[0] === false) {
@@ -1768,7 +1774,7 @@
 							formRowIds = $delData.data("rowids"),
 							cs = {};
 						if ($.isFunction(o.onclickSubmit)) { cs = o.onclickSubmit.call($t, o, postdata) || {}; }
-						if ($.isFunction(o.beforeSubmit)) { ret = o.beforeSubmit.call($t, postdata); }
+						if ($.isFunction(o.beforeSubmit)) { ret = o.beforeSubmit.call($t, postdata) || ret; }
 						if (ret[0] && !o.processing) {
 							o.processing = true;
 							opers = p.prmNames;
@@ -1804,7 +1810,7 @@
 											// data is posted successful
 											// execute aftersubmit with the returned data from server
 											if ($.isFunction(o.afterSubmit)) {
-												ret = o.afterSubmit.call($t, jqXHR, postd);
+												ret = o.afterSubmit.call($t, jqXHR, postd) || [true];
 											}
 										}
 										if (ret[0] === false) {
