@@ -238,14 +238,32 @@
 				/* Function to get the permutation array, and pass it to the
 				   "done" function */
 				apply_perm: function () {
-					var perm = [];
+					var perm = [], showHideColOptions = { skipSetGridWidth: true, skipSetGroupHeaders: true };
+
 					$("option", select).each(function () {
 						if ($(this).is(":selected")) {
-							$self.jqGrid("showCol", colModel[this.value].name);
+							$self.jqGrid("showCol", colModel[this.value].name, showHideColOptions);
 						} else {
-							$self.jqGrid("hideCol", colModel[this.value].name);
+							$self.jqGrid("hideCol", colModel[this.value].name, showHideColOptions);
 						}
 					});
+					if (p.groupHeader && (typeof p.groupHeader === "object" || $.isFunction(p.groupHeader))) {
+						$self.jqGrid("destroyGroupHeader", false);
+						if (p.pivotOptions != null && p.pivotOptions.colHeaders != null && p.pivotOptions.colHeaders.length > 1) {
+							var i, gHead = p.pivotOptions.colHeaders;
+							for (i = 0; i < gHead.length; i++) {
+								// Multiple calls of setGroupHeaders for one grid are wrong,
+								// but there are produces good results in case of usage
+								// useColSpanStyle: false option. The rowspan values
+								// needed be increased in case of usage useColSpanStyle: true
+								if (gHead[i] && gHead[i].groupHeaders.length) {
+									$self.jqGrid("setGroupHeaders", gHead[i]);
+								}
+							}
+						} else {
+							$self.jqGrid("setGroupHeaders", p.groupHeader);
+						}
+					}
 
 					//fixedCols.slice(0);
 					$("option", select).filter(":selected").each(function () { perm.push(parseInt(this.value, 10)); });

@@ -6138,15 +6138,22 @@
 			});
 			return action === "get" ? res : success;
 		},
-		showHideCol: function (colname, show) {
+		showHideCol: function (colname, show, options) {
 			return this.each(function () {
 				var $t = this, $self = $($t), grid = $t.grid, fndh = false, p = $t.p, brd = jgrid.cell_width ? 0 : p.cellLayout, cw;
+
 				if (!grid) { return; }
 				if (typeof colname === "string") { colname = [colname]; }
-				show = show !== "none" ? "" : "none";
+				show = (show !== "none" && show !== false) ? "" : "none";
+				options = options || {};
+
 				var sw = show === "" ? true : false, groupHeader = p.groupHeader,
 					gh = groupHeader && (typeof groupHeader === "object" || $.isFunction(groupHeader));
-				if (gh) { base.destroyGroupHeader.call($self, false); }
+
+				if (gh && !options.skipSetGroupHeaders) {
+					base.destroyGroupHeader.call($self, false);
+				}
+
 				$(p.colModel).each(function (i) {
 					if ($.inArray(this.name, colname) !== -1 && this.hidden === sw) {
 						if (p.frozenColumns === true && this.frozen === true) {
@@ -6173,13 +6180,25 @@
 						}
 						this.hidden = !sw;
 						fndh = true;
-						feedback.call($t, "onShowHideCol", sw, this.name, i);
+						if (!options.skipFeedback) {
+							feedback.call($t, "onShowHideCol", sw, this.name, i);
+						} else {
+							options.toReport = options.toReport || {};
+							options.toReport[this.name] = sw;
+						}
 					}
 				});
 				if (fndh === true) {
-					base.setGridWidth.call($self, !p.autowidth && (p.widthOrg === undefined || p.widthOrg === "auto" || p.widthOrg === "100%") ? p.tblwidth + parseInt(p.scrollOffset, 10) : p.width);
+					var newGridWidth = !p.autowidth && (p.widthOrg === undefined || p.widthOrg === "auto" || p.widthOrg === "100%") ?
+							p.tblwidth + parseInt(p.scrollOffset, 10) :
+							p.width;
+					if (!options.skipSetGridWidth) {
+						base.setGridWidth.call($self, newGridWidth);
+					} else {
+						options.newGridWidth = newGridWidth;
+					}
 				}
-				if (gh) {
+				if (gh && !options.skipSetGroupHeaders) {
 					if (p.pivotOptions != null && p.pivotOptions.colHeaders != null && p.pivotOptions.colHeaders.length > 1) {
 						var i, gHead = p.pivotOptions.colHeaders;
 						for (i = 0; i < gHead.length; i++) {
@@ -6197,11 +6216,11 @@
 				}
 			});
 		},
-		hideCol: function (colname) {
-			return this.each(function () { base.showHideCol.call($(this), colname, "none"); });
+		hideCol: function (colname, options) {
+			return this.each(function () { base.showHideCol.call($(this), colname, "none", options); });
 		},
-		showCol: function (colname) {
-			return this.each(function () { base.showHideCol.call($(this), colname, ""); });
+		showCol: function (colname, options) {
+			return this.each(function () { base.showHideCol.call($(this), colname, "", options); });
 		},
 		remapColumns: function (permutation, updateCells, keepHeader) {
 			var ts = this[0], p = ts.p, grid = ts.grid, i, n, makeArray = $.makeArray;
@@ -14902,14 +14921,32 @@
 				/* Function to get the permutation array, and pass it to the
 				   "done" function */
 				apply_perm: function () {
-					var perm = [];
+					var perm = [], showHideColOptions = { skipSetGridWidth: true, skipSetGroupHeaders: true };
+
 					$("option", select).each(function () {
 						if ($(this).is(":selected")) {
-							$self.jqGrid("showCol", colModel[this.value].name);
+							$self.jqGrid("showCol", colModel[this.value].name, showHideColOptions);
 						} else {
-							$self.jqGrid("hideCol", colModel[this.value].name);
+							$self.jqGrid("hideCol", colModel[this.value].name, showHideColOptions);
 						}
 					});
+					if (p.groupHeader && (typeof p.groupHeader === "object" || $.isFunction(p.groupHeader))) {
+						$self.jqGrid("destroyGroupHeader", false);
+						if (p.pivotOptions != null && p.pivotOptions.colHeaders != null && p.pivotOptions.colHeaders.length > 1) {
+							var i, gHead = p.pivotOptions.colHeaders;
+							for (i = 0; i < gHead.length; i++) {
+								// Multiple calls of setGroupHeaders for one grid are wrong,
+								// but there are produces good results in case of usage
+								// useColSpanStyle: false option. The rowspan values
+								// needed be increased in case of usage useColSpanStyle: true
+								if (gHead[i] && gHead[i].groupHeaders.length) {
+									$self.jqGrid("setGroupHeaders", gHead[i]);
+								}
+							}
+						} else {
+							$self.jqGrid("setGroupHeaders", p.groupHeader);
+						}
+					}
 
 					//fixedCols.slice(0);
 					$("option", select).filter(":selected").each(function () { perm.push(parseInt(this.value, 10)); });
