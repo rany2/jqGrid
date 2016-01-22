@@ -40,7 +40,7 @@ var locInfo = {
 		pgtext: "Strona {0} z {1}",
 		pgfirst: "Pierwsza strona",
 		pglast: "Ostatnia strona",
-		pgnext: "Nasętpna strona",
+		pgnext: "Następna strona",
 		pgprev: "Poprzednia strona",
 		pgrecs: "Rekordów na stronę",
 		showhide: "Przełącz zwinięcie/rozwinięcie tabeli",
