@@ -7,6 +7,9 @@
  * Tomasz Pęczek tpeczek@gmail.com
  * http://tpeczek.blogspot.com; http://tpeczek.codeplex.com
  *
+ * 22-01-2015: Updated locale strings
+ * Robert 'Wooya' Gaudyn <wogaew@wp.pl>
+ *
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
@@ -35,12 +38,12 @@ var locInfo = {
 		emptyrecords: "Brak rekordów do pokazania",
 		loadtext: "Ładowanie...",
 		pgtext: "Strona {0} z {1}",
-		pgfirst: "First Page",
-		pglast: "Last Page",
-		pgnext: "Next Page",
-		pgprev: "Previous Page",
-		pgrecs: "Records per Page",
-		showhide: "Toggle Expand Collapse Grid",
+		pgfirst: "Pierwsza strona",
+		pglast: "Ostatnia strona",
+		pgnext: "Nasętpna strona",
+		pgprev: "Poprzednia strona",
+		pgrecs: "Rekordów na stronę",
+		showhide: "Przełącz zwinięcie/rozwinięcie tabeli",
 		savetext: "Trwa zapisywanie..."
 	},
 	search: {
@@ -62,19 +65,19 @@ var locInfo = {
 			{ oper: "en", text: "nie kończy się na" },
 			{ oper: "cn", text: "zawiera" },
 			{ oper: "nc", text: "nie zawiera" },
-			{ oper: "nu", text: "is null" },
-			{ oper: "nn", text: "is not null" }
+			{ oper: "nu", text: "jest null" },
+			{ oper: "nn", text: "nie jest null" }
 		],
 		groupOps: [
 			{ op: "AND", text: "oraz" },
 			{ op: "OR",  text: "lub" }
 		],
-		addGroupTitle: "Add subgroup",
-		deleteGroupTitle: "Delete group",
-		addRuleTitle: "Add rule",
-		deleteRuleTitle: "Delete rule",
-		operandTitle: "Click to select search operation.",
-		resetTitle: "Reset Search Value"
+		addGroupTitle: "Dodaj podgrupę",
+		deleteGroupTitle: "Usuń grupę",
+		addRuleTitle: "Dodaj regułę",
+		deleteRuleTitle: "Usuń regułę",
+		operandTitle: "Kliknij, aby wybrać operację wyszukiwania.",
+		resetTitle: "Zresetuj wartość wyszukiwania"
 	},
 	edit: {
 		addCaption: "Dodaj rekord",
@@ -89,8 +92,8 @@ var locInfo = {
 		msg: {
 			required: "Pole jest wymagane",
 			number: "Proszę wpisać poprawną liczbę",
-			minValue: "wartość musi być większa lub równa od",
-			maxValue: "wartość musi być mniejsza lub równa od",
+			minValue: "Wartość musi być większa lub równa od",
+			maxValue: "Wartość musi być mniejsza lub równa od",
 			email: "nie jest poprawnym adresem e-mail",
 			integer: "Proszę wpisać poprawną liczbę",
 			date: "Proszę podaj poprawną datę",
@@ -127,9 +130,9 @@ var locInfo = {
 		viewtext: "",
 		viewtitle: "Pokaż wybrany wiersz",
 		savetext: "",
-		savetitle: "Save row",
+		savetitle: "Zapisz wiersz",
 		canceltext: "",
-		canceltitle: "Cancel row editing"
+		canceltitle: "Anuluj edycję wiersza"
 	},
 	col: {
 		caption: "Pokaż/Ukryj kolumny",
