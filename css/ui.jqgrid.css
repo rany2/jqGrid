@@ -121,6 +121,10 @@
 	right: -3px;
 	bottom: -3px;
 }
+.ui-jqdialog .ui-resizable-handle.fa {
+	bottom: 1px;
+	right: -2px;
+}
 
 /* header*/
 .ui-jqgrid > .ui-jqgrid-view > .ui-jqgrid-hdiv {

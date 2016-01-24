@@ -478,7 +478,7 @@
 					undo: "fa-undo",
 					del: "fa-trash-o",
 					cancel: "fa-ban",
-					resizableLtr: "ui-resizable-se ui-state-default fa fa-rss fa-rotate-270"
+					resizableLtr: "fa fa-rss fa-rotate-270"
 				},
 				search: {
 					search: "fa-search",

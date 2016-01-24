@@ -120,7 +120,7 @@
 		createModal: function (aIDs, content, o, insertSelector, posSelector, appendsel, css) {
 			var jqID = jgrid.jqID, p = this.p, gridjqModal = p != null ? p.jqModal || {} : {};
 			o = $.extend(true, {
-				resizingRightBottomIcon: "ui-icon ui-icon-gripsmall-diagonal-se"
+				resizingRightBottomIcon: jgrid.getIconRes(p.iconSet, "form.resizableLtr")
 			}, jgrid.jqModal || {}, gridjqModal, o);
 			// create main window "div.ui-jqdialog", which will contains other components of the modal window:
 			// "div.ui-jqdialog-titlebar", "div.ui-jqdialog-content" and optionally resizer like "div.jqResize"
