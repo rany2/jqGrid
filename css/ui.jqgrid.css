@@ -1,6 +1,6 @@
 /**
  * jqGrid 4.12.2-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2016-01-21
+ * Date: 2016-01-24
  */
 
 /*Grid*/
@@ -116,6 +116,10 @@
 .ui-jqdialog-titlebar > .ui-jqdialog-titlebar-close:hover > span,
 .ui-jqdialog-titlebar > .ui-jqdialog-titlebar-close:focus > span {
 	margin: 1px 0 0 1px;
+}
+.ui-jqdialog .ui-resizable-handle {
+	right: -3px;
+	bottom: -3px;
 }
 
 /* header*/
