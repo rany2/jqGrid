@@ -326,8 +326,10 @@
 }
 .ui-jqgrid tr.jqgfirstrow > td {
 	padding: 0 2px 0 2px;
+	border-top: 0 none;
 	border-left: 0 none;
 	border-right: 1px solid;
+	border-bottom: 0 none;
 }
 .ui-jqgrid tr.jqgrow > td,
 .ui-jqgrid tr.jqgroup > td,
