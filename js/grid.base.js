@@ -509,6 +509,7 @@
 		guiStyles: {
 			jQueryUI: {
 				gBox: "ui-widget ui-widget-content ui-corner-all",  // ui-widget-content??? for the children of gbox
+				gView: "",
 				overlay: "ui-widget-overlay",
 				loading: "ui-state-default ui-state-active",
 				hDiv: "ui-state-default ui-corner-top",
@@ -2878,7 +2879,7 @@
 			// TODO: replace altclass : "ui-priority-secondary",
 			// set default buttonicon : "ui-icon-newwin" of navButtonAdd: fa-external-link, fa-desktop or other
 			// change the order in $.extend to allows to set icons using $.jgrid (for example $.jgrid.nav). It will be ovewritten currently by p.navOptions which we set above.
-			var gv = $("<div class='ui-jqgrid-view' role='grid' aria-multiselectable='" + !!p.multiselect + "'></div>"),
+			var gv = $("<div class='" + getGuiStyles("gView", "ui-jqgrid-view") + "' role='grid' aria-multiselectable='" + !!p.multiselect + "'></div>"),
 				isMSIE = jgrid.msie,
 				isMSIE7 = isMSIE && jgrid.msiever() < 8;
 			p.direction = trim(p.direction.toLowerCase());
@@ -4724,7 +4725,7 @@
 			}
 			var idn, w, res, sort, cmi, tooltip, labelStyle, ptr, sortarr = [], sortord = [], sotmp = [],
 				thead = "<thead><tr class='ui-jqgrid-labels' role='row'>", headerText,
-				tbody = "<tbody><tr>",
+				tbody = "<tbody><tr style='display:none;'>",
 				hoverStateClasses = getGuiStyles("states.hover"),
 				disabledStateClasses = getGuiStyles("states.disabled");
 
