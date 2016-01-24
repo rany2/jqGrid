@@ -526,6 +526,9 @@
 				dialog: {
 					header: "ui-widget-header ui-dialog-titlebar ui-corner-all ui-helper-clearfix",
 					window: "ui-widget ui-widget-content ui-corner-all ui-front",
+					document: "",
+					subdocument: "",
+					footer: "",
 					content: "ui-widget-content",
 					hr: "ui-widget-content",
 					fmButton: "ui-state-default",

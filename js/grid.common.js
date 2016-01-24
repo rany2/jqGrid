@@ -131,6 +131,13 @@
 			mw.className = getGuiStyles.call(this, "dialog.window", "ui-jqdialog");
 			mw.id = aIDs.themodal;
 			mw.dir = rtlsup ? "rtl" : "ltr";
+			var mdoc = document.createElement("div");
+			mdoc.className = getGuiStyles.call(this, "dialog.document");
+			$(mdoc).attr("role", "document");
+			var msubdoc = document.createElement("div");
+			msubdoc.className = getGuiStyles.call(this, "dialog.subdocument");
+			mdoc.appendChild(msubdoc);
+			mw.appendChild(mdoc);
 			// create the title "div.ui-jqdialog-titlebar", which contains:
 			// "span.ui-jqdialog-title" with the title text and "a.ui-jqdialog-titlebar-close" with the closing button
 			var mh = document.createElement("div");
@@ -151,8 +158,8 @@
 				.attr("id", aIDs.modalcontent);
 			$(mc).append(content);
 			// place "div.ui-jqdialog-content" and "div.ui-jqdialog-titlebar" in main window "div.ui-jqdialog"
-			mw.appendChild(mc);
-			$(mw).prepend(mh);
+			msubdoc.appendChild(mc);
+			$(msubdoc).prepend(mh);
 			// appendsel and insertSelector specifies where the dialog should be placed on the HTML page
 			if (appendsel === true) {
 				$("body").append(mw);  //append as first child in body -for alert dialog
@@ -225,7 +232,7 @@
 			}
 			if (o.resize) {
 				if ($.fn.jqResize) {
-					$(mw).append("<div class='jqResize ui-resizable-handle ui-resizable-se " + o.resizingRightBottomIcon + "'></div>");
+					$(mc).append("<div class='jqResize ui-resizable-handle ui-resizable-se " + o.resizingRightBottomIcon + "'></div>");
 					$(themodalSelector).jqResize(".jqResize", resizeAlso);
 				} else {
 					try {

@@ -526,6 +526,9 @@
 				dialog: {
 					header: "ui-widget-header ui-dialog-titlebar ui-corner-all ui-helper-clearfix",
 					window: "ui-widget ui-widget-content ui-corner-all ui-front",
+					document: "",
+					subdocument: "",
+					footer: "",
 					content: "ui-widget-content",
 					hr: "ui-widget-content",
 					fmButton: "ui-state-default",
@@ -7655,6 +7658,13 @@
 			mw.className = getGuiStyles.call(this, "dialog.window", "ui-jqdialog");
 			mw.id = aIDs.themodal;
 			mw.dir = rtlsup ? "rtl" : "ltr";
+			var mdoc = document.createElement("div");
+			mdoc.className = getGuiStyles.call(this, "dialog.document");
+			$(mdoc).attr("role", "document");
+			var msubdoc = document.createElement("div");
+			msubdoc.className = getGuiStyles.call(this, "dialog.subdocument");
+			mdoc.appendChild(msubdoc);
+			mw.appendChild(mdoc);
 			// create the title "div.ui-jqdialog-titlebar", which contains:
 			// "span.ui-jqdialog-title" with the title text and "a.ui-jqdialog-titlebar-close" with the closing button
 			var mh = document.createElement("div");
@@ -7675,8 +7685,8 @@
 				.attr("id", aIDs.modalcontent);
 			$(mc).append(content);
 			// place "div.ui-jqdialog-content" and "div.ui-jqdialog-titlebar" in main window "div.ui-jqdialog"
-			mw.appendChild(mc);
-			$(mw).prepend(mh);
+			msubdoc.appendChild(mc);
+			$(msubdoc).prepend(mh);
 			// appendsel and insertSelector specifies where the dialog should be placed on the HTML page
 			if (appendsel === true) {
 				$("body").append(mw);  //append as first child in body -for alert dialog
@@ -7749,7 +7759,7 @@
 			}
 			if (o.resize) {
 				if ($.fn.jqResize) {
-					$(mw).append("<div class='jqResize ui-resizable-handle ui-resizable-se " + o.resizingRightBottomIcon + "'></div>");
+					$(mc).append("<div class='jqResize ui-resizable-handle ui-resizable-se " + o.resizingRightBottomIcon + "'></div>");
 					$(themodalSelector).jqResize(".jqResize", resizeAlso);
 				} else {
 					try {
@@ -10803,9 +10813,7 @@
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	**/
 	// begin module grid.formedit
-	var jgridFeedback = jgrid.feedback, fullBoolFeedback = jgrid.fullBoolFeedback,
-		hideModal = jgrid.hideModal, viewModal = jgrid.viewModal, createModal = jgrid.createModal, infoDialog = jgrid.info_dialog,
-		builderFmButon = jgrid.builderFmButon,
+	var jgridFeedback = jgrid.feedback, fullBoolFeedback = jgrid.fullBoolFeedback, builderFmButon = jgrid.builderFmButon,
 		getCssStyleOrFloat = function ($elem, styleName) {
 			var v = $elem[0].style[styleName];
 			return v.indexOf("px") >= 0 ? parseFloat(v) : v;
@@ -10928,7 +10936,7 @@
 				function showFilter($filter) {
 					if (searchFeedback("beforeShow", $filter)) {
 						$(themodalSelector).data("onClose", o.onClose);
-						viewModal(themodalSelector, {
+						jgrid.viewModal(themodalSelector, {
 							gbox: gboxSelector,
 							jqm: o.jqModal,
 							overlay: o.overlay,
@@ -11055,9 +11063,9 @@
 					if (o.multipleGroup === true) { o.multipleSearch = true; }
 					searchFeedback("onInitialize", $(fid));
 					if (o.layer) {
-						createModal.call($t, ids, fil, o, gviewSelector, $(gboxSelector)[0], "#" + jqID(o.layer), { position: "relative" });
+						jgrid.createModal.call($t, ids, fil, o, gviewSelector, $(gboxSelector)[0], "#" + jqID(o.layer), { position: "relative" });
 					} else {
-						createModal.call($t, ids, fil, o, gviewSelector, $(gboxSelector)[0]);
+						jgrid.createModal.call($t, ids, fil, o, gviewSelector, $(gboxSelector)[0]);
 					}
 					if (o.searchOnEnter || o.closeOnEscape) {
 						$(themodalSelector).keydown(function (e) {
@@ -11131,7 +11139,7 @@
 							$self.trigger("reloadGrid", [$.extend({ page: 1 }, o.reloadGridSearchOptions || {})]);
 						}
 						if (o.closeAfterSearch) {
-							hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal });
+							jgrid.hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal });
 						}
 						return false;
 					});
@@ -11153,7 +11161,7 @@
 							$self.trigger("reloadGrid", [$.extend({ page: 1 }, o.reloadGridResetOptions || {})]);
 						}
 						if (o.closeAfterReset) {
-							hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal });
+							jgrid.hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal });
 						}
 						return false;
 					});
@@ -11234,6 +11242,7 @@
 					ids = { themodal: "editmod" + gridId, modalhead: "edithd" + gridId, modalcontent: "editcnt" + gridId, resizeAlso: frmgr },
 					themodalSelector = "#" + jqID(ids.themodal), gboxSelector = p.gBox, propOrAttr = p.propOrAttr, colModel = p.colModel, iColByName = p.iColByName,
 					maxCols = 1, maxRows = 0, postdata, diff, editOrAdd, commonIconClass = o.commonIconClass,
+					hideModal = jgrid.hideModal,
 					errcap = getGridRes.call($self, "errors.errcap"),
 					editFeedback = function () {
 						var args = $.makeArray(arguments);
@@ -11283,9 +11292,9 @@
 										if (postdata[nm] === undefined) { throw "e1"; }
 									} catch (e) {
 										if (e === "e1") {
-											infoDialog.call($t, errcap, "function 'custom_value' " + o.msg.novalue, o.bClose);
+											jgrid.info_dialog.call($t, errcap, "function 'custom_value' " + o.msg.novalue, o.bClose);
 										} else {
-											infoDialog.call($t, errcap, e.message, o.bClose);
+											jgrid.info_dialog.call($t, errcap, e.message, o.bClose);
 										}
 									}
 									return true;
@@ -11555,9 +11564,9 @@
 										} else { throw "e1"; }
 									} catch (e) {
 										if (e === "e1") {
-											infoDialog.call($t, errcap, "function 'custom_value' " + o.msg.nodefined, o.bClose);
+											jgrid.info_dialog.call($t, errcap, "function 'custom_value' " + o.msg.nodefined, o.bClose);
 										} else {
-											infoDialog.call($t, errcap, e.message, o.bClose);
+											jgrid.info_dialog.call($t, errcap, e.message, o.bClose);
 										}
 									}
 									break;
@@ -11947,7 +11956,7 @@
 					cle = true;
 				}
 				var tms = $("<div></div>").append(frm).append(bt);
-				createModal.call($t, ids, tms, o, p.gView, $(gboxSelector)[0]);
+				jgrid.createModal.call($t, ids, tms, o, p.gView, $(gboxSelector)[0]);
 				// TODO: remove the call of jgrid.bindEv and probably call of opt.custom_value from createData
 				// and place the calls here AFTER the form are placed on the HTML page
 				if (o.topinfo) { $(".tinfo", frmtb).show(); }
@@ -12056,7 +12065,7 @@
 				}
 				editFeedback("beforeShowForm", $(frmgr), editOrAdd);
 				$(themodalSelector).data("onClose", o.onClose);
-				viewModal(themodalSelector, {
+				jgrid.viewModal(themodalSelector, {
 					gbox: gboxSelector,
 					jqm: o.jqModal,
 					overlay: o.overlay,
@@ -12359,7 +12368,7 @@
 				}
 				o.gbox = gboxSelector;
 				var bt = $("<div></div>").append(frm).append("<table border='0' class='EditTable' id='" + frmtbId + "_2'><tbody><tr id='Act_Buttons'><td class='navButton navButton-" + p.direction + "' width='" + (o.labelswidth || "auto") + "'>" + (rtlb ? bN + bP : bP + bN) + "</td><td class='EditButton EditButton-" + p.direction + "'>" + bC + "</td></tr></tbody></table>");
-				createModal.call($t, ids, bt, o, p.gView, $(p.gView)[0]);
+				jgrid.createModal.call($t, ids, bt, o, p.gView, $(p.gView)[0]);
 				if (!o.viewPagerButtons) { $("#pData, #nData", frmtb2).hide(); }
 				bt = null;
 				$(themodalSelector).keydown(function (e) {
@@ -12375,7 +12384,7 @@
 					}
 
 					if (e.which === 27) {
-						if (o.closeOnEscape) { hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal, formprop: !o.recreateForm, form: o.form }); }
+						if (o.closeOnEscape) { jgrid.hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal, formprop: !o.recreateForm, form: o.form }); }
 						return false;
 					}
 					if (o.navkeys[0] === true) {
@@ -12391,7 +12400,7 @@
 				});
 				addFormIcon($("#cData", frmtb2), o.closeicon, commonIconClass);
 				viewFeedback("beforeShowForm", $(frmgr));
-				viewModal(themodalSelector, {
+				jgrid.viewModal(themodalSelector, {
 					gbox: gboxSelector,
 					jqm: o.jqModal,
 					overlay: o.overlay,
@@ -12407,7 +12416,7 @@
 				);
 				focusaref();
 				$("#cData", frmtb2).click(function () {
-					hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal, formprop: !o.recreateForm, form: o.form });
+					jgrid.hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal, formprop: !o.recreateForm, form: o.form });
 					return false;
 				});
 				$("#nData", frmtb2).click(function () {
@@ -12509,7 +12518,7 @@
 						$("#dData", dtbl).removeClass(activeClass);
 					}
 					deleteFeedback("beforeShowForm", $(dtbl));
-					viewModal(themodalSelector, { gbox: gboxSelector, jqm: o.jqModal, jqM: false, overlay: o.overlay, toTop: o.toTop, modal: o.modal });
+					jgrid.viewModal(themodalSelector, { gbox: gboxSelector, jqm: o.jqModal, jqM: false, overlay: o.overlay, toTop: o.toTop, modal: o.modal });
 					deleteFeedback("afterShowForm", $(dtbl));
 				} else {
 					var dh = isNaN(o.dataheight) ? o.dataheight : o.dataheight + "px",
@@ -12527,7 +12536,7 @@
 					tbl += "<table" + (jgrid.msie && jgrid.msiever() < 8 ? " cellspacing='0'" : "") + " class='EditTable' id='" + dtblId + "_2'><tbody><tr><td><hr class='" +
 					getGuiStyles.call($t, "dialog.hr") + "' style='margin:1px'/></td></tr><tr><td class='DelButton EditButton EditButton-" + p.direction + "'>" + bS + "&#160;" + bC + "</td></tr></tbody></table>";
 					o.gbox = gboxSelector;
-					createModal.call($t, ids, tbl, o, p.gView, $(p.gView)[0]);
+					jgrid.createModal.call($t, ids, tbl, o, p.gView, $(p.gView)[0]);
 					$("#DelData>td", dtbl).data("rowids", rowids);
 
 					if (!deleteFeedback("beforeInitData", $(tbl))) { return; }
@@ -12603,7 +12612,7 @@
 											}, 50);
 										}
 										o.processing = false;
-										if (ret[0]) { hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal }); }
+										if (ret[0]) { jgrid.hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal }); }
 									}
 								}, jgrid.ajaxOptions, o.ajaxDelOptions);
 
@@ -12626,7 +12635,7 @@
 										ret[0] = false;
 										ret[1] = dpret[1] || "Error deleting the selected row!";
 									} else {
-										hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal });
+										jgrid.hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal });
 									}
 								} else {
 									if (ajaxOptions.url === "clientArray") {
@@ -12646,11 +12655,11 @@
 						return false;
 					});
 					$("#eData", dtbl + "_2").click(function () {
-						hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal });
+						jgrid.hideModal(themodalSelector, { gb: gboxSelector, jqm: o.jqModal, onClose: o.onClose, removemodal: o.removemodal });
 						return false;
 					});
 					deleteFeedback("beforeShowForm", $(dtbl));
-					viewModal(themodalSelector, { gbox: gboxSelector, jqm: o.jqModal, overlay: o.overlay, toTop: o.toTop, modal: o.modal });
+					jgrid.viewModal(themodalSelector, { gbox: gboxSelector, jqm: o.jqModal, overlay: o.overlay, toTop: o.toTop, modal: o.modal });
 					deleteFeedback("afterShowForm", $(dtbl));
 				}
 				if (o.closeOnEscape === true) {
@@ -12733,7 +12742,7 @@
 									left = left / 2 - parseInt(o.alertwidth, 10) / 2 - offsetGbox.left;
 									top = top / 2 - 25 - offsetGbox.top;
 								}
-								createModal.call($t, alertIDs,
+								jgrid.createModal.call($t, alertIDs,
 									"<div>" + o.alerttext + "</div><span tabindex='0'><span tabindex='-1' id='" + gridId + "_jqg_alrt'></span></span>",
 									{
 										gbox: gboxSelector,
@@ -12753,7 +12762,7 @@
 									$(gboxSelector)[0],
 									false);
 							}
-							viewModal("#" + jqID(alertIDs.themodal), { gbox: gboxSelector, toTop: o.alertToTop, jqm: o.jqModal });
+							jgrid.viewModal("#" + jqID(alertIDs.themodal), { gbox: gboxSelector, toTop: o.alertToTop, jqm: o.jqModal });
 							var $close = $("#" + jqID(alertIDs.modalhead)).find(".ui-jqdialog-titlebar-close");
 							$close.attr({ tabindex: "0", href: "#", role: "button" });
 							setTimeout(function () {
