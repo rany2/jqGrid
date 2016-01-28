@@ -184,6 +184,9 @@
 			h.t = trigger;
 			h.a = true;
 			h.w.css("z-index", z);
+			if ($(h.w[0].ownerDocument).data("ui-dialog-overlays")) {
+				h.w.addClass("ui-dialog"); // hack to allow input inside of jQuery UI modal
+			}
 			if (options.modal) {
 				if (!createdModals[0]) {
 					setTimeout(function () {
