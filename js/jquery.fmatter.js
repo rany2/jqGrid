@@ -731,7 +731,7 @@
 					idPrefix = options.idPrefix !== undefined ? options.idPrefix : (action.charAt(0).toUpperCase() + action.substring(1));
 				return "<div title='" + op[action + "title"] +
 					(options.hidden ? "' style='display:none;" : "") +
-					"' class='ui-pg-div ui-inline-" + action + "' " +
+					"' class='" + $self.jqGrid("getGuiStyles", "actionsButton", "ui-pg-div ui-inline-" + action) + "' " +
 					(idPrefix !== null ? "id='j" + idPrefix + "Button_" + rowid : "") +
 					"' onclick=\"return jQuery.fn.fmatter.rowactions.call(this,event,'" + actionName + "');\" " +
 					(options.noHovering ? "" : hoverAttributes) + "><span class='" +
@@ -755,7 +755,7 @@
 				str += actionButton(info);
 			}
 		}
-		return "<div class='ui-jqgrid-actions'>" + str + "</div>";
+		return "<div class='" + $self.jqGrid("getGuiStyles", "actionsDiv", "ui-jqgrid-actions") + "'>" + str + "</div>";
 	};
 	$FnFmatter.actions.pageFinalization = function (iCol) {
 		var $self = $(this), p = this.p, colModel = p.colModel, cm = colModel[iCol],

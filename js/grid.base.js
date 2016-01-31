@@ -8,11 +8,11 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-01-24
+ * Date: 2016-01-31
  */
 //jsHint options
-/*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
-/*jslint browser: true, devel: true, eqeq: true, nomen: true, plusplus: true, unparam: true, vars: true, evil: true, regexp: true, white: true, todo: true */
+/*jshint eqnull:true */
+/*jslint browser: true, evil: true, devel: true, white: true */
 /*global jQuery, define, HTMLElement, HTMLTableRowElement */
 
 (function (factory) {
@@ -464,7 +464,7 @@
 					newbutton: "fa-external-link"
 				},
 				actions: {
-					common: "ui-state-default fa-fw",
+					common: "fa-fw",
 					edit: "fa-pencil",
 					del: "fa-trash-o",
 					save: "fa-floppy-o",
@@ -478,7 +478,7 @@
 					undo: "fa-undo",
 					del: "fa-trash-o",
 					cancel: "fa-ban",
-					resizableLtr: "fa fa-rss fa-rotate-270"
+					resizableLtr: "fa-rss fa-rotate-270"
 				},
 				search: {
 					search: "fa-search",
@@ -486,7 +486,7 @@
 					query: "fa-comments-o"
 				},
 				subgrid: {
-					common: "ui-state-default fa-fw",
+					common: "fa-fw",
 					plus: "fa-plus",
 					minus: "fa-minus",
 					openLtr: "fa-reply fa-rotate-180",
@@ -508,7 +508,7 @@
 		},
 		guiStyles: {
 			jQueryUI: {
-				gBox: "ui-widget ui-widget-content ui-corner-all",  // ui-widget-content??? for the children of gbox
+				gBox: "ui-jqgrid-jquery-ui ui-widget ui-widget-content ui-corner-all",  // ui-widget-content??? for the children of gbox
 				gView: "",
 				overlay: "ui-widget-overlay",
 				loading: "ui-state-default ui-state-active",
@@ -525,12 +525,14 @@
 				},
 				dialog: {
 					header: "ui-widget-header ui-dialog-titlebar ui-corner-all ui-helper-clearfix",
-					window: "ui-widget ui-widget-content ui-corner-all ui-front",
+					window: "ui-jqgrid-jquery-ui ui-widget ui-widget-content ui-corner-all ui-front",
 					document: "",
 					subdocument: "",
+					body: "",
 					footer: "",
 					content: "ui-widget-content",
 					hr: "ui-widget-content",
+					closeButton: "ui-corner-all",
 					fmButton: "ui-state-default",
 					dataField: "ui-widget-content ui-corner-all",
 					viewLabel: "ui-widget-content",
@@ -543,11 +545,13 @@
 					dataField: "ui-widget-content"
 				},
 				subgrid: {
-					thSubgrid: "ui-state-default test", // used only with subGridModel
+					thSubgrid: "ui-state-default", // used only with subGridModel
 					rowSubTable: "ui-widget-content", // used only with subGridModel additionally to ui-subtblcell
 					row: "ui-widget-content", // class of the subgrid row, additional to ui-subgrid
 					tdStart: "", // it can be with span over rownumber and multiselect columns
 					tdWithIcon: "ui-widget-content", // class of cell with +- icon, additional to subgrid-cell
+					buttonDiv: "",
+					button: "",
 					tdData: "ui-widget-content" // class of main td with span over the grid, additional subgrid-data
 				},
 				grid: "",
@@ -560,13 +564,116 @@
 				titleButton: "ui-corner-all",
 				toolbarUpper: "ui-state-default",
 				toolbarBottom: "ui-state-default",
+				actionsDiv: "ui-widget-content",
+				actionsButton: "ui-corner-all",
 				pager: "ui-state-default",
 				pagerButton: "ui-corner-all",
+				navButton: "ui-corner-all",
 				pagerInput: "ui-widget-content",
 				pagerSelect: "ui-widget-content",
+				searchDialog: {
+					operator: "ui-corner-all",
+					label: "ui-corner-all",
+					elem: "ui-corner-all",
+					operationGroup: "",
+					addRuleButton: "ui-corner-all",
+					deleteRuleButton: "ui-corner-all",
+					operationSelect: "ui-corner-all",
+					addGroupButton: "ui-corner-all",
+					deleteGroupButton: "ui-corner-all"
+				},
+				searchToolbar: {
+					menu: "ui-menu-jqueryui",
+					operButton: "ui-corner-all",
+					clearButton: "ui-corner-all"
+				},
 				top: "ui-corner-top",
 				bottom: "ui-corner-bottom",
 				resizer: "ui-widget-header"
+			},
+			bootstrap: {
+				gBox: "ui-jqgrid-bootstrap",
+				gView: "panel-info",
+				overlay: "modal-backdrop",
+				loading: "",
+				hDiv: "custom-hdiv",
+				hTable: "table table-hover table-condensed table-bordered",
+				colHeaders: "",
+				states: {
+					select: "success",
+					disabled: "disabled ui-jqgrid-disablePointerEvents",
+					hover: "active",
+					error: "danger",
+					active: "active",
+					textOfClickable: ""
+				},
+				dialog: {
+					header: "modal-header custom-dlg-header",
+					window: "modal custom-dlg-window ui-jqgrid-bootstrap",
+					document: "modal-dialog",
+					subdocument: "modal-content",
+					body: "modal-body",
+					footer: "modal-footer",
+					content: "modal-content",
+					hr: "hidden",
+					closeButton: "btn btn-xs btn-default",
+					fmButton: "btn btn-default",
+					dataField: "form-control",
+					viewLabel: "",
+					viewData: "form-control",
+					leftCorner: "",
+					rightCorner: "",
+					defaultCorner: ""
+				},
+				filterToolbar: {
+					dataField: "form-control"
+				},
+				subgrid: {
+					thSubgrid: "",
+					rowSubTable: "",
+					row: "",
+					tdStart: "",
+					tdWithIcon: "",
+					buttonDiv: "",
+					button: "btn btn-xs",
+					tdData: ""
+				},
+				grid: "table table-condensed table-hover table-bordered",
+				gridRow: "",
+				rowNum: "",
+				gridFooter: "table table-hover table-condensed table-bordered",
+				rowFooter: "",
+				gridTitle: "custom-title-div",
+				gridError: "", //"ui-state-error",
+				titleButton: "btn btn-xs btn-default",
+				actionsDiv: "",
+				actionsButton: "btn btn-xs btn-default",
+				toolbarUpper: "",
+				toolbarBottom: "",
+				pager: "panel-footer",
+				pagerButton: "btn btn-xs",
+				navButton: "btn btn-xs",
+				pagerInput: "form-control",
+				pagerSelect: "form-control",
+				searchDialog: {
+					operator: "form-control",
+					label: "form-control",
+					elem: "form-control",
+					operationGroup: "form-inline",
+					addRuleButton: "btn btn-xs btn-default",
+					deleteRuleButton: "btn btn-xs btn-default",
+					operationSelect: "form-control",
+					addGroupButton: "btn btn-xs btn-default",
+					deleteGroupButton: "btn btn-xs btn-default"
+				},
+				searchToolbar: {
+					menu: "dropdown-menu",
+					operButton: "btn btn-xs btn-default",
+					clearButton: "btn btn-xs btn-default"
+				},
+				top: "",
+				bottom: "",
+				resizer: "ui-jqgrid-bootstrap"
 			}
 		},
 		htmlDecode: function (value) {
@@ -737,6 +844,12 @@
 			return base;
 		},
 		parseDate: function (format, date, newformat, opts) {
+			// It seems that the code was "imported" by Tony from http://blog.stevenlevithan.com/archives/date-time-format
+			// Thus I include the reference to original
+			// Date Format 1.2.3 (c) 2007-2009 Steven Levithan <stevenlevithan.com> MIT license
+			// The code can be found on https://github.com/felixge/node-dateformat/blob/master/lib/dateformat.js
+			// It would be probabbly good idea to support original date format additionally to the
+			// PHP data format used below.
 			var token = /\\.|[dDjlNSwzWFmMntLoYyaABgGhHisueIOPTZcrU]/g, dM, k, hl, timestamp = 0, offset = 0,
 				timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[\-+]\d{4})?)\b/g,
 				timezoneClip = /[^\-+\dA-Z]/g,
@@ -2035,7 +2148,7 @@
 		},
 		parseDataToHtml: function (len, ids, items, cellsToDisplay, rcnt, adjust, readAllInputData) {
 			var self = this, p = self.p, $self = $(self), i, j, altr, cn1, selr, idr, rd, cells, iStartTrTag,
-				selected = false, rowData = [],	cn = (p.altRows === true) ? p.altclass : "", grpdata = [],
+				selected = false, rowData = [],	cn = (p.altRows === true && p.guiStyle !== "bootstrap") ? p.altclass : "", grpdata = [],
 				hiderow = p.grouping ? p.groupingView.groupCollapse === true : false,
 				rn = parseInt(p.rowNum, 10), cmName, $j = $.fn.jqGrid,
 				// prepare to build the map rowIndexes, which will simplify us to get rowIndex
@@ -2720,9 +2833,9 @@
 						if (self.fbRows) {
 							$(self.fbRows[0].cells[idx]).css("width", nw);
 							$(getGridComponent(COMPONENT_NAMES.FROZEN_HEADER_TABLE, self.fhDiv)[0].rows[0].cells[idx]).css("width", nw);
-							if (p.footerrow) {
+							/*if (p.footerrow) {
 								$(getGridComponent(COMPONENT_NAMES.FROZEN_FOOTER_TABLE, self.fsDiv)[0].rows[0].cells[idx]).css("width", nw);
-							}
+							}*/
 						}
 						if (footers.length > 0) { footers[idx].style.width = nw + "px"; }
 						if (skipGridAdjustments !== true) {
@@ -2743,7 +2856,7 @@
 							if (skipGridAdjustments !== true) {
 								self.hDiv.scrollLeft = self.bDiv.scrollLeft;
 								if (p.footerrow) {
-									getGridComponent(COMPONENT_NAMES.FOOTER_TABLE, self.sDiv).css("width", p.tblwidth + "px");
+									//getGridComponent(COMPONENT_NAMES.FOOTER_TABLE, self.sDiv).css("width", p.tblwidth + "px");
 									self.sDiv.scrollLeft = self.bDiv.scrollLeft;
 								}
 							}
@@ -3217,7 +3330,7 @@
 					}
 				},
 				refreshIndex = function () {
-					var datalen = p.data.length, idname, i, val;
+					var datalen = p.data.length, idname, i, val, item;
 
 					if (p.keyName === false || p.loadonce) {
 						idname = p.localReader.id;
@@ -3226,8 +3339,14 @@
 					}
 					p._index = {};
 					for (i = 0; i < datalen; i++) {
-						val = getAccessor(p.data[i], idname);
-						if (val === undefined) { val = String(i + 1); }
+						item = p.data[i];
+						val = getAccessor(item, idname);
+						if (val === undefined) {
+							val = String(randId()); //String(i + 1);
+							if (item[idname] === undefined) {
+								item[idname] = val;
+							}
+						}
 						p._index[val] = i;
 					}
 				},
@@ -3570,6 +3689,9 @@
 							if (id === undefined) {
 								id = randId(); //id = br + i;
 							}
+						}
+						if (rd[idName] === undefined) {
+							rd[idName] = id;
 						}
 						id = String(id);
 						idr = p.idPrefix + id;
@@ -4190,7 +4312,10 @@
 					cent = pgid + "_center";
 					rgt = pgid + "_right";
 					$("#" + jqID(pgid))
-						.append("<div id='" + pgcnt + "' class='ui-pager-control' role='group'><table " + (isMSIE7 ? "cellspacing='0' " : "") + "class='ui-pg-table' style='width:100%;table-layout:fixed;height:100%;'><tbody><tr><td id='" + lft + "' style='text-align:left;'></td><td id='" + cent + "' style='text-align:center;white-space:pre;'></td><td id='" + rgt + "' style='text-align:right;'></td></tr></tbody></table></div>")
+						.append("<div id='" + pgcnt + "' class='ui-pager-control' role='group'><table " + (isMSIE7 ? "cellspacing='0' " : "") + "class='ui-pg-table' style='width:100%;table-layout:fixed;height:100%;'><tbody><tr>" +
+							"<td id='" + lft + "' style='text-align:left;" + (p.pagerLeftWidth !== undefined ? "width:" + p.pagerLeftWidth + "px;" : "") + "'></td>" +
+							"<td id='" + cent + "' style='text-align:center;white-space:pre;" + (p.pagerCenterWidth !== undefined ? "width:" + p.pagerCenterWidth + "px;" : "") + "'></td>" +
+							"<td id='" + rgt + "' style='text-align:right;" + (p.pagerRightWidth !== undefined ? "width:" + p.pagerRightWidth + "px;" : "") + "'></td></tr></tbody></table></div>")
 						.attr("dir", "ltr"); //explicit setting
 					pgcnt = "#" + jqID(pgcnt); // modify to id selector
 					if (p.rowList.length > 0) {
@@ -4817,7 +4942,7 @@
 							}
 						},
 						frozenRows = grid.fbRows,
-						skipClasses = disabledStateClasses + " ui-subgrid jqgroup jqfoot jqgfirstrow",
+						skipClasses = disabledStateClasses + " ui-subgrid jqgroup jqfoot jqgfirstrow jqgskipselect",
 						id, ids = p._index;
 					clearArray(p.selarrrow); // p.selarrrow = [];
 					if (this.checked) {
@@ -4837,10 +4962,13 @@
 						toCheck = false;
 						p.selrow = null;
 					}
+					var selArr = toCheck ? p.selarrrow : emp;
 					$(ts.rows).each(function (i) {
 						if (!hasOneFromClasses(this, skipClasses)) {
 							selectUnselectRow(this, toCheck);
-							(toCheck ? p.selarrrow : emp).push(this.id);
+							if ($.inArray(this.id, selArr) < 0) {
+								selArr.push(this.id);
+							}
 							if (frozenRows) {
 								selectUnselectRow(frozenRows[i], toCheck);
 							}
@@ -4893,7 +5021,11 @@
 				});
 			$(gv).css("width", grid.width + "px");
 			var tfoot = "";
-			if (p.footerrow) { tfoot += "<table role='presentation' style='width:" + p.tblwidth + "px' class='ui-jqgrid-ftable'" + (isMSIE7 ? " cellspacing='0'" : "") + "><tbody><tr role='row' class='" + getGuiStyles("rowFooter", "footrow footrow-" + dir) + "'>"; }
+			if (p.footerrow) {
+				tfoot += "<table role='presentation' style='width:1px' class='" +
+					getGuiStyles("gridFooter", "ui-jqgrid-ftable") + "'" + (isMSIE7 ? " cellspacing='0'" : "") +
+					"><tbody><tr role='row' class='" + getGuiStyles("rowFooter", "footrow footrow-" + dir) + "'>";
+			}
 			var firstr = "<tr class='jqgfirstrow' role='row' style='height:auto'>";
 			p.disableClick = false;
 			$("th", hTable[0].tHead.rows[0])
@@ -5027,7 +5159,7 @@
 			firstr += "</tr>";
 			$(ts).html("<tbody>" + firstr + "</tbody>");
 			//firstr = null;
-			$self0.addClass(getGuiStyles("grid", "ui-jqgrid-btable"));
+			$self0.addClass(getGuiStyles("grid", "ui-jqgrid-btable" + (p.guiStyle === "bootstrap" ? " table-striped" : "")));
 			var hg = (p.caption && p.hiddengrid === true) ? true : false,
 				hb = $("<div class='ui-jqgrid-hbox" + (dir === "rtl" ? "-rtl" : "") + "'></div>"),
 				bottomClasses = getGuiStyles("bottom");
@@ -5857,7 +5989,7 @@
 					}
 				}
 				$t.rebuildRowIndexes();
-				if (p.altRows === true && success) {
+				if (p.altRows === true && success && p.guiStyle !== "bootstrap") {
 					var cn = p.altclass, frozenRows = $t.grid.fbRows;
 					$($t.rows).each(function (i) {
 						var $row = $(this);
@@ -6085,7 +6217,7 @@
 						});
 						k++;
 					}
-					if (p.altRows === true && !aradd) {
+					if (p.altRows === true && !aradd && p.guiStyle !== "bootstrap") {
 						// even in case of usage correct parameter for parseDataToHtml
 						// one will need to reset the classes if the row will be inserted not at the end of jqGrid
 						if (pos === "last") {
@@ -6430,9 +6562,9 @@
 					//$($t).css("width", newGridWidth + "px");
 					//getGridComponent(COMPONENT_NAMES.HEADER_TABLE, hDiv).css("width", newGridWidth + "px");
 					hDiv.scrollLeft = bDiv.scrollLeft;
-					if (p.footerrow) {
+					/*if (p.footerrow) {
 						getGridComponent(COMPONENT_NAMES.FOOTER_TABLE, sDiv).css("width", newGridWidth + "px");
-					}
+					}*/
 					// small fix which origin should be examined more exactly
 					delta = Math.abs(newGridWidth - p.width);
 					if (p.shrinkToFit && !shrink && delta < 3 && delta > 0) {

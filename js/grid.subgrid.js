@@ -81,7 +81,9 @@
 			return self == null || self.p == null || subGridOptions == null ? "" :
 					"<td role='gridcell' class='" + base.getGuiStyles.call(this, "subgrid.tdStart", hasSubgrid ? "ui-sgcollapsed sgcollapsed" : "") + "' " +
 					self.formatCol(pos, iRow) + ">" +
-					(hasSubgrid ? "<a style='cursor:pointer;'><span class='" + jgrid.mergeCssClasses(subGridOptions.commonIconClass, subGridOptions.plusicon) + "'></span></a>" : "&nbsp;") +
+					(hasSubgrid ? "<div class='" + base.getGuiStyles.call(this, "subgrid.buttonDiv", "sgbutton-div") +
+						"'><a role='button' class='" + base.getGuiStyles.call(this, "subgrid.button", "sgbutton") +
+						"'><span class='" + jgrid.mergeCssClasses(subGridOptions.commonIconClass, subGridOptions.plusicon) + "'></span></a></div>" : "&nbsp;") +
 					"</td>";
 		},
 		addSubGrid: function (pos, sind) {
@@ -244,7 +246,11 @@
 							} else {
 								$(r).show();
 							}
-							$(this).html("<a style='cursor:pointer;'><span class='" + iconClass("minusicon") + "'></span></a>").removeClass("sgcollapsed").addClass("sgexpanded");
+							$(this).html(
+								"<div class='" + base.getGuiStyles.call(ts, "subgrid.buttonDiv", "sgbutton-div") +
+								"'><a role='button' class='" + base.getGuiStyles.call(ts, "subgrid.button", "sgbutton") +
+								"'><span class='" + iconClass("minusicon") + "'></span></a></div>"
+							).removeClass("sgcollapsed").addClass("sgexpanded");
 							if (p.subGridOptions.selectOnExpand) {
 								$(ts).jqGrid("setSelection", rowid);
 							}
@@ -257,7 +263,11 @@
 							} else if ($(r).hasClass("ui-subgrid")) { // incase of dynamic deleting
 								$(r).hide();
 							}
-							$(this).html("<a style='cursor:pointer;'><span class='" + iconClass("plusicon") + "'></span></a>").removeClass("sgexpanded").addClass("sgcollapsed");
+							$(this).html(
+								"<div class='" + base.getGuiStyles.call(ts, "subgrid.buttonDiv", "sgbutton-div") +
+								"'><a role='button' class='" + base.getGuiStyles.call(ts, "subgrid.button", "sgbutton") +
+								"'><span class='" + iconClass("plusicon") + "'></span></a></div>"
+							).removeClass("sgexpanded").addClass("sgcollapsed");
 							if (p.subGridOptions.selectOnCollapse) {
 								$(ts).jqGrid("setSelection", rowid);
 							}

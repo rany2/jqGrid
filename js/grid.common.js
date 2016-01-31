@@ -147,7 +147,7 @@
 			mh.id = aIDs.modalhead;
 			$(mh).append("<span class='ui-jqdialog-title'>" + o.caption + "</span>");
 			var hoverClasses = getGuiStyles.call(this, "states.hover"),
-				ahr = $("<a class='ui-jqdialog-titlebar-close ui-corner-all'></a>")
+				ahr = $("<a class='" + getGuiStyles.call(this, "dialog.closeButton", "ui-jqdialog-titlebar-close") + "'></a>")
 					.hover(function () { ahr.addClass(hoverClasses); },
 						function () { ahr.removeClass(hoverClasses); })
 					.append("<span class='" + jgrid.getIconRes(p.iconSet, "form.close") + "'></span>");
@@ -212,8 +212,7 @@
 			$(mw).css($.extend({
 				width: isNaN(o.width) ? "auto" : o.width + "px",
 				height: isNaN(o.height) ? "auto" : o.height + "px",
-				zIndex: o.zIndex,
-				overflow: "hidden"
+				zIndex: o.zIndex
 			}, coord))
 				.attr({ tabIndex: "-1", "role": "dialog", "aria-labelledby": aIDs.modalhead, "aria-hidden": "true" });
 			if (o.drag === undefined) { o.drag = true; }
@@ -254,7 +253,7 @@
 				//toTop: false,
 				overlay: 30,
 				modal: false,
-				overlayClass: "ui-widget-overlay",
+				overlayClass: getGuiStyles.call(this, "overlay"), // "ui-widget-overlay"
 				onShow: jgrid.showModal,
 				onHide: jgrid.closeModal,
 				gbox: "",
@@ -354,11 +353,11 @@
 				return false;
 			});
 			$(".fm-button", "#info_dialog").hover(
-				function () { $(this).addClass(hoverClasses); },
-				function () { $(this).removeClass(hoverClasses); }
+				function () { $($t).addClass(hoverClasses); },
+				function () { $($t).removeClass(hoverClasses); }
 			);
 			if ($.isFunction(mopt.beforeOpen)) { mopt.beforeOpen(); }
-			jgrid.viewModal("#info_dialog", {
+			jgrid.viewModal.call($t, "#info_dialog", {
 				onHide: function (h) {
 					h.w.hide().remove();
 					if (h.o) { h.o.remove(); }
@@ -408,7 +407,7 @@
 					elem = document.createElement("textarea");
 					if (autowidth) {
 						if (!options.cols) { $(elem).css({ width: "100%", "box-sizing": "border-box" }); }
-					} else if (!options.cols) { options.cols = 20; }
+					} else if (!options.cols) { options.cols = 19; }
 					if (!options.rows) { options.rows = 2; }
 					if (vl === "&nbsp;" || vl === "&#160;" || (vl.length === 1 && vl.charCodeAt(0) === 160)) { vl = ""; }
 					elem.value = vl;

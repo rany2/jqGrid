@@ -157,7 +157,7 @@
 				function showFilter($filter) {
 					if (searchFeedback("beforeShow", $filter)) {
 						$(themodalSelector).data("onClose", o.onClose);
-						jgrid.viewModal(themodalSelector, {
+						jgrid.viewModal.call($t, themodalSelector, {
 							gbox: gboxSelector,
 							jqm: o.jqModal,
 							overlay: o.overlay,
@@ -174,7 +174,9 @@
 				if ($(themodalSelector)[0] !== undefined) {
 					showFilter($("#fbox_" + p.idSel));
 				} else {
-					var fil = $("<div><div id='" + fid + "' class='searchFilter' style='overflow:auto'></div></div>").insertBefore(gviewSelector);
+					var fil = $("<div><div id='" + fid + "' class='" +
+						getGuiStyles.call($t, "dialog.body", "searchFilter") +
+						"' style='overflow:auto'></div></div>").insertBefore(gviewSelector);
 					if (p.direction === "rtl") {
 						fil.attr("dir", "rtl");
 					}
@@ -240,8 +242,8 @@
 						tmpl += "</select>";
 					}
 
-					bt = "<table class='EditTable' style='border:0px none;margin-top:5px' id='" + fid + "_2'><tbody><tr><td colspan='2'><hr class='" +
-						getGuiStyles.call($t, "dialog.hr") + "' style='margin:1px'/></td></tr><tr><td class='EditButton EditButton-" + p.direction + "'  style='float:" + (p.direction === "rtl" ? "right" : "left") + ";'>" + bC + tmpl + "</td><td class='EditButton EditButton-" + p.direction + "'>" + bQ + bS + "</td></tr></tbody></table>";
+					bt = "<div class='" + getGuiStyles.call($t, "dialog.footer") + "'><table class='EditTable' style='border:0px none;margin-top:5px' id='" + fid + "_2'><tbody><tr><td colspan='2'><hr class='" +
+						getGuiStyles.call($t, "dialog.hr") + "' style='margin:1px'/></td></tr><tr><td class='EditButton EditButton-" + p.direction + "'  style='float:" + (p.direction === "rtl" ? "right" : "left") + ";'>" + bC + tmpl + "</td><td class='EditButton EditButton-" + p.direction + "'>" + bQ + bS + "</td></tr></tbody></table></div>";
 					fid = jqID(fid);
 					o.gbox = "#gbox_" + fid;
 					o.height = "auto";
@@ -449,7 +451,7 @@
 							ajaxEditOptions: {},
 							serializeEditData: null,
 							viewPagerButtons: true,
-							overlayClass: "ui-widget-overlay",
+							overlayClass: getGuiStyles.call(this, "overlay"),
 							removemodal: true,
 							skipPostTypes: ["image", "file"],
 							form: "edit"
@@ -1152,10 +1154,10 @@
 					bN = builderFmButon.call($t, bn, "", mergeCssClasses(commonIconClass, o.nextIcon), "", "right"),
 					bS = builderFmButon.call($t, "sData", o.bSubmit),
 					bC = builderFmButon.call($t, "cData", o.bCancel),
-					bt = "<table" + (jgrid.msie && jgrid.msiever() < 8 ? " cellspacing='0'" : "") + " class='EditTable' id='" + frmtborg + "_2'><tbody><tr><td colspan='2'><hr class='" +
+					bt = "<div class='" + getGuiStyles.call($t, "dialog.footer") + "'><table" + (jgrid.msie && jgrid.msiever() < 8 ? " cellspacing='0'" : "") + " class='EditTable' id='" + frmtborg + "_2'><tbody><tr><td colspan='2'><hr class='" +
 					getGuiStyles.call($t, "dialog.hr") + "' style='margin:1px'/></td></tr><tr id='Act_Buttons'><td class='navButton navButton-" + p.direction + "'>" + (rtlb ? bN + bP : bP + bN) + "</td><td class='EditButton EditButton-" + p.direction + "'>" + bS + "&#160;" + bC + "</td></tr>";
 				bt += "<tr style='display:none' class='binfo'><td class='bottominfo' colspan='2'>" + (o.bottominfo || "&#160;") + "</td></tr>";
-				bt += "</tbody></table>";
+				bt += "</tbody></table></div>";
 				if (maxRows > 0) {
 					var sd = [];
 					$.each($(tbl)[0].rows, function (i, r) {
@@ -1176,7 +1178,7 @@
 					o.closeOnEscape = false;
 					cle = true;
 				}
-				var tms = $("<div></div>").append(frm).append(bt);
+				var tms = $("<div></div>").append($("<div class='" + getGuiStyles.call($t, "dialog.body") + "'></div>").append(frm)).append(bt);
 				jgrid.createModal.call($t, ids, tms, o, p.gView, $(gboxSelector)[0]);
 				// TODO: remove the call of jgrid.bindEv and probably call of opt.custom_value from createData
 				// and place the calls here AFTER the form are placed on the HTML page
@@ -1286,7 +1288,7 @@
 				}
 				editFeedback("beforeShowForm", $(frmgr), editOrAdd);
 				$(themodalSelector).data("onClose", o.onClose);
-				jgrid.viewModal(themodalSelector, {
+				jgrid.viewModal.call($t, themodalSelector, {
 					gbox: gboxSelector,
 					jqm: o.jqModal,
 					overlay: o.overlay,
@@ -1429,7 +1431,7 @@
 				}
 				function focusaref() { //Sfari 3 issues
 					if (o.closeOnEscape === true || o.navkeys[0] === true) {
-						setTimeout(function () { $(".ui-jqdialog-titlebar-close", "#" + jqID(ids.modalhead)).attr("tabindex", "-1").focus(); }, 0);
+						setTimeout(function () { $("#cData").focus(); }, 0);
 					}
 				}
 				function createData(rowid, tb, maxcols) {
@@ -1554,8 +1556,10 @@
 
 				var dh = isNaN(o.dataheight) ? o.dataheight : o.dataheight + "px",
 					dw = isNaN(o.datawidth) ? o.datawidth : o.datawidth + "px",
-					frm = $("<form name='FormPost' id='" + frmgrId + "' class='FormGrid' style='width:" + dw + ";overflow:auto;position:relative;height:" + dh + ";'></form>"),
-					tbl = $("<table id='" + frmtbId + "' class='EditTable' cellspacing='1' cellpadding='2' border='0' style='table-layout:fixed'><tbody></tbody></table>");
+					frm = $("<div class='" + getGuiStyles.call($t, "dialog.body") + "'><form name='FormPost' id='" + frmgrId +
+						"' class='FormGrid' style='width:" + dw + ";overflow:auto;position:relative;height:" + dh + ";'></form></div>"),
+					tbl = $("<table id='" + frmtbId +
+						"' class='EditTable' cellspacing='1' cellpadding='2' border='0' style='table-layout:fixed'><tbody></tbody></table>");
 				$(colModel).each(function () {
 					var fmto = this.formoptions;
 					maxCols = Math.max(maxCols, fmto ? fmto.colpos || 0 : 0);
@@ -1588,7 +1592,7 @@
 					});
 				}
 				o.gbox = gboxSelector;
-				var bt = $("<div></div>").append(frm).append("<table border='0' class='EditTable' id='" + frmtbId + "_2'><tbody><tr id='Act_Buttons'><td class='navButton navButton-" + p.direction + "' width='" + (o.labelswidth || "auto") + "'>" + (rtlb ? bN + bP : bP + bN) + "</td><td class='EditButton EditButton-" + p.direction + "'>" + bC + "</td></tr></tbody></table>");
+				var bt = $("<div></div>").append(frm).append("<div class='" + getGuiStyles.call($t, "dialog.footer") + "'><table border='0' class='EditTable' id='" + frmtbId + "_2'><tbody><tr id='Act_Buttons'><td class='navButton navButton-" + p.direction + "' width='" + (o.labelswidth || "auto") + "'>" + (rtlb ? bN + bP : bP + bN) + "</td><td class='EditButton EditButton-" + p.direction + "'>" + bC + "</td></tr></tbody></table></div>");
 				jgrid.createModal.call($t, ids, bt, o, p.gView, $(p.gView)[0]);
 				if (!o.viewPagerButtons) { $("#pData, #nData", frmtb2).hide(); }
 				bt = null;
@@ -1621,7 +1625,7 @@
 				});
 				addFormIcon($("#cData", frmtb2), o.closeicon, commonIconClass);
 				viewFeedback("beforeShowForm", $(frmgr));
-				jgrid.viewModal(themodalSelector, {
+				jgrid.viewModal.call($t, themodalSelector, {
 					gbox: gboxSelector,
 					jqm: o.jqModal,
 					overlay: o.overlay,
@@ -1687,6 +1691,7 @@
 							removemodal: true,
 							height: "auto",
 							dataheight: "auto",
+							datawidth: "auto",
 							//modal: false,
 							//toTop: false,
 							//overlay: 30,
@@ -1739,23 +1744,25 @@
 						$("#dData", dtbl).removeClass(activeClass);
 					}
 					deleteFeedback("beforeShowForm", $(dtbl));
-					jgrid.viewModal(themodalSelector, { gbox: gboxSelector, jqm: o.jqModal, jqM: false, overlay: o.overlay, toTop: o.toTop, modal: o.modal });
+					jgrid.viewModal.call($t, themodalSelector, { gbox: gboxSelector, jqm: o.jqModal, jqM: false, overlay: o.overlay, toTop: o.toTop, modal: o.modal });
 					deleteFeedback("afterShowForm", $(dtbl));
 				} else {
 					var dh = isNaN(o.dataheight) ? o.dataheight : o.dataheight + "px",
 						dw = isNaN(o.datawidth) ? o.datawidth : o.datawidth + "px",
-						tbl = "<div id='" + dtblId + "' class='formdata' style='width:" + dw + ";overflow:auto;position:relative;height:" + dh + ";'>";
+						tbl = "<div class='" + getGuiStyles.call($t, "dialog.body") + "'><div id='" + dtblId + "' class='formdata' style='width:" + dw + ";overflow:auto;position:relative;height:" + dh + ";'>";
 					tbl += "<table class='DelTable'><tbody>";
 					// error data
 					tbl += "<tr id='DelError' style='display:none'><td class='" + errorClass + "'></td></tr>";
 					tbl += "<tr id='DelData' style='display:none'><td >" + rowids.join() + "</td></tr>";
-					tbl += "<tr><td class='delmsg' style='white-space:pre;'>" + o.msg + "</td></tr><tr><td >&#160;</td></tr>";
+					tbl += "<tr><td class='delmsg' style='white-space:pre;'>" + o.msg + "</td></tr>";
 					// buttons at footer
-					tbl += "</tbody></table></div>";
+					tbl += "</tbody></table></div></div>";
 					var bS = builderFmButon.call($t, "dData", o.bSubmit),
 						bC = builderFmButon.call($t, "eData", o.bCancel);
-					tbl += "<table" + (jgrid.msie && jgrid.msiever() < 8 ? " cellspacing='0'" : "") + " class='EditTable' id='" + dtblId + "_2'><tbody><tr><td><hr class='" +
-					getGuiStyles.call($t, "dialog.hr") + "' style='margin:1px'/></td></tr><tr><td class='DelButton EditButton EditButton-" + p.direction + "'>" + bS + "&#160;" + bC + "</td></tr></tbody></table>";
+					tbl += "<div class='" + getGuiStyles.call($t, "dialog.footer") + "'><table" + (jgrid.msie && jgrid.msiever() < 8 ? " cellspacing='0'" : "") +
+						" class='EditTable' id='" + dtblId + "_2'><tbody><tr><td><hr class='" +
+						getGuiStyles.call($t, "dialog.hr") + "' style='margin:1px'/></td></tr><tr><td class='DelButton EditButton EditButton-" +
+						p.direction + "'>" + bS + "&#160;" + bC + "</td></tr></tbody></table></div>";
 					o.gbox = gboxSelector;
 					jgrid.createModal.call($t, ids, tbl, o, p.gView, $(p.gView)[0]);
 					$("#DelData>td", dtbl).data("rowids", rowids);
@@ -1880,7 +1887,7 @@
 						return false;
 					});
 					deleteFeedback("beforeShowForm", $(dtbl));
-					jgrid.viewModal(themodalSelector, { gbox: gboxSelector, jqm: o.jqModal, overlay: o.overlay, toTop: o.toTop, modal: o.modal });
+					jgrid.viewModal.call($t, themodalSelector, { gbox: gboxSelector, jqm: o.jqModal, overlay: o.overlay, toTop: o.toTop, modal: o.modal });
 					deleteFeedback("afterShowForm", $(dtbl));
 				}
 				if (o.closeOnEscape === true) {
@@ -1983,7 +1990,7 @@
 									$(gboxSelector)[0],
 									false);
 							}
-							jgrid.viewModal("#" + jqID(alertIDs.themodal), { gbox: gboxSelector, toTop: o.alertToTop, jqm: o.jqModal });
+							jgrid.viewModal.call($t, "#" + jqID(alertIDs.themodal), { gbox: gboxSelector, toTop: o.alertToTop, jqm: o.jqModal });
 							var $close = $("#" + jqID(alertIDs.modalhead)).find(".ui-jqdialog-titlebar-close");
 							$close.attr({ tabindex: "0", href: "#", role: "button" });
 							setTimeout(function () {
@@ -2004,7 +2011,8 @@
 						}
 					},
 					hoverClasses = getGuiStateStyles.call($t, "hover"),
-					disabledClass = getGuiStateStyles.call($t, "disabled");
+					disabledClass = getGuiStateStyles.call($t, "disabled"),
+					navButtonClass = getGuiStyles.call($t, "navButton", "ui-pg-button");
 				if (!$t.grid) {
 					return; // error
 				}
@@ -2022,7 +2030,8 @@
 				}
 
 				var clone = 1, i, tbd, pgid, elemids, iPart, pagerTable, $pagerPart, pagerParts = ["left", "center", "right"],
-					sep = "<div class='ui-pg-button " + disabledClass + "'><span class='ui-separator'></span></div>",
+					navButtonDisabledClass = getGuiStyles.call($t, "navButton", "ui-pg-button" + " " + getGuiStateStyles.call($t, "disabled")),
+					sep = "<div class='" + navButtonDisabledClass + "'><span class='ui-separator'></span></div>",
 					onHoverIn = function () {
 						if (!hasOneFromClasses(this, disabledClass)) {
 							$(this).addClass(hoverClasses);
@@ -2121,7 +2130,7 @@
 						return false;
 					},
 					stdButtonActivation = function (name, id, onClick, navtbl, elemids) {
-						var $button = $("<div class='ui-pg-button ui-corner-all' tabindex='0' role='button'></div>"),
+						var $button = $("<div class='" + navButtonClass + "' tabindex='0' role='button'></div>"),
 							iconClass = o[name + "icon"],
 							iconText = $.trim(o[name + "text"]);
 						$button.append("<div class='ui-pg-div'><span class='" +
@@ -2234,7 +2243,8 @@
 						oMuligrid || {}
 					),
 					hoverClasses = getGuiStateStyles.call($t, "hover"),
-					disabledClass = getGuiStateStyles.call($t, "disabled");
+					disabledClass = getGuiStateStyles.call($t, "disabled"),
+					navButtonClass = getGuiStyles.call($t, "navButton", "ui-pg-button");
 				if (elem === undefined) {
 					if (p.pager) {
 						base.navButtonAdd.call($($t), p.pager, o);
@@ -2253,11 +2263,11 @@
 					if (o.id && findnav.find("#" + jqID(o.id)).length > 0) { return; }
 					var tbd = $("<div tabindex='0' role='button'></div>");
 					if (o.buttonicon.toString().toUpperCase() === "NONE") {
-						$(tbd).addClass("ui-pg-button ui-corner-all").append("<div class='ui-pg-div'>" +
+						$(tbd).addClass(navButtonClass).append("<div class='ui-pg-div'>" +
 							(o.caption ? "<span class='ui-pg-button-text" + (o.iconsOverText ? " ui-pg-button-icon-over-text" : "") + "'>" + o.caption + "</span>" : "") +
 							"</div>");
 					} else {
-						$(tbd).addClass("ui-pg-button ui-corner-all").append("<div class='ui-pg-div'>" +
+						$(tbd).addClass(navButtonClass).append("<div class='ui-pg-div'>" +
 							"<span class='" +
 							(o.iconsOverText ?
 									mergeCssClasses("ui-pg-button-icon-over-text", commonIconClass, o.buttonicon) :
@@ -2300,7 +2310,9 @@
 			}, o || {});
 			return this.each(function () {
 				if (!this.grid) { return; }
-				var $t = this, p = $t.p;
+				var $t = this, p = $t.p,
+					navButtonClass = getGuiStyles.call($t, "navButton", "ui-pg-button" + " " + getGuiStateStyles.call($t, "disabled"));
+
 				if (elem === undefined) {
 					if (p.pager) {
 						base.navSeparatorAdd.call($($t), p.pager, o);
@@ -2316,7 +2328,7 @@
 				if (typeof elem === "string" && elem.indexOf("#") !== 0) { elem = "#" + jqID(elem); }
 				var $nav = $(".navtable", elem);
 				if ($nav.length > 0) {
-					var sep = "<div class='ui-pg-button " + getGuiStateStyles.call($t, "disabled") + "'><span class='" + o.sepclass + "'></span>" + o.sepcontent + "</div>";
+					var sep = "<div class='" + navButtonClass + "'><span class='" + o.sepclass + "'></span>" + o.sepcontent + "</div>";
 					if (o.position === "first") {
 						if ($nav.children("div.ui-pg-button").length === 0) {
 							$nav.append(sep);

@@ -486,7 +486,9 @@
 
 						var selclass, ina, i = 0, aoprs = [], selected = $(elem).data("soper"), nm = $(elem).data("colname"),
 							fs = $(".ui-jqgrid-view").css("font-size") || "11px",
-							str = "<ul id='sopt_menu' class='ui-search-menu' role='menu' tabindex='0' style='z-index:9999;font-size:" + fs + ";left:" + left + "px;top:" + top + "px;'>";
+							str = "<ul id='sopt_menu' class='" +
+									getGuiStyles.call($t, "searchToolbar.menu", "ui-search-menu") +
+									"' role='menu' tabindex='0' style='z-index:9999;display:block;font-size:" + fs + ";left:" + left + "px;top:" + top + "px;'>";
 						i = p.iColByName[nm];
 						if (i === undefined) { return; }
 						var cm = colModel[i], options = $.extend({}, cm.searchoptions), odataItem, item, itemOper, itemOperand, itemText;
@@ -545,7 +547,7 @@
 				$.each(colModel, function (ci) {
 					var cm = this, soptions, mode = "filter", surl, self, select = "", sot, so, i, searchoptions = cm.searchoptions, editoptions = cm.editoptions,
 						th = $("<th></th>", { "class": getGuiStyles.call($t, "colHeaders", "ui-th-column ui-th-" + p.direction + " " + (o.applyLabelClasses ? cm.labelClasses || "" : "")) }),
-						thd = $("<div style='position:relative;height:auto;'></div>"),
+						thd = $("<div></div>"),
 						stbl = $("<table class='ui-search-table'" + (jgrid.msie && jgrid.msiever() < 8 ? " cellspacing='0'" : "") + "><tr><td class='ui-search-oper'></td><td class='ui-search-input'></td><td class='ui-search-clear' style='width:1px'></td></tr></table>");
 					if (this.hidden === true) { $(th).css("display", "none"); }
 					this.search = this.search === false ? false : true;
@@ -572,7 +574,9 @@
 							}
 							if (sot === undefined) { sot = "="; }
 							var st = soptions.searchtitle != null ? soptions.searchtitle : getRes("search.operandTitle");
-							select = "<a title='" + st + "' style='padding-right:0.5em;' data-soper='" + so + "' class='soptclass' data-colname='" + this.name + "'>" + sot + "</a>";
+							select = "<a title='" + st + "' data-soper='" + so + "' class='" +
+								getGuiStyles.call($t, "searchToolbar.operButton", "soptclass") +
+								"' data-colname='" + this.name + "'>" + sot + "</a>";
 						}
 						$("td", stbl).first().data("colindex", ci).append(select);
 						if (soptions.sopt == null || soptions.sopt.length === 1) {
@@ -583,7 +587,11 @@
 						}
 						if (soptions.clearSearch) {
 							var csv = getRes("search.resetTitle") || "Clear Search Value";
-							$("td", stbl).eq(2).append("<a title='" + csv + "' style='padding-right:0.2em;padding-left:0.3em;' class='clearsearchclass'>" + o.resetIcon + "</a>");
+							$("td", stbl)
+								.eq(2)
+								.append("<a title='" + csv + "' class='" +
+									getGuiStyles.call($t, "searchToolbar.clearButton", "clearsearchclass") +
+									"'><span>" + o.resetIcon + "</span></a>");
 						} else {
 							$("td", stbl).eq(2).hide();
 						}
@@ -695,7 +703,7 @@
 							case "text":
 								var df = soptions.defaultValue !== undefined ? soptions.defaultValue : "";
 
-								$("td", stbl).eq(1).append("<input type='text' class='" + dataFieldClass + "' style='width:100%;padding:0;' name='" + (cm.index || cm.name) + "' id='gs_" + cm.name + "' value='" + df + "'/>");
+								$("td", stbl).eq(1).append("<input type='text' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='gs_" + cm.name + "' value='" + df + "'/>");
 								$(thd).append(stbl);
 
 								if (soptions.attr) { $("input", thd).attr(soptions.attr); }
@@ -733,7 +741,7 @@
 								}
 								break;
 							case "custom":
-								$("td", stbl).eq(1).append("<span style='width:95%;padding:0;' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='gs_" + cm.name + "'/>");
+								$("td", stbl).eq(1).append("<span style='width:100%;padding:0;box-sizing:border-box;' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='gs_" + cm.name + "'/>");
 								$(thd).append(stbl);
 								try {
 									if ($.isFunction(soptions.custom_element)) {
@@ -761,6 +769,12 @@
 						}
 					}
 					$(th).append(thd);
+					$(th).find(".ui-search-oper .soptclass,.ui-search-clear .clearsearchclass")
+						.hover(function () {
+							$(this).addClass(hoverClasses);
+						}, function () {
+							$(this).removeClass(hoverClasses);
+						});
 					$(tr).append(th);
 					if (!o.searchOperators) {
 						$("td", stbl).eq(0).hide();

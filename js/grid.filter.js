@@ -91,10 +91,10 @@
 				getGrid = function () {
 					return $("#" + jgrid.jqID(p.id))[0] || null;
 				},
-				getGuiStyles = function (path) {
+				getGuiStyles = function (path, jqClasses) {
 					//return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path), jqClasses || "");
 					//return jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path);
-					return $(getGrid()).jqGrid("getGuiStyles", path);
+					return $(getGrid()).jqGrid("getGuiStyles", path, jqClasses || "");
 				},
 				getRes = function (property) {
 					return $(getGrid()).jqGrid("getGridRes", "search." + property);
@@ -193,7 +193,8 @@
 			this.createTableForGroup = function (group, parentgroup) {
 				var that = this, i;
 				// this table will hold all the group (tables) and rules (rows)
-				var table = $("<table class='group " + dialogContentClass + "' style='border:0px none;'><tbody></tbody></table>"), align = "left";
+				var table = $("<table class='" + getGuiStyles("searchDialog.operationGroup", "group " + dialogContentClass) +
+						"' style='border:0px none;'><tbody></tbody></table>"), align = "left";
 				// create error message row
 				if (p.direction === "rtl") {
 					align = "right";
@@ -212,7 +213,7 @@
 
 				if (p.ruleButtons === true) {
 					// dropdown for: choosing group operator type
-					var groupOpSelect = $("<select class='opsel'></select>");
+					var groupOpSelect = $("<select class='" + getGuiStyles("searchDialog.operationSelect", "opsel") + "'></select>");
 					th.append(groupOpSelect);
 					// populate dropdown with all posible group operators: or, and
 					var str = "", selected;
@@ -230,7 +231,8 @@
 				// button for adding a new subgroup
 				var inputAddSubgroup = "<span></span>";
 				if (p.groupButton) {
-					inputAddSubgroup = $("<input type='button' value='+ {}' title='" + getRes("addGroupTitle") + "' class='add-group'/>");
+					inputAddSubgroup = $("<input type='button' value='+ {}' title='" + getRes("addGroupTitle") + "' class='" +
+						getGuiStyles("searchDialog.addGroupButton", "add-group") + "'/>");
 					inputAddSubgroup.bind("click", function () {
 						if (group.groups === undefined) {
 							group.groups = [];
@@ -251,7 +253,8 @@
 				th.append(inputAddSubgroup);
 				if (p.ruleButtons === true) {
 					// button for adding a new rule
-					var inputAddRule = $("<input type='button' value='+' title='" + getRes("addRuleTitle") + "' class='add-rule ui-add'/>"), cm;
+					var inputAddRule = $("<input type='button' value='+' title='" + getRes("addRuleTitle") + "' class='" +
+							getGuiStyles("searchDialog.addRuleButton", "add-rule ui-add") + "'/>"), cm;
 					inputAddRule.bind("click", function () {
 						var searchable, hidden, ignoreHiding;
 						//if(!group) { group = {};}
@@ -296,7 +299,8 @@
 
 				// button for delete the group
 				if (parentgroup !== null) { // ignore the first group
-					var inputDeleteGroup = $("<input type='button' value='-' title='" + getRes("deleteGroupTitle") + "' class='delete-group'/>");
+					var inputDeleteGroup = $("<input type='button' value='-' title='" + getRes("deleteGroupTitle") + "' class='" +
+							getGuiStyles("searchDialog.deleteGroupButton", "delete-group") + "'/>");
 					th.append(inputDeleteGroup);
 					inputDeleteGroup.bind("click", function () {
 						// remove group from parent
@@ -361,7 +365,8 @@
 				tr.append(ruleFieldTd);
 
 				// dropdown for: choosing field
-				var ruleFieldSelect = $("<select></select>"), ina, aoprs = [];
+				var ruleFieldSelect = $("<select class='" + getGuiStyles("searchDialog.label", "selectLabel") +
+						"'></select>"), ina, aoprs = [];
 				ruleFieldTd.append(ruleFieldSelect);
 				ruleFieldSelect.bind("change", function () {
 					rule.field = $(ruleFieldSelect).val();
@@ -382,7 +387,7 @@
 					}
 					var elm = jgrid.createEl.call($t, columns.inputtype, searchoptions,
 								"", true, that.p.ajaxSelectOptions || {}, true);
-					$(elm).addClass("input-elm");
+					$(elm).addClass(getGuiStyles("searchDialog.elem", "input-elm"));
 					//that.createElement(rule, "");
 
 					if (searchoptions.sopt) {
@@ -476,7 +481,7 @@
 					$(ruleDataInput).attr("disabled", "true");
 				} //retain the state of disabled text fields in case of null ops
 				// dropdown for: choosing operator
-				var ruleOperatorSelect = $("<select class='selectopts'></select>");
+				var ruleOperatorSelect = $("<select class='" + getGuiStyles("searchDialog.operator", "selectopts") + "'></select>");
 				ruleOperatorTd.append(ruleOperatorSelect);
 				ruleOperatorSelect.bind("change", function () {
 					rule.op = $(ruleOperatorSelect).val();
@@ -534,7 +539,7 @@
 				//ruleDataInput.setAttribute("type", "text");
 				ruleDataTd.append(ruleDataInput);
 				jgrid.bindEv.call($t, ruleDataInput, cm.searchoptions);
-				$(ruleDataInput).addClass("input-elm")
+				$(ruleDataInput).addClass(getGuiStyles("searchDialog.elem", "input-elm"))
 					.bind("change", function () {
 						rule.data = cm.inputtype === "custom" ? cm.searchoptions.custom_value.call($t, $(this).children(".customelement:first"), "get") : $(this).val();
 						that.onchange(); // signals that the filter has changed
@@ -546,7 +551,8 @@
 
 				// create button for: delete rule
 				if (p.ruleButtons === true) {
-					var ruleDeleteInput = $("<input type='button' value='-' title='" + getRes("deleteRuleTitle") + "' class='delete-rule ui-del'/>");
+					var ruleDeleteInput = $("<input type='button' value='-' title='" + getRes("deleteRuleTitle") + "' class='" +
+							getGuiStyles("searchDialog.deleteRuleButton", "delete-rule ui-del") + "'/>");
 					ruleDeleteTd.append(ruleDeleteInput);
 					//$(ruleDeleteInput).html("").height(20).width(30).button({icons: {  primary: "ui-icon-minus", text:false}});
 					ruleDeleteInput.bind("click", function () {
