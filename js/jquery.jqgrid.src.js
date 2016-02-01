@@ -17867,9 +17867,10 @@
 			},
 			// TODO: add cmTemplate for currency and date
 			actions: function () {
+				var p = this.p;
 				return {
 					formatter: "actions",
-					width: (this.p != null && this.p.fontAwesomeIcons ? 33 : 37) + (jgrid.cellWidth() ? 5 : 0),
+					width: (p != null && p.iconSet === "fontAwesome" ? (p.guiStyle === "bootstrap" ? 45 : 39) : 37) + (jgrid.cellWidth() ? 5 : 0),
 					align: "center",
 					label: "",
 					autoResizable: false,
