@@ -1272,3 +1272,6 @@ a.clearsearchclass {
 	padding: .1em;
 	height: 22px;
 }
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-th-column .cbox {
+	margin-top: -2px;
+}
