@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-01-31
+ * Date: 2016-02-02
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -671,8 +671,8 @@
 					operButton: "btn btn-xs btn-default",
 					clearButton: "btn btn-xs btn-default"
 				},
-				top: "",
-				bottom: "",
+				top: "ui-jqgrid-bootstrap-corner-top",
+				bottom: "ui-jqgrid-bootstrap-corner-bottom",
 				resizer: "ui-jqgrid-bootstrap"
 			}
 		},

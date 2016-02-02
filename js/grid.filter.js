@@ -193,7 +193,7 @@
 			this.createTableForGroup = function (group, parentgroup) {
 				var that = this, i;
 				// this table will hold all the group (tables) and rules (rows)
-				var table = $("<table class='" + getGuiStyles("searchDialog.operationGroup", "group " + dialogContentClass) +
+				var table = $("<table class='" + getGuiStyles("searchDialog.operationGroup", "group") +
 						"' style='border:0px none;'><tbody></tbody></table>"), align = "left";
 				// create error message row
 				if (p.direction === "rtl") {
