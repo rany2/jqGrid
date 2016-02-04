@@ -1,8 +1,13 @@
 /**
  * @license jqGrid Spanish Translation
  * Traduccion jqGrid en Español por Yamil Bracho
+ *
  * Traduccion corregida y ampliada por Faserline, S.L.
  * http://www.faserline.com
+ *
+ * Traducción corregida y ampliada por Marc lobato
+ * http://www.navigatecms.com
+ *
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
@@ -10,19 +15,7 @@
 
 /*jslint white: true */
 /*global jQuery */
-(function (factory) {
-	"use strict";
-	if (typeof define === "function" && define.amd) {
-		// AMD. Register as an anonymous module.
-		define(["jquery"], factory);
-	} else if (typeof exports === "object") {
-		// Node/CommonJS
-		factory(require("jquery"));
-	} else {
-		// Browser globals
-		factory(jQuery);
-	}
-}(function ($) {
+(function ($) {
 "use strict";
 var locInfo = {
 	isRTL: false,
@@ -31,12 +24,12 @@ var locInfo = {
 		emptyrecords: "Sin registros que mostrar",
 		loadtext: "Cargando...",
 		pgtext: "Página {0} de {1}",
-		pgfirst: "First Page",
-		pglast: "Last Page",
-		pgnext: "Next Page",
-		pgprev: "Previous Page",
-		pgrecs: "Records per Page",
-		showhide: "Toggle Expand Collapse Grid",
+		pgfirst: "Primera página",
+		pglast: "Última página",
+		pgnext: "Página siguiente",
+		pgprev: "Página anterior",
+		pgrecs: "Registros por página",
+		showhide: "Alternar expandir/colapsar la tabla",
 		savetext: "Guardando..."
 	},
 	search: {
@@ -44,33 +37,29 @@ var locInfo = {
 		Find: "Buscar",
 		Reset: "Limpiar",
 		odata: [
-			{ oper: "eq", text: "igual " },
+			{ oper: "eq", text: "igual" },
 			{ oper: "ne", text: "no igual a" },
 			{ oper: "lt", text: "menor que" },
 			{ oper: "le", text: "menor o igual que" },
 			{ oper: "gt", text: "mayor que" },
 			{ oper: "ge", text: "mayor o igual a" },
-			{ oper: "bw", text: "empiece por" },
-			{ oper: "bn", text: "no empiece por" },
+			{ oper: "bw", text: "empieza por" },
+			{ oper: "bn", text: "no empieza por" },
 			{ oper: "in", text: "está en" },
 			{ oper: "ni", text: "no está en" },
 			{ oper: "ew", text: "termina por" },
 			{ oper: "en", text: "no termina por" },
 			{ oper: "cn", text: "contiene" },
 			{ oper: "nc", text: "no contiene" },
-			{ oper: "nu", text: "is null" },
-			{ oper: "nn", text: "is not null" }
+			{ oper: "nu", text: "es nulo" },
+			{ oper: "nn", text: "no es nulo" }
 		],
 		groupOps: [
 			{ op: "AND", text: "todo" },
 			{ op: "OR",  text: "cualquier" }
 		],
-		addGroupTitle: "Add subgroup",
-		deleteGroupTitle: "Delete group",
-		addRuleTitle: "Add rule",
-		deleteRuleTitle: "Delete rule",
-		operandTitle: "Click to select search operation.",
-		resetTitle: "Reset Search Value"
+		operandTitle: "Clic para seleccionar la operación de búsqueda.",
+		resetTitle: "Reiniciar valor de búsqueda"
 	},
 	edit: {
 		addCaption: "Agregar registro",
@@ -121,11 +110,7 @@ var locInfo = {
 		alertcap: "Aviso",
 		alerttext: "Seleccione una fila",
 		viewtext: "",
-		viewtitle: "Ver fila seleccionada",
-		savetext: "",
-		savetitle: "Guardar fila",
-		canceltext: "",
-		canceltitle: "Cancelar edición de fila"
+		viewtitle: "Ver fila seleccionada"
 	},
 	col: {
 		caption: "Mostrar/ocultar columnas",
@@ -182,4 +167,4 @@ $.extend(true, $.jgrid, {
 		"es-ES": $.extend({}, locInfo, { name: "Español (España)", nameEnglish: "Spanish (Spain)" })
 	}
 });
-}));
+}(jQuery));
