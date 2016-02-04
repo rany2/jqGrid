@@ -1,7 +1,12 @@
 /**
  * @license jqGrid Catalan Translation
- * Traducció jqGrid en Catatà per Faserline, S.L.
+ *
+ * Traducció jqGrid en Català per Faserline, S.L.
  * http://www.faserline.com
+ *
+ * Traducció corregida i ampliada per Marc lobato
+ * http://www.navigatecms.com
+ *
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
@@ -9,33 +14,21 @@
 
 /*jslint white: true */
 /*global jQuery */
-(function (factory) {
-	"use strict";
-	if (typeof define === "function" && define.amd) {
-		// AMD. Register as an anonymous module.
-		define(["jquery"], factory);
-	} else if (typeof exports === "object") {
-		// Node/CommonJS
-		factory(require("jquery"));
-	} else {
-		// Browser globals
-		factory(jQuery);
-	}
-}(function ($) {
+(function ($) {
 "use strict";
 var locInfo = {
 	isRTL: false,
 	defaults: {
 		recordtext: "Mostrant {0} - {1} de {2}",
-		emptyrecords: "Sense registres que mostrar",
+		emptyrecords: "Sense registres a mostrar",
 		loadtext: "Carregant...",
 		pgtext: "Pàgina {0} de {1}",
-		pgfirst: "First Page",
-		pglast: "Last Page",
-		pgnext: "Next Page",
-		pgprev: "Previous Page",
-		pgrecs: "Records per Page",
-		showhide: "Toggle Expand Collapse Grid",
+		pgfirst: "Primera pàgina",
+		pglast: "Última pàgina",
+		pgnext: "Pàgina següent",
+		pgprev: "Pàgina anterior",
+		pgrecs: "Registres per pàgina",
+		showhide: "Alternar expandir/col·lapsar la taula",
 		savetext: "S'està desant..."
 	},
 	search: {
@@ -43,33 +36,29 @@ var locInfo = {
 		Find: "Cercar",
 		Reset: "Buidar",
 		odata: [
-			{ oper: "eq", text: "equal" },
-			{ oper: "ne", text: "not equal" },
-			{ oper: "lt", text: "less" },
-			{ oper: "le", text: "less or equal" },
-			{ oper: "gt", text: "greater" },
-			{ oper: "ge", text: "greater or equal" },
-			{ oper: "bw", text: "begins with" },
-			{ oper: "bn", text: "does not begin with" },
-			{ oper: "in", text: "is in" },
-			{ oper: "ni", text: "is not in" },
-			{ oper: "ew", text: "ends with" },
-			{ oper: "en", text: "does not end with" },
-			{ oper: "cn", text: "contains" },
-			{ oper: "nc", text: "does not contain" },
-			{ oper: "nu", text: "is null" },
-			{ oper: "nn", text: "is not null" }
+			{ oper: "eq", text: "igual" },
+			{ oper: "ne", text: "no igual" },
+			{ oper: "lt", text: "menor que" },
+			{ oper: "le", text: "menor o igual" },
+			{ oper: "gt", text: "major que" },
+			{ oper: "ge", text: "major o igual" },
+			{ oper: "bw", text: "comença amb" },
+			{ oper: "bn", text: "no comença amb" },
+			{ oper: "in", text: "està entre" },
+			{ oper: "ni", text: "no està entre" },
+			{ oper: "ew", text: "acaba amb" },
+			{ oper: "en", text: "no acaba amb" },
+			{ oper: "cn", text: "conté" },
+			{ oper: "nc", text: "no conté" },
+			{ oper: "nu", text: "és nul" },
+			{ oper: "nn", text: "no és nul" }
 		],
 		groupOps: [
 			{ op: "AND", text: "tot" },
 			{ op: "OR",  text: "qualsevol" }
 		],
-		addGroupTitle: "Add subgroup",
-		deleteGroupTitle: "Delete group",
-		addRuleTitle: "Add rule",
-		deleteRuleTitle: "Delete rule",
-		operandTitle: "Click to select search operation.",
-		resetTitle: "Reset Search Value"
+		operandTitle: "Clic per escollir la operació de cerca.",
+		resetTitle: "Reiniciar valors de la cerca"
 	},
 	edit: {
 		addCaption: "Afegir registre",
@@ -78,9 +67,9 @@ var locInfo = {
 		bCancel: "Cancelar",
 		bClose: "Tancar",
 		saveData: "Les dades han canviat. Guardar canvis?",
-		bYes: "Yes",
+		bYes: "Sí",
 		bNo: "No",
-		bExit: "Cancel",
+		bExit: "Cancel·lar",
 		msg: {
 			required: "Camp obligatori",
 			number: "Introdueixi un nombre",
@@ -89,11 +78,11 @@ var locInfo = {
 			email: "no és una direcció de correu vàlida",
 			integer: "Introdueixi un valor enter",
 			date: "Introdueixi una data correcta ",
-			url: "no és una URL vàlida. Prefix requerit ('http://' or 'https://')",
-			nodefined: " is not defined!",
-			novalue: " return value is required!",
-			customarray: "Custom function should return array!",
-			customfcheck: "Custom function should be present in case of custom checking!"
+			url: "no és una URL vàlida. Prefix requerit ('http://' o 'https://')",
+			nodefined: " no està definit!",
+			novalue: " es requereix un valor de retorn!",
+			customarray: "La funció personalitzada hauria de retornar una array!",
+			customfcheck: "La funció personalitzada hauria d'estar present si es fa una comprovació personalitzada!"
 		}
 	},
 	view: {
@@ -104,7 +93,7 @@ var locInfo = {
 		caption: "Eliminar",
 		msg: "¿Desitja eliminar els registres seleccionats?",
 		bSubmit: "Eliminar",
-		bCancel: "Cancelar"
+		bCancel: "Cancel·lar"
 	},
 	nav: {
 		edittext: "",
@@ -120,11 +109,7 @@ var locInfo = {
 		alertcap: "Avís",
 		alerttext: "Seleccioni una fila",
 		viewtext: "",
-		viewtitle: "Veure fila seleccionada",
-		savetext: "",
-		savetitle: "Save row",
-		canceltext: "",
-		canceltitle: "Cancel row editing"
+		viewtitle: "Veure fila seleccionada"
 	},
 	// setcolumns module
 	col: {
@@ -184,4 +169,4 @@ $.extend(true, $.jgrid, {
 		"ca-ES": $.extend({}, locInfo, { name: "català (català)", nameEnglish: "Catalan (Catalan)" })
 	}
 });
-}));
+}(jQuery));
