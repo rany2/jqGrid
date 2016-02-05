@@ -2005,8 +2005,20 @@
 						if (e.which === 13) {
 							$focused = $(this).find(".ui-pg-button").filter(":focus");
 							if ($focused.length > 0) {
-								$focused.trigger("click");
-								return false;
+								// $focused[0].id == "view_list" or "view_list_top"
+								var focusedId = $focused[0].id,
+									actionName = focusedId.substr(0,
+										$(this).closest(".ui-jqgrid-toppager").length > 0 ?
+											focusedId.length - gridId.length - 5 : // "_" + "_top"
+											focusedId.length - gridId.length - 1), // view "_"
+									gialogId = actionName + "mod" + p.id, // "viewmodlist"
+									visibleDailogIds = $(".ui-jqdialog").filter(":visible").map(function () { return this.id; });
+
+								if ($.inArray(gialogId, visibleDailogIds) < 0) {
+									// simulate click only if the dialog is not already opened
+									$focused.trigger("click");
+									return false;
+								}
 							}
 						}
 					},
