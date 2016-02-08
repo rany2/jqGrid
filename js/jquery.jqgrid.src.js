@@ -8738,6 +8738,8 @@
 							 * used for integer/number/currency. The code will be duplicate */
 							if (cm.stype === "custom" && $.isFunction(searchoptions.custom_value) && $elem.length > 0 && $elem[0].nodeName.toUpperCase() === "SPAN") {
 								v = searchoptions.custom_value.call($t, $elem.children(".customelement").first(), "get");
+							} else if (cm.stype === "select") {
+								v = $elem.val();
 							} else {
 								v = $.trim($elem.val());
 								switch (cm.formatter) {
