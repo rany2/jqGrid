@@ -82,6 +82,12 @@
 	height: 1.4em;
 	cursor: pointer;
 	box-sizing: border-box;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 .ui-jqgrid-jquery-ui .ui-jqdialog-titlebar > .ui-jqdialog-titlebar-close {
 	margin: -8px 0 0 0;
