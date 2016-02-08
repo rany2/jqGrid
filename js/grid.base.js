@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-02-05
+ * Date: 2016-02-08
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -566,11 +566,13 @@
 				toolbarBottom: "ui-state-default",
 				actionsDiv: "ui-widget-content",
 				actionsButton: "ui-corner-all",
-				pager: "ui-state-default",
-				pagerButton: "ui-corner-all",
+				pager: {
+					pager: "ui-state-default",
+					pagerButton: "ui-corner-all",
+					pagerInput: "ui-widget-content",
+					pagerSelect: "ui-widget-content"
+				},
 				navButton: "ui-corner-all",
-				pagerInput: "ui-widget-content",
-				pagerSelect: "ui-widget-content",
 				searchDialog: {
 					operator: "ui-corner-all",
 					label: "ui-corner-all",
@@ -596,7 +598,7 @@
 				gView: "panel-info",
 				overlay: "modal-backdrop",
 				loading: "",
-				hDiv: "custom-hdiv",
+				hDiv: "",
 				hTable: "table table-hover table-condensed table-bordered",
 				colHeaders: "",
 				states: {
@@ -608,8 +610,8 @@
 					textOfClickable: ""
 				},
 				dialog: {
-					header: "modal-header custom-dlg-header",
-					window: "modal custom-dlg-window ui-jqgrid-bootstrap",
+					header: "modal-header",
+					window: "modal ui-jqgrid-bootstrap",
 					document: "modal-dialog",
 					subdocument: "modal-content",
 					body: "modal-body",
@@ -643,18 +645,20 @@
 				rowNum: "",
 				gridFooter: "table table-hover table-condensed table-bordered",
 				rowFooter: "",
-				gridTitle: "custom-title-div",
+				gridTitle: "",
 				gridError: "", //"ui-state-error",
 				titleButton: "btn btn-xs btn-default",
 				actionsDiv: "",
 				actionsButton: "btn btn-xs btn-default",
 				toolbarUpper: "",
 				toolbarBottom: "",
-				pager: "panel-footer",
-				pagerButton: "btn btn-xs",
+				pager: {
+					pager: "panel-footer",
+					pagerButton: "btn btn-xs",
+					pagerInput: "form-control",
+					pagerSelect: "form-control"
+				},
 				navButton: "btn btn-xs",
-				pagerInput: "form-control",
-				pagerSelect: "form-control",
 				searchDialog: {
 					operator: "form-control",
 					label: "form-control",
@@ -2148,7 +2152,8 @@
 		},
 		parseDataToHtml: function (len, ids, items, cellsToDisplay, rcnt, adjust, readAllInputData) {
 			var self = this, p = self.p, $self = $(self), i, j, altr, cn1, selr, idr, rd, cells, iStartTrTag,
-				selected = false, rowData = [],	cn = (p.altRows === true && p.guiStyle !== "bootstrap") ? p.altclass : "", grpdata = [],
+				selected = false, rowData = [], grpdata = [],
+				cn = (p.altRows === true && !$self.jqGrid("isBootstrapGuiStyle")) ? p.altclass : "",
 				hiderow = p.grouping ? p.groupingView.groupCollapse === true : false,
 				rn = parseInt(p.rowNum, 10), cmName, $j = $.fn.jqGrid,
 				// prepare to build the map rowIndexes, which will simplify us to get rowIndex
@@ -2503,7 +2508,7 @@
 					subGridWidth: 16,
 					multiselectWidth: 16,
 					multiselectPosition: "left",
-					gridview: (pin == null || pin.afterInsertRow == null), // use true if callback afterInsertRow is not specified
+					gridview: true,
 					rownumWidth: 25,
 					rownumbers: false,
 					pagerpos: "center",
@@ -4321,7 +4326,7 @@
 					if (p.rowList.length > 0) {
 						str = "<td dir='" + dir + "'>";
 						var pgrecs = getDef("pgrecs");
-						str += "<select class='" + getGuiStyles("pagerSelect", "ui-pg-selbox") + "' " + (pgrecs ? "title='" + pgrecs + "'" : "") + ">";
+						str += "<select class='" + getGuiStyles("pager.pagerSelect", "ui-pg-selbox") + "' " + (pgrecs ? "title='" + pgrecs + "'" : "") + ">";
 						var strnm;
 						for (i = 0; i < p.rowList.length; i++) {
 							strnm = p.rowList[i].toString().split(":");
@@ -4333,11 +4338,11 @@
 						str += "</select></td>";
 					}
 					if (dir === "rtl") { pgl += str; }
-					if (p.pginput === true) { pginp = "<td dir='" + dir + "'>" + jgrid.format(getDef("pgtext") || "", "<input class='" + getGuiStyles("pagerInput", "ui-pg-input") + "' type='text' size='2' maxlength='7' value='0'/>", "<span id='sp_1_" + pgid + "'>0</span>") + "</td>"; }
+					if (p.pginput === true) { pginp = "<td dir='" + dir + "'>" + jgrid.format(getDef("pgtext") || "", "<input class='" + getGuiStyles("pager.pagerInput", "ui-pg-input") + "' type='text' size='2' maxlength='7' value='0'/>", "<span id='sp_1_" + pgid + "'>0</span>") + "</td>"; }
 					pgid = "#" + jqID(pgid); // modify to id selector
 					if (p.pgbuttons === true) {
 						var po = ["first", "prev", "next", "last"],
-							buttonClasses = getGuiStyles("pagerButton", "ui-pg-button"),
+							buttonClasses = getGuiStyles("pager.pagerButton", "ui-pg-button"),
 							buildPagerButton = function (buttonName) {
 								var titleText = getDef("pg" + buttonName);
 								return "<td role='button' tabindex='0' id='" + buttonName + tp + "' class='" + buttonClasses + "' " +
@@ -5157,9 +5162,9 @@
 			}
 			if (p.footerrow) { tfoot += "</tr></tbody></table>"; }
 			firstr += "</tr>";
-			$(ts).html("<tbody>" + firstr + "</tbody>");
+			$self0.html("<tbody>" + firstr + "</tbody>");
 			//firstr = null;
-			$self0.addClass(getGuiStyles("grid", "ui-jqgrid-btable" + (p.guiStyle === "bootstrap" ? " table-striped" : "")));
+			$self0.addClass(getGuiStyles("grid", "ui-jqgrid-btable" + ($self0.jqGrid("isBootstrapGuiStyle") ? " table-striped" : "")));
 			var hg = (p.caption && p.hiddengrid === true) ? true : false,
 				hb = $("<div class='ui-jqgrid-hbox" + (dir === "rtl" ? "-rtl" : "") + "'></div>"),
 				bottomClasses = getGuiStyles("bottom");
@@ -5201,7 +5206,7 @@
 					pagerId = $pager.attr("id");
 				}
 				if ($pager.length > 0) {
-					$pager.css({ width: grid.width + "px" }).addClass(getGuiStyles("pager", "ui-jqgrid-pager" + " " + bottomClasses)).appendTo(eg);
+					$pager.css({ width: grid.width + "px" }).addClass(getGuiStyles("pager.pager", "ui-jqgrid-pager" + " " + bottomClasses)).appendTo(eg);
 					if (hg) { $pager.hide(); }
 					setPager.call(ts, pagerId, "");
 					p.pager = "#" + jqID(pagerId); // hold ESCAPED id selector in the pager
@@ -5441,7 +5446,7 @@
 			if (p.toppager) {
 				p.toppager = p.id + "_toppager";
 				grid.topDiv = $("<div id='" + p.toppager + "'></div>")[0];
-				$(grid.topDiv).addClass(getGuiStyles("pager", "ui-jqgrid-toppager")).css({ width: grid.width + "px" }).insertBefore(grid.hDiv);
+				$(grid.topDiv).addClass(getGuiStyles("pager.pager", "ui-jqgrid-toppager")).css({ width: grid.width + "px" }).insertBefore(grid.hDiv);
 				setPager.call(ts, p.toppager, "_t");
 				p.toppager = "#" + jqID(p.toppager); // hold ESCAPED id selector in the toppager option
 			} else if (p.pager === "" && !p.scroll) {
@@ -5605,6 +5610,11 @@
 			if (!$t || !$t.grid || !$t.p) { return ""; }
 			var p = $t.p, guiStyle = p.guiStyle || jgrid.defaults.guiStyle || "jQueryUI";
 			return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[guiStyle], path), jqClasses || "");
+		},
+		isBootstrapGuiStyle: function () {
+			var $t = this instanceof $ && this.length > 0 ? this[0] : this,
+				gBoxClasses = jgrid.guiStyles[$t.p.guiStyle].gBox.split(" ");
+			return $.inArray("ui-jqgrid-bootstrap", gBoxClasses) >= 0;
 		},
 		getGridParam: function (pName) {
 			var $t = this[0];
@@ -5989,7 +5999,7 @@
 					}
 				}
 				$t.rebuildRowIndexes();
-				if (p.altRows === true && success && p.guiStyle !== "bootstrap") {
+				if (p.altRows === true && success && !$($t).jqGrid("isBootstrapGuiStyle")) {
 					var cn = p.altclass, frozenRows = $t.grid.fbRows;
 					$($t.rows).each(function (i) {
 						var $row = $(this);
@@ -6218,7 +6228,7 @@
 						});
 						k++;
 					}
-					if (p.altRows === true && !aradd && p.guiStyle !== "bootstrap") {
+					if (p.altRows === true && !aradd && !$self.jqGrid("isBootstrapGuiStyle")) {
 						// even in case of usage correct parameter for parseDataToHtml
 						// one will need to reset the classes if the row will be inserted not at the end of jqGrid
 						if (pos === "last") {

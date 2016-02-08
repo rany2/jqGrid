@@ -63,34 +63,12 @@
 			}
 		},
 		hideModal: function (selector, o) {
-			o = $.extend({ jqm: true, gb: "", removemodal: false, formprop: false, form: "" }, o || {});
+			o = $.extend({ jqm: true, gb: "", removemodal: false }, o || {});
 			var thisgrid = o.gb && typeof o.gb === "string" && o.gb.substr(0, 6) === "#gbox_" ? $("#" + o.gb.substr(6))[0] : false,
 				$selector = $(selector);
 			if (o.onClose) {
 				var oncret = thisgrid ? o.onClose.call(thisgrid, selector) : o.onClose(selector);
 				if (typeof oncret === "boolean" && !oncret) { return; }
-			}
-			if (o.formprop && thisgrid && o.form && $selector.length > 0) {
-				var fh = $selector[0].style.height;
-				if (fh.indexOf("px") > -1) {
-					fh = parseFloat(fh);
-				}
-				var frmgr, frmdata;
-				if (o.form === "edit") {
-					frmgr = "#" + jgrid.jqID("FrmGrid_" + o.gb.substr(6));
-					frmdata = "formProp";
-				} else if (o.form === "view") {
-					frmgr = "#" + jgrid.jqID("ViewGrid_" + o.gb.substr(6));
-					frmdata = "viewProp";
-				}
-				$(thisgrid).data(frmdata, {
-					top: parseFloat($selector.css("top")),
-					left: parseFloat($selector.css("left")),
-					width: $selector.width(),
-					height: fh,
-					dataheight: $(frmgr).height(),
-					datawidth: $(frmgr).width()
-				});
 			}
 			if ($.fn.jqm && o.jqm === true) {
 				$selector.attr("aria-hidden", "true").jqmHide();
@@ -185,7 +163,12 @@
 			$("a.ui-jqdialog-titlebar-close", mh).click(function () {
 				var oncm = $(themodalSelector).data("onClose") || o.onClose;
 				var gboxclose = $(themodalSelector).data("gbox") || o.gbox;
-				jgrid.hideModal(themodalSelector, { gb: gboxclose, jqm: o.jqModal, onClose: oncm, removemodal: o.removemodal || false, formprop: !o.recreateForm || false, form: o.form || "" });
+				jgrid.hideModal(themodalSelector, {
+					gb: gboxclose,
+					jqm: o.jqModal,
+					onClose: oncm,
+					removemodal: o.removemodal || false
+				});
 				return false;
 			});
 			if (o.width === 0 || !o.width) { o.width = 300; }

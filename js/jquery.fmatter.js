@@ -120,7 +120,7 @@
 				var p = this.p;
 				return {
 					formatter: "actions",
-					width: (p != null && p.iconSet === "fontAwesome" ? (p.guiStyle === "bootstrap" ? 45 : 39) : 37) + (jgrid.cellWidth() ? 5 : 0),
+					width: (p != null && p.iconSet === "fontAwesome" ? ($(this).jqGrid("isBootstrapGuiStyle") ? 45 : 39) : 37) + (jgrid.cellWidth() ? 5 : 0),
 					align: "center",
 					label: "",
 					autoResizable: false,
