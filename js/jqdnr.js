@@ -81,7 +81,7 @@
 						eventData;
 
 					if ($(e.target).hasClass("ui-jqdialog-titlebar-close") || $(e.target).parent().hasClass("ui-jqdialog-titlebar-close")) {
-						$(e.target).click();
+						//$(e.target).click();
 						return;
 					}
 
