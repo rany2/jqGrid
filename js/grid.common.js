@@ -24,13 +24,9 @@
 	}
 }(function ($) {
 	"use strict";
-	var jgrid = $.jgrid;
+	var jgrid = $.jgrid, base = $.fn.jqGrid;
 	// begin module grid.common
-	var getGridRes = jgrid.getMethod("getGridRes"),
-		getGuiStyles = function (path, jqClasses) {
-			var p = this.p, guiStyle = p.guiStyle || jgrid.defaults.guiStyle || "jQueryUI";
-			return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[guiStyle], path), jqClasses || "");
-		};
+	var getGuiStyles = base.getGuiStyles, getGridRes = base.getGridRes;
 
 	jgrid.jqModal = jgrid.jqModal || {};
 	$.extend(true, jgrid.jqModal, { toTop: true });
