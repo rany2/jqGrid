@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-02-08
+ * Date: 2016-02-12
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -678,6 +678,19 @@
 				top: "ui-jqgrid-bootstrap-corner-top",
 				bottom: "ui-jqgrid-bootstrap-corner-bottom",
 				resizer: "ui-jqgrid-bootstrap"
+			},
+			bootstrapPrimary: {
+				baseGuiStyle: "bootstrap",
+				dialog: {
+					closeButton: "btn btn-xs close",
+					fmButton: "btn btn-primary"
+				},
+				searchDialog: {
+					addRuleButton: "btn btn-xs btn-primary",
+					deleteRuleButton: "btn btn-xs btn-primary",
+					addGroupButton: "btn btn-xs btn-primary",
+					deleteGroupButton: "btn btn-xs btn-primary"
+				}
 			}
 		},
 		htmlDecode: function (value) {
@@ -2075,7 +2088,7 @@
 			// iCol is unused currently, but one can modify the code to set for example different sorting
 			// icons for columns based on sorttype option of colModel
 			var p = this.p,
-				disabledStateClasses = jgrid.getRes(jgrid.guiStyles[p.guiStyle], "states.disabled"),
+				disabledStateClasses = $(this).jqGrid("getGuiStyles", "states.disabled"),
 				getClasses = function (ascOrDesc) {
 					return jgrid.mergeCssClasses(
 						"ui-grid-ico-sort",
@@ -2099,9 +2112,9 @@
 		 *  @param {String} conner - string "left", "right" or undefined.
 		 */
 		builderFmButon: function (id, text, icon, iconOnLeftOrRight, conner) {
-			var p = this.p,
+			var p = this.p, $self = $(this),
 				getDialogGuiStyles = function (name) {
-					return jgrid.getRes(jgrid.guiStyles[p.guiStyle], "dialog." + name);
+					return $self.jqGrid("getGuiStyles", "dialog." + name);
 				};
 			if (p == null) { return ""; }
 
@@ -2305,7 +2318,7 @@
 					return jgrid.getIconRes(iconSet, path);
 				},
 				getGuiStyles = function (path, jqClasses) {
-					return mergeCssClasses(jgrid.getRes(jgrid.guiStyles[guiStyle], path), jqClasses || "");
+					return $self0.jqGrid("getGuiStyles", path, jqClasses);
 				},
 				stdLoadError = function (jqXHR, textStatus, errorThrown) {
 					if (textStatus !== "abort" && errorThrown !== "abort") {
@@ -5167,6 +5180,7 @@
 			$self0.addClass(getGuiStyles("grid", "ui-jqgrid-btable" + ($self0.jqGrid("isBootstrapGuiStyle") ? " table-striped" : "")));
 			var hg = (p.caption && p.hiddengrid === true) ? true : false,
 				hb = $("<div class='ui-jqgrid-hbox" + (dir === "rtl" ? "-rtl" : "") + "'></div>"),
+				topClasses = getGuiStyles("top"),
 				bottomClasses = getGuiStyles("bottom");
 			grid.hDiv = document.createElement("div");
 			$(grid.hDiv)
@@ -5206,7 +5220,7 @@
 					pagerId = $pager.attr("id");
 				}
 				if ($pager.length > 0) {
-					$pager.css({ width: grid.width + "px" }).addClass(getGuiStyles("pager.pager", "ui-jqgrid-pager" + " " + bottomClasses)).appendTo(eg);
+					$pager.css({ width: grid.width + "px" }).addClass(getGuiStyles("pager.pager", "ui-jqgrid-pager " + bottomClasses)).appendTo(eg);
 					if (hg) { $pager.hide(); }
 					setPager.call(ts, pagerId, "");
 					p.pager = "#" + jqID(pagerId); // hold ESCAPED id selector in the pager
@@ -5420,7 +5434,7 @@
 						"";
 			$(grid.cDiv).append("<span class='ui-jqgrid-title'>" + p.caption + "</span>")
 				.append(arf)
-				.addClass(getGuiStyles("gridTitle", "ui-jqgrid-titlebar ui-jqgrid-caption" + (dir === "rtl" ? "-rtl" : "")));
+				.addClass(getGuiStyles("gridTitle", "ui-jqgrid-titlebar ui-jqgrid-caption" + (dir === "rtl" ? "-rtl " : " ") + topClasses));
 			$(grid.cDiv).insertBefore(grid.hDiv);
 			if (p.toolbar[0]) {
 				grid.uDiv = document.createElement("div");
@@ -5446,7 +5460,10 @@
 			if (p.toppager) {
 				p.toppager = p.id + "_toppager";
 				grid.topDiv = $("<div id='" + p.toppager + "'></div>")[0];
-				$(grid.topDiv).addClass(getGuiStyles("pager.pager", "ui-jqgrid-toppager")).css({ width: grid.width + "px" }).insertBefore(grid.hDiv);
+				$(grid.topDiv)
+					.addClass(getGuiStyles("pager.pager", "ui-jqgrid-toppager" + (p.caption ? "" : " " + topClasses)))
+					.css({ width: grid.width + "px" })
+					.insertBefore(grid.hDiv);
 				setPager.call(ts, p.toppager, "_t");
 				p.toppager = "#" + jqID(p.toppager); // hold ESCAPED id selector in the toppager option
 			} else if (p.pager === "" && !p.scroll) {
@@ -5608,13 +5625,18 @@
 		getGuiStyles: function (path, jqClasses) {
 			var $t = this instanceof $ && this.length > 0 ? this[0] : this;
 			if (!$t || !$t.grid || !$t.p) { return ""; }
-			var p = $t.p, guiStyle = p.guiStyle || jgrid.defaults.guiStyle || "jQueryUI";
-			return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[guiStyle], path), jqClasses || "");
+			var p = $t.p, guiStyle = p.guiStyle || jgrid.defaults.guiStyle || "jQueryUI",
+				guiClasses = jgrid.getRes(jgrid.guiStyles[guiStyle], path), baseGuiStyle;
+			if (guiClasses === undefined) {
+				baseGuiStyle = jgrid.getRes(jgrid.guiStyles[guiStyle], "baseGuiStyle");
+				if (typeof baseGuiStyle === "string") {
+					guiClasses = jgrid.getRes(jgrid.guiStyles[baseGuiStyle], path);
+				}
+			}
+			return jgrid.mergeCssClasses(guiClasses || "", jqClasses || "");
 		},
 		isBootstrapGuiStyle: function () {
-			var $t = this instanceof $ && this.length > 0 ? this[0] : this,
-				gBoxClasses = jgrid.guiStyles[$t.p.guiStyle].gBox.split(" ");
-			return $.inArray("ui-jqgrid-bootstrap", gBoxClasses) >= 0;
+			return $.inArray("ui-jqgrid-bootstrap", $(this).jqGrid("getGuiStyles", "gBox").split(" ")) >= 0;
 		},
 		getGridParam: function (pName) {
 			var $t = this[0];
@@ -7696,11 +7718,7 @@
 	 * http://www.gnu.org/licenses/gpl-2.0.html
 	*/
 	// begin module grid.common
-	var getGridRes = jgrid.getMethod("getGridRes"),
-		getGuiStyles = function (path, jqClasses) {
-			var p = this.p, guiStyle = p.guiStyle || jgrid.defaults.guiStyle || "jQueryUI";
-			return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[guiStyle], path), jqClasses || "");
-		};
+	var getGuiStyles = base.getGuiStyles, getGridRes = base.getGridRes;
 
 	jgrid.jqModal = jgrid.jqModal || {};
 	$.extend(true, jgrid.jqModal, { toTop: true });
