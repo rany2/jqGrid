@@ -92,8 +92,6 @@
 					return $("#" + jgrid.jqID(p.id))[0] || null;
 				},
 				getGuiStyles = function (path, jqClasses) {
-					//return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path), jqClasses || "");
-					//return jgrid.getRes(jgrid.guiStyles[getGrid().p.guiStyle], path);
 					return $(getGrid()).jqGrid("getGuiStyles", path, jqClasses || "");
 				},
 				getRes = function (property) {

@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-02-12
+ * Date: 2016-02-13
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1407,7 +1407,7 @@
 				case "button":
 					$field = $dataFiled.find("input" + nameSelector + ",textarea" + nameSelector);
 					result = $field.val();
-					if ($field[$t.p.propOrAttr]("type") === "date" && String(result).split("-").length === 3) {
+					if ($field.prop("type") === "date" && String(result).split("-").length === 3) {
 						newformat = formatoptions.newformat || $self.jqGrid("getGridRes", "formatter.date.newformat");
 						result = jgrid.parseDate.call($t, "Y-m-d", result, newformat);
 					}
@@ -2677,11 +2677,8 @@
 			p.rs = getGridComponentIdSelector.call(ts, COMPONENT_NAMES.COLUMN_RESIZER_DIV); // vertical div inside of gbox which will be seen on resizing of columns
 			p.cbId = getGridComponentId.call(ts, COMPONENT_NAMES.HEADER_SELECT_ALL_ROWS_CHECKBOX); // "cb_" +id
 			p.cb = getGridComponentIdSelector.call(ts, COMPONENT_NAMES.HEADER_SELECT_ALL_ROWS_CHECKBOX); // "cb_" +id
-			p.useProp = !!$.fn.prop;
-			p.propOrAttr = p.useProp ? "prop" : "attr";
 
-			var propOrAttr = p.propOrAttr,
-				fixScrollOffsetAndhBoxPadding = jgrid.fixScrollOffsetAndhBoxPadding,
+			var fixScrollOffsetAndhBoxPadding = jgrid.fixScrollOffsetAndhBoxPadding,
 				buildColNameMap = function (colModel) {
 					var m = {}, i, n = colModel.length;
 					for (i = 0; i < n; i++) {
@@ -3014,8 +3011,7 @@
 			// set default buttonicon : "ui-icon-newwin" of navButtonAdd: fa-external-link, fa-desktop or other
 			// change the order in $.extend to allows to set icons using $.jgrid (for example $.jgrid.nav). It will be ovewritten currently by p.navOptions which we set above.
 			var gv = $("<div class='" + getGuiStyles("gView", "ui-jqgrid-view") + "' role='grid' aria-multiselectable='" + !!p.multiselect + "'></div>"),
-				isMSIE = jgrid.msie,
-				isMSIE7 = isMSIE && jgrid.msiever() < 8;
+				isMSIE = jgrid.msie;
 			p.direction = trim(p.direction.toLowerCase());
 			if (inArray(p.direction, ["ltr", "rtl"]) === -1) { p.direction = "ltr"; }
 			dir = p.direction;
@@ -3027,9 +3023,6 @@
 			$(gv).attr("id", p.gViewId).appendTo(eg);
 			$("<div class='" + getGuiStyles("overlay", "jqgrid-overlay") + "' id='lui_" + p.id + "'></div>").insertBefore(gv);
 			$("<div class='" + getGuiStyles("loading", "loading") + "' id='load_" + p.id + "'>" + getDef("loadtext") + "</div>").insertBefore(gv);
-			if (isMSIE7) {
-				$self0.attr({ cellspacing: "0" });
-			}
 			$self0.attr({ "role": "presentation", "aria-labelledby": "gbox_" + ts.id });
 			var sortkeys = ["shiftKey", "altKey", "ctrlKey"],
 				// for reading of array of items from the input data it's required to know the
@@ -4053,7 +4046,7 @@
 						fmt = getRes("formatter.integer") || {};
 						cp = intNum(p.page);
 						last = intNum(p.lastpage);
-						$(".selbox", pgboxes)[propOrAttr]("disabled", false);
+						$(".selbox", pgboxes).prop("disabled", false);
 						if (p.pginput === true) {
 							$(".ui-pg-input", pgboxes).val(p.page);
 							sppg = p.toppager ? "#sp_1" + tspg + ",#sp_1" + tspgTop : "#sp_1" + tspg;
@@ -4292,9 +4285,9 @@
 				},
 				setHeadCheckBox = function (checked) {
 					var self = this, gridSelf = self.grid;
-					$(p.cb, gridSelf.hDiv)[p.propOrAttr]("checked", checked);
+					$(p.cb, gridSelf.hDiv).prop("checked", checked);
 					if (p.frozenColumns) {
-						$(p.cb, gridSelf.fhDiv)[p.propOrAttr]("checked", checked);
+						$(p.cb, gridSelf.fhDiv).prop("checked", checked);
 					}
 				},
 				setPager = function (pgid, tp) {
@@ -4302,7 +4295,7 @@
 						sep = "<td class='ui-pg-button " + disabledClasses + "'><span class='ui-separator'></span></td>",
 						pginp = "",
 						blockAlign = p.pagerpos === "left" ? "margin-right:auto;" : (p.pagerpos === "right" ? "margin-left:auto;" : "margin-left:auto;margin-right:auto;"),
-						pgl = "<table " + (isMSIE7 ? "cellspacing='0' " : "") + "style='table-layout:auto;white-space: pre;" + blockAlign + "' class='ui-pg-table'><tbody><tr>",
+						pgl = "<table " + "style='table-layout:auto;white-space: pre;" + blockAlign + "' class='ui-pg-table'><tbody><tr>",
 						str = "", pgcnt, lft, cent, rgt, twd, i,
 						clearVals = function (onpaging, newPage, newRowNum) {
 							if (!feedback.call(ts, "onPaging", onpaging, {
@@ -4330,7 +4323,7 @@
 					cent = pgid + "_center";
 					rgt = pgid + "_right";
 					$("#" + jqID(pgid))
-						.append("<div id='" + pgcnt + "' class='ui-pager-control' role='group'><table " + (isMSIE7 ? "cellspacing='0' " : "") + "class='ui-pg-table' style='width:100%;table-layout:fixed;height:100%;'><tbody><tr>" +
+						.append("<div id='" + pgcnt + "' class='ui-pager-control' role='group'><table class='ui-pg-table' style='width:100%;table-layout:fixed;height:100%;'><tbody><tr>" +
 							"<td id='" + lft + "' style='text-align:left;" + (p.pagerLeftWidth !== undefined ? "width:" + p.pagerLeftWidth + "px;" : "") + "'></td>" +
 							"<td id='" + cent + "' style='text-align:center;white-space:pre;" + (p.pagerCenterWidth !== undefined ? "width:" + p.pagerCenterWidth + "px;" : "") + "'></td>" +
 							"<td id='" + rgt + "' style='text-align:right;" + (p.pagerRightWidth !== undefined ? "width:" + p.pagerRightWidth + "px;" : "") + "'></td></tr></tbody></table></div>")
@@ -4937,8 +4930,8 @@
 			thead += "</tr></thead>";
 			tbody += "</tr></tbody>";
 			var hTable = $("<table class='" + getGuiStyles("hTable", "ui-jqgrid-htable") +
-					"' style='width:1px' role='presentation' aria-labelledby='gbox_" + p.id + "'" +
-					(isMSIE7 ? " cellspacing='0'" : "") + ">" + thead + tbody + "</table>");
+					"' style='width:1px' role='presentation' aria-labelledby='gbox_" + p.id + "'>" +
+					thead + tbody + "</table>");
 			$(hTable[0].tHead)
 				.children("tr")
 				.children("th")
@@ -4956,7 +4949,7 @@
 										{ "aria-selected": "true", tabindex: "0" } :
 										{ "aria-selected": "false", tabindex: "-1" });
 							if (iColCb !== undefined) { // p.multiselectCheckboxes
-								$(tr.cells[iColCb]).children("input.cbox")[p.propOrAttr]("checked", toSelect);
+								$(tr.cells[iColCb]).children("input.cbox").prop("checked", toSelect);
 							}
 						},
 						frozenRows = grid.fbRows,
@@ -5041,8 +5034,8 @@
 			var tfoot = "";
 			if (p.footerrow) {
 				tfoot += "<table role='presentation' style='width:1px' class='" +
-					getGuiStyles("gridFooter", "ui-jqgrid-ftable") + "'" + (isMSIE7 ? " cellspacing='0'" : "") +
-					"><tbody><tr role='row' class='" + getGuiStyles("rowFooter", "footrow footrow-" + dir) + "'>";
+					getGuiStyles("gridFooter", "ui-jqgrid-ftable") +
+					"'><tbody><tr role='row' class='" + getGuiStyles("rowFooter", "footrow footrow-" + dir) + "'>";
 			}
 			var firstr = "<tr class='jqgfirstrow' role='row' style='height:auto'>";
 			p.disableClick = false;
@@ -5304,10 +5297,10 @@
 								$(p.selarrrow).each(function (i, n) {
 									var trid = $j.getGridRowById.call($self0, n);
 									if (trid) { $(trid).removeClass(highlightClass); }
-									$("#jqg_" + jqID(p.id) + "_" + jqID(n))[p.propOrAttr]("checked", false);
+									$("#jqg_" + jqID(p.id) + "_" + jqID(n)).prop("checked", false);
 									if (frz) {
 										$("#" + jqID(n), "#" + jqID(frz)).removeClass(highlightClass);
-										$("#jqg_" + jqID(p.id) + "_" + jqID(n), "#" + jqID(frz))[p.propOrAttr]("checked", false);
+										$("#jqg_" + jqID(p.id) + "_" + jqID(n), "#" + jqID(frz)).prop("checked", false);
 									}
 								});
 								clearArray(p.selarrrow); // p.selarrrow = [];
@@ -5329,7 +5322,7 @@
 							setSelection.call($self0, ri, true, e);
 						} else if (p.multiselect && scb) {
 							scb = $("#jqg_" + jqID(p.id) + "_" + ri).is(":checked");
-							$("#jqg_" + jqID(p.id) + "_" + ri)[propOrAttr]("checked", !scb);
+							$("#jqg_" + jqID(p.id) + "_" + ri).prop("checked", !scb);
 						}
 					}
 					// it's important don't use return false in the event handler
@@ -5407,7 +5400,7 @@
 			grid.bDiv = document.createElement("div");
 			if (isMSIE) { if (String(p.height).toLowerCase() === "auto") { p.height = "100%"; } }
 			$(grid.bDiv)
-				.append($("<div style='position:relative;" + (isMSIE7 ? "height:0.01%;" : "") + "'></div>").append("<div></div>").append(ts))
+				.append($("<div style='position:relative;'></div>").append("<div></div>").append(ts))
 				.addClass("ui-jqgrid-bdiv")
 				.css({ height: p.height + (isNaN(p.height) ? "" : "px"), width: (grid.width) + "px" })
 				.scroll(grid.scrollGrid);
@@ -5729,7 +5722,7 @@
 							selectUnselectRowInTable = function (tr) {
 								$(tr)[method](highlightClass).attr(attributes);
 								if (iColCb !== undefined) { // p.multiselect or p.multiselectCheckboxes
-									$(tr.cells[iColCb]).children("input.cbox")[p.propOrAttr]("checked", toSelect);
+									$(tr.cells[iColCb]).children("input.cbox").prop("checked", toSelect);
 								}
 							};
 						selectUnselectRowInTable(tr1);
@@ -5769,7 +5762,7 @@
 							selectUnselectRowInTable = function (tr) {
 								$(tr)[method](highlightClass).attr(attributes);
 								if (iColCb !== undefined) { // p.multiselect or p.multiselectCheckboxes
-									$(tr.cells[iColCb]).children("input.cbox")[p.propOrAttr]("checked", toSelect);
+									$(tr.cells[iColCb]).children("input.cbox").prop("checked", toSelect);
 								}
 							};
 						selectUnselectRowInTable(tr1);
@@ -5879,13 +5872,13 @@
 							attributes = { "aria-selected": "false", tabindex: "-1" };
 						$(tr)[method](highlightClass).attr(attributes);
 						if (multiselectChechboxes) { // p.multiselect or p.multiselectCheckboxes
-							$(tr.cells[iColCb]).children("input.cbox")[p.propOrAttr]("checked", false);
+							$(tr.cells[iColCb]).children("input.cbox").prop("checked", false);
 						}
 						if (frozenRows) {
 							frozenRow = frozenRows[tr.rowIndex];
 							$(frozenRow)[method](highlightClass).attr(attributes);
 							if (multiselectChechboxes) { // p.multiselect or p.multiselectCheckboxes
-								$(frozenRow.cells[iColCb]).children("input.cbox")[p.propOrAttr]("checked", false);
+								$(frozenRow.cells[iColCb]).children("input.cbox").prop("checked", false);
 							}
 						}
 					};

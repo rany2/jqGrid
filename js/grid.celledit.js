@@ -54,10 +54,7 @@
 			return jgrid.feedback.apply(this, args);
 		};
 	// begin module grid.celledit
-	var getGuiStateStyles = function (path, moreClasses) {
-			return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[this.p.guiStyle], "states." + path), moreClasses || "");
-		},
-		getTdByColumnIndex = function (tr, iCol) {
+	var getTdByColumnIndex = function (tr, iCol) {
 			var $t = this, frozenRows = $t.grid.fbRows;
 			return $((frozenRows != null && frozenRows[0].cells.length > iCol ? frozenRows[tr.rowIndex] : tr).cells[iCol]);
 		};
@@ -116,8 +113,8 @@
 						mode: mode
 					});
 				}
-				var highlightClasses = getGuiStateStyles.call($t, "select", "edit-cell"),
-					hoverClasses = getGuiStateStyles.call($t, "hover", "selected-row");
+				var highlightClasses = $self.jqGrid("getGuiStyles", "select", "edit-cell"),
+					hoverClasses = $self.jqGrid("getGuiStyles", "hover", "selected-row");
 				if (editable === true && ed === true && !cc.hasClass("not-editable-cell")) {
 					if (iColOld >= 0 && iRowOld >= 0) {
 						getTdByColumnIndex.call($t, $trOld[0], iColOld).removeClass(highlightClasses);

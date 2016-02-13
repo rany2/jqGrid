@@ -24,14 +24,8 @@
 	}
 }(function ($) {
 	"use strict";
-	var jgrid = $.jgrid, jqID = jgrid.jqID, base = $.fn.jqGrid,
-		mergeCssClasses = jgrid.mergeCssClasses, hasOneFromClasses = jgrid.hasOneFromClasses,
-		getGuiStyles = function (path, jqClasses) {
-			return mergeCssClasses(jgrid.getRes(jgrid.guiStyles[this.p.guiStyle], path), jqClasses || "");
-		},
-		getGuiStateStyles = function (path) {
-			return getGuiStyles.call(this, "states." + path);
-		};
+	var jgrid = $.jgrid, jqID = jgrid.jqID, base = $.fn.jqGrid, getGuiStyles = base.getGuiStyles,
+		mergeCssClasses = jgrid.mergeCssClasses, hasOneFromClasses = jgrid.hasOneFromClasses;
 
 	// begin module grid.formedit
 	var jgridFeedback = jgrid.feedback, fullBoolFeedback = jgrid.fullBoolFeedback, builderFmButon = jgrid.builderFmButon,
@@ -45,6 +39,9 @@
 					$fmButton.addClass("fm-button-icon-left").prepend(iconspan);
 				}
 			}
+		},
+		getGuiStateStyles = function (path) {
+			return getGuiStyles.call(this, "states." + path);
 		},
 		isEmptyString = function (htmlStr) {
 			return htmlStr === "&nbsp;" || htmlStr === "&#160;" || (htmlStr.length === 1 && htmlStr.charCodeAt(0) === 160);
@@ -441,7 +438,7 @@
 
 				var frmgr = "FrmGrid_" + gridId, frmgrId = frmgr, frmtborg = "TblGrid_" + gridId, frmtb = "#" + jqID(frmtborg), frmtb2 = frmtb + "_2",
 					ids = { themodal: "editmod" + gridId, modalhead: "edithd" + gridId, modalcontent: "editcnt" + gridId, resizeAlso: frmgr },
-					themodalSelector = "#" + jqID(ids.themodal), gboxSelector = p.gBox, propOrAttr = p.propOrAttr, colModel = p.colModel, iColByName = p.iColByName,
+					themodalSelector = "#" + jqID(ids.themodal), gboxSelector = p.gBox, colModel = p.colModel, iColByName = p.iColByName,
 					maxCols = 1, maxRows = 0, postdata, diff, editOrAdd, commonIconClass = o.commonIconClass,
 					hideModal = function () {
 						jgrid.hideModal(themodalSelector, {
@@ -611,7 +608,7 @@
 							//if(tmp === "" && cm.edittype == "select") {tmp = $("option:eq(0)",elc).text();}
 							if (o.checkOnSubmit || o.checkOnUpdate) { o._savedData[nm] = tmp; }
 							$(elc).addClass("FormElement");
-							if ($.inArray(cm.edittype, ["text", "textarea", "password", "select"]) > -1) {
+							if ($.inArray(cm.edittype, ["text", "textarea", "checkbox", "password", "select"]) > -1) {
 								$(elc).addClass(getGuiStyles.call($t, "dialog.dataField"));
 							}
 							trdata = $(tb).find("tr[data-rowpos=" + rp + "]");
@@ -655,7 +652,7 @@
 					return retpos;
 				}
 				function fillData(rowid, fmid) {
-					var nm, cnt = 0, tmp, fld, opt, vl, vlc;
+					var nm, cnt = 0, fld, opt, vl, vlc;
 					if (o.checkOnSubmit || o.checkOnUpdate) { o._savedData = {}; o._savedData[gridId + "_id"] = rowid; }
 					var cm = p.colModel;
 					if (rowid === "_empty") {
@@ -701,6 +698,7 @@
 					if (!tre) { return; }
 					//$("td[role=gridcell]", tre)
 					$(tre.cells).filter("td[role=gridcell]").each(function (i) {
+						var tmp;
 						nm = cm[i].name;
 						// hidden fields are included in the form
 						if (nm !== "cb" && nm !== "subgrid" && nm !== "rn" && cm[i].editable === true) {
@@ -741,23 +739,14 @@
 									break;
 								case "checkbox":
 									tmp = String(tmp);
+									// tmp will be set below (in the if-else) to Boolean true or false
 									if (cm[i].editoptions && cm[i].editoptions.value) {
-										var cb = cm[i].editoptions.value.split(":");
-										if (cb[0] === tmp) {
-											$(nm, fmid)[propOrAttr]({ "checked": true, "defaultChecked": true });
-										} else {
-											$(nm, fmid)[propOrAttr]({ "checked": false, "defaultChecked": false });
-										}
+										tmp = cm[i].editoptions.value.split(":")[0] === tmp;
 									} else {
 										tmp = tmp.toLowerCase();
-										if (tmp.search(/(false|f|0|no|n|off|undefined)/i) < 0 && tmp !== "") {
-											$(nm, fmid)[propOrAttr]("checked", true);
-											$(nm, fmid)[propOrAttr]("defaultChecked", true); //ie
-										} else {
-											$(nm, fmid)[propOrAttr]("checked", false);
-											$(nm, fmid)[propOrAttr]("defaultChecked", false); //ie
-										}
+										tmp = tmp.search(/(false|f|0|no|n|off|undefined)/i) < 0 && tmp !== "";
 									}
+									$(nm, fmid).prop({ checked: tmp, defaultChecked: tmp });
 									break;
 								case "custom":
 									try {
@@ -2379,7 +2368,7 @@
 			return this.each(function () {
 				var $t = this, i, $field, iField, $fieldi;
 				if (!$t.grid) { return; }
-				var rowdata = base.getRowData.call($($t), rowid), propOrAttr = $t.p.propOrAttr;
+				var rowdata = base.getRowData.call($($t), rowid);
 				if (rowdata) {
 					for (i in rowdata) {
 						if (rowdata.hasOwnProperty(i)) {
@@ -2387,7 +2376,7 @@
 							if ($field.is("input:radio") || $field.is("input:checkbox")) {
 								for (iField = 0; iField < $field.length; iField++) {
 									$fieldi = $($field[iField]);
-									$fieldi[propOrAttr]("checked", $fieldi.val() === String(rowdata[i]));
+									$fieldi.prop("checked", $fieldi.val() === String(rowdata[i]));
 								}
 							} else {
 								// this is very slow on big table and form.
