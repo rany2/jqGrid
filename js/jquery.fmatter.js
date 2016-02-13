@@ -621,6 +621,13 @@
 			$grid = $("#" + jgrid.jqID($id)),
 			$t = $grid[0],
 			p = $t.p,
+			getTop = function () {
+				var tr = $tr[0], gbox = $grid.closest(".ui-jqgrid")[0];
+				if (tr.getBoundingClientRect != null && gbox.getBoundingClientRect != null) {
+					return tr.getBoundingClientRect().top + $tr.outerHeight() - gbox.getBoundingClientRect().top;
+				}
+				return $tr.offset().top + $tr.outerHeight() - $(gbox).offset().top;
+			},
 			cm = p.colModel[jgrid.getCellIndex(this)],
 			op = $.extend(true, { extraparam: {} }, jgrid.actionsNav || {},	p.actionsNavOptions || {}, cm.formatoptions || {});
 
@@ -663,14 +670,14 @@
 			case "del":
 				op.delOptions = op.delOptions || {};
 				if (op.delOptions.top === undefined) {
-					op.delOptions.top = $tr.offset().top + $tr.outerHeight() - $grid.closest(".ui-jqgrid").offset().top;
+					op.delOptions.top = getTop();
 				}
 				$grid.jqGrid("delGridRow", rid, op.delOptions);
 				break;
 			case "formedit":
 				op.editOptions = op.editOptions || {};
 				if (op.editOptions.top === undefined) {
-					op.editOptions.top = $tr.offset().top + $tr.outerHeight() - $grid.closest(".ui-jqgrid").offset().top;
+					op.editOptions.top = getTop();
 					op.editOptions.recreateForm = true;
 				}
 				$grid.jqGrid("editGridRow", rid, op.editOptions);
@@ -717,7 +724,7 @@
 			cssIconClass = function (name) {
 				return mergeCssClasses(op.commonIconClass, op[name + "icon"]);
 			},
-			hoverClass = mergeCssClasses(jgrid.getRes(jgrid.guiStyles[p.guiStyle], "states.hover")),
+			hoverClass = $self.jqGrid("getGuiStyles", "states.hover"),
 			hoverAttributes = "onmouseover=\"jQuery(this).addClass('" + hoverClass +
 				"');\" onmouseout=\"jQuery(this).removeClass('" + hoverClass + "');\"",
 			buttonInfos = [
