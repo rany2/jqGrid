@@ -1,6 +1,6 @@
 /**
  * jqGrid 4.12.2-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2016-02-12
+ * Date: 2016-02-13
  */
 
 /* Grid */
@@ -54,8 +54,8 @@
 	border-top: 0 none;
 }
 .ui-jqgrid-errorbar {
-    max-height: 100px;
-    overflow: auto;
+	max-height: 100px;
+	overflow: auto;
 }
 .ui-jqgrid .ui-jqgrid-caption,
 .ui-jqgrid .ui-jqgrid-errorbar-ltr {
@@ -92,31 +92,31 @@
 .ui-jqgrid-jquery-ui .ui-jqdialog-titlebar > .ui-jqdialog-titlebar-close {
 	margin: -8px 0 0 0;
 }
-.ui-jqgrid  .ui-jqgrid-caption .ui-jqgrid-titlebar-close {
+.ui-jqgrid .ui-jqgrid-caption .ui-jqgrid-titlebar-close {
 	right: .1em;
 }
-.ui-jqgrid  .ui-jqgrid-caption-rtl .ui-jqgrid-titlebar-close {
+.ui-jqgrid .ui-jqgrid-caption-rtl .ui-jqgrid-titlebar-close {
 	left: .1em;
 }
-.ui-jqdialog  .ui-jqdialog-titlebar-ltr .ui-jqdialog-titlebar-close {
+.ui-jqdialog .ui-jqdialog-titlebar-ltr .ui-jqdialog-titlebar-close {
 	right: .3em;
 }
-.ui-jqdialog  .ui-jqdialog-titlebar-rtl .ui-jqdialog-titlebar-close {
+.ui-jqdialog .ui-jqdialog-titlebar-rtl .ui-jqdialog-titlebar-close {
 	left: .3em;
 }
 .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close,
 .ui-jqdialog-titlebar > .ui-jqdialog-titlebar-close {
 	border-radius: .5em;
 }
-.ui-jqgrid  .ui-jqgrid-caption .ui-jqgrid-title,
-.ui-jqgrid  .ui-jqgrid-errorbar-ltr .ui-jqgrid-error,
-.ui-jqdialog  .ui-jqdialog-titlebar-ltr .ui-jqdialog-title {
+.ui-jqgrid .ui-jqgrid-caption .ui-jqgrid-title,
+.ui-jqgrid .ui-jqgrid-errorbar-ltr .ui-jqgrid-error,
+.ui-jqdialog .ui-jqdialog-titlebar-ltr .ui-jqdialog-title {
 	position: relative;
 	left: .1em;
 }
-.ui-jqgrid  .ui-jqgrid-caption-rtl .ui-jqgrid-title,
-.ui-jqgrid  .ui-jqgrid-errorbar-rtl .ui-jqgrid-error,
-.ui-jqdialog  .ui-jqdialog-titlebar-rtl .ui-jqdialog-title {
+.ui-jqgrid .ui-jqgrid-caption-rtl .ui-jqgrid-title,
+.ui-jqgrid .ui-jqgrid-errorbar-rtl .ui-jqgrid-error,
+.ui-jqdialog .ui-jqdialog-titlebar-rtl .ui-jqdialog-title {
 	position: relative;
 	right: .1em;
 }
@@ -133,16 +133,16 @@
 	position: relative;
 	top: -2px;
 }
-.ui-jqgrid  .ui-jqgrid-caption .ui-jqgrid-titlebar-close span.ui-icon,
+.ui-jqgrid .ui-jqgrid-caption .ui-jqgrid-titlebar-close span.ui-icon,
 .ui-jqdialog-titlebar-ltr .ui-jqdialog-titlebar-close span.ui-icon {
 	right: 3px;
 }
 
-.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close  > span.ui-icon {
+.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.ui-icon {
 	margin-top: -1px;
 }
 
-.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close  > span.fa {
+.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.fa {
 	/*  the values below are based on the difference between the
 		font-size of fa-icon and the font size of the parent element */
 	font-size: 14px;
@@ -199,6 +199,8 @@
 	vertical-align: middle;
 }
 .ui-jqgrid .ui-jqgrid-htable .ui-jqgrid-labels .jqgh_cbox > div {
+	text-align: center;
+	vertical-align: baseline;
 	margin: 0;
 }
 .ui-jqgrid-labels .ui-th-column-header,
@@ -234,8 +236,12 @@
 	margin: 3px 0;
 }
 .ui-jqgrid .ui-th-column .cbox {
-	margin: 0;
+	margin: .1em;
 	vertical-align: middle;
+}
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-th-column .cbox {
+	height: 18px;
+	width: 18px;
 }
 .ui-jqgrid .ui-th-column .ui-th-div-ie > .cbox {
 	margin-left: -1px;
@@ -354,6 +360,8 @@
 .ui-jqgrid tr.ui-subgrid > td {
 	overflow: hidden;
 	white-space: pre;
+	vertical-align: middle;
+	text-align: center;
 	height: 22px;
 	border-top: 0 none;
 	border-bottom-width: 1px;
@@ -380,9 +388,12 @@
 	border-right: 1px solid;
 	border-bottom: 0 none;
 }
+.ui-jqgrid tr.jqgfirstrow > td.td_cbox {
+	padding: 0;
+}
 .ui-jqgrid tr.jqgrow > td,
 .ui-jqgrid tr.jqgroup > td,
-.ui-jqgrid tr.jqfoot > td  {
+.ui-jqgrid tr.jqfoot > td {
 	font-weight: normal;
 }
 .ui-jqgrid tr.jqfoot > td {
@@ -430,7 +441,12 @@
 	text-align: center;
 	vertical-align: middle;
 }
+.ui-jqgrid tr.jqgrow > td.td_cbox {
+	padding: 0;
+}
 .ui-jqgrid .jqgrow > td > .cbox {
+	height: 14px;
+	width: 14px;
 	vertical-align: middle;
 }
 .ui-jqgrid > .ui-jqgrid-resize-mark,
@@ -543,20 +559,20 @@ span.ui-jqgrid-cell-wrapper {
 	width: auto;
 	margin: 0;
 }
-.jqgrow .ui-jqgrid-actions  {
+.jqgrow .ui-jqgrid-actions {
 	background: inherit;
 	border-style: none;
 }
-.ui-jqgrid  .ui-pg-button:not(.ui-state-hover),
+.ui-jqgrid .ui-pg-button:not(.ui-state-hover),
 .jqgrow .ui-jqgrid-actions .ui-pg-div:not(.ui-state-hover) {
 	border: 1px solid transparent;
 }
 .ui-pager-control .ui-pg-table {
 	border-color: inherit;
 }
-.ui-jqgrid  .ui-pg-button:hover,
-.ui-jqgrid  .ui-pg-button.ui-state-hover,
-.ui-jqgrid  .ui-pg-button:focus,
+.ui-jqgrid .ui-pg-button:hover,
+.ui-jqgrid .ui-pg-button.ui-state-hover,
+.ui-jqgrid .ui-pg-button:focus,
 .jqgrow .ui-jqgrid-actions .ui-pg-div:hover,
 .jqgrow .ui-jqgrid-actions .ui-pg-div.ui-state-hover,
 .jqgrow .ui-jqgrid-actions .ui-pg-div:focus {
@@ -609,7 +625,7 @@ span.ui-jqgrid-cell-wrapper {
 .ui-jqgrid .ui-jqgrid-pager .ui-pg-button {
 	cursor: pointer;
 }
-.ui-jqgrid .ui-jqgrid-pager .ui-pg-div  span.ui-icon {
+.ui-jqgrid .ui-jqgrid-pager .ui-pg-div span.ui-icon {
 	float: left;
 	margin: 0 2px;
 }
@@ -641,7 +657,7 @@ span.ui-jqgrid-cell-wrapper {
 .ui-jqgrid .ui-jqgrid-toppager .ui-pg-button {
 	cursor: pointer;
 }
-.ui-jqgrid .ui-jqgrid-toppager .ui-pg-div  span.ui-icon {
+.ui-jqgrid .ui-jqgrid-toppager .ui-pg-div span.ui-icon {
 	float: left;
 	margin: 0 2px;
 }
@@ -867,16 +883,16 @@ span.ui-jqgrid-cell-wrapper {
 	padding: 0 .2em;
 }
 .ui-jqdialog .EditButton-ltr .fm-button-icon-left .fm-button-icon {
-    margin-right: .2em;
+	margin-right: .2em;
 }
 .ui-jqdialog .EditButton-ltr .fm-button-icon-right .fm-button-icon {
-    margin-left: .2em;
+	margin-left: .2em;
 }
 .ui-jqdialog .EditButton-rtl .fm-button-icon-right .fm-button-icon {
-    margin-right: .2em;
+	margin-right: .2em;
 }
 .ui-jqdialog .EditButton-rtl .fm-button-icon-left .fm-button-icon {
-    margin-left: .2em;
+	margin-left: .2em;
 }
 .delmsg {
 	padding: .5em;
@@ -889,7 +905,7 @@ span.ui-jqgrid-cell-wrapper {
 }
 
 /* Inline edit actions button */
-.ui-jqgrid  .jqgrow .ui-jqgrid-actions {
+.ui-jqgrid .jqgrow .ui-jqgrid-actions {
 	display: inline-block;
 	vertical-align: middle;
 	margin: 0;
@@ -1004,14 +1020,14 @@ a.clearsearchclass {
 .ui-search-menu .ui-menu-item .g-menu-item {
 	padding: .2em;
 }
-.ui-menu-jqueryui  .ui-menu-item .g-menu-item:not(.ui-state-hover) {
+.ui-menu-jqueryui .ui-menu-item .g-menu-item:not(.ui-state-hover) {
 	border: 1px solid transparent;
 }
 .ui-menu-jqueryui .ui-menu-item .g-menu-item:hover {
 	font-weight: normal;
 }
  
-.ui-search-oper  {
+.ui-search-oper {
 	padding: 0;
 }
 .ui-search-clear {
@@ -1169,6 +1185,17 @@ a.clearsearchclass {
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgfirstrow > td {
 	padding: 0 .3em;
 }
+.ui-jqgrid.ui-jqgrid-bootstrap tr.jqgfirstrow > td.td_cbox,
+.ui-jqgrid.ui-jqgrid-bootstrap tr.jqgrow > td.td_cbox {
+	padding: 0;
+}
+.ui-jqgrid.ui-jqgrid-bootstrap .jqgrow > td > .cbox {
+	height: 18px;
+	width: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+}
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-btable td.jqgrid-rownum {
 	padding: .2em .3em;
 }
@@ -1243,12 +1270,10 @@ a.clearsearchclass {
 .ui-search-input select.form-control {
 	padding: 0;
 }
-.ui-jqgrid.ui-jqgrid-bootstrap .ui-pg-table .ui-pg-button:hover {
-	margin: 0;
-}
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-actions .ui-pg-div.btn {
 	padding: 0;
 	margin: 0;
+	box-shadow: none;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgrow .sgbutton-div .sgbutton.btn {
 	padding: 0;
@@ -1283,11 +1308,17 @@ a.clearsearchclass {
 	font-size: 12px;
 	padding: 0;
 }
+.ui-jqdialog.ui-jqgrid-bootstrap .FormData .CaptionTD {
+	font-size: 14px;
+}
 .FormData .DataTD {
 	vertical-align: middle;
 }
 .FormData .DataTD input[type="checkbox"] {
 	vertical-align: middle;
+}
+.ui-jqdialog.ui-jqgrid-bootstrap .FormData .DataTD input.form-control[type="checkbox"] {
+	width: 34px; /* change width:100% to the width the same like the height */
 }
 .DelTable .delmsg {
 }
@@ -1301,6 +1332,4 @@ a.clearsearchclass {
 	padding: .1em;
 	height: 22px;
 }
-.ui-jqgrid.ui-jqgrid-bootstrap .ui-th-column .cbox {
-	margin-top: -2px;
-}
+
