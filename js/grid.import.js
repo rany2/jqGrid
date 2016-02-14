@@ -46,9 +46,9 @@
 				var $t = this,
 					xmlConvert = function (xml, o) {
 						var cnfg = $(o.xmlGrid.config, xml)[0], xmldata = $(o.xmlGrid.data, xml)[0], jstr, jstr1, key, svdatatype;
-						if (xmlJsonClass.xml2json && $.jgrid.parse) {
+						if (xmlJsonClass.xml2json) {
 							jstr = xmlJsonClass.xml2json(cnfg, " ");
-							jstr = $.jgrid.parse(jstr);
+							jstr = $.parseJSON(jstr);
 							for (key in jstr) {
 								if (jstr.hasOwnProperty(key)) {
 									jstr1 = jstr[key];
@@ -76,7 +76,7 @@
 								$.jgrid.useJSON = false;
 								jsonparse = true;
 							}
-							json = $.jgrid.parse(jsonstr);
+							json = $.parseJSON(jsonstr);
 							if (jsonparse) {
 								$.jgrid.useJSON = true;
 							}

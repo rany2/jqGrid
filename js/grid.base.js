@@ -832,15 +832,6 @@
 			}
 			return id;
 		},
-		parse: function (jsonString) {
-			var js = jsonString;
-			if (js.substr(0, 9) === "while(1);") { js = js.substr(9); }
-			if (js.substr(0, 2) === "/*") { js = js.substr(2, js.length - 4); }
-			if (!js) { js = "{}"; }
-			return (jgrid.useJSON === true && typeof JSON === "object" && $.isFunction(JSON.parse)) ?
-					JSON.parse(js) :
-					eval("(" + js + ")");
-		},
 		getRes: function (base, path) {
 			var pathParts = path.split("."), n = pathParts.length, i;
 			if (base == null) {
@@ -3934,7 +3925,7 @@
 					if (p.search === true) {
 						var srules = p.postData.filters;
 						if (srules) {
-							if (typeof srules === "string") { srules = jgrid.parse(srules); }
+							if (typeof srules === "string") { srules = $.parseJSON(srules); }
 							tojLinq(srules);
 						} else {
 							try {
@@ -4269,7 +4260,7 @@
 							break;
 						case "jsonstring":
 							beginReq.call(self);
-							dstr = typeof p.datastr === "string" ? jgrid.parse(p.datastr) : p.datastr;
+							dstr = typeof p.datastr === "string" ? $.parseJSON(p.datastr) : p.datastr;
 							readInput.call(self, dstr);
 							finalReportSteps();
 							if (p.forceClientSorting) { readLocal(); }

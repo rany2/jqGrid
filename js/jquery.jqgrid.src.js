@@ -832,15 +832,6 @@
 			}
 			return id;
 		},
-		parse: function (jsonString) {
-			var js = jsonString;
-			if (js.substr(0, 9) === "while(1);") { js = js.substr(9); }
-			if (js.substr(0, 2) === "/*") { js = js.substr(2, js.length - 4); }
-			if (!js) { js = "{}"; }
-			return (jgrid.useJSON === true && typeof JSON === "object" && $.isFunction(JSON.parse)) ?
-					JSON.parse(js) :
-					eval("(" + js + ")");
-		},
 		getRes: function (base, path) {
 			var pathParts = path.split("."), n = pathParts.length, i;
 			if (base == null) {
@@ -3934,7 +3925,7 @@
 					if (p.search === true) {
 						var srules = p.postData.filters;
 						if (srules) {
-							if (typeof srules === "string") { srules = jgrid.parse(srules); }
+							if (typeof srules === "string") { srules = $.parseJSON(srules); }
 							tojLinq(srules);
 						} else {
 							try {
@@ -4269,7 +4260,7 @@
 							break;
 						case "jsonstring":
 							beginReq.call(self);
-							dstr = typeof p.datastr === "string" ? jgrid.parse(p.datastr) : p.datastr;
+							dstr = typeof p.datastr === "string" ? $.parseJSON(p.datastr) : p.datastr;
 							readInput.call(self, dstr);
 							finalReportSteps();
 							if (p.forceClientSorting) { readLocal(); }
@@ -10647,7 +10638,7 @@
 		},
 		addFilter: function (pfilter) {
 			if (typeof pfilter === "string") {
-				pfilter = jgrid.parse(pfilter);
+				pfilter = $.parseJSON(pfilter);
 			}
 			this.each(function () {
 				this.p.filter = pfilter;
@@ -11065,7 +11056,7 @@
 						});
 					};
 				if (typeof defaultFilters === "string") {
-					defaultFilters = $.trim(defaultFilters) !== "" ? jgrid.parse(defaultFilters) : undefined;
+					defaultFilters = $.trim(defaultFilters) !== "" ? $.parseJSON(defaultFilters) : undefined;
 				}
 				$(themodalSelector).remove();
 				function showFilter($filter) {
@@ -14015,9 +14006,9 @@
 				var $t = this,
 					xmlConvert = function (xml, o) {
 						var cnfg = $(o.xmlGrid.config, xml)[0], xmldata = $(o.xmlGrid.data, xml)[0], jstr, jstr1, key, svdatatype;
-						if (xmlJsonClass.xml2json && $.jgrid.parse) {
+						if (xmlJsonClass.xml2json) {
 							jstr = xmlJsonClass.xml2json(cnfg, " ");
-							jstr = $.jgrid.parse(jstr);
+							jstr = $.parseJSON(jstr);
 							for (key in jstr) {
 								if (jstr.hasOwnProperty(key)) {
 									jstr1 = jstr[key];
@@ -14045,7 +14036,7 @@
 								$.jgrid.useJSON = false;
 								jsonparse = true;
 							}
-							json = $.jgrid.parse(jsonstr);
+							json = $.parseJSON(jsonstr);
 							if (jsonparse) {
 								$.jgrid.useJSON = true;
 							}
@@ -16556,7 +16547,7 @@
 											if (p.subgridtype === "xml") {
 												subGridXml(jqXHR.responseXML, sid);
 											} else {
-												subGridJson(jgrid.parse(jqXHR.responseText), sid);
+												subGridJson($.parseJSON(jqXHR.responseText), sid);
 											}
 										}
 									}, jgrid.ajaxOptions, p.ajaxSubgridOptions || {}));

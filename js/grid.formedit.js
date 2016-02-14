@@ -127,7 +127,7 @@
 						});
 					};
 				if (typeof defaultFilters === "string") {
-					defaultFilters = $.trim(defaultFilters) !== "" ? jgrid.parse(defaultFilters) : undefined;
+					defaultFilters = $.trim(defaultFilters) !== "" ? $.parseJSON(defaultFilters) : undefined;
 				}
 				$(themodalSelector).remove();
 				function showFilter($filter) {

@@ -208,7 +208,7 @@
 											if (p.subgridtype === "xml") {
 												subGridXml(jqXHR.responseXML, sid);
 											} else {
-												subGridJson(jgrid.parse(jqXHR.responseText), sid);
+												subGridJson($.parseJSON(jqXHR.responseText), sid);
 											}
 										}
 									}, jgrid.ajaxOptions, p.ajaxSubgridOptions || {}));

@@ -779,7 +779,7 @@
 		},
 		addFilter: function (pfilter) {
 			if (typeof pfilter === "string") {
-				pfilter = jgrid.parse(pfilter);
+				pfilter = $.parseJSON(pfilter);
 			}
 			this.each(function () {
 				this.p.filter = pfilter;
