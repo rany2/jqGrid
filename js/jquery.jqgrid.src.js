@@ -8005,8 +8005,8 @@
 				return false;
 			});
 			$(".fm-button", "#info_dialog").hover(
-				function () { $($t).addClass(hoverClasses); },
-				function () { $($t).removeClass(hoverClasses); }
+				function () { $(this).addClass(hoverClasses); },
+				function () { $(this).removeClass(hoverClasses); }
 			);
 			if ($.isFunction(mopt.beforeOpen)) { mopt.beforeOpen(); }
 			jgrid.viewModal.call($t, "#info_dialog", {
