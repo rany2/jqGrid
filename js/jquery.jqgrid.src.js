@@ -12907,7 +12907,7 @@
 									top = top / 2 - 25 - offsetGbox.top;
 								}
 								jgrid.createModal.call($t, alertIDs,
-									"<div>" + o.alerttext + "</div><span tabindex='0'><span tabindex='-1' id='" + gridId + "_jqg_alrt'></span></span>",
+									"<div class='" + getGuiStyles.call($t, "dialog.body") + "'><div>" + o.alerttext + "</div></div>",
 									{
 										gbox: gboxSelector,
 										jqModal: o.jqModal,
@@ -12934,7 +12934,7 @@
 							var $close = $("#" + jqID(alertIDs.modalhead)).find(".ui-jqdialog-titlebar-close");
 							$close.attr({ tabindex: "0", href: "#", role: "button" });
 							setTimeout(function () {
-								$close.focus(); //$(p.idSel + "_jqg_alrt").focus();
+								$close.focus();
 							}, 50);
 						};
 					},
