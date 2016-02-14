@@ -81,6 +81,8 @@
 	border: 1px solid transparent;
 	height: 1.4em;
 	cursor: pointer;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	-ms-touch-action: manipulation;
 	touch-action: manipulation;
@@ -89,6 +91,7 @@
 	-ms-user-select: none;
 	user-select: none;
 }
+
 .ui-jqgrid-jquery-ui .ui-jqdialog-titlebar > .ui-jqdialog-titlebar-close {
 	margin: -8px 0 0 0;
 }
@@ -106,8 +109,10 @@
 }
 .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close,
 .ui-jqdialog-titlebar > .ui-jqdialog-titlebar-close {
+	-ms-border-radius: .5em;
 	border-radius: .5em;
 }
+
 .ui-jqgrid .ui-jqgrid-caption .ui-jqgrid-title,
 .ui-jqgrid .ui-jqgrid-errorbar-ltr .ui-jqgrid-error,
 .ui-jqdialog .ui-jqdialog-titlebar-ltr .ui-jqdialog-title {
@@ -237,6 +242,8 @@
 }
 .ui-jqgrid .ui-th-column .cbox {
 	margin: .1em;
+	cursor: pointer;
+	text-align: center;
 	vertical-align: middle;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-th-column .cbox {
@@ -253,11 +260,9 @@
 	position: relative;
 	cursor: col-resize;
 	-webkit-touch-callout: none;
-	-khtml-user-select: none;
 	-ms-user-select: none;
 	-moz-user-select: -moz-none;
 	-webkit-user-select: none;
-	-o-user-select: none;
 	user-select: none;
 	display: inline;
 	overflow: hidden;
@@ -447,6 +452,8 @@
 .ui-jqgrid .jqgrow > td > .cbox {
 	height: 14px;
 	width: 14px;
+	cursor: pointer;
+	text-align: center;
 	vertical-align: middle;
 }
 .ui-jqgrid > .ui-jqgrid-resize-mark,
@@ -455,11 +462,9 @@ body > .ui-jqgrid-resize-mark {
 	left: 0;
 	cursor: col-resize;
 	-webkit-touch-callout: none;
-	-khtml-user-select: none;
 	-ms-user-select: none;
 	-moz-user-select: -moz-none;
 	-webkit-user-select: none;
-	-o-user-select: none;
 	user-select: none;
 	position: absolute;
 	top: 0;
@@ -696,7 +701,7 @@ span.ui-jqgrid-cell-wrapper {
 	padding: 0;
 	width: 100%;
 }
-.sgbuton {
+.sgbutton {
 	cursor: pointer;
 }
 .ui-jqgrid .ui-subgrid table {
@@ -1145,21 +1150,24 @@ a.clearsearchclass {
 .ui-jqgrid-disablePointerEvents {
 	pointer-events: none;
 }
+
 /* Bootstrap style support */
 .ui-jqgrid.ui-jqgrid-bootstrap {
 	border: 1px solid #ddd;
+	-ms-border-radius: 6px;
 	border-radius: 6px;
 }
-.ui-jqgrid-view > .ui-jqgrid-toppager {
-	border-bottom-radius: 0;
+.ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view > .ui-jqgrid-toppager {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
 }
-.ui-jqgrid-view > .ui-userdata {
+.ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view > .ui-userdata {
 	background-color: #f0f0f0;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-hdiv {
 	background-color: #e5e5e5;
 }
-.ui-jqgrid-view > .ui-jqgrid-sdiv td {
+.ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view > .ui-jqgrid-sdiv td {
 	background-color: #f9f9f9
 }
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-titlebar .ui-jqgrid-title,
@@ -1173,7 +1181,10 @@ a.clearsearchclass {
 .ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view .fa {
 	font-size: 14px;
 }
-.ui-jqdialog-content .CaptionTD {
+.ui-jqdialog.ui-jqgrid-bootstrap {
+	font-size: 14px;
+}
+.ui-jqdialog.ui-jqgrid-bootstrap .ui-jqdialog-content .CaptionTD {
 	padding: .5em;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgfirstrow > td,
@@ -1202,27 +1213,34 @@ a.clearsearchclass {
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-caption,
 .ui-jqdialog.ui-jqgrid-bootstrap .ui-jqdialog-titlebar {
 	background-color: #cacaca;
+	-ms-border-top-left-radius: 6px;
 	border-top-left-radius: 6px;
+	-ms-border-top-right-radius: 6px;
 	border-top-right-radius: 6px;
 }
+
 .modal-backdrop.jqgrid-overlay {
+	-ms-opacity: .35;
 	opacity: .35;
+	-webkit-filter:Alpha(Opacity=35);
+	-moz-filter:Alpha(Opacity=35);
+	-o-filter:Alpha(Opacity=35);
 	filter:Alpha(Opacity=35);
 }
-.ui-jqdialog-content,
-.ui-jqdialog .ui-jqdialog-content {
+
+.ui-jqdialog.ui-jqgrid-bootstrap .ui-jqdialog-content {
 	border: 0;
 	padding: .3em .2em;
 	background: white;
 	height: auto;
 }
-.ui-jqdialog .modal-dialog {
+.ui-jqdialog.ui-jqgrid-bootstrap .modal-dialog {
 	width: auto;
 }
 .ui-jqdialog.ui-widget {
 	overflow: hidden;
 }
-.ui-jqdialog .modal-content > .ui-resizable-handle {
+.ui-jqdialog.ui-jqgrid-bootstrap .modal-content > .ui-resizable-handle {
 	bottom: 1px;
 	right: 1px;
 	cursor: se-resize;
@@ -1277,6 +1295,7 @@ a.clearsearchclass {
 }
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgrow .sgbutton-div .sgbutton.btn {
 	padding: 0;
+	cursor: pointer;
 	border: 1px solid transparent;
 	margin: -.3em -.3em;
 }
@@ -1284,11 +1303,11 @@ a.clearsearchclass {
 .ui-jqgrid.ui-jqgrid-bootstrap .sgbutton-div .sgbutton.btn:hover {
 	border: 1px solid #333;
 }
-.ui-jqdialog .ui-jqdialog-content {
+.ui-jqdialog.ui-jqgrid-bootstrap .ui-jqdialog-content {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
-.ui-pager-control .ui-pg-input {
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-pager-control .ui-pg-input {
 	display: inline-block;
 	font-size: 12px;
 	padding: .3em;
@@ -1304,7 +1323,7 @@ a.clearsearchclass {
 	border-bottom-left-radius: 6px;
 	border-bottom-right-radius: 6px;
 }
-.ui-pager-control .ui-pg-selbox {
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-pager-control .ui-pg-selbox {
 	font-size: 12px;
 	padding: 0;
 }
@@ -1321,6 +1340,7 @@ a.clearsearchclass {
 	width: 34px; /* change width:100% to the width the same like the height */
 }
 .DelTable .delmsg {
+	padding: .2em;
 }
 .queryresult {
 	margin-bottom: 1em;
