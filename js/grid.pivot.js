@@ -341,7 +341,7 @@
 					index.createDataIndex(data);
 					return index;
 				},
-				buildColModelItem = function (colType, agr, iAggr, level, iyData) {
+				buildColModelItem = function (colType, agr1, iAggr, level, iyData) {
 					var label, name, cmItem;
 					switch (colType) {
 						case 1: // total group
@@ -354,19 +354,19 @@
 							break;
 						//case 0: // standard column
 						default:
-							label = aggrlen > 1 ? agr.label || "{0}" : yIndex.getItem(iyData)[level];
+							label = aggrlen > 1 ? agr1.label || "{0}" : yIndex.getItem(iyData)[level];
 							name = "y" + iyData;
 							break;
 					}
-					cmItem = $.extend({}, agr, {
+					cmItem = $.extend({}, agr1, {
 						name: name + (aggrlen > 1 ? "a" + iAggr : ""),
 						label: $.isFunction(label) ?
 									(label.call(self, colType === 2 ?
-											{ aggregate: agr, iAggregate: iAggr, pivotOptions: o } :
-											{ yIndex: yIndex.getItem(iyData), aggregate: agr, iAggregate: iAggr, yLevel: level, pivotOptions: o })) :
+											{ aggregate: agr1, iAggregate: iAggr, pivotOptions: o } :
+											{ yIndex: yIndex.getItem(iyData), aggregate: agr1, iAggregate: iAggr, yLevel: level, pivotOptions: o })) :
 									(jgrid.template.apply(self, colType === 2 ?
-											[label, agr.aggregator, agr.member, iAggr] :
-											[label, agr.aggregator, agr.member, yIndex.getItem(iyData)[level], level]))
+											[label, agr1.aggregator, agr1.member, iAggr] :
+											[label, agr1.aggregator, agr1.member, yIndex.getItem(iyData)[level], level]))
 					});
 					delete cmItem.member;
 					delete cmItem.aggregator;
@@ -382,7 +382,7 @@
 						colModel.push(buildColModelItem(colType, aggregate, iAggr, level, iyData));
 					}
 				},
-				addGroupTotalHeaders = function (iyData, level, previousY) {
+				addGroupTotalHeaders = function (iyData, level, previousY1) {
 					var iLevel, j, totalHeader, headerOnTop;
 					for (iLevel = headerLevels - 1; iLevel >= level; iLevel--) {
 						if (hasGroupTotal[iLevel]) {
@@ -397,8 +397,8 @@
 								colHeaders[j].groupHeaders.push({
 									titleText: ((headerOnTop && j === iLevel + 1) || (!headerOnTop && j === headerLevels - 1)) ?
 											($.isFunction(totalHeader) ?
-													totalHeader.call(self, previousY, iLevel) :
-													jgrid.template.call(self, totalHeader || "", previousY[iLevel], iLevel)) :
+													totalHeader.call(self, previousY1, iLevel) :
+													jgrid.template.call(self, totalHeader || "", previousY1[iLevel], iLevel)) :
 											"",
 									startColumnName: "y" + (iyData - 1) + "t" + iLevel + (aggrlen === 1 ? "" : "a0"),
 									numberOfColumns: aggrlen
@@ -425,10 +425,10 @@
 						}
 					}
 				},
-				finalizeGroupTotals = function (iyData, itemYData, previousY, iAggr) {
-					var iLevel, level = yIndex.getIndexOfDifferences(itemYData, previousY),	fieldName, aggrGroup;
+				finalizeGroupTotals = function (iyData, itemYData1, previousY1, iAggr) {
+					var iLevel, level = yIndex.getIndexOfDifferences(itemYData1, previousY1), fieldName, aggrGroup;
 
-					if (previousY !== null) {
+					if (previousY1 !== null) {
 						// test whether the group is finished and one need to get results
 						level = Math.max(level, 0); // change -1 to 0 for the last call (itemYData === previousY)
 						for (iLevel = headerLevels - 1; iLevel >= level; iLevel--) {
@@ -446,31 +446,31 @@
 									ys: aggrGroup.groupInfo.ys,
 									iYs: aggrGroup.groupInfo.iYs
 								};
-								if (itemYData !== previousY) {
+								if (itemYData1 !== previousY1) {
 									aggrContextGroupTotalRows[iLevel][iAggr] = createTotalAggregation(iAggr);
 								}
 							}
 						}
 					}
 				},
-				calculateGroupTotals = function (itemYData, previousY, aggregate, iAggr, row, iRow, iyData) {
+				calculateGroupTotals = function (itemYData1, previousY1, aggregate, iAggr, row1, iRow1, iyData) {
 					// the method will be called at the first time with previousY === null in every output row
 					// and finally with itemYData === previousY for getting results of all aggregation contexts
 					var iLevel, aggrGroup, groupInfo;
 
-					if (itemYData !== previousY) { // not the last call in the row
+					if (itemYData1 !== previousY1) { // not the last call in the row
 						for (iLevel = headerLevels - 1; iLevel >= 0; iLevel--) {
 							if (hasGroupTotal[iLevel]) {
 								aggrGroup = aggrContextGroupTotalRows[iLevel][iAggr];
-								aggrGroup.calc(row[aggregate.member], aggregate.member, row, iRow, data);
+								aggrGroup.calc(row1[aggregate.member], aggregate.member, row1, iRow1, data);
 								groupInfo = aggrGroup.groupInfo;
 								if ($.inArray(iyData, groupInfo.iYs) < 0) {
 									groupInfo.iYs.push(iyData);
-									groupInfo.ys.push(itemYData);
+									groupInfo.ys.push(itemYData1);
 								}
-								if ($.inArray(iRow, groupInfo.iRows) < 0) {
-									groupInfo.iRows.push(iRow);
-									groupInfo.rows.push(row);
+								if ($.inArray(iRow1, groupInfo.iRows) < 0) {
+									groupInfo.iRows.push(iRow1);
+									groupInfo.rows.push(row1);
 								}
 							}
 						}
@@ -746,7 +746,7 @@
 			return this.each(function () {
 				var $t = this, $self = $($t), $j = $.fn.jqGrid;
 
-				function pivot(data) {
+				function pivot() {
 					var pivotGrid = $j.pivotSetup.call($self, data, pivotOpt),
 						gHead = pivotGrid.groupHeaders,
 						assocArraySize = function (obj) {
@@ -802,12 +802,13 @@
 					$.ajax($.extend({
 						url: data,
 						dataType: "json",
-						success: function (data) {
-							pivot(jgrid.getAccessor(data, ajaxOpt && ajaxOpt.reader ? ajaxOpt.reader : "rows"));
+						success: function (data1) {
+							data = jgrid.getAccessor(data1, ajaxOpt && ajaxOpt.reader ? ajaxOpt.reader : "rows");
+							pivot();
 						}
 					}, ajaxOpt || {}));
 				} else {
-					pivot(data);
+					pivot();
 				}
 			});
 		}
