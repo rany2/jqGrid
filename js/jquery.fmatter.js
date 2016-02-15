@@ -13,7 +13,9 @@
  *
 **/
 /*jshint eqeqeq:false */
-/*jslint eqeq: true, plusplus: true, unparam: true, vars: true, regexp: true, white: true, todo: true */
+/*jslint
+    browser, devel, for, multivar, this, white
+*/
 /*global jQuery, define */
 
 (function (factory) {
@@ -158,7 +160,7 @@
 			if (!this.isValue(o)) {
 				return true;
 			}
-			o = $.trim(o).replace(/\&nbsp\;/ig, "").replace(/\&#160\;/ig, "");
+			o = $.trim(o).replace(/&nbsp;/ig, "").replace(/&#160;/ig, "");
 			return o === "";
 		},
 		NumberFormat: function (nData, opts) {
@@ -358,16 +360,16 @@
 		// and no cellValue callback function are defined "to decode" the value
 		return defaultFormat(cellval, op);
 	};
-	$FnFmatter.showlink.getCellBuilder = function (opts) {
+	$FnFmatter.showlink.getCellBuilder = function (opts1) {
 		var op = {
-				baseLinkUrl: opts.baseLinkUrl,
-				showAction: opts.showAction,
-				addParam: opts.addParam || "",
-				target: opts.target,
-				idName: opts.idName,
+				baseLinkUrl: opts1.baseLinkUrl,
+				showAction: opts1.showAction,
+				addParam: opts1.addParam || "",
+				target: opts1.target,
+				idName: opts1.idName,
 				hrefDefaultValue: "#"
 			},
-			colModel = opts.colModel;
+			colModel = opts1.colModel;
 
 		if (colModel != null) {
 			op = $.extend({}, op, colModel.formatoptions || {});
@@ -436,7 +438,9 @@
 					if (cm.autoResizable && td != null && $(td.firstChild).hasClass(p.autoResizing.wrapperClassName)) {
 						td = td.firstChild;
 					}
-					$(td.firstChild).bind("click", onClick);
+					if (td != null) {
+						$(td.firstChild).bind("click", onClick);
+					}
 				}
 			}
 		}
@@ -526,7 +530,7 @@
 			oSelect = op.value, sep = op.separator || ":", delim = op.delimiter || ";";
 		if (oSelect) {
 			var msl = op.multiple === true ? true : false, scell = [], sv,
-			mapFunc = function (n, i) { if (i > 0) { return n; } };
+			mapFunc = function (n, j) { if (j > 0) { return n; } };
 			if (msl) {
 				scell = $.map(String(cellval).split(","), function (n) { return $.trim(n); });
 			}
@@ -573,7 +577,7 @@
 			oSelect = op.value, sep = op.separator || ":", delim = op.delimiter || ";",
 			defaultValue, defaultValueDefined = op.defaultValue !== undefined,
 			isMultiple = op.multiple === true ? true : false, sv, so, i, nOpts, selOptions = {},
-			mapFunc = function (n, i) { if (i > 0) { return n; } };
+			mapFunc = function (n, j) { if (j > 0) { return n; } };
 		if (typeof oSelect === "string") {
 			// maybe here we can use some caching with care ????
 			so = oSelect.split(delim);
@@ -640,18 +644,21 @@
 		if ($tr.hasClass("jqgrid-new-row")) {
 			op.extraparam[p.prmNames.oper] = p.prmNames.addoper;
 		}
-		var actop = {
-			keys: op.keys,
-			oneditfunc: op.onEdit,
-			successfunc: op.onSuccess,
-			url: op.url,
-			extraparam: op.extraparam,
-			aftersavefunc: op.afterSave,
-			errorfunc: op.onError,
-			afterrestorefunc: op.afterRestore,
-			restoreAfterError: op.restoreAfterError,
-			mtype: op.mtype
-		};
+		var i, n = op.custom.length,
+			customAction,
+				actop = {
+				keys: op.keys,
+				oneditfunc: op.onEdit,
+				successfunc: op.onSuccess,
+				url: op.url,
+				extraparam: op.extraparam,
+				aftersavefunc: op.afterSave,
+				errorfunc: op.onError,
+				afterrestorefunc: op.afterRestore,
+				restoreAfterError: op.restoreAfterError,
+				mtype: op.mtype
+			};
+
 		if ((!p.multiselect && rid !== p.selrow) || (p.multiselect && $.inArray(rid, p.selarrrow) < 0)) {
 			$grid.jqGrid("setSelection", rid, true, e);
 		} else {
@@ -684,7 +691,6 @@
 				break;
 			default:
 				if (op.custom != null && op.custom.length > 0) {
-					var i, n = op.custom.length, customAction;
 					for (i = 0; i < n; i++) {
 						customAction = op.custom[i];
 						if (customAction.action === act && $.isFunction(customAction.onClick)) {
@@ -894,7 +900,7 @@
 		if (op.value) {
 			var oSelect = op.value,
 				msl = op.multiple === true ? true : false,
-				scell = [], sv, mapFunc = function (n, i) { if (i > 0) { return n; } };
+				scell = [], sv, mapFunc = function (n, k) { if (k > 0) { return n; } };
 			if (msl) { scell = cell.split(","); scell = $.map(scell, function (n) { return $.trim(n); }); }
 			if (typeof oSelect === "string") {
 				var so = oSelect.split(delim), j = 0, i;
@@ -917,9 +923,9 @@
 				if (!msl) { scell[0] = cell; }
 				ret = $.map(scell, function (n) {
 					var rv;
-					$.each(oSelect, function (i, val) {
+					$.each(oSelect, function (k, val) {
 						if (val === n) {
-							rv = i;
+							rv = k;
 							return false;
 						}
 					});
