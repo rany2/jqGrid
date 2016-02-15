@@ -44,8 +44,8 @@
 			}, o || {});
 			return this.each(function () {
 				var $t = this,
-					xmlConvert = function (xml, o) {
-						var cnfg = $(o.xmlGrid.config, xml)[0], xmldata = $(o.xmlGrid.data, xml)[0], jstr, jstr1, key, svdatatype;
+					xmlConvert = function (xml, options) {
+						var cnfg = $(options.xmlGrid.config, xml)[0], xmldata = $(options.xmlGrid.data, xml)[0], jstr, jstr1, key, svdatatype;
 						if (xmlJsonClass.xml2json) {
 							jstr = xmlJsonClass.xml2json(cnfg, " ");
 							jstr = $.parseJSON(jstr);
@@ -69,19 +69,12 @@
 							alert("xml2json or parse are not present");
 						}
 					},
-					jsonConvert = function (jsonstr, o) {
+					jsonConvert = function (jsonstr, options) {
 						if (jsonstr && typeof jsonstr === "string") {
-							var jsonparse = false, json, gprm, jdata, svdatatype;
-							if ($.jgrid.useJSON) {
-								$.jgrid.useJSON = false;
-								jsonparse = true;
-							}
-							json = $.parseJSON(jsonstr);
-							if (jsonparse) {
-								$.jgrid.useJSON = true;
-							}
-							gprm = json[o.jsonGrid.config];
-							jdata = json[o.jsonGrid.data];
+							var json = $.parseJSON(jsonstr),
+								gprm = json[options.jsonGrid.config],
+								jdata = json[options.jsonGrid.data], svdatatype;
+
 							if (jdata) {
 								svdatatype = gprm.datatype;
 								gprm.datatype = "jsonstring";
@@ -100,12 +93,13 @@
 							type: o.mtype,
 							data: o.impData,
 							dataType: "xml",
+							context: o,
 							complete: function (jqXHR) {
 								if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
-									xmlConvert(jqXHR.responseXML, o);
-									$($t).triggerHandler("jqGridImportComplete", [jqXHR, o]);
-									if ($.isFunction(o.importComplete)) {
-										o.importComplete(jqXHR);
+									xmlConvert(jqXHR.responseXML, this);
+									$($t).triggerHandler("jqGridImportComplete", [jqXHR, this]);
+									if ($.isFunction(this.importComplete)) {
+										this.importComplete(jqXHR);
 									}
 								}
 							}
@@ -131,13 +125,14 @@
 							type: o.mtype,
 							data: o.impData,
 							dataType: "json",
+							context: o,
 							complete: function (jqXHR) {
 								try {
 									if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
-										jsonConvert(jqXHR.responseText, o);
-										$($t).triggerHandler("jqGridImportComplete", [jqXHR, o]);
-										if ($.isFunction(o.importComplete)) {
-											o.importComplete(jqXHR);
+										jsonConvert(jqXHR.responseText, this);
+										$($t).triggerHandler("jqGridImportComplete", [jqXHR, this]);
+										if ($.isFunction(this.importComplete)) {
+											this.importComplete(jqXHR);
 										}
 									}
 								} catch (ignore) { }
