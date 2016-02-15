@@ -97,8 +97,8 @@
 					rowClasses = getSubgridStyle("row", "ui-subgrid ui-row-" + p.direction),
 					tdWithIconClasses = getSubgridStyle("tdWithIcon", "subgrid-cell"),
 					tdDataClasses = getSubgridStyle("tdData", "subgrid-data"),
-					subGridCell = function ($tr, cell, pos) {
-						var $td = $("<td align='" + cm.align[pos] + "'></td>").html(cell);
+					subGridCell = function ($tr, cell, pos1) {
+						var $td = $("<td align='" + cm.align[pos1] + "'></td>").html(cell);
 						$tr.append($td);
 					},
 					fillXmlBody = function (data, $tbody) {
@@ -106,8 +106,8 @@
 						$(sgmap.root + " " + sgmap.row, data).each(function () {
 							var f, i, $tr = $("<tr class='" + rowSubTableClasses + "'></tr>");
 							if (sgmap.repeatitems === true) {
-								$(sgmap.cell, this).each(function (i) {
-									subGridCell($tr, $(this).text() || "&#160;", i);
+								$(sgmap.cell, this).each(function (j) {
+									subGridCell($tr, $(this).text() || "&#160;", j);
 								});
 							} else {
 								f = cm.mapping || cm.name;
@@ -275,8 +275,8 @@
 						return false;
 					},
 					len,
-					tr,
-					$td,
+					tr1,
+					$td1,
 					iRow = 1;
 
 				if (!ts.grid) {
@@ -289,14 +289,14 @@
 					len = sind + 1;
 				}
 				while (iRow < len) {
-					tr = ts.rows[iRow];
-					if ($(tr).hasClass("jqgrow")) {
-						$td = $(tr.cells[pos]);
-						if ($td.hasClass("ui-sgcollapsed")) {
+					tr1 = ts.rows[iRow];
+					if ($(tr1).hasClass("jqgrow")) {
+						$td1 = $(tr1.cells[pos]);
+						if ($td1.hasClass("ui-sgcollapsed")) {
 							if (p.scroll) {
-								$td.unbind("click");
+								$td1.unbind("click");
 							}
-							$td.bind("click", onClick);
+							$td1.bind("click", onClick);
 						}
 					}
 					iRow++;
