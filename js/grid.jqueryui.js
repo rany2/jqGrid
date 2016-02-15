@@ -322,11 +322,11 @@
 			}
 
 			select.empty();
-			var gh = p.groupHeader, colHeader = {}, i, j, l, iCol, ghItem;
+			var gh = p.groupHeader, colHeader = {}, k, j, l, iCol, ghItem;
 			// fill colHeader for columns which have column header
 			if (gh != null && gh.groupHeaders != null) {
-				for (i = 0, l = gh.groupHeaders.length; i < l; i++) {
-					ghItem = gh.groupHeaders[i];
+				for (k = 0, l = gh.groupHeaders.length; k < l; k++) {
+					ghItem = gh.groupHeaders[k];
 					for (j = 0; j < ghItem.numberOfColumns; j++) {
 						iCol = p.iColByName[ghItem.startColumnName] + j;
 						colHeader[iCol] = $.isFunction(opts.buildItemText) ?
@@ -477,7 +477,7 @@
 					return;
 				}
 				opts = $.extend({
-					drag: function (opts) {
+					drag: function (opts1) {
 						return $.extend({
 							start: function (ev, ui) {
 								var i, subgid;
@@ -500,11 +500,11 @@
 								$("td", ui.helper).each(function (iCol) {
 									this.style.width = $t.grid.headers[iCol].width + "px";
 								});
-								if (opts.onstart && $.isFunction(opts.onstart)) { opts.onstart.call($($t), ev, ui); }
+								if (opts1.onstart && $.isFunction(opts1.onstart)) { opts1.onstart.call($($t), ev, ui); }
 							},
 							stop: function (ev, ui) {
 								var i, ids;
-								if (ui.helper.dropped && !opts.dragcopy) {
+								if (ui.helper.dropped && !opts1.dragcopy) {
 									ids = $(ui.helper).attr("id");
 									if (ids === undefined) { ids = $(this).attr("id"); }
 									$($t).jqGrid("delRowData", ids);
@@ -513,11 +513,11 @@
 								for (i = 0; i < $.data($t, "dnd").connectWith.length; i++) {
 									$($.data($t, "dnd").connectWith[i]).jqGrid("delRowData", "jqg_empty_row");
 								}
-								if (opts.onstop && $.isFunction(opts.onstop)) { opts.onstop.call($($t), ev, ui); }
+								if (opts1.onstop && $.isFunction(opts1.onstop)) { opts1.onstop.call($($t), ev, ui); }
 							}
-						}, opts.drag_opts || {});
+						}, opts1.drag_opts || {});
 					},
-					drop: function (opts) {
+					drop: function (opts1) {
 						return $.extend({
 							accept: function (d) {
 								if (!$(d).hasClass("jqgrow")) { return d; }
@@ -532,7 +532,7 @@
 								if (!$(ui.draggable).hasClass("jqgrow")) { return; }
 								var accept = $(ui.draggable).attr("id");
 								var getdata = ui.draggable.parent().parent().jqGrid("getRowData", accept);
-								if (!opts.dropbyname) {
+								if (!opts1.dropbyname) {
 									var i = 0, tmpdata = {}, nm, key;
 									var dropmodel = $("#" + jqID(this.id)).jqGrid("getGridParam", "colModel");
 									try {
@@ -551,29 +551,29 @@
 									} catch (ignore) { }
 								}
 								ui.helper.dropped = true;
-								if (opts.beforedrop && $.isFunction(opts.beforedrop)) {
+								if (opts1.beforedrop && $.isFunction(opts1.beforedrop)) {
 									//parameters to this callback - event, element, data to be inserted, sender, reciever
 									// should return object which will be inserted into the reciever
-									var datatoinsert = opts.beforedrop.call(this, ev, ui, getdata, $("#" + jqID($t.p.id)), $(this));
+									var datatoinsert = opts1.beforedrop.call(this, ev, ui, getdata, $("#" + jqID($t.p.id)), $(this));
 									if (datatoinsert !== undefined && datatoinsert !== null && typeof datatoinsert === "object") { getdata = datatoinsert; }
 								}
 								if (ui.helper.dropped) {
 									var grid;
-									if (opts.autoid) {
-										if ($.isFunction(opts.autoid)) {
-											grid = opts.autoid.call(this, getdata);
+									if (opts1.autoid) {
+										if ($.isFunction(opts1.autoid)) {
+											grid = opts1.autoid.call(this, getdata);
 										} else {
 											grid = Math.ceil(Math.random() * 1000);
-											grid = opts.autoidprefix + grid;
+											grid = opts1.autoidprefix + grid;
 										}
 									}
 									// NULL is interpreted as undefined while null as object
-									$("#" + jqID(this.id)).jqGrid("addRowData", grid, getdata, opts.droppos);
+									$("#" + jqID(this.id)).jqGrid("addRowData", grid, getdata, opts1.droppos);
 									getdata[$t.p.localReader.id] = grid;
 								}
-								if (opts.ondrop && $.isFunction(opts.ondrop)) { opts.ondrop.call(this, ev, ui, getdata); }
+								if (opts1.ondrop && $.isFunction(opts1.ondrop)) { opts1.ondrop.call(this, ev, ui, getdata); }
 							}
-						}, opts.drop_opts || {});
+						}, opts1.drop_opts || {});
 					},
 					onstart: null,
 					onstop: null,

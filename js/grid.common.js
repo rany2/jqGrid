@@ -372,9 +372,9 @@
 				if (exl !== undefined && $.isArray(exl)) {
 					$.merge(exclude, exl);
 				}
-				$.each(atr, function (key, value) {
-					if ($.inArray(key, exclude) === -1) {
-						$(elm).attr(key, value);
+				$.each(atr, function (attrName, value) {
+					if ($.inArray(attrName, exclude) === -1) {
+						$(elm).attr(attrName, value);
 					}
 				});
 				if (!atr.hasOwnProperty("id")) {
@@ -463,10 +463,10 @@
 									setAttributes(elem1, options1, postData ? ["postData"] : undefined);
 									setTimeout(function () {
 										var isSelected1; // undefined
-										$("option", elem1).each(function (i) {
+										$("option", elem1).each(function (iOpt) {
 											//if(i===0) { this.selected = ""; }
 											// fix IE8/IE7 problem with selecting of the first item on multiple=true
-											if (i === 0 && elem1.multiple) { this.selected = false; }
+											if (iOpt === 0 && elem1.multiple) { this.selected = false; }
 											if ($.inArray($.trim($(this).val()), ovm1) > -1) {
 												this.selected = "selected";
 												isSelected1 = true;

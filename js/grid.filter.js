@@ -398,7 +398,7 @@
 						op = that.p.numopts;
 					}
 					// operators
-					var s = "", so = 0, odataItem, itemOper, itemText;
+					var s = "", so = 0, odataItem1, itemOper1, itemText;
 					aoprs = [];
 					$.each(that.p.ops, function () { aoprs.push(this.oper); });
 					// append aoprs array with custom operations defined in customSortOperations parameter jqGrid
@@ -406,16 +406,16 @@
 						$.each(that.p.cops, function (propertyName) { aoprs.push(propertyName); });
 					}
 					for (k = 0; k < op.length; k++) {
-						itemOper = op[k];
+						itemOper1 = op[k];
 						ina = $.inArray(op[k], aoprs);
 						if (ina !== -1) {
-							odataItem = that.p.ops[ina];
-							itemText = odataItem !== undefined ? odataItem.text : that.p.cops[itemOper].text;
+							odataItem1 = that.p.ops[ina];
+							itemText = odataItem1 !== undefined ? odataItem1.text : that.p.cops[itemOper1].text;
 							if (so === 0) {
 								// the first select item will be automatically selected in single-select
-								rule.op = itemOper;
+								rule.op = itemOper1;
 							}
-							s += "<option value='" + itemOper + "'>" + itemText + "</option>";
+							s += "<option value='" + itemOper1 + "'>" + itemText + "</option>";
 							so++;
 						}
 					}
