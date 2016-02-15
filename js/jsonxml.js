@@ -110,11 +110,11 @@
 						return xml;
 					},
 					xml1 = "",
-					m;
+					p;
 
-				for (m in o) {
-					if (o.hasOwnProperty(m)) {
-						xml1 += toXml(o[m], m, "");
+				for (p in o) {
+					if (o.hasOwnProperty(p)) {
+						xml1 += toXml(o[p], p, "");
 					}
 				}
 				return tab ? xml1.replace(/\t/g, tab) : xml1.replace(/\t|\n/g, "");
