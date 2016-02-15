@@ -25,7 +25,7 @@
 	"use strict";
 	var jgrid = $.jgrid, fullBoolFeedback = jgrid.fullBoolFeedback, hasOneFromClasses = jgrid.hasOneFromClasses,
 		getGuiStateStyles = function (path) {
-			return jgrid.getRes(jgrid.guiStyles[this.p.guiStyle], "states." + path);
+			return base.getGuiStyles.call(this, "states." + path);
 		};
 	// begin module grid.inlinedit
 	var editFeedback = function (o) {
@@ -395,7 +395,7 @@
 								var rT = res.responseText || res.statusText;
 								try {
 									infoDialog.call($t, errcap, '<div class="' + getGuiStateStyles.call($t, "error") + '">' + rT + "</div>", bClose, { buttonalign: "right" });
-								} catch (e) {
+								} catch (e1) {
 									alert(rT);
 								}
 							}
@@ -720,9 +720,9 @@
 			return this.each(function () {
 				var $t = this;
 				if (!$t.grid) { return; }
-				var p = $t.p, gID = p.idSel, disabledClass = getGuiStateStyles.call($t, "disabled"),
-					saveCancel = gID + "_ilsave," + gID + "_ilcancel" + (p.toppager ? "," + gID + "_top_ilsave," + gID + "_top_ilcancel" : ""),
-					addEdit = gID + "_iladd," + gID + "_iledit" + (p.toppager ? "," + gID + "_top_iladd," + gID + "_top_iledit" : "");
+				var p = $t.p, idSel = p.idSel, disabledClass = getGuiStateStyles.call($t, "disabled"),
+					saveCancel = idSel + "_ilsave," + idSel + "_ilcancel" + (p.toppager ? "," + idSel + "_top_ilsave," + idSel + "_top_ilcancel" : ""),
+					addEdit = idSel + "_iladd," + idSel + "_iledit" + (p.toppager ? "," + idSel + "_top_iladd," + idSel + "_top_iledit" : "");
 				$(isEditing ? addEdit : saveCancel).addClass(disabledClass);
 				$(isEditing ? saveCancel : addEdit).removeClass(disabledClass);
 			});

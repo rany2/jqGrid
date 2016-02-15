@@ -26,12 +26,8 @@
 	}
 }(function ($) {
 	"use strict";
-	var jgrid = $.jgrid, jqID = jgrid.jqID,
-		getGridRes = jgrid.getMethod("getGridRes"),
-		getGuiStyles = function (path, jqClasses) {
-			var p = this.p, guiStyle = p.guiStyle || jgrid.defaults.guiStyle || "jQueryUI";
-			return jgrid.mergeCssClasses(jgrid.getRes(jgrid.guiStyles[guiStyle], path), jqClasses || "");
-		};
+	var jgrid = $.jgrid, jqID = jgrid.jqID, getGuiStyles = base.getGuiStyles, getGridRes = base.getGridRes;
+
 	// begin module grid.custom
 	jgrid.extend({
 		getColProp: function (colname) {
@@ -757,14 +753,14 @@
 									} else {
 										throw "e1";
 									}
-								} catch (e) {
-									if (e === "e1") {
+								} catch (ex) {
+									if (ex === "e1") {
 										infoDialog.call($t, errcap, "function 'custom_element' " + editMsg.nodefined, bClose);
 									}
-									if (e === "e2") {
+									if (ex === "e2") {
 										infoDialog.call($t, errcap, "function 'custom_element' " + editMsg.novalue, bClose);
 									} else {
-										infoDialog.call($t, errcap, typeof e === "string" ? e : e.message, bClose);
+										infoDialog.call($t, errcap, typeof ex === "string" ? ex : ex.message, bClose);
 									}
 								}
 								break;

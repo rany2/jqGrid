@@ -540,22 +540,22 @@
 					});
 					return true;
 				}
-				function createData(rowid, tb, maxcols) {
+				function createData(rowid1, tb, maxcols) {
 					var cnt = 0, retpos = [], ind = false,
 						tdtmpl = "<td class='CaptionTD'>&#160;</td><td class='DataTD'>&#160;</td>", tmpl = "", i; //*2
 					for (i = 1; i <= maxcols; i++) {
 						tmpl += tdtmpl;
 					}
-					if (rowid !== "_empty") {
-						ind = base.getInd.call($self, rowid);
+					if (rowid1 !== "_empty") {
+						ind = base.getInd.call($self, rowid1);
 					}
-					$(colModel).each(function (i) {
+					$(colModel).each(function (iCol) {
 						var cm = this, nm = cm.name, $td, hc, trdata, tmp, dc, elc, editable = cm.editable, disabled = false, readonly = false,
-							mode = rowid === "_empty" ? "addForm" : "editForm";
+							mode = rowid1 === "_empty" ? "addForm" : "editForm";
 						if ($.isFunction(editable)) {
 							editable = editable.call($t, {
-								rowid: rowid,
-								iCol: i,
+								rowid: rowid1,
+								iCol: iCol,
 								iRow: ind, // can be false for Add operation
 								cmName: nm,
 								cm: cm,
@@ -586,19 +586,19 @@
 							if (ind === false) {
 								tmp = "";
 							} else {
-								$td = $($t.rows[ind].cells[i]); // $("td[role=gridcell]:eq(" + i + ")", $t.rows[ind])
+								$td = $($t.rows[ind].cells[iCol]); // $("td[role=gridcell]:eq(" + i + ")", $t.rows[ind])
 								try {
-									tmp = $.unformat.call($t, $td, { rowId: rowid, colModel: cm }, i);
+									tmp = $.unformat.call($t, $td, { rowId: rowid1, colModel: cm }, iCol);
 								} catch (_) {
 									tmp = (cm.edittype && cm.edittype === "textarea") ? $td.text() : $td.html();
 								}
 								if (isEmptyString(tmp)) { tmp = ""; }
 							}
-							var opt = $.extend({}, cm.editoptions || {}, { id: nm, name: nm, rowId: rowid, mode: mode }),
+							var opt = $.extend({}, cm.editoptions || {}, { id: nm, name: nm, rowId: rowid1, mode: mode }),
 								frmopt = $.extend({}, { elmprefix: "", elmsuffix: "", rowabove: false, rowcontent: "" }, cm.formoptions || {}),
 								rp = parseInt(frmopt.rowpos, 10) || cnt + 1,
 								cp = parseInt((parseInt(frmopt.colpos, 10) || 1) * 2, 10);
-							if (rowid === "_empty" && opt.defaultValue) {
+							if (rowid1 === "_empty" && opt.defaultValue) {
 								tmp = $.isFunction(opt.defaultValue) ? opt.defaultValue.call($t) : opt.defaultValue;
 							}
 							if (!cm.edittype) { cm.edittype = "text"; }
@@ -625,7 +625,7 @@
 							}
 							var $label = $("td:eq(" + (cp - 2) + ")", trdata[0]),
 								$data = $("td:eq(" + (cp - 1) + ")", trdata[0]);
-							$label.html(frmopt.label === undefined ? p.colNames[i] : frmopt.label || "&#160;");
+							$label.html(frmopt.label === undefined ? p.colNames[iCol] : frmopt.label || "&#160;");
 							$data[isEmptyString($data.html()) ? "html" : "append"](frmopt.elmprefix).append(elc).append(frmopt.elmsuffix);
 							if (disabled) {
 								$label.addClass(disabledClass);
@@ -639,23 +639,23 @@
 								opt.custom_value.call($t, $("#" + jqID(nm), frmgr), "set", tmp);
 							}
 							jgrid.bindEv.call($t, elc, opt);
-							retpos[cnt] = i;
+							retpos[cnt] = iCol;
 							cnt++;
 						}
 					});
 					if (cnt > 0) {
-						var idrow = $("<tr class='FormData' style='display:none'><td class='CaptionTD'>&#160;</td><td colspan='" + (maxcols * 2 - 1) + "' class='DataTD'><input class='FormElement' id='id_g' type='text' name='" + gridId + "_id' value='" + rowid + "'/></td></tr>");
+						var idrow = $("<tr class='FormData' style='display:none'><td class='CaptionTD'>&#160;</td><td colspan='" + (maxcols * 2 - 1) + "' class='DataTD'><input class='FormElement' id='id_g' type='text' name='" + gridId + "_id' value='" + rowid1 + "'/></td></tr>");
 						idrow[0].rp = cnt + 999;
 						$(tb).append(idrow);
-						if (o.checkOnSubmit || o.checkOnUpdate) { o._savedData[gridId + "_id"] = rowid; }
+						if (o.checkOnSubmit || o.checkOnUpdate) { o._savedData[gridId + "_id"] = rowid1; }
 					}
 					return retpos;
 				}
-				function fillData(rowid, fmid) {
+				function fillData(rowid1, fmid) {
 					var nm, cnt = 0, fld, opt, vl, vlc;
-					if (o.checkOnSubmit || o.checkOnUpdate) { o._savedData = {}; o._savedData[gridId + "_id"] = rowid; }
+					if (o.checkOnSubmit || o.checkOnUpdate) { o._savedData = {}; o._savedData[gridId + "_id"] = rowid1; }
 					var cm = p.colModel;
-					if (rowid === "_empty") {
+					if (rowid1 === "_empty") {
 						$(cm).each(function () {
 							nm = this.name;
 							opt = $.extend({}, this.editoptions || {});
@@ -691,10 +691,10 @@
 								if (o.checkOnSubmit === true || o.checkOnUpdate) { o._savedData[nm] = vl; }
 							}
 						});
-						$("#id_g", fmid).val(rowid);
+						$("#id_g", fmid).val(rowid1);
 						return;
 					}
-					var tre = base.getInd.call($self, rowid, true);
+					var tre = base.getInd.call($self, rowid1, true);
 					if (!tre) { return; }
 					//$("td[role=gridcell]", tre)
 					$(tre.cells).filter("td[role=gridcell]").each(function (i) {
@@ -703,7 +703,7 @@
 						// hidden fields are included in the form
 						if (nm !== "cb" && nm !== "subgrid" && nm !== "rn" && cm[i].editable === true) {
 							try {
-								tmp = $.unformat.call($t, $(this), { rowId: rowid, colModel: cm[i] }, i);
+								tmp = $.unformat.call($t, $(this), { rowId: rowid1, colModel: cm[i] }, i);
 							} catch (_) {
 								tmp = cm[i].edittype === "textarea" ? $(this).text() : $(this).html();
 							}
@@ -765,7 +765,7 @@
 							cnt++;
 						}
 					});
-					if (cnt > 0) { $("#id_g", frmtb).val(rowid); }
+					if (cnt > 0) { $("#id_g", frmtb).val(rowid1); }
 				}
 				function setNullsOrUnformat() {
 					var url = o.url || p.editurl;
@@ -1401,8 +1401,8 @@
 						setTimeout(function () { $("#cData").focus(); }, 0);
 					}
 				}
-				function createData(rowid, tb, maxcols) {
-					var nm, hc, trdata, cnt = 0, tmp, dc, retpos = [], ind = base.getInd.call($self, rowid), i,
+				function createData(rowid1, tb, maxcols) {
+					var nm, hc, trdata, cnt = 0, tmp, dc, retpos = [], ind = base.getInd.call($self, rowid1), i,
 						viewDataClasses = getGuiStyles.call($t, "dialog.viewData", "DataTD form-view-data"),
 						viewLabelClasses = getGuiStyles.call($t, "dialog.viewLabel", "CaptionTD form-view-label"),
 						tdtmpl = "<td class='" + viewLabelClasses + "' width='" + o.labelswidth + "'>&#160;</td><td class='" + viewDataClasses + " ui-helper-reset'>&#160;</td>", tmpl = "",
@@ -1428,7 +1428,7 @@
 						}
 					});
 					maxw = max1 !== 0 ? max1 : max2 !== 0 ? max2 : 0;
-					$(colModel).each(function (i) {
+					$(colModel).each(function (iCol) {
 						var cm = this;
 						nm = cm.name;
 						setme = false;
@@ -1441,7 +1441,7 @@
 						dc = hc ? "style='display:none'" : "";
 						viewfld = (typeof cm.viewable !== "boolean") ? true : cm.viewable;
 						if (nm !== "cb" && nm !== "subgrid" && nm !== "rn" && viewfld) {
-							tmp = ind === false ? "" : jgrid.getDataFieldOfCell.call($t, $t.rows[ind], i).html();
+							tmp = ind === false ? "" : jgrid.getDataFieldOfCell.call($t, $t.rows[ind], iCol).html();
 							setme = cm.align === "right" && maxw !== 0 ? true : false;
 							var frmopt = $.extend({}, { rowabove: false, rowcontent: "" }, cm.formoptions || {}),
 								rp = parseInt(frmopt.rowpos, 10) || cnt + 1,
@@ -1458,26 +1458,26 @@
 								$(tb).append(trdata);
 								trdata[0].rp = rp;
 							}
-							var labelText = (frmopt.label === undefined ? p.colNames[i] : frmopt.label),
+							var labelText = (frmopt.label === undefined ? p.colNames[iCol] : frmopt.label),
 								$data = $("td:eq(" + (cp - 1) + ")", trdata[0]);
 							$("td:eq(" + (cp - 2) + ")", trdata[0]).html("<b>" + (labelText || "&nbsp;") + "</b>");
 							$data[isEmptyString($data.html()) ? "html" : "append"]("<span>" + (tmp || "&nbsp;") + "</span>").attr("id", "v_" + nm);
 							if (setme) {
 								$("td:eq(" + (cp - 1) + ") span", trdata[0]).css({ "text-align": "right", width: maxw + "px" });
 							}
-							retpos[cnt] = i;
+							retpos[cnt] = iCol;
 							cnt++;
 						}
 					});
 					if (cnt > 0) {
-						var idrow = $("<tr class='FormData' style='display:none'><td class='CaptionTD'>&#160;</td><td colspan='" + (maxcols * 2 - 1) + "' class='DataTD'><input class='FormElement' id='id_g' type='text' name='id' value='" + rowid + "'/></td></tr>");
+						var idrow = $("<tr class='FormData' style='display:none'><td class='CaptionTD'>&#160;</td><td colspan='" + (maxcols * 2 - 1) + "' class='DataTD'><input class='FormElement' id='id_g' type='text' name='id' value='" + rowid1 + "'/></td></tr>");
 						idrow[0].rp = cnt + 99;
 						$(tb).append(idrow);
 					}
 					return retpos;
 				}
-				function fillData(rowid) {
-					var nm, hc, cnt = 0, trv = base.getInd.call($self, rowid, true), cm;
+				function fillData(rowid1) {
+					var nm, hc, cnt = 0, trv = base.getInd.call($self, rowid1, true), cm;
 					if (!trv) { return; }
 					$("td", trv).each(function (i) {
 						cm = colModel[i];
@@ -1495,7 +1495,7 @@
 							cnt++;
 						}
 					});
-					if (cnt > 0) { $("#id_g", frmtb).val(rowid); }
+					if (cnt > 0) { $("#id_g", frmtb).val(rowid1); }
 				}
 				function updateNav(cr, posarr) {
 					var totr = posarr[1].length - 1;
@@ -2152,7 +2152,7 @@
 						}
 						return false;
 					},
-					stdButtonActivation = function (name, id, onClick, navtbl, elemids) {
+					stdButtonActivation = function (name, id, onClick) {
 						var $button = $("<div class='" + navButtonClass + "' tabindex='0' role='button'></div>"),
 							iconClass = o[name + "icon"],
 							iconText = $.trim(o[name + "text"]);
@@ -2188,26 +2188,26 @@
 						elemids = gridId + "_top";
 					}
 					if (o.add) {
-						stdButtonActivation("add", pAdd.id, onAdd, navtbl, elemids);
+						stdButtonActivation("add", pAdd.id, onAdd);
 					}
 					if (o.edit) {
-						stdButtonActivation("edit", pEdit.id, onEdit, navtbl, elemids);
+						stdButtonActivation("edit", pEdit.id, onEdit);
 					}
 					if (o.view) {
-						stdButtonActivation("view", pView.id, onView, navtbl, elemids);
+						stdButtonActivation("view", pView.id, onView);
 					}
 					if (o.del) {
-						stdButtonActivation("del", pDel.id, onDel, navtbl, elemids);
+						stdButtonActivation("del", pDel.id, onDel);
 					}
 					if (o.add || o.edit || o.del || o.view) { $(navtbl).append(sep); }
 					if (o.search) {
-						tbd = stdButtonActivation("search", pSearch.id, onSearch, navtbl, elemids);
+						tbd = stdButtonActivation("search", pSearch.id, onSearch);
 						if (pSearch.showOnLoad && pSearch.showOnLoad === true) {
 							$(tbd, navtbl).click();
 						}
 					}
 					if (o.refresh) {
-						stdButtonActivation("refresh", "", onRefresh, navtbl, elemids);
+						stdButtonActivation("refresh", "", onRefresh);
 					}
 					// TODO use setWidthOfPagerTdWithPager or remove at all and use div structure with wrapping
 					tdw = $(".ui-jqgrid>.ui-jqgrid-view").css("font-size") || "11px";
