@@ -49,7 +49,7 @@
 							var $target = $(eOrg.target),
 								$td = $target.closest("tr.jqgrow>td"),
 								$tr = $td.parent(),
-								expendOrCollaps = function (rowid) {
+								expendOrCollaps = function () {
 									var item = p.data[p._index[stripPref(p.idPrefix, rowid)]],
 										collapseOrExpand = item[expanded] ? "collapse" : "expand";
 									if (!item[isLeaf]) {
@@ -58,10 +58,10 @@
 									}
 								};
 							if ($target.is("div.treeclick")) {
-								expendOrCollaps(rowid);
+								expendOrCollaps();
 							} else if (p.ExpandColClick) {
 								if ($td.length > 0 && $target.closest("span.cell-wrapper", $td).length > 0) {
-									expendOrCollaps(rowid);
+									expendOrCollaps();
 								}
 							}
 							return true; // allow selection
