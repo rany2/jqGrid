@@ -199,7 +199,7 @@
 					}
 					cc.addClass(highlightClasses);
 					$tr.addClass(hoverClasses);
-					tmp = cc.html().replace(/\&#160\;/ig, "");
+					tmp = cc.html().replace(/&#160;/ig, "");
 					feedback.call($t, "onSelectCell", rowid, nm, tmp, iRow, iCol);
 				}
 				p.iCol = iCol;
