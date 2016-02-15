@@ -622,9 +622,7 @@
 	$FnFmatter.rowactions = function (e, act) {
 		var $tr = $(this).closest("tr.jqgrow"), rid = $tr.attr("id"),
 			$id = $(this).closest("table.ui-jqgrid-btable").attr("id").replace(/_frozen([^_]*)$/, "$1"),
-			$grid = $("#" + jgrid.jqID($id)),
-			$t = $grid[0],
-			p = $t.p,
+			$grid = $("#" + jgrid.jqID($id)), $t = $grid[0], p = $t.p, i, n, customAction, actop,
 			getTop = function () {
 				var tr = $tr[0], gbox = $grid.closest(".ui-jqgrid")[0];
 				if (tr.getBoundingClientRect != null && gbox.getBoundingClientRect != null) {
@@ -644,20 +642,18 @@
 		if ($tr.hasClass("jqgrid-new-row")) {
 			op.extraparam[p.prmNames.oper] = p.prmNames.addoper;
 		}
-		var i, n = op.custom.length,
-			customAction,
-				actop = {
-				keys: op.keys,
-				oneditfunc: op.onEdit,
-				successfunc: op.onSuccess,
-				url: op.url,
-				extraparam: op.extraparam,
-				aftersavefunc: op.afterSave,
-				errorfunc: op.onError,
-				afterrestorefunc: op.afterRestore,
-				restoreAfterError: op.restoreAfterError,
-				mtype: op.mtype
-			};
+		actop = {
+			keys: op.keys,
+			oneditfunc: op.onEdit,
+			successfunc: op.onSuccess,
+			url: op.url,
+			extraparam: op.extraparam,
+			aftersavefunc: op.afterSave,
+			errorfunc: op.onError,
+			afterrestorefunc: op.afterRestore,
+			restoreAfterError: op.restoreAfterError,
+			mtype: op.mtype
+		};
 
 		if ((!p.multiselect && rid !== p.selrow) || (p.multiselect && $.inArray(rid, p.selarrrow) < 0)) {
 			$grid.jqGrid("setSelection", rid, true, e);
@@ -691,6 +687,7 @@
 				break;
 			default:
 				if (op.custom != null && op.custom.length > 0) {
+					n = op.custom.length;
 					for (i = 0; i < n; i++) {
 						customAction = op.custom[i];
 						if (customAction.action === act && $.isFunction(customAction.onClick)) {
