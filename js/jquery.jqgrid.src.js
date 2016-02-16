@@ -504,6 +504,78 @@
 					plusLtr: "fa-lg fa-caret-right",
 					plusRtl: "fa-lg fa-caret-left"
 				}
+			},
+			glyph: {
+				common: "glyphicon",
+				pager: {
+					common: "",
+					first: "glyphicon-step-backward",
+					prev: "glyphicon-backward",
+					next: "glyphicon-forward",
+					last: "glyphicon-step-forward"
+				},
+				sort: {
+					common: "",
+					asc: "glyphicon-triangle-top",
+					desc: "glyphicon-triangle-bottom"
+				},
+				gridMinimize: {
+					visible: "glyphicon-circle-arrow-up",
+					hidden: "glyphicon-circle-arrow-down"
+				},
+				nav: {
+					common: "",
+					edit: "glyphicon-edit",
+					add: "glyphicon-plus",
+					del: "glyphicon-trash",
+					search: "glyphicon-search",
+					refresh: "glyphicon-refresh",
+					view: "glyphicon-file", // glyphicon glyphicon-th-list
+					save: "glyphicon-save",
+					cancel: "glyphicon-ban-circle",
+					newbutton: "glyphicon-new-window"
+				},
+				actions: {
+					common: "",
+					edit: "glyphicon-edit",
+					del: "glyphicon-trash",
+					save: "glyphicon-save",
+					cancel: "glyphicon-ban-circle"
+				},
+				form: {
+					close: "glyphicon-remove-circle",
+					prev: "glyphicon-step-backward",
+					next: "glyphicon-step-forward",
+					save: "glyphicon-save",
+					undo: "glyphicon-repeat",
+					del: "glyphicon-trash",
+					cancel: "glyphicon-ban-circle",
+					resizableLtr: "glyphicon-import"
+				},
+				search: {
+					search: "glyphicon-search",
+					reset: "glyphicon-repeat",
+					query: "glyphicon-cog" //"glyphicon-comment"
+				},
+				subgrid: {
+					common: "",
+					plus: "glyphicon-zoom-in", //"glyphicon-plus", "glyphicon-th-list",
+					minus: "glyphicon-zoom-out", // "glyphicon-minus",
+					openLtr: "glyphicon-indent-left",
+					openRtl: "glyphicon-indent-left"
+				},
+				grouping: {
+					common: "",
+					plus: "glyphicon-expand",
+					minus: "glyphicon-collapse-down"
+				},
+				treeGrid: {
+					common: "",
+					minus: "glyphicon-collapse-down",
+					leaf: "glyphicon-record", // glyphicon-unchecked
+					plusLtr: "glyphicon-expand",
+					plusRtl: "glyphicon-expand"
+				}
 			}
 		},
 		guiStyles: {
@@ -16560,6 +16632,8 @@
 							nhc = 1;
 						$.each(p.colModel, function () {
 							if (this.hidden === true || this.name === "rn" || this.name === "cb") {
+								// ??? probably one should don't calculate hidden columns of subgrid?
+								// (remove this.hidden === true part from the if) ???
 								nhc++;
 							}
 						});
@@ -17885,10 +17959,11 @@
 			},
 			// TODO: add cmTemplate for currency and date
 			actions: function () {
-				var p = this.p;
+				var p = this.p, commonIconClass = jgrid.getIconRes(p.iconSet || jgrid.defaults.iconSet || "jQueryUI", "common");
 				return {
 					formatter: "actions",
-					width: (p != null && p.iconSet === "fontAwesome" ? ($(this).jqGrid("isBootstrapGuiStyle") ? 45 : 39) : 37) + (jgrid.cellWidth() ? 5 : 0),
+					width: (p != null && p.iconSet === "fontAwesome" || commonIconClass === "fa" || commonIconClass === "glyphicon" ?
+							($(this).jqGrid("isBootstrapGuiStyle") ? 45 : 39) : 37) + (jgrid.cellWidth() ? 5 : 0),
 					align: "center",
 					label: "",
 					autoResizable: false,

@@ -147,15 +147,25 @@
 	margin-top: -1px;
 }
 
-.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.fa {
+.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.fa,
+.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.glyphicon {
 	/*  the values below are based on the difference between the
 		font-size of fa-icon and the font size of the parent element */
 	font-size: 14px;
 	margin-top: -2px;
+}
+.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.fa {
 	margin-left: -1px;
+}
+.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.glyphicon {
+	margin-left: -2px;
 }
 .ui-jqdialog-titlebar .ui-jqdialog-titlebar-close > span {
 	margin-top: -1px;
+}
+.ui-jqdialog-titlebar .ui-jqdialog-titlebar-close > span.glyphicon {
+	margin-top: -.05em;
+	margin-left: -.05em;
 }
 
 /* Resizer */
@@ -166,6 +176,10 @@
 .ui-jqdialog .ui-resizable-handle.fa {
 	bottom: 1px;
 	right: -2px;
+}
+.ui-jqdialog .ui-resizable-handle.glyphicon {
+	right: -2px;
+	bottom: -3.8px;
 }
 
 /* Header */
@@ -934,6 +948,13 @@ span.ui-jqgrid-cell-wrapper {
 	width: 18px;
 	overflow: hidden;
 }
+.ui-jqgrid .ui-jqgrid-bdiv .jqgroup .tree-wrap {
+	text-align: center;
+	padding-left: .1em;
+}
+.ui-jqgrid .ui-jqgrid-bdiv .jqgroup .tree-wrap.glyphicon {
+	margin-top: -.18em;
+}
 
 /* Modal dialog */
 * iframe.jqm {
@@ -1074,6 +1095,12 @@ a.clearsearchclass {
 }
 .ui-jqgrid .s-ico > .ui-icon-desc.fa {
 	top: -0.75em;
+}
+.ui-jqgrid .s-ico > .ui-icon-asc.glyphicon {
+	margin-top: -.36em;
+}
+.ui-jqgrid .s-ico > .ui-icon-desc.glyphicon {
+	margin-top: -.41em;
 }
 .ui-jqgrid .s-ico > .ui-icon-asc.fa.ui-sort-ltr,
 .ui-jqgrid .s-ico > .ui-icon-desc.fa.ui-sort-ltr {
@@ -1240,15 +1267,25 @@ a.clearsearchclass {
 .ui-jqdialog.ui-widget {
 	overflow: hidden;
 }
-.ui-jqdialog.ui-jqgrid-bootstrap .modal-content > .ui-resizable-handle {
-	bottom: 1px;
-	right: 1px;
+.ui-jqdialog  .ui-resizable-handle {
 	cursor: se-resize;
-	height: 12px;
-	width: 12px;
 	position: absolute;
+	-ms-touch-action: none;
 	touch-action: none;
 }
+.ui-jqdialog.ui-jqgrid-bootstrap .modal-content {
+	overflow: hidden;
+}
+.ui-jqdialog.ui-jqgrid-bootstrap .modal-content > .ui-resizable-handle.fa {
+	bottom: 1px;
+	right: 1px;
+	height: 12px;
+	width: 12px;
+}
+.ui-jqdialog.ui-jqgrid-bootstrap .modal-content > .ui-resizable-handle.glyphicon {
+	right: -.4em;
+}
+
 .ui-jqgrid.ui-jqgrid-bootstrap .disabled {
 	opacity: .35;
 	filter:Alpha(Opacity=35);
@@ -1354,4 +1391,35 @@ a.clearsearchclass {
 }
 .ui-jqdialog.ui-jqgrid-bootstrap .modal-header .close {
 	margin-top: -0.7em;
+}
+.ui-jqdialog .glyphicon,
+.ui-jqgrid .glyphicon {
+	font-size: 12px;
+	top: auto;
+}
+.ui-jqdialog.ui-jqgrid-bootstrap .glyphicon,
+.ui-jqgrid.ui-jqgrid-bootstrap .glyphicon {
+	font-size: 14px;
+	top: auto;
+	height: 1em;
+	width: 1.28em;
+}
+.ui-jqgrid .ui-pg-button span.glyphicon {
+	display: inline-block;
+	text-align: center;
+	/*margin-left: auto;
+	margin-right: auto;
+	padding: 0 .1em;*/
+	vertical-align: middle;
+}
+.ui-jqgrid-actions .glyphicon {
+	padding: .1em;
+}
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.glyphicon {
+	margin-top: -.125em;
+	margin-left: -.275em;
+}
+.ui-jqdialog.ui-jqgrid-bootstrap .ui-jqdialog-titlebar  > .ui-jqdialog-titlebar-close > span.glyphicon {
+	margin-top: -.1em;
+	margin-left: -.28em;
 }

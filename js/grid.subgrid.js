@@ -225,6 +225,8 @@
 							nhc = 1;
 						$.each(p.colModel, function () {
 							if (this.hidden === true || this.name === "rn" || this.name === "cb") {
+								// ??? probably one should don't calculate hidden columns of subgrid?
+								// (remove this.hidden === true part from the if) ???
 								nhc++;
 							}
 						});
