@@ -26,7 +26,8 @@
 	}
 }(function ($) {
 	"use strict";
-	var jgrid = $.jgrid, jqID = jgrid.jqID, getGuiStyles = base.getGuiStyles, getGridRes = base.getGridRes;
+	var jgrid = $.jgrid, jqID = jgrid.jqID, base = $.fn.jqGrid,
+		getGuiStyles = base.getGuiStyles, getGridRes = base.getGridRes;
 
 	// begin module grid.custom
 	jgrid.extend({

@@ -24,6 +24,7 @@
 }(function ($) {
 	"use strict";
 	var jgrid = $.jgrid, fullBoolFeedback = jgrid.fullBoolFeedback, hasOneFromClasses = jgrid.hasOneFromClasses,
+		base = $.fn.jqGrid,
 		getGuiStateStyles = function (path) {
 			return base.getGuiStyles.call(this, "states." + path);
 		};
