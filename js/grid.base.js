@@ -5694,6 +5694,27 @@
 		isBootstrapGuiStyle: function () {
 			return $.inArray("ui-jqgrid-bootstrap", $(this).jqGrid("getGuiStyles", "gBox").split(" ")) >= 0;
 		},
+		isInCommonIconClass: function (testClass) {
+			var $t = this instanceof $ && this.length > 0 ? this[0] : this;
+			if (!$t || !$t.grid || !$t.p) { return ""; }
+
+			var p = $t.p, iconSet = jgrid.icons[p.iconSet];
+			if (iconSet == null) {
+				return false;
+			}
+			var commonClasses = iconSet.common;
+			if (commonClasses === undefined) {
+				if (iconSet.baseIconSet == null) {
+					return false;
+				}
+				iconSet = jgrid.icons[iconSet.baseIconSet];
+				if (iconSet == null) {
+					return false;
+				}
+				commonClasses = iconSet.common;
+			}
+			return typeof commonClasses === "string" && $.inArray(testClass, commonClasses.split(" ")) >= 0;
+		},
 		getGridParam: function (pName) {
 			var $t = this[0];
 			if (!$t || !$t.grid) { return null; }
@@ -6118,18 +6139,19 @@
 							}
 						});
 						$(p.colModel).each(function (i) {
-							var cm = this, nm = cm.name, title, vl = getAccessor(data, nm);
+							var cm = this, nm = cm.name, title, vl = getAccessor(data, nm), $td = $(ind.cells[i]);
 							if (vl !== undefined) {
 								if (p.datatype === "local" && oData != null) {
 									vl = lcdata[nm];
 								}
 								title = cm.title ? { "title": vl } : {};
 								vl = t.formatter(rowid, vl, i, data, "edit", newData);
-								var $dataFiled = $(ind.cells[i]);
+								var $dataFiled = $td;
 								if (p.treeGrid === true && nm === p.ExpandColumn) {
 									$dataFiled = $dataFiled.children("span.cell-wrapperleaf,span.cell-wrapper").first();
 								}
-								$dataFiled.html(vl).attr(title);
+								$dataFiled.html(vl);
+								$td.attr(title);
 								if (p.frozenColumns) {
 									$dataFiled = $(t.grid.fbRows[ind.rowIndex].cells[i]);
 									if (p.treeGrid === true && nm === p.ExpandColumn) {
@@ -6733,7 +6755,7 @@
 		setCell: function (rowid, colName, nData, cssp, attrp, forceUpdate) {
 			// TODO: add an additional parameter, which will inform whether the input data nData is in formatted or unformatted form
 			return this.each(function () {
-				var $t = this, p = $t.p, iCol = -1, colModel = p.colModel, v, title, i, cm, item, tr, $td, $tdi, val, rawdat = {}, id, index;
+				var $t = this, p = $t.p, iCol = -1, colModel = p.colModel, v, i, cm, item, tr, $td, $tdi, val, rawdat = {}, id, index;
 				if (!$t.grid) { return; }
 				iCol = isNaN(colName) ? p.iColByName[colName] : parseInt(colName, 10);
 				if (iCol >= 0) {
@@ -6772,8 +6794,19 @@
 							}
 							rawdat[cm.name] = nData;
 							v = $t.formatter(rowid, nData, iCol, rawdat, "edit");
-							title = p.colModel[iCol].title ? { "title": stripHtml(v) } : {};
-							$td.html(v).attr(title);
+
+							// update the data in the corresponding part of the cell
+							var $dataFiled = $td;
+							if (p.treeGrid === true && cm.name === p.ExpandColumn) {
+								$dataFiled = $dataFiled.children("span.cell-wrapperleaf,span.cell-wrapper").first();
+							}
+							$dataFiled.html(v);
+
+							// update the title of the cell if required
+							if (cm.title) {
+								$td.attr({ "title": nData });
+							}
+
 							if (item != null) { // p.datatype === "local"
 								v = convertOnSaveLocally.call($t, nData, cm, item[cm.name], id, item, iCol);
 								if ($.isFunction(cm.saveLocally)) {
