@@ -1086,6 +1086,15 @@ a.clearsearchclass {
 	font-size: 11px;
 }
 
+.ui-jqgrid.ui-jqgrid-jquery-ui .s-ico > .ui-grid-ico-sort.glyphicon {
+	font-size: 10px;
+}
+.ui-jqgrid .s-ico > .ui-icon-asc.glyphicon {
+	margin-top: -.23em;
+}
+.ui-jqgrid .s-ico > .ui-icon-desc.glyphicon {
+	margin-top: -.34em;
+}
 /* Support of Font Awesome */
 .ui-jqgrid .s-ico > .ui-grid-ico-sort.fa {
 	width: .63em;
@@ -1095,12 +1104,6 @@ a.clearsearchclass {
 }
 .ui-jqgrid .s-ico > .ui-icon-desc.fa {
 	top: -0.75em;
-}
-.ui-jqgrid .s-ico > .ui-icon-asc.glyphicon {
-	margin-top: -.36em;
-}
-.ui-jqgrid .s-ico > .ui-icon-desc.glyphicon {
-	margin-top: -.41em;
 }
 .ui-jqgrid .s-ico > .ui-icon-asc.fa.ui-sort-ltr,
 .ui-jqgrid .s-ico > .ui-icon-desc.fa.ui-sort-ltr {
