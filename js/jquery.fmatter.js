@@ -119,10 +119,10 @@
 			},
 			// TODO: add cmTemplate for currency and date
 			actions: function () {
-				var p = this.p, commonIconClass = jgrid.getIconRes(p.iconSet || jgrid.defaults.iconSet || "jQueryUI", "common");
+				var p = this.p;
 				return {
 					formatter: "actions",
-					width: (p != null && p.iconSet === "fontAwesome" || commonIconClass === "fa" || commonIconClass === "glyphicon" ?
+					width: (p != null && (base.isInCommonIconClass.call(this, "fa") || base.isInCommonIconClass.call(this, "glyphicon")) ?
 							($(this).jqGrid("isBootstrapGuiStyle") ? 45 : 39) : 37) + (jgrid.cellWidth() ? 5 : 0),
 					align: "center",
 					label: "",
@@ -237,10 +237,61 @@
 	$FnFmatter.defaultFormat = function (cellval, opts) {
 		return (fmatter.isValue(cellval) && cellval !== "") ? cellval : opts.defaultValue || "&#160;";
 	};
-	var defaultFormat = $FnFmatter.defaultFormat;
+	var defaultFormat = $FnFmatter.defaultFormat,
+		getOptionByName = function (colModel, name) {
+			return (colModel.formatoptions || {})[name] || (colModel.editoptions || {})[name];
+		},
+		parseCheckboxOptions = function (options) {
+			var colModel = options.colModel, checked, unchecked,
+				title = colModel.title !== false ?
+						" title='" + (options.colName || colModel.label || colModel.name) + "'" :
+						"",
+				getOption = function (name) {
+					return getOptionByName(colModel, name);
+				},
+				checkedClasses = getOption("checkedClass"),
+				uncheckedClasses = getOption("uncheckedClass"),
+				value = getOption("value"),
+				yes = typeof value === "string" ? (value.split(":")[0] || "Yes") : "Yes",
+				no = typeof value === "string" ? (value.split(":")[1] || "No") : "No",
+				buildCheckbox = function (classes) {
+					return "<i class='" + classes + "'" + title + "></i>";
+				};
+
+			if (base.isInCommonIconClass.call(this, "fa")) {
+				checkedClasses = checkedClasses || "fa fa-check-square-o fa-lg";
+				checked = buildCheckbox(checkedClasses);
+				unchecked = buildCheckbox(uncheckedClasses || "fa fa-square-o fa-lg");
+			} else if (base.isInCommonIconClass.call(this, "glyphicon")) {
+				checkedClasses = checkedClasses || "glyphicon glyphicon-check";
+				checked = buildCheckbox(checkedClasses);
+				unchecked = buildCheckbox(uncheckedClasses || "glyphicon glyphicon-unchecked");
+			} else {
+				checked = "<input type='checkbox' checked='checked'" + title + " disabled='disabled' />";
+				unchecked = "<input type='checkbox'" + title + " disabled='disabled' />";
+			}
+			return {
+				checkedClasses: checkedClasses,
+				checked: checked,
+				unchecked: unchecked,
+				yes: yes,
+				no: no
+			};
+		},
+		isYes = function (cellValue, yes) {
+			var strCellValue = String(cellValue).toLowerCase();
+
+			return cellValue === 1 ||
+				strCellValue === "1" ||
+				strCellValue === "x" ||
+				cellValue === true ||
+				strCellValue === "true" ||
+				strCellValue === "yes" ||
+				strCellValue === yes.toLowerCase();
+		};
 	$FnFmatter.email = function (cellval, opts) {
 		if (!fmatter.isEmpty(cellval)) {
-			return "<a href=\"mailto:" + cellval + "\">" + cellval + "</a>";
+			return "<a href='mailto:" + cellval + "'>" + cellval + "</a>";
 		}
 		return defaultFormat(cellval, opts);
 	};
@@ -249,52 +300,45 @@
 		if (colModel != null) {
 			op = $.extend({}, op, colModel.formatoptions || {});
 		}
-		if (op.disabled === true) { ds = "disabled=\"disabled\""; } else { ds = ""; }
+		if (op.disabled === true) { ds = "disabled='disabled'"; } else { ds = ""; }
 		if (fmatter.isEmpty(cval) || cval === undefined) { cval = defaultFormat(cval, op); }
-		cval = String(cval);
 		cval = String(cval).toLowerCase();
 		var bchk = cval.search(/(false|f|0|no|n|off|undefined)/i) < 0 ? " checked='checked' " : "";
-		return "<input type=\"checkbox\" " + bchk + " value=\"" + cval + "\" data-offval=\"no\" " + ds + "/>";
+		return "<input type='checkbox' " + bchk + " value='" + cval + "' data-offval='no' " + ds + "/>";
 	};
 	$FnFmatter.checkbox.getCellBuilder = function (opts) {
 		var colModel = opts.colModel, op = $.extend({}, opts.checkbox), tagEnd;
 		if (colModel != null) {
 			op = $.extend({}, op, colModel.formatoptions || {});
 		}
-		tagEnd = "\" data-offval=\"no\" " + (op.disabled === true ? "disabled=\"disabled\"" : "") + "/>";
+		tagEnd = "' data-offval='no' " + (op.disabled === true ? "disabled='disabled'" : "") + "/>";
 		return function (cval) {
 			if (fmatter.isEmpty(cval) || cval === undefined) { cval = defaultFormat(cval, op); }
 			cval = String(cval).toLowerCase();
-			return "<input type=\"checkbox\" " +
+			return "<input type='checkbox' " +
 				(cval.search(/(false|f|0|no|n|off|undefined)/i) < 0 ? " checked='checked' " : "") +
-				" value=\"" + cval + tagEnd;
+				" value='" + cval + tagEnd;
 		};
 	};
 	$FnFmatter.checkboxFontAwesome4 = function (cellValue, options) {
-		var colModel = options.colModel, title = colModel.title !== false ? ' title="' + (options.colName || colModel.label || colModel.name) + '"' : "",
-			strCellValue = String(cellValue).toLowerCase(),
-			editoptions = colModel.editoptions || {},
-			editYes = typeof editoptions.value === "string" ? editoptions.value.split(":")[0] : "yes";
-		return (cellValue === 1 || strCellValue === "1" || strCellValue === "x" || cellValue === true || strCellValue === "true" || strCellValue === "yes" || strCellValue === editYes) ?
-				'<i class="fa fa-check-square-o fa-lg"' + title + "></i>" :
-				'<i class="fa fa-square-o fa-lg"' + title + "></i>";
+		var checkboxOptions = parseCheckboxOptions.call(this, options);
+
+		return isYes(cellValue, checkboxOptions.yes) ?
+				checkboxOptions.checked :
+				checkboxOptions.unchecked;
 	};
 	$FnFmatter.checkboxFontAwesome4.getCellBuilder = function (options) {
-		var colModel = options.colModel, title = colModel.title !== false ? ' title="' + (options.colName || colModel.label || colModel.name) + '"' : "",
-			editoptions = colModel.editoptions || {},
-			editYes = typeof editoptions.value === "string" ? editoptions.value.split(":")[0] : "yes",
-			checked = '<i class="fa fa-check-square-o fa-lg"' + title + "></i>",
-			unchecked = '<i class="fa fa-square-o fa-lg"' + title + "></i>";
+		var checkboxOptions = parseCheckboxOptions.call(this, options);
 		return function (cellValue) {
-			var strCellValue = String(cellValue).toLowerCase();
-			return (cellValue === true || cellValue === 1 || strCellValue === "1" || strCellValue === "x" || strCellValue === "true" || strCellValue === "yes" || strCellValue === editYes) ?
-				checked : unchecked;
+			return isYes(cellValue, checkboxOptions.yes) ?
+					checkboxOptions.checked :
+					checkboxOptions.unchecked;
 		};
 	};
 	$FnFmatter.checkboxFontAwesome4.unformat = function (cellValue, options, elem) {
-		var colModel = options.colModel, editoptions = colModel.editoptions || {},
-			cbv = typeof editoptions.value === "string" ? editoptions.value.split(":") : ["Yes", "No"];
-		return $(">i", elem).hasClass("fa-check-square-o") ? cbv[0] : cbv[1];
+		var checkboxOptions = parseCheckboxOptions.call(this, options);
+		return jgrid.hasAllClasses($(">i", elem), checkboxOptions.checkedClasses) ?
+				checkboxOptions.yes : checkboxOptions.no;
 	};
 	$FnFmatter.link = function (cellval, opts) {
 		var colModel = opts.colModel, target = "", op = { target: opts.target };
@@ -303,7 +347,7 @@
 		}
 		if (op.target) { target = "target=" + op.target; }
 		if (!fmatter.isEmpty(cellval)) {
-			return "<a " + target + " href=\"" + cellval + "\">" + cellval + "</a>";
+			return "<a " + target + " href='" + cellval + "'>" + cellval + "</a>";
 		}
 		return defaultFormat(cellval, op);
 	};
@@ -352,7 +396,7 @@
 		}
 		if (typeof cellval === "string" || fmatter.isNumber(cellval) || $.isFunction(op.cellValue)) {
 			//add this one even if cellval is blank string
-			return "<a " + target + " href=\"" + idUrl + "\">" +
+			return "<a " + target + " href='" + idUrl + "'>" +
 				($.isFunction(op.cellValue) ? getOptionValue(op.cellValue) : cellval) +
 				"</a>";
 		}
@@ -404,7 +448,7 @@
 			}
 			if (typeof cellval === "string" || fmatter.isNumber(cellval) || $.isFunction(op.cellValue)) {
 				//add this one even if cellval is blank string
-				return "<a " + target + " href=\"" + idUrl + "\">" +
+				return "<a " + target + " href='" + idUrl + "'>" +
 					($.isFunction(op.cellValue) ? getOptionValue(op.cellValue) : cellval) +
 					"</a>";
 			}
