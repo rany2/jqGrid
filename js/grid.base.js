@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-02-17
+ * Date: 2016-02-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2117,40 +2117,10 @@
 			args.unshift(callback);
 			return jgrid.fullBoolFeedback.apply(self, args);
 		},
-		getIconRes: function (basePath, path) {
-			var pathParts = path.split("."), root, n = pathParts.length, part, i, classes = [];
-			basePath = jgrid.icons[basePath];
-			if (basePath == null) {
-				return ""; // error unknown iconSet
-			}
-			root = basePath;
-			if (root.common) {
-				classes.push(root.common);
-			}
-			for (i = 0; i < n; i++) {
-				part = pathParts[i];
-				if (!part) {
-					break;
-				}
-				root = root[part];
-				if (root === undefined) {
-					if (part === "common") { break; }
-					return ""; // error unknown icon path
-				}
-				if (typeof root === "string") {
-					classes.push(root);
-					break;
-				}
-				if (root != null && root.common) {
-					classes.push(root.common);
-				}
-			}
-			return jgrid.mergeCssClasses.apply(this, classes);
-		},
 		builderSortIcons: function (/*iCol*/) {
 			// iCol is unused currently, but one can modify the code to set for example different sorting
 			// icons for columns based on sorttype option of colModel
-			var p = this.p,
+			var ts = this, p = ts.p,
 				disabledStateClasses = $(this).jqGrid("getGuiStyles", "states.disabled"),
 				getClasses = function (ascOrDesc) {
 					return jgrid.mergeCssClasses(
@@ -2158,7 +2128,7 @@
 						"ui-icon-" + ascOrDesc,
 						p.viewsortcols[1] === "horizontal" ? "ui-i-" + ascOrDesc : "",
 						disabledStateClasses,
-						jgrid.getIconRes(p.iconSet, "sort." + ascOrDesc),
+						$(ts).jqGrid("getIconRes", "sort." + ascOrDesc),
 						"ui-sort-" + p.direction
 					);
 				};
@@ -2189,7 +2159,7 @@
 							"fm-button-icon-right" :
 							(iconOnLeftOrRight === "left" ? "fm-button-icon-left" : "")
 				) + "' role='button' tabindex='0'>" +
-				(icon ? "<span class='fm-button-icon " + (jgrid.getIconRes(p.iconSet, icon) || icon) + "'></span>" : "") +
+				(icon ? "<span class='fm-button-icon " + ($self.jqGrid("getIconRes", icon) || icon) + "'></span>" : "") +
 				(text ? "<span class='fm-button-text'>" + text + "</span>" : "") +
 				"</a>";
 		},
@@ -2378,7 +2348,8 @@
 				iconSet = pin.iconSet || defaults.iconSet || "jQueryUI",
 				guiStyle = pin.guiStyle || defaults.guiStyle || "jQueryUI",
 				getIcon = function (path) {
-					return jgrid.getIconRes(iconSet, path);
+					//return jgrid.getIconRes(iconSet, path);
+					return $j.getIconRes.call(ts, path);
 				},
 				getGuiStyles = function (path, jqClasses) {
 					return $self0.jqGrid("getGuiStyles", path, jqClasses);
@@ -2476,6 +2447,7 @@
 				delete pin.type;
 			}
 
+			ts.p = { iconSet: iconSet }; // minimal initializing to get icons with respect of getIconRes method
 			var p = extend(true,
 				{
 					//url: "",
@@ -5694,9 +5666,54 @@
 		isBootstrapGuiStyle: function () {
 			return $.inArray("ui-jqgrid-bootstrap", $(this).jqGrid("getGuiStyles", "gBox").split(" ")) >= 0;
 		},
+		getIconRes: function (path) {
+			var $t = this instanceof $ && this.length > 0 ? this[0] : this;
+			if (!$t || !$t.p) { return ""; }
+
+			var p = $t.p, iconSet = jgrid.icons[p.iconSet],
+				getIcon = function (basePath, path) {
+					var pathParts = path.split("."), root, n = pathParts.length, part, i, classes = [];
+					basePath = typeof basePath === "string" ? jgrid.icons[basePath] : basePath;
+					if (basePath == null) {
+						return ""; // error unknown iconSet
+					}
+					root = basePath;
+					if (root.common) {
+						classes.push(root.common);
+					}
+					for (i = 0; i < n; i++) {
+						part = pathParts[i];
+						if (!part) {
+							break;
+						}
+						root = root[part];
+						if (root === undefined) {
+							if (part === "common") { break; }
+							return ""; // error unknown icon path
+						}
+						if (typeof root === "string") {
+							classes.push(root);
+							break;
+						}
+						if (root != null && root.common) {
+							classes.push(root.common);
+						}
+					}
+					return jgrid.mergeCssClasses.apply(this, classes);
+				};
+
+			if (iconSet == null) {
+				return "";
+			}
+			var classes = getIcon(p.iconSet, path);
+			if (classes === "" && iconSet.baseIconSet != null) {
+				classes = getIcon(iconSet.baseIconSet, path);
+			}
+			return classes || "";
+		},
 		isInCommonIconClass: function (testClass) {
 			var $t = this instanceof $ && this.length > 0 ? this[0] : this;
-			if (!$t || !$t.grid || !$t.p) { return ""; }
+			if (!$t || !$t.p) { return ""; }
 
 			var p = $t.p, iconSet = jgrid.icons[p.iconSet];
 			if (iconSet == null) {

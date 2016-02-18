@@ -94,7 +94,7 @@
 		createModal: function (aIDs, content, o, insertSelector, posSelector, appendsel, css) {
 			var jqID = jgrid.jqID, p = this.p, gridjqModal = p != null ? p.jqModal || {} : {};
 			o = $.extend(true, {
-				resizingRightBottomIcon: jgrid.getIconRes(p.iconSet, "form.resizableLtr")
+				resizingRightBottomIcon: base.getIconRes.call(this, "form.resizableLtr")
 			}, jgrid.jqModal || {}, gridjqModal, o);
 			// create main window "div.ui-jqdialog", which will contains other components of the modal window:
 			// "div.ui-jqdialog-titlebar", "div.ui-jqdialog-content" and optionally resizer like "div.jqResize"
@@ -124,7 +124,7 @@
 				ahr = $("<a class='" + getGuiStyles.call(this, "dialog.closeButton", "ui-jqdialog-titlebar-close") + "'></a>")
 					.hover(function () { ahr.addClass(hoverClasses); },
 						function () { ahr.removeClass(hoverClasses); })
-					.append("<span class='" + jgrid.getIconRes(p.iconSet, "form.close") + "'></span>");
+					.append("<span class='" + base.getIconRes.call(this, "form.close") + "'></span>");
 			$(mh).append(ahr);
 			// create "div.ui-jqdialog-content" which hold some HTML content (see input parameter)
 			var mc = document.createElement("div");

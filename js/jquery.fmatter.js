@@ -768,9 +768,8 @@
 			jgrid.actionsNav || {},
 			p.actionsNavOptions || {},
 			opts.colModel.formatoptions || {}),
-			mergeCssClasses = jgrid.mergeCssClasses,
 			cssIconClass = function (name) {
-				return mergeCssClasses(op.commonIconClass, op[name + "icon"]);
+				return jgrid.mergeCssClasses(op.commonIconClass, op[name + "icon"]);
 			},
 			hoverClass = $self.jqGrid("getGuiStyles", "states.hover"),
 			hoverAttributes = "onmouseover=\"jQuery(this).addClass('" + hoverClass +

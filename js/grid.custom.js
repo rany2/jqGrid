@@ -181,9 +181,8 @@
 			return this.each(function () {
 				var $t = this, p = $t.p, grid = $t.grid, cDiv = grid.cDiv, $uDiv = $(grid.uDiv), $ubDiv = $(grid.ubDiv);
 				if (!grid || p == null) { return; }
-				var iconSet = p.iconSet || jgrid.defaults.iconSet || "jQueryUI",
-					getMinimizeIcon = function (path) {
-						return jgrid.getIconRes(iconSet, "gridMinimize." + path);
+				var getMinimizeIcon = function (path) {
+						return base.getIconRes.call($t, "gridMinimize." + path);
 					},
 					visibleGridIcon = getMinimizeIcon("visible"), // "ui-icon-circle-triangle-n"
 					hiddenGridIcon = getMinimizeIcon("hidden");  // "ui-icon-circle-triangle-s"
