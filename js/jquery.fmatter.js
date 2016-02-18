@@ -36,7 +36,72 @@
 	var jgrid = $.jgrid, getGridRes = jgrid.getMethod("getGridRes"), base = $.fn.jqGrid;
 	// begin module jquery.fmatter
 	$.fmatter = $.fmatter || {};
-	var fmatter = $.fmatter;
+	var fmatter = $.fmatter,
+		getOptionByName = function (colModel, name) {
+			var option = colModel.formatoptions || {};
+			if (option.hasOwnProperty(name)) {
+				return option[name];
+			} else {
+				return (colModel.editoptions || {})[name];
+			}
+		},
+		parseCheckboxOptions = function (options) {
+			var colModel = options.colModel || options.cm, checked, unchecked,
+				title = colModel.title !== false ?
+						" title='" + (options.colName || colModel.label || colModel.name) + "'" :
+						"",
+				getOption = function (name) {
+					return getOptionByName(colModel, name);
+				},
+				checkedClasses = getOption("checkedClass"),
+				uncheckedClasses = getOption("uncheckedClass"),
+				value = getOption("value"),
+				yes = typeof value === "string" ? (value.split(":")[0] || "Yes") : "Yes",
+				no = typeof value === "string" ? (value.split(":")[1] || "No") : "No",
+				buildCheckbox = function (classes) {
+					return "<i class='" + classes + "'" + title + "></i>";
+				},
+				disabled = getOption("disabled");
+
+			if (disabled === undefined) {
+				disabled = jgrid.formatter.checkbox.disabled;
+			}
+
+			if (disabled === true && base.isInCommonIconClass.call(this, "fa")) {
+				checkedClasses = checkedClasses || "fa fa-check-square-o fa-lg";
+				checked = buildCheckbox(checkedClasses);
+				unchecked = buildCheckbox(uncheckedClasses || "fa fa-square-o fa-lg");
+			} else if (disabled === true && base.isInCommonIconClass.call(this, "glyphicon")) {
+				checkedClasses = checkedClasses || "glyphicon glyphicon-check";
+				checked = buildCheckbox(checkedClasses);
+				unchecked = buildCheckbox(uncheckedClasses || "glyphicon glyphicon-unchecked");
+			} else {
+				checkedClasses = "";
+				title += disabled === true ? " disabled='disabled'" : "";
+				checked = "<input type='checkbox' checked='checked'" + title + " />";
+				unchecked = "<input type='checkbox'" + title + " />";
+			}
+			return {
+				checkedClasses: checkedClasses,
+				checked: checked,
+				unchecked: unchecked,
+				yes: yes,
+				no: no
+			};
+		},
+		YesObject = Object.create(null, {
+			1: { value: 1 },
+			x: { value: 1 },
+			"true": { value: 1 },
+			yes: { value: 1 },
+			on: { value: 1 }
+		}),
+		NoObject = Object.create(null, {
+			0: { value: 1 },
+			"false": { value: 1 },
+			no: { value: 1 },
+			off: { value: 1 }
+		});
 	$.extend(true, jgrid, {
 		formatter: { // setting common formatter settings, which are independent from the language and locale
 			date: {
@@ -85,35 +150,16 @@
 				align: "center", formatter: "checkbox",
 				edittype: "checkbox", editoptions: { value: "true:false", defaultValue: "false" },
 				convertOnSave: function (options) {
-					var nData = options.newValue, cm = options.cm,
-						lnData = String(nData).toLowerCase(),
-						cbv = cm.editoptions != null && typeof cm.editoptions.value === "string" ?
-							cm.editoptions.value.split(":") : ["yes", "no"];
+					var newValue = options.newValue,
+						checkboxOptions = parseCheckboxOptions.call(this, options),
+						lowerCaseNewData = String(newValue).toLowerCase();
 
-					if ($.inArray(lnData, ["1", "true", cbv[0].toLowerCase()]) >= 0) {
-						nData = true;
-					} else if ($.inArray(lnData, ["0", "false", cbv[1].toLowerCase()]) >= 0) {
-						nData = false;
+					if (YesObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.yes.toLowerCase()) {
+						newValue = true;
+					} else if (NoObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.no.toLowerCase()) {
+						newValue = false;
 					}
-					return nData;
-				},
-				stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;true:Yes;false:No" }
-			},
-			booleanCheckboxFa: {
-				align: "center", formatter: "checkboxFontAwesome4",
-				edittype: "checkbox", editoptions: { value: "true:false", defaultValue: "false" },
-				convertOnSave: function (options) {
-					var nData = options.newValue, cm = options.cm,
-						lnData = String(nData).toLowerCase(),
-						cbv = cm.editoptions != null && typeof cm.editoptions.value === "string" ?
-							cm.editoptions.value.split(":") : ["yes", "no"];
-
-					if ($.inArray(lnData, ["1", "true", cbv[0].toLowerCase()]) >= 0) {
-						nData = true;
-					} else if ($.inArray(lnData, ["0", "false", cbv[1].toLowerCase()]) >= 0) {
-						nData = false;
-					}
-					return nData;
+					return newValue;
 				},
 				stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;true:Yes;false:No" }
 			},
@@ -139,6 +185,7 @@
 			}
 		}
 	});
+	jgrid.cmTemplate.booleanCheckboxFa = jgrid.cmTemplate.booleanCheckbox;
 
 	//opts can be id:row id for the row, rowdata:the data for the row, colmodel:the column model for this column
 	//example {id:1234,}
@@ -238,56 +285,19 @@
 		return (fmatter.isValue(cellval) && cellval !== "") ? cellval : opts.defaultValue || "&#160;";
 	};
 	var defaultFormat = $FnFmatter.defaultFormat,
-		getOptionByName = function (colModel, name) {
-			return (colModel.formatoptions || {})[name] || (colModel.editoptions || {})[name];
-		},
-		parseCheckboxOptions = function (options) {
-			var colModel = options.colModel, checked, unchecked,
-				title = colModel.title !== false ?
-						" title='" + (options.colName || colModel.label || colModel.name) + "'" :
-						"",
-				getOption = function (name) {
-					return getOptionByName(colModel, name);
-				},
-				checkedClasses = getOption("checkedClass"),
-				uncheckedClasses = getOption("uncheckedClass"),
-				value = getOption("value"),
-				yes = typeof value === "string" ? (value.split(":")[0] || "Yes") : "Yes",
-				no = typeof value === "string" ? (value.split(":")[1] || "No") : "No",
-				buildCheckbox = function (classes) {
-					return "<i class='" + classes + "'" + title + "></i>";
-				};
-
-			if (base.isInCommonIconClass.call(this, "fa")) {
-				checkedClasses = checkedClasses || "fa fa-check-square-o fa-lg";
-				checked = buildCheckbox(checkedClasses);
-				unchecked = buildCheckbox(uncheckedClasses || "fa fa-square-o fa-lg");
-			} else if (base.isInCommonIconClass.call(this, "glyphicon")) {
-				checkedClasses = checkedClasses || "glyphicon glyphicon-check";
-				checked = buildCheckbox(checkedClasses);
-				unchecked = buildCheckbox(uncheckedClasses || "glyphicon glyphicon-unchecked");
-			} else {
-				checked = "<input type='checkbox' checked='checked'" + title + " disabled='disabled' />";
-				unchecked = "<input type='checkbox'" + title + " disabled='disabled' />";
+		formatCheckboxValue = function (cellValue, checkboxOptions, colModel) {
+			if (cellValue === undefined || fmatter.isEmpty(cellValue)) {
+				var defaultValue = getOptionByName(colModel, "defaultValue");
+				if (defaultValue === undefined) {
+					cellValue = checkboxOptions.no;
+				}
+				cellValue = defaultValue;
 			}
-			return {
-				checkedClasses: checkedClasses,
-				checked: checked,
-				unchecked: unchecked,
-				yes: yes,
-				no: no
-			};
-		},
-		isYes = function (cellValue, yes) {
-			var strCellValue = String(cellValue).toLowerCase();
-
-			return cellValue === 1 ||
-				strCellValue === "1" ||
-				strCellValue === "x" ||
-				cellValue === true ||
-				strCellValue === "true" ||
-				strCellValue === "yes" ||
-				strCellValue === yes.toLowerCase();
+			// see http://jsperf.com/regex-vs-indexof-vs-in/12
+			cellValue = String(cellValue).toLowerCase();
+			return YesObject[cellValue] || cellValue === checkboxOptions.yes.toLowerCase() ?
+					checkboxOptions.checked :
+					checkboxOptions.unchecked;
 		};
 	$FnFmatter.email = function (cellval, opts) {
 		if (!fmatter.isEmpty(cellval)) {
@@ -295,51 +305,30 @@
 		}
 		return defaultFormat(cellval, opts);
 	};
-	$FnFmatter.checkbox = function (cval, opts) {
-		var colModel = opts.colModel, op = $.extend({}, opts.checkbox), ds;
-		if (colModel != null) {
-			op = $.extend({}, op, colModel.formatoptions || {});
-		}
-		if (op.disabled === true) { ds = "disabled='disabled'"; } else { ds = ""; }
-		if (fmatter.isEmpty(cval) || cval === undefined) { cval = defaultFormat(cval, op); }
-		cval = String(cval).toLowerCase();
-		var bchk = cval.search(/(false|f|0|no|n|off|undefined)/i) < 0 ? " checked='checked' " : "";
-		return "<input type='checkbox' " + bchk + " value='" + cval + "' data-offval='no' " + ds + "/>";
-	};
-	$FnFmatter.checkbox.getCellBuilder = function (opts) {
-		var colModel = opts.colModel, op = $.extend({}, opts.checkbox), tagEnd;
-		if (colModel != null) {
-			op = $.extend({}, op, colModel.formatoptions || {});
-		}
-		tagEnd = "' data-offval='no' " + (op.disabled === true ? "disabled='disabled'" : "") + "/>";
-		return function (cval) {
-			if (fmatter.isEmpty(cval) || cval === undefined) { cval = defaultFormat(cval, op); }
-			cval = String(cval).toLowerCase();
-			return "<input type='checkbox' " +
-				(cval.search(/(false|f|0|no|n|off|undefined)/i) < 0 ? " checked='checked' " : "") +
-				" value='" + cval + tagEnd;
-		};
-	};
-	$FnFmatter.checkboxFontAwesome4 = function (cellValue, options) {
+	$FnFmatter.checkbox = function (cellValue, options) {
 		var checkboxOptions = parseCheckboxOptions.call(this, options);
-
-		return isYes(cellValue, checkboxOptions.yes) ?
-				checkboxOptions.checked :
-				checkboxOptions.unchecked;
+		return formatCheckboxValue(cellValue, checkboxOptions, options.colModel);
 	};
-	$FnFmatter.checkboxFontAwesome4.getCellBuilder = function (options) {
-		var checkboxOptions = parseCheckboxOptions.call(this, options);
+	$FnFmatter.checkbox.getCellBuilder = function (options) {
+		var checkboxOptions = parseCheckboxOptions.call(this, options),
+			colModel = options.colModel;
 		return function (cellValue) {
-			return isYes(cellValue, checkboxOptions.yes) ?
-					checkboxOptions.checked :
-					checkboxOptions.unchecked;
+			return formatCheckboxValue(cellValue, checkboxOptions, colModel);
 		};
 	};
-	$FnFmatter.checkboxFontAwesome4.unformat = function (cellValue, options, elem) {
-		var checkboxOptions = parseCheckboxOptions.call(this, options);
-		return jgrid.hasAllClasses($(">i", elem), checkboxOptions.checkedClasses) ?
-				checkboxOptions.yes : checkboxOptions.no;
+	$FnFmatter.checkbox.unformat = function (cellValue, options, elem) {
+		var checkboxOptions = parseCheckboxOptions.call(this, options),
+			$elem = $(elem);
+
+		return (checkboxOptions.checkedClasses ?
+					jgrid.hasAllClasses($elem.children("i"), checkboxOptions.checkedClasses) :
+					$elem.children("input").is(":checked")) ?
+				checkboxOptions.yes :
+				checkboxOptions.no;
 	};
+	$FnFmatter.checkboxFontAwesome4 = $FnFmatter.checkbox;
+	$FnFmatter.checkboxFontAwesome4.getCellBuilder = $FnFmatter.checkbox.getCellBuilder;
+	$FnFmatter.checkboxFontAwesome4.unformat = $FnFmatter.checkbox.unformat;
 	$FnFmatter.link = function (cellval, opts) {
 		var colModel = opts.colModel, target = "", op = { target: opts.target };
 		if (colModel != null) {
@@ -912,10 +901,7 @@
 							.replace(getFormaterOption("number", "decimalSeparator"), ".");
 					break;
 				case "checkbox":
-					var cbv = (colModel.editoptions != null && typeof colModel.editoptions.value === "string") ?
-							colModel.editoptions.value.split(":") :
-							["Yes", "No"];
-					ret = $("input", cellval).is(":checked") ? cbv[0] : cbv[1];
+					ret = $FnFmatter.checkbox.unformat(cellval, options, cellval);
 					break;
 				case "select":
 					ret = $.unformat.select(cellval, options, pos, cnt);
