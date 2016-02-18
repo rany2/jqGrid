@@ -33,7 +33,7 @@
 }(function ($) {
 	"use strict";
 	$.jgrid = $.jgrid || {};
-	var jgrid = $.jgrid, getGridRes = jgrid.getMethod("getGridRes");
+	var jgrid = $.jgrid, getGridRes = jgrid.getMethod("getGridRes"), base = $.fn.jqGrid;
 	// begin module jquery.fmatter
 	$.fmatter = $.fmatter || {};
 	var fmatter = $.fmatter;
