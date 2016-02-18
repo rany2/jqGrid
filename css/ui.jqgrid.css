@@ -1086,7 +1086,7 @@ a.clearsearchclass {
 	font-size: 11px;
 }
 
-.ui-jqgrid.ui-jqgrid-jquery-ui .s-ico > .ui-grid-ico-sort.glyphicon {
+.ui-jqgrid .s-ico > .ui-grid-ico-sort.glyphicon {
 	font-size: 10px;
 }
 .ui-jqgrid .s-ico > .ui-icon-asc.glyphicon {
