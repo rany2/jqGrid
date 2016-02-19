@@ -2345,7 +2345,7 @@
 				fatalErrorFunction = isFunction(defaults.fatalError) ? defaults.fatalError : alert,
 				locale = pin.locale || defaults.locale || "en-US",
 				direction = locales[locale] != null && typeof locales[locale].isRTL === "boolean" ? (locales[locale].isRTL ? "rtl" : "ltr") : "ltr",
-				iconSet = pin.iconSet || defaults.iconSet || "jQueryUI",
+				iconSet = pin.iconSet || defaults.iconSet || ((pin.guiStyle || defaults.guiStyle) === "bootstrap" || (pin.guiStyle || defaults.guiStyle) === "bootstrapPrimary" ? "glyph" : "jQueryUI"),
 				guiStyle = pin.guiStyle || defaults.guiStyle || "jQueryUI",
 				getIcon = function (path) {
 					//return jgrid.getIconRes(iconSet, path);
