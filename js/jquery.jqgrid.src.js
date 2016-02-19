@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-02-18
+ * Date: 2016-02-19
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -571,10 +571,10 @@
 				},
 				treeGrid: {
 					common: "",
-					minus: "glyphicon-collapse-down",
+					minus: "glyphicon-triangle-bottom",
 					leaf: "glyphicon-record", // glyphicon-unchecked
-					plusLtr: "glyphicon-expand",
-					plusRtl: "glyphicon-expand"
+					plusLtr: "glyphicon-triangle-right",
+					plusRtl: "glyphicon-triangle-left"
 				}
 			}
 		},
@@ -17937,7 +17937,7 @@
 		parseCheckboxOptions = function (options) {
 			var colModel = options.colModel || options.cm, checked, unchecked,
 				title = colModel.title !== false ?
-						" title='" + (options.colName || colModel.label || colModel.name) + "'" :
+						" title='" + (options.colName || colModel.name) + "'" :
 						"",
 				getOption = function (name) {
 					return getOptionByName(colModel, name);
@@ -18199,8 +18199,11 @@
 		return formatCheckboxValue(cellValue, checkboxOptions, options.colModel);
 	};
 	$FnFmatter.checkbox.getCellBuilder = function (options) {
-		var checkboxOptions = parseCheckboxOptions.call(this, options),
-			colModel = options.colModel;
+		var checkboxOptions, colModel = options.colModel;
+
+		options.colName = options.colName || this.p.colNames[options.pos];
+		checkboxOptions = parseCheckboxOptions.call(this, options);
+
 		return function (cellValue) {
 			return formatCheckboxValue(cellValue, checkboxOptions, colModel);
 		};

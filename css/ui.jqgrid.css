@@ -1,6 +1,6 @@
 /**
  * jqGrid 4.13.0-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2016-02-18
+ * Date: 2016-02-19
  */
 
 /* Grid */
@@ -1252,10 +1252,10 @@ a.clearsearchclass {
 .modal-backdrop.jqgrid-overlay {
 	-ms-opacity: .35;
 	opacity: .35;
-	-webkit-filter:Alpha(Opacity=35);
-	-moz-filter:Alpha(Opacity=35);
-	-o-filter:Alpha(Opacity=35);
-	filter:Alpha(Opacity=35);
+	-webkit-filter: Alpha(Opacity=35);
+	-moz-filter: Alpha(Opacity=35);
+	-o-filter: Alpha(Opacity=35);
+	filter: Alpha(Opacity=35);
 }
 
 .ui-jqdialog.ui-jqgrid-bootstrap .ui-jqdialog-content {
@@ -1291,7 +1291,7 @@ a.clearsearchclass {
 
 .ui-jqgrid.ui-jqgrid-bootstrap .disabled {
 	opacity: .35;
-	filter:Alpha(Opacity=35);
+	filter: Alpha(Opacity=35);
 }
 .ui-jqgrid-bootstrap.ui-jqgrid-resize-mark {
 	border: 1px solid #aaaaaa;
@@ -1426,4 +1426,10 @@ a.clearsearchclass {
 	margin-top: -.1em;
 	margin-left: -.28em;
 }
-.tree-leaf
+.tree-wrap > .treeclick {
+	line-height: 1;
+}
+.tree-wrap > .treeclick.glyphicon {
+	margin-top: -.2em;
+	font-size: 12px;
+}
