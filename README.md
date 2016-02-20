@@ -51,14 +51,14 @@ Remark: the above URLs will be available **after publishing** the release of the
 
 Some demos could be helpful for understanding how `guiStyle: "bootstrap"`, `guiStyle: "bootstrapPrimary"` and `iconSet` can be used:
 
-* [Bootstrap with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap.htm)
-* [BootstrapPrimary with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrapPrimary.htm)
-* [Bootstrap glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap-glyph.htm)
-* [TreeGrid with Bootstrap and custom iconSet based on glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/LocalAdjacencyTree-glyph.htm). The demo ovewrite icons used for three nodes and uses no icons for leafs.
-* [Grouping with Bootstrap glyph fonts and custom colors](http://www.ok-soft-gmbh.com/jqGrid/OK/grouping-bootstrap-glyph.htm)
-* [jQuery UI](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui.htm)
-* [jQuery UI with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa.htm)
-* [jQuery UI with glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-glyph.htm)
+* [Bootstrap with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap.htm) - The demo demonstrates the usage of the new option `guiStyle: "bootstrap"`. No jQuery UI CSS is used in the demo.
+* [BootstrapPrimary with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrapPrimary.htm) - The demo is very close to the previous one, but it uses `guiStyle: "bootstrapPrimary"`. It changes the style of buttons in the modal dialogs.
+* [Bootstrap glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap-glyph.htm) - The demo uses no jQuery UI CSS and Font Awesome. All CSS and icons are from Bootstrap. It uses `iconSet: "glyph"`.
+* [TreeGrid with Bootstrap and custom iconSet based on glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/LocalAdjacencyTree-glyph.htm) - The demo domonstrates how one can ovewrite some icons from `iconSet: "glyph"`. The demo use custom icons for tree nodes and it uses no icons for leafs.
+* [Grouping with Bootstrap glyph fonts and custom colors](http://www.ok-soft-gmbh.com/jqGrid/OK/grouping-bootstrap-glyph.htm) - The demo uses `guiStyle: "bootstrap"` with data groupinh. It shows additionally how one can customize colors or border and background color of some jqGrid elements.
+* [jQuery UI](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui.htm) - the base demo which uses jQuery UI CSS and the icons from jQuery UI.
+* [jQuery UI with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa.htm) - the same demo, but with Font Awesome CSS and the option `iconSet: "fontAwesome"`.
+* [jQuery UI with glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-glyph.htm) - the demo which uses jQuery UI CSS, but glyph icons from Bootsrap.
 
 ### The below is the full list of changes in the version 4.13.0 compared with 4.12.1.
 
