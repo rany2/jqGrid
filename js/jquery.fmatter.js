@@ -169,7 +169,7 @@
 				return {
 					formatter: "actions",
 					width: (p != null && (base.isInCommonIconClass.call(this, "fa") || base.isInCommonIconClass.call(this, "glyphicon")) ?
-							($(this).jqGrid("isBootstrapGuiStyle") ? 45 : 39) : 37) + (jgrid.cellWidth() ? 5 : 0),
+							($(this).jqGrid("isBootstrapGuiStyle") ? 45 : 39) : 40) + (jgrid.cellWidth() ? 5 : 0),
 					align: "center",
 					label: "",
 					autoResizable: false,
