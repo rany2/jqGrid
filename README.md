@@ -11,7 +11,7 @@ Below you can find short description of new features and bug fixes implemented i
 
 Read [Wiki](https://github.com/free-jqgrid/jqGrid/wiki) for more detailed information about the features of free-jqGrid. The preliminary version of the documentation can be found [here](http://free-jqgrid.github.io/).
 
-Free jqGrid can be used *for free*. We still ask to contribute the development by donating via PayPal, if one have the possibility for it. One can donate by clicking on the following button [![PayPayl donate button](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=JGTCBLQM2BYHG "Donate once-off to free jqGrid project using PayPal") or by sending money via PayPal to oleg.kiriljuk@ok-soft-gmbh.com with the comment "free jqGrid". Bank transfer based on the invoice from OK soft GmbH is another option of the donation. Just send the email with the information about the sum of donation and you will get the corresponding invoice with the full information about our bank account and our VAT number.
+Free jqGrid can be used *for free*. We still ask to contribute the development by donating via PayPal, if one have the possibility for it. One can donate by clicking on the following button [![PayPayl donate button](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=JGTCBLQM2BYHG "Donate once-off to free jqGrid project using PayPal") or by sending money via PayPal to oleg.kiriljuk@ok-soft-gmbh.com with the comment "free jqGrid". Bank transfer based on the invoice from OK soft GmbH is another option of donating. Just send the email with the information about the amount of donation and you will get the corresponding invoice with the full information about our bank account and our VAT number.
 
 One can install the package with respect of [bower](http://bower.io/search/?q=free-jqgrid) by using "bower install free-jqgrid", with respect of [npm](https://www.npmjs.com/package/free-jqgrid) by using "npm install free-jqgrid" or from [NuGet](https://www.nuget.org/packages/free-jqGrid) by using "Install-Package free-jqGrid".
 
@@ -23,9 +23,9 @@ Free jqGrid is published on [cdnjs](https://cdnjs.com/libraries/free-jqgrid) and
 ```
 or
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.12.1/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/free-jqgrid/4.12.1/js/i18n/grid.locale-de.min.js"></script>
-<script src="https://cdn.jsdelivr.net/free-jqgrid/4.12.1/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.13.0/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.0/js/i18n/grid.locale-de.min.js"></script>
+<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.0/js/jquery.jqgrid.min.js"></script>
 ```
 The locale file is optional. One can, but one don't need to include `grid.locale-en.min.js`, becusue the same information is already included in `jquery.jqgrid.min.js`.
 
@@ -50,16 +50,19 @@ Remark: the above URLs will be available **after publishing** the release of the
 * Some minor changes are made in `$.jgrid.viewModal`. Such changes can produces compatibility problems with the old code. It could be important **only if you call the method directly in your code**. In the case one should add `.call(gridDOM, ...` to the call of `$.jgrid.viewModal` to initialize `this` of `$.jgrid.viewModal` to the DOM element of the grid.
 
 Some demos could be helpful for understanding how `guiStyle: "bootstrap"`, `guiStyle: "bootstrapPrimary"` and `iconSet` can be used:
-[Bootstrap with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap.htm)
-[BootstrapPrimary with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrapPrimary.htm)
-[Bootstrap glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap-glyph.htm)
-[TreeGrid with Bootstrap and custom iconSet based on glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/LocalAdjacencyTree-glyph.htm). The demo ovewrite icons used for three nodes and uses no icons for leafs.
-[Grouping with Bootstrap glyph fonts and custom colors](http://www.ok-soft-gmbh.com/jqGrid/OK/grouping-bootstrap-glyph.htm)
-[jQuery UI](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui.htm)
-[jQuery UI with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa.htm)
-[jQuery UI with glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-glyph.htm)
 
-### The below is the full list of changes in the version 4.13.0 compared with 4.12.1. The list doesn’t include temporary changes and fixes, which are not important for the final state of the version 4.13.0.
+* [Bootstrap with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap.htm)
+* [BootstrapPrimary with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrapPrimary.htm)
+* [Bootstrap glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap-glyph.htm)
+* [TreeGrid with Bootstrap and custom iconSet based on glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/LocalAdjacencyTree-glyph.htm). The demo ovewrite icons used for three nodes and uses no icons for leafs.
+* [Grouping with Bootstrap glyph fonts and custom colors](http://www.ok-soft-gmbh.com/jqGrid/OK/grouping-bootstrap-glyph.htm)
+* [jQuery UI](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui.htm)
+* [jQuery UI with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa.htm)
+* [jQuery UI with glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-glyph.htm)
+
+### The below is the full list of changes in the version 4.13.0 compared with 4.12.1.
+
+Remark: The list below doesn’t include temporary changes and fixes, which are not important for the final state of the version 4.13.0.
 
 * New `baseIconSet` property can be used in the definition of new `iconSet` in `$.jgrid.icons`. It allows easy to define new `iconSet` by modifying of some settings of existing `iconSet` (currently `"jQueryUI"`, `"fontAwesome"` and `"glyph"`). In the same way the new `guiStyles` can be defined using `baseGuiStyle` property. The definition of the guiStyle `bootstrapPrimary` reference the setting of `bootstrap` and just overwrite *some properties*.
 * Some old and unused files are removed from GitHub repository. Gradle is not more used for the build process.
@@ -73,7 +76,7 @@ Some demos could be helpful for understanding how `guiStyle: "bootstrap"`, `guiS
 * Bug fix: remove unneeded trimming of value of `<select>` of the searching toolbar created by `stype:"select"`.
 * Fix closing of Modal dialogs in case of click of right mouse button on the "Close" button of the dialog title.
 * Saving of the last position of Add/Edit dialog is *removed* from free jqGrid. The problem was incorrect restoring of the position in more complex CSS scenarios. The problem exist in advanced scenarios or in case of different combination of other dialog parameters (`toTop`, `overlay`, ..,). For example, if jqGrid is created inside of jQuery UI dialog or inside of inside of complex Bootstrap structurs or just inside of the hirarchy of parents of jqGrid which contains mix values of `position` settings (`position: absolute`, `position: relative`, ...) then the calculation of position is very complex. Between of two opening of the Edit dialog the position of the parents (jQuery UI Dialog, which contains the grid) of the grid could be changed and the old position could be outside of visible area. There are too many aspects and the simple saving of previos position become really complex. Because of the complexity and many bug reports in the past the new versions of free jqGrid dropped the feature. One can still use `onClose` and `afterShowForm` callbacks to implement the feature in more simple scenario.
-* Bug fix of processing of <kbd>Enter</kbd> key in `navGrid`. Old code produced incorrect results in View dialog on pressing <kbd>Enter</kbd> key.
+* Bug fix of processing of <kbd>Enter</kbd> key in `navGrid`. The old code produced incorrect results in View dialog on pressing <kbd>Enter</kbd> key.
 * Bug fix of `addRowData` by usage of array of data as the input.
 * Updated Catalan and Spanish translations: `grid.locale-ca.js` and `grid.locale-es.js`.
 * Reorganize many parts of code and internal structures of jqGrid to support new `guiStyle: "bootstrap"` option, which allows to format jqGrid using CSS classes of Bootstrap.
@@ -88,7 +91,7 @@ Some demos could be helpful for understanding how `guiStyle: "bootstrap"`, `guiS
 * Update Polish translation `grid.locale-pl.js`.
 * Improve the usage of `beforeSubmit` and `afterSubmit` callbacks of form editing. Old versions of the callbackes **required** that the methods return results as an array. If, for example, one forgets to return the value in the required format it produed unhandled exception. The new changes test the results of `beforeSubmit` and `afterSubmit` callbacks and continues the standard processing.
 * Improve performance of `showHideCol`, `hideCol`, `showCol` and `columnChooser`. New additional parameter of `showHideCol`, `hideCol` and `showCol` methods is object with three Boolean properties `skipSetGroupHeaders`, `skipFeedback`, `skipSetGridWidth`. Specifying of `true` values for any from the properties force skipping of the corresponding parts of `showHideCol` code. The usage of the options is very helpful in case of sequensial multipe calles, for example from `columnChooser`. Skipping of unneeded actions in the intermediate calls improves the performance and holds the same final results.
-* Bug fix `createEl` (existing in versions starting with 4.9.2) in parsing of option `value` of `edittype: "select"`.
+* Bug fix `createEl` (existing in versions starting with the version 4.9.2) in parsing of option `value` of `edittype: "select"`.
 
 Other readmes contain the list of the features and bug fixed implemented before:
 
