@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.13.0 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.13.1-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-02-20
+ * Date: 2016-02-29
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -669,7 +669,7 @@
 				gBox: "ui-jqgrid-bootstrap",
 				gView: "panel-info",
 				overlay: "modal-backdrop",
-				loading: "",
+				loading: "alert alert-info",
 				hDiv: "",
 				hTable: "table table-hover table-condensed table-bordered",
 				colHeaders: "",
@@ -17162,7 +17162,7 @@
 							var i;
 							len = result.length;
 							for (i = 0; i < len; i++) {
-								if (result[i][dtid] === this[parentId]) {
+								if (String(result[i][dtid]) === String(this[parentId])) {
 									result.push(this);
 									break;
 								}
