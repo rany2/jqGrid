@@ -293,7 +293,7 @@
 							var i;
 							len = result.length;
 							for (i = 0; i < len; i++) {
-								if (result[i][dtid] === this[parentId]) {
+								if (String(result[i][dtid]) === String(this[parentId])) {
 									result.push(this);
 									break;
 								}
