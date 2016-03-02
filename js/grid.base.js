@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-02-29
+ * Date: 2016-03-02
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1873,7 +1873,16 @@
 							return self;
 						}
 						$.each(_data, function () {
-							if (eval(match)) { results.push(this); }
+							(function () {
+								var localMath = "(function (context) { var intFunc = function (jQuery, self) { return " +
+										match +
+										"; }; return intFunc.call(context.item, context.jQuery, context.context); }(this))";
+								if (eval(localMath)) { results.push(this.item); }
+							}.call({
+								item: this,
+								jQuery: $,
+								context: context
+							}));
 						});
 						_data = results;
 						return self;
@@ -1973,7 +1982,7 @@
 							case "date":
 							case "datetime":
 								val = String(jgrid.parseDateToNumber.call(context, t.newfmt || "Y-m-d", val));
-								fld = "jQuery.jgrid.parseDateToNumber.call(jQuery(\"" + context.p.idSel + "\")[0],\"" + t.srcfmt + "\"," + fld + ")";
+								fld = "jQuery.jgrid.parseDateToNumber.call(self,\"" + t.srcfmt + "\"," + fld + ")";
 								break;
 							default:
 								fld = self._getStr(fld);
@@ -2058,7 +2067,7 @@
 						return self;
 					};
 					this.custom = function (ruleOp, field, data) {
-						self._append("jQuery(\"" + context.p.idSel + "\")[0].p.customSortOperations." + ruleOp + ".filter.call(jQuery(\"" + context.p.idSel + "\")[0],{item:this,cmName:\"" + field + "\",searchValue:\"" + data + "\"})");
+						self._append("self.p.customSortOperations." + ruleOp + ".filter.call(self,{item:this,cmName:\"" + field + "\",searchValue:\"" + data + "\"})");
 						self._setCommand(self.custom, field);
 						self._resetNegate();
 						return self;
