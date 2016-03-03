@@ -1433,3 +1433,7 @@ a.clearsearchclass {
 	margin-top: -.2em;
 	font-size: 12px;
 }
+.subgrid-data .ui-jqgrid-bootstrap .ui-jqgrid-hdiv .ui-jqgrid-htable,
+.subgrid-data .ui-jqgrid-bootstrap .ui-jqgrid-bdiv .ui-jqgrid-btable {
+    background-color: transparent;
+}
