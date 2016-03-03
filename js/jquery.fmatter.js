@@ -89,7 +89,8 @@
 				no: no
 			};
 		},
-		YesObject = Object.create(null, {
+		// http://jsperf.com/regex-vs-indexof-vs-in/12
+		/*YesObject = Object.create(null, {
 			1: { value: 1 },
 			x: { value: 1 },
 			"true": { value: 1 },
@@ -101,7 +102,12 @@
 			"false": { value: 1 },
 			no: { value: 1 },
 			off: { value: 1 }
-		});
+		});*/
+		// one can use typeof Object.create != "function" and use either
+		// Object.create or simple object firm, but the performance differences
+		// are so low, that the compatibility to IE8 is more important
+		YesObject = { 1: 1, x: 1, "true": 1, yes: 1, on: 1 },
+		NoObject = { 0: 1, "false": 1, no: 1, off: 1 };
 	$.extend(true, jgrid, {
 		formatter: { // setting common formatter settings, which are independent from the language and locale
 			date: {
