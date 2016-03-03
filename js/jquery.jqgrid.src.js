@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-02
+ * Date: 2016-03-03
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -3001,25 +3001,22 @@
 							}
 						}
 					},
-					scrollGrid: function (e) { // this must be bDiv
-						var bDiv = this, $bTable = getGridComponent(COMPONENT_NAMES.BODY_TABLE, bDiv);
-						if (e) { e.stopPropagation(); }
-						if ($bTable.length === 0) { return true; }
-						var gridSelf = $bTable[0].grid;
+					scrollGrid: function () { // this must be bDiv
 						if (p.scroll) {
-							var scrollTop = bDiv.scrollTop;
+							var scrollTop = this.scrollTop;
 							// save last scrollTop of bDiv as property of grid object
-							if (gridSelf.scrollTop === undefined) { gridSelf.scrollTop = 0; }
-							if (scrollTop !== gridSelf.scrollTop) {
-								gridSelf.scrollTop = scrollTop;
-								if (gridSelf.timer) { clearTimeout(gridSelf.timer); }
-								gridSelf.timer = setTimeout(function () { gridSelf.populateVisible.call($bTable[0]); }, p.scrollTimeout);
+							if (grid.scrollTop === undefined) { grid.scrollTop = 0; }
+							if (scrollTop !== grid.scrollTop) {
+								grid.scrollTop = scrollTop;
+								if (grid.timer) { clearTimeout(grid.timer); }
+								grid.timer = setTimeout(function () { grid.populateVisible.call(ts); }, p.scrollTimeout);
 							}
 						}
-						gridSelf.hDiv.scrollLeft = bDiv.scrollLeft;
+						grid.hDiv.scrollLeft = this.scrollLeft;
 						if (p.footerrow) {
-							gridSelf.sDiv.scrollLeft = bDiv.scrollLeft;
+							grid.sDiv.scrollLeft = this.scrollLeft;
 						}
+						return false;
 					},
 					selectionPreserver: function () {
 						var self = this, $self = $(self), sr = p.selrow, sra = p.selarrrow ? $.makeArray(p.selarrrow) : null,
@@ -5231,6 +5228,7 @@
 					if (bDiv) {
 						bDiv.scrollLeft = this.scrollLeft;
 					}
+					return false;
 				});
 			$(hb).append(hTable);
 			hTable = null;
