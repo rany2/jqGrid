@@ -238,6 +238,7 @@
 						searchOperators: false,
 						resetIcon: "x",
 						applyLabelClasses: true,
+						loadFilterDefaults: true, // this options activates loading of default filters from grid's postData for Multipe Search only.
 						operands: { "eq": "==", "ne": "!", "lt": "<", "le": "<=", "gt": ">", "ge": ">=", "bw": "^", "bn": "!^", "in": "=", "ni": "!=", "ew": "|", "en": "!@", "cn": "~", "nc": "!~", "nu": "#", "nn": "!#" }
 					}, jgrid.search, p.searching || {}, oMuligrid || {}),
 					colModel = p.colModel,
@@ -250,6 +251,42 @@
 					hoverClasses = getGuiStyles.call($t, "states.hover"),
 					highlightClass = getGuiStyles.call($t, "states.select"),
 					dataFieldClass = getGuiStyles.call($t, "filterToolbar.dataField"),
+					currentFilters,
+					parseFilter = function () {
+						var j, filters = p.postData.filters, filter = {}, rules, rule,
+							iColByName = p.iColByName, cm, soptions;
+						if (typeof filters === "string") {
+							filters = $.parseJSON(filters);
+						}
+						rules = (filters || {}).rules;
+						if (filters == null ||
+								filters.groupOp.toUpperCase() !== o.groupOp.toUpperCase() ||
+								rules == null || rules.length === 0 ||
+								(filters.groups != null && filters.groups.length > 0)) {
+							return;
+						}
+						for (j = 0; j < rules.length; j++) {
+							rule = rules[j];
+							cm = colModel[iColByName[rule.field]];
+							if (cm == null || cm.search === false) {
+								return;
+							}
+							soptions = cm.searchoptions || {};
+							if (soptions.sopt) {
+								if ($.inArray(rule.op, soptions.sopt) < 0) {
+									return;
+								}
+							} else if (cm.stype === "select") {
+								if (rule.op !== "eq") {
+									return;
+								}
+							} else if (rule.op !== o.defaultSearch) {
+								return;
+							}
+							filter[cm.name] = { op: rule.op, data: rule.data };
+						}
+						return filter;
+					},
 					triggerToolbar = function () {
 						var sdata = {}, j = 0, sopt = {};
 						$.each(colModel, function () {
@@ -541,6 +578,9 @@
 					timeoutHnd,
 					tr = $("<tr></tr>", { "class": "ui-search-toolbar", role: "row" });
 
+				if (o.loadFilterDefaults) {
+					currentFilters = parseFilter();
+				}
 				// create the row
 				$.each(colModel, function (ci) {
 					var cm = this, soptions, mode = "filter", surl, self, select = "", sot, so, i, searchoptions = cm.searchoptions, editoptions = cm.editoptions,
@@ -553,7 +593,11 @@
 					soptions = $.extend({ mode: mode }, searchoptions || {});
 					if (this.search) {
 						if (o.searchOperators) {
-							so = (soptions.sopt) ? soptions.sopt[0] : cm.stype === "select" ? "eq" : o.defaultSearch;
+							if (p.search && currentFilters[this.name] != null) {
+								so = currentFilters[this.name].op;
+							} else {
+								so = (soptions.sopt) ? soptions.sopt[0] : cm.stype === "select" ? "eq" : o.defaultSearch;
+							}
 							for (i = 0; i < odata.length; i++) {
 								if (odata[i].oper === so) {
 									sot = o.operands[so] || "";
@@ -579,6 +623,9 @@
 						$("td", stbl).first().data("colindex", ci).append(select);
 						if (soptions.sopt == null || soptions.sopt.length === 1) {
 							$("td.ui-search-oper", stbl).hide();
+						}
+						if (p.search && currentFilters[this.name] != null) {
+							soptions.defaultValue = currentFilters[this.name].data;
 						}
 						if (soptions.clearSearch === undefined) {
 							soptions.clearSearch = this.stype === "text" ? true : false;
@@ -840,6 +887,33 @@
 					$self.jqGrid("destroyFrozenColumns");
 					$self.jqGrid("setFrozenColumns");
 				}
+				$self.bind(
+					"jqGridRefreshFilterValues.filterToolbar" + (o.loadFilterDefaults ? "jqGridAfterLoadComplete.filterToolbar" : ""),
+					function () {
+						var cmName, filter, newFilters = parseFilter(), p = this.p, $input, $searchOper, i;
+
+						if (!p && !p.search) { return; }
+
+						for (cmName in newFilters) {
+							if (newFilters.hasOwnProperty(cmName)) {
+								filter = newFilters[cmName];
+								$input = $("#gs_" + jqID(cmName));
+								$input.val(filter.data);
+								$searchOper = $input.closest(".ui-search-input")
+										.siblings(".ui-search-oper")
+										.children(".soptclass");
+								$searchOper.data("soper", filter.op);
+								$searchOper.text(o.operands[filter.op]);
+							}
+						}
+						for (i = 0; i < p.colModel.length; i++) {
+							cmName = p.colModel[i].name;
+							if (!newFilters.hasOwnProperty(cmName)) {
+								$("#gs_" + jqID(cmName)).val("");
+							}
+						}
+					}
+				);
 			});
 		},
 		destroyFilterToolbar: function () {
