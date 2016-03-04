@@ -148,7 +148,7 @@
 					},
 					subGridXmlOrJson = function (sjxml, sbid, fullBody) {
 						var $th, i,
-							$table = $("<table" + (jgrid.msie && jgrid.msiever() < 8 ? " cellspacing='0'" : "") + "><tbody></tbody></table>"),
+							$table = $("<table><tbody></tbody></table>"),
 							$tbody = $($table[0].tBodies[0]),
 							$tr = $("<tr></tr>");
 						for (i = 0; i < cm.name.length; i++) {
