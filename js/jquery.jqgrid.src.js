@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-04
+ * Date: 2016-03-05
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -624,7 +624,8 @@
 					tdWithIcon: "ui-widget-content", // class of cell with +- icon, additional to subgrid-cell
 					buttonDiv: "",
 					button: "",
-					tdData: "ui-widget-content" // class of main td with span over the grid, additional subgrid-data
+					tdData: "ui-widget-content", // class of main td with span over the grid, additional subgrid-data
+					legacyTable: ""
 				},
 				grid: "",
 				gridRow: "ui-widget-content",
@@ -710,7 +711,8 @@
 					tdWithIcon: "",
 					buttonDiv: "",
 					button: "btn btn-xs",
-					tdData: ""
+					tdData: "",
+					legacyTable: "table table-condensed table-hover table-bordered"
 				},
 				grid: "table table-condensed table-hover table-bordered",
 				gridRow: "",
@@ -5211,7 +5213,7 @@
 			firstr += "</tr>";
 			$self0.html("<tbody>" + firstr + "</tbody>");
 			//firstr = null;
-			$self0.addClass(getGuiStyles("grid", "ui-jqgrid-btable" + ($self0.jqGrid("isBootstrapGuiStyle") ? " table-striped" : "")));
+			$self0.addClass(getGuiStyles("grid", "ui-jqgrid-btable" + (p.altRows === true && $self0.jqGrid("isBootstrapGuiStyle") ? " table-striped" : "")));
 			var hg = (p.caption && p.hiddengrid === true) ? true : false,
 				hb = $("<div class='ui-jqgrid-hbox" + (dir === "rtl" ? "-rtl" : "") + "'></div>"),
 				topClasses = getGuiStyles("top"),
@@ -16575,8 +16577,8 @@
 
 	/**
 	 * jqGrid extension for SubGrid Data
-	 * Tony Tomov, tony@trirand.com, http://trirand.com/blog/
-	 * Changed by Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
+	 * Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -16654,7 +16656,10 @@
 					tdWithIconClasses = getSubgridStyle("tdWithIcon", "subgrid-cell"),
 					tdDataClasses = getSubgridStyle("tdData", "subgrid-data"),
 					subGridCell = function ($tr, cell, pos1) {
-						var $td = $("<td align='" + cm.align[pos1] + "'></td>").html(cell);
+						var align = cm.align[pos1],
+							$td = $("<td" +
+								(align ? " style='text-align:" + align + ";'" : "") +
+								"></td>").html(cell);
 						$tr.append($td);
 					},
 					fillXmlBody = function (data, $tbody) {
@@ -16703,9 +16708,11 @@
 						}
 					},
 					subGridXmlOrJson = function (sjxml, sbid, fullBody) {
-						var $th, i,
-							$table = $("<table><tbody></tbody></table>"),
-							$tbody = $($table[0].tBodies[0]),
+						var $th, i,	subgridTableClasses = getSubgridStyle("legacyTable", "ui-jqgrid-legacy-subgrid" +
+								(p.altRows === true && $(ts).jqGrid("isBootstrapGuiStyle") ? " table-striped" : "")),
+							$table = $("<table" +
+								(subgridTableClasses ? " class='" + subgridTableClasses + "'" : "") +
+								"><thead></thead><tbody></tbody></table>"),
 							$tr = $("<tr></tr>");
 						for (i = 0; i < cm.name.length; i++) {
 							$th = $("<th class='" + thSubgridClasses + "'></th>")
@@ -16713,8 +16720,8 @@
 									.width(cm.width[i]);
 							$tr.append($th);
 						}
-						$tbody.append($tr);
-						fullBody(sjxml, $tbody);
+						$tr.appendTo($table[0].tHead);
+						fullBody(sjxml, $($table[0].tBodies[0]));
 						$("#" + jqID(p.id + "_" + sbid)).append($table);
 						ts.grid.hDiv.loading = false;
 						$("#load_" + jqID(p.id)).hide();

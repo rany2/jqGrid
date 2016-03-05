@@ -1,6 +1,6 @@
 /**
  * jqGrid 4.13.1-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2016-03-04
+ * Date: 2016-03-05
  */
 
 /* Grid */
@@ -725,8 +725,10 @@ span.ui-jqgrid-cell-wrapper {
 	height: 18px;
 	border-top: 0 none;
 	border-bottom-width: 1px;
-	border-bottom-color: inherit;
 	border-bottom-style: solid;
+}
+.ui-jqgrid-jquery-ui.ui-jqgrid .ui-subgrid tr.ui-subtblcell td {
+	border-bottom-color: inherit;
 }
 .ui-jqgrid .ui-th-subgrid {
 	height: 20px;
@@ -1194,7 +1196,8 @@ a.clearsearchclass {
 .ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view > .ui-userdata {
 	background-color: #f0f0f0;
 }
-.ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-hdiv {
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-hdiv,
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-legacy-subgrid > thead {
 	background-color: #e5e5e5;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view > .ui-jqgrid-sdiv td {
@@ -1436,4 +1439,7 @@ a.clearsearchclass {
 .subgrid-data .ui-jqgrid-bootstrap .ui-jqgrid-hdiv .ui-jqgrid-htable,
 .subgrid-data .ui-jqgrid-bootstrap .ui-jqgrid-bdiv .ui-jqgrid-btable {
     background-color: transparent;
+}
+.subgrid-data .ui-jqgrid-legacy-subgrid  {
+	margin: 0;
 }
