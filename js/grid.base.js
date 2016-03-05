@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-04
+ * Date: 2016-03-05
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -624,7 +624,8 @@
 					tdWithIcon: "ui-widget-content", // class of cell with +- icon, additional to subgrid-cell
 					buttonDiv: "",
 					button: "",
-					tdData: "ui-widget-content" // class of main td with span over the grid, additional subgrid-data
+					tdData: "ui-widget-content", // class of main td with span over the grid, additional subgrid-data
+					legacyTable: ""
 				},
 				grid: "",
 				gridRow: "ui-widget-content",
@@ -710,7 +711,8 @@
 					tdWithIcon: "",
 					buttonDiv: "",
 					button: "btn btn-xs",
-					tdData: ""
+					tdData: "",
+					legacyTable: "table table-condensed table-hover table-bordered"
 				},
 				grid: "table table-condensed table-hover table-bordered",
 				gridRow: "",
@@ -5211,7 +5213,7 @@
 			firstr += "</tr>";
 			$self0.html("<tbody>" + firstr + "</tbody>");
 			//firstr = null;
-			$self0.addClass(getGuiStyles("grid", "ui-jqgrid-btable" + ($self0.jqGrid("isBootstrapGuiStyle") ? " table-striped" : "")));
+			$self0.addClass(getGuiStyles("grid", "ui-jqgrid-btable" + (p.altRows === true && $self0.jqGrid("isBootstrapGuiStyle") ? " table-striped" : "")));
 			var hg = (p.caption && p.hiddengrid === true) ? true : false,
 				hb = $("<div class='ui-jqgrid-hbox" + (dir === "rtl" ? "-rtl" : "") + "'></div>"),
 				topClasses = getGuiStyles("top"),
