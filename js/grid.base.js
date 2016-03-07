@@ -1969,7 +1969,7 @@
 							case "integer":
 								val = String(val).replace(_stripNum, "");
 								val = (isNaN(Number(val)) || val === "") ? "0" : Number(val); // To be fixed with more intelligent code
-								fld = "parseInt(" + fld + ",10)";
+								fld = "parseInt(" + fld + "||0,10)";
 								val = String(parseInt(val, 10));
 								break;
 							case "float":
@@ -1978,7 +1978,7 @@
 							case "numeric":
 								val = String(val).replace(_stripNum, "");
 								val = (isNaN(Number(val)) || val === "") ? "0" : Number(val); // To be fixed with more intelligent code
-								fld = "parseFloat(" + fld + ")";
+								fld = "parseFloat(" + fld + "||0)";
 								val = String(val);
 								break;
 							case "date":
@@ -1987,6 +1987,12 @@
 								fld = "jQuery.jgrid.parseDateToNumber.call(self,\"" + t.srcfmt + "\"," + fld + ")";
 								break;
 							default:
+								// TODO: consider to apply formatter at least to process correctly
+								// default values. For example is bootean property is not defined
+								// if will be displayed by formatter:"checkbox" as false value.
+								// If the user search for the value one will process the following
+								//    jQuery.jgrid.getAccessor(this,'closed')).toUpperCase() == String("FALSE").toUpperCase()
+								// which works wrong if the property "closed" is undefined.
 								fld = self._getStr(fld);
 								val = self._getStr("\"" + self._toStr(val) + "\"");
 							}
