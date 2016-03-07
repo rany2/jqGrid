@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-05
+ * Date: 2016-03-07
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1893,8 +1893,6 @@
 						return _data;
 					};
 					this.select = function (f) {
-						self._performSort();
-						if (!self._hasData()) { return []; }
 						self.execute();
 						if ($.isFunction(f)) {
 							var results = [];
@@ -1903,6 +1901,8 @@
 							});
 							return results;
 						}
+						if (!self._hasData()) { return []; }
+						self._performSort();
 						return _data;
 					};
 					this.hasMatch = function () {
