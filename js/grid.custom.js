@@ -906,7 +906,7 @@
 					$self.jqGrid("setFrozenColumns");
 				}
 				$self.bind(
-					"jqGridRefreshFilterValues.filterToolbar" + (o.loadFilterDefaults ? "jqGridAfterLoadComplete.filterToolbar" : ""),
+					"jqGridRefreshFilterValues.filterToolbar" + (o.loadFilterDefaults ? " jqGridAfterLoadComplete.filterToolbar" : ""),
 					function () {
 						var cmName, filter, newFilters = parseFilter(), p = this.p, $input, $searchOper, i;
 
