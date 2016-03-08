@@ -9193,14 +9193,14 @@
 				}
 				// create the row
 				$.each(colModel, function (ci) {
-					var cm = this, soptions, mode = "filter", surl, self, select = "", sot, so, i, searchoptions = cm.searchoptions, editoptions = cm.editoptions,
+					var cm = this, soptions, mode = "filter", surl, self, select = "", sot, so, i, searchoptions = cm.searchoptions || {}, editoptions = cm.editoptions || {},
 						th = $("<th></th>", { "class": getGuiStyles.call($t, "colHeaders", "ui-th-column ui-th-" + p.direction + " " + (o.applyLabelClasses ? cm.labelClasses || "" : "")) }),
 						thd = $("<div></div>"),
 						stbl = $("<table class='ui-search-table'><tr><td class='ui-search-oper'></td><td class='ui-search-input'></td><td class='ui-search-clear' style='width:1px'></td></tr></table>");
 					if (this.hidden === true) { $(th).css("display", "none"); }
 					this.search = this.search === false ? false : true;
 					if (this.stype === undefined) { this.stype = "text"; }
-					soptions = $.extend({ mode: mode }, searchoptions || {});
+					soptions = $.extend({ mode: mode }, searchoptions);
 					if (this.search) {
 						if (o.searchOperators) {
 							if (p.search && currentFilters[this.name] != null) {
@@ -9306,11 +9306,11 @@
 									}, jgrid.ajaxOptions, p.ajaxSelectOptions || {}));
 								} else {
 									var oSv, sep, delim;
-									if (searchoptions) {
-										oSv = (searchoptions.value === undefined ? "" : searchoptions.value) || editoptions.value;
-										sep = (searchoptions.separator === undefined ? ":" : searchoptions.separator) || editoptions.separator;
-										delim = (searchoptions.delimiter === undefined ? ";" : searchoptions.delimiter) || editoptions.delimiter;
-									} else if (editoptions) {
+									if (cm.searchoptions) {
+										oSv = searchoptions.value === undefined ? editoptions.value || "" : searchoptions.value;
+										sep = searchoptions.separator === undefined ? editoptions.separator || ":" : searchoptions.separator;
+										delim = searchoptions.delimiter === undefined ? editoptions.delimiter || ";" : searchoptions.delimiter;
+									} else if (cm.editoptions) {
 										oSv = editoptions.value === undefined ? "" : editoptions.value;
 										sep = editoptions.separator === undefined ? ":" : editoptions.separator;
 										delim = editoptions.delimiter === undefined ? ";" : editoptions.delimiter;
@@ -9359,7 +9359,7 @@
 										$("td", stbl).eq(1).append(elem);
 										jgrid.fullBoolFeedback.call($t, soptions.selectFilled, "jqGridSelectFilled", {
 											elem: elem,
-											options: searchoptions || editoptions || {},
+											options: cm.searchoptions || editoptions,
 											cm: cm,
 											cmName: cm.name,
 											iCol: ci,
