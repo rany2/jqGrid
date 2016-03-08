@@ -167,7 +167,7 @@
 					}
 					return newValue;
 				},
-				stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;true:Yes;false:No" }
+				stype: "select", searchoptions: { sopt: ["eq", "ne"], value: "true:Yes;false:No", noFilterText: "Any" }
 			},
 			// TODO: add cmTemplate for currency and date
 			actions: function () {

@@ -377,7 +377,12 @@
 						}
 					}
 					if (!columns) { return; }
-					var searchoptions = $.extend({}, columns.searchoptions || {}, { id: jgrid.randId(), name: columns.name, mode: "search" });
+					var searchoptions = $.extend(
+							{},
+							columns.editoptions || {},
+							columns.searchoptions || {},
+							{ id: jgrid.randId(), name: columns.name, mode: "search" }
+						);
 					if (isIE && columns.inputtype === "text") {
 						if (!searchoptions.size) {
 							searchoptions.size = 10;
@@ -472,7 +477,7 @@
 					}
 				}
 				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
-						$.extend({}, cm.searchoptions || {}, { id: jgrid.randId(), name: cm.name }),
+						$.extend({}, cm.editoptions || {}, cm.searchoptions || {}, { id: jgrid.randId(), name: cm.name }),
 						rule.data, true, that.p.ajaxSelectOptions || {}, true);
 				if (rule.op === "nu" || rule.op === "nn") {
 					$(ruleDataInput).attr("readonly", "true");

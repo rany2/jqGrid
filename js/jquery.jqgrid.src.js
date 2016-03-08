@@ -8845,7 +8845,7 @@
 					highlightClass = getGuiStyles.call($t, "states.select"),
 					dataFieldClass = getGuiStyles.call($t, "filterToolbar.dataField"),
 					currentFilters,
-					getFiledId = function (cmName) {
+					getId = function (cmName) {
 						var prefix = "gs_";
 						switch (o.idMode) {
 							case "compatibility":
@@ -8859,8 +8859,8 @@
 						}
 						return prefix + cmName;
 					},
-					getFiledIdSel = function (cmName) {
-						return "#" + getFiledId(cmName);
+					getIdSel = function (cmName) {
+						return "#" + getId(cmName);
 					},
 					parseFilter = function () {
 						var j, filters = p.postData.filters, filter = {}, rules, rule,
@@ -8901,7 +8901,7 @@
 						var sdata = {}, j = 0, sopt = {};
 						$.each(colModel, function () {
 							var cm = this, nm = cm.index || cm.name, v, so, searchoptions = cm.searchoptions || {},
-								$elem = $(getFiledIdSel(cm.name), (cm.frozen === true && p.frozenColumns === true) ? grid.fhDiv : grid.hDiv),
+								$elem = $(getIdSel(cm.name), (cm.frozen === true && p.frozenColumns === true) ? grid.fhDiv : grid.hDiv),
 								getFormaterOption = function (optionName, formatter) {
 									var formatoptions = cm.formatoptions || {};
 									return formatoptions[optionName] !== undefined ?
@@ -9022,7 +9022,7 @@
 						var sdata = {}, j = 0, nm;
 						trigger = (typeof trigger !== "boolean") ? true : trigger;
 						$.each(colModel, function () {
-							var v, cm = this, $elem = $(getFiledIdSel(cm.name), (cm.frozen === true && p.frozenColumns === true) ? grid.fhDiv : grid.hDiv),
+							var v, cm = this, $elem = $(getIdSel(cm.name), (cm.frozen === true && p.frozenColumns === true) ? grid.fhDiv : grid.hDiv),
 								isSindleSelect, searchoptions = cm.searchoptions || {};
 							if (searchoptions.defaultValue !== undefined) { v = searchoptions.defaultValue; }
 							nm = cm.index || cm.name;
@@ -9282,7 +9282,7 @@
 											}
 
 											if (soptions1.defaultValue !== undefined) { $select.val(soptions1.defaultValue); }
-											$select.attr({ name: cm1.index || cm1.name, id: getFiledId(cm1.name) });
+											$select.attr({ name: cm1.index || cm1.name, id: getId(cm1.name) });
 											if (soptions1.attr) { $select.attr(soptions1.attr); }
 											$select.addClass(dataFieldClass);
 											$select.css({ width: "100%" });
@@ -9318,7 +9318,7 @@
 									if (oSv) {
 										var elem = document.createElement("select");
 										elem.style.width = "100%";
-										$(elem).attr({ name: cm.index || cm.name, id: getFiledId(cm.name) });
+										$(elem).attr({ name: cm.index || cm.name, id: getId(cm.name) });
 										var sv, ov, key, k, isNoFilterValueExist;
 										if (typeof oSv === "string") {
 											so = oSv.split(delim);
@@ -9377,7 +9377,7 @@
 							case "text":
 								var df = soptions.defaultValue !== undefined ? soptions.defaultValue : "";
 
-								$("td", stbl).eq(1).append("<input type='text' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='" + getFiledId(cm.name) + "' value='" + df + "'/>");
+								$("td", stbl).eq(1).append("<input type='text' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='" + getId(cm.name) + "' value='" + df + "'/>");
 								$(thd).append(stbl);
 
 								if (soptions.attr) { $("input", thd).attr(soptions.attr); }
@@ -9415,7 +9415,7 @@
 								}
 								break;
 							case "custom":
-								$("td", stbl).eq(1).append("<span style='width:100%;padding:0;box-sizing:border-box;' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='" + getFiledId(cm.name) + "'/>");
+								$("td", stbl).eq(1).append("<span style='width:100%;padding:0;box-sizing:border-box;' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='" + getId(cm.name) + "'/>");
 								$(thd).append(stbl);
 								try {
 									if ($.isFunction(soptions.custom_element)) {
@@ -9507,7 +9507,7 @@
 						for (cmName in newFilters) {
 							if (newFilters.hasOwnProperty(cmName)) {
 								filter = newFilters[cmName];
-								$input = $(getFiledIdSel(cmName));
+								$input = $(getIdSel(cmName));
 								$input.val(filter.data);
 								$searchOper = $input.closest(".ui-search-input")
 										.siblings(".ui-search-oper")
@@ -9519,7 +9519,7 @@
 						for (i = 0; i < p.colModel.length; i++) {
 							cmName = p.colModel[i].name;
 							if (!newFilters.hasOwnProperty(cmName)) {
-								$(getFiledIdSel(cmName)).val("");
+								$(getIdSel(cmName)).val("");
 							}
 						}
 					}
@@ -10483,7 +10483,12 @@
 						}
 					}
 					if (!columns) { return; }
-					var searchoptions = $.extend({}, columns.searchoptions || {}, { id: jgrid.randId(), name: columns.name, mode: "search" });
+					var searchoptions = $.extend(
+							{},
+							columns.editoptions || {},
+							columns.searchoptions || {},
+							{ id: jgrid.randId(), name: columns.name, mode: "search" }
+						);
 					if (isIE && columns.inputtype === "text") {
 						if (!searchoptions.size) {
 							searchoptions.size = 10;
@@ -10578,7 +10583,7 @@
 					}
 				}
 				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
-						$.extend({}, cm.searchoptions || {}, { id: jgrid.randId(), name: cm.name }),
+						$.extend({}, cm.editoptions || {}, cm.searchoptions || {}, { id: jgrid.randId(), name: cm.name }),
 						rule.data, true, that.p.ajaxSelectOptions || {}, true);
 				if (rule.op === "nu" || rule.op === "nn") {
 					$(ruleDataInput).attr("readonly", "true");
@@ -18187,7 +18192,7 @@
 					}
 					return newValue;
 				},
-				stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;true:Yes;false:No" }
+				stype: "select", searchoptions: { sopt: ["eq", "ne"], value: "true:Yes;false:No", noFilterText: "Any" }
 			},
 			// TODO: add cmTemplate for currency and date
 			actions: function () {
