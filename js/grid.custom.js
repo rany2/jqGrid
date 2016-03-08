@@ -235,6 +235,7 @@
 						stringResult: false,
 						groupOp: "AND",
 						defaultSearch: "bw",
+						idMode: "new", // support "old", "compatibility", "new"
 						searchOperators: false,
 						resetIcon: "x",
 						applyLabelClasses: true,
@@ -253,7 +254,18 @@
 					dataFieldClass = getGuiStyles.call($t, "filterToolbar.dataField"),
 					currentFilters,
 					getId = function (cmName) {
-						return "gs_" + p.idPrefix + cmName;
+						var prefix = "gs_";
+						switch (o.idMode) {
+							case "compatibility":
+								prefix += p.idPrefix;
+								break;
+							case "new":
+								prefix += p.id + "_";
+								break;
+							default: // "old"
+								break;
+						}
+						return prefix + cmName;
 					},
 					getIdSel = function (cmName) {
 						return "#" + getId(cmName);
