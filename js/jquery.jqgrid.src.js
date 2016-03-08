@@ -9502,7 +9502,7 @@
 					function () {
 						var cmName, filter, newFilters = parseFilter(), p = this.p, $input, $searchOper, i;
 
-						if (!p && !p.search) { return; }
+						if (!p || !p.search || !newFilters) { return; }
 
 						for (cmName in newFilters) {
 							if (newFilters.hasOwnProperty(cmName)) {
