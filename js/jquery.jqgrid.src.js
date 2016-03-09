@@ -12094,7 +12094,7 @@
 									postdata),
 								complete: function (jqXHR, textStatus) {
 									$("#sData", frmtb2).removeClass(activeClass);
-									postdata[idname] = p.idPrefix + $("#id_g", frmtb).val();
+									postdata[idname] = $("#id_g", frmtb).val();
 									if ((jqXHR.status >= 300 && jqXHR.status !== 304) || (jqXHR.status === 0 && jqXHR.readyState === 4)) {
 										ret[0] = false;
 										ret[1] = $self.triggerHandler("jqGridAddEditErrorTextFormat", [jqXHR, editOrAdd]);
