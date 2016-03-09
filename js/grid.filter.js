@@ -97,6 +97,19 @@
 				getRes = function (property) {
 					return $(getGrid()).jqGrid("getGridRes", "search." + property);
 				},
+				getCmInfo = function (cmName) {
+					// the function convert column name or advanced property name to
+					// object with properties { cm: , iCol: }
+					var $t = getGrid(), iCol = $t.p.iColByName[cmName]; //iPropByName
+					if (iCol !== undefined) {
+						return { cm: $t.p.colModel[iCol], iCol: iCol };
+					}
+					iCol = $t.p.iPropByName[cmName];
+					if (iCol !== undefined) {
+						return { cm: $t.p.colModel[iCol], iCol: iCol, isAddProp: true };
+					}
+					return { cm: null, iCol: -1 };
+				},
 				errorClass = getGuiStyles("states.error"),
 				dialogContentClass = getGuiStyles("dialog.content");
 
@@ -126,6 +139,7 @@
 				if (!cl.label) {
 					cl.label = cl.name;
 				}
+				cl.cmName = cl.name;
 				if (cl.index) {
 					cl.name = cl.index;
 				}
@@ -381,6 +395,7 @@
 							{},
 							columns.editoptions || {},
 							columns.searchoptions || {},
+							getCmInfo(columns.cmName),
 							{ id: jgrid.randId(), name: columns.name, mode: "search" }
 						);
 					if (isIE && columns.inputtype === "text") {
@@ -477,7 +492,7 @@
 					}
 				}
 				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
-						$.extend({}, cm.editoptions || {}, cm.searchoptions || {}, { id: jgrid.randId(), name: cm.name }),
+						$.extend({}, cm.editoptions || {}, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name }),
 						rule.data, true, that.p.ajaxSelectOptions || {}, true);
 				if (rule.op === "nu" || rule.op === "nn") {
 					$(ruleDataInput).attr("readonly", "true");

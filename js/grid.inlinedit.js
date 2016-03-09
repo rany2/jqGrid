@@ -110,7 +110,8 @@
 						}
 						svr[nm] = tmp; // include only editable fields in svr object
 						$dataFiled.html("");
-						opt = $.extend({}, editoptions, { id: rowid + "_" + nm, name: nm, rowId: rowid, mode: options.mode });
+						opt = $.extend({}, editoptions,
+							{ id: rowid + "_" + nm, name: nm, rowId: rowid, mode: options.mode, cm: cm, iCol: iCol });
 						if (tmp === "&nbsp;" || tmp === "&#160;" || (tmp.length === 1 && tmp.charCodeAt(0) === 160)) { tmp = ""; }
 						elc = jgrid.createEl.call($t, edittype, opt, tmp, true, $.extend({}, jgrid.ajaxOptions, p.ajaxSelectOptions || {}));
 						$(elc).addClass("editable");

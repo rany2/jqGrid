@@ -423,9 +423,8 @@
 					break;
 				case "select":
 					elem = document.createElement("select");
-					var msl, ovm = [], iCol = p.iColByName[options.name], cm = p.colModel[iCol], isSelected;
+					var msl, ovm = [], isSelected;
 
-					if (cm == null) { return ""; }
 					if (options.multiple === true) {
 						msl = true;
 						elem.multiple = "multiple";
@@ -441,7 +440,7 @@
 					}
 					if (options.dataUrl !== undefined) {
 						var rowid = null, postData = options.postData || ajaxso.postData,
-							ajaxContext = { elem: elem, options: options, cm: cm, iCol: iCol, ovm: ovm };
+							ajaxContext = { elem: elem, options: options, cm: options.cm, iCol: options.iCol, ovm: ovm };
 						try {
 							rowid = options.rowId;
 						} catch (ignore) { }
@@ -488,7 +487,7 @@
 											elem: elem1,
 											options: options1,
 											cm: cm1,
-											cmName: cm1.name,
+											cmName: cm1 != null ? cm1.name : options1.name,
 											iCol: iCol1
 										});
 									}, 0);
@@ -559,9 +558,9 @@
 						jgrid.fullBoolFeedback.call($t, options.selectFilled, "jqGridSelectFilled", {
 							elem: elem,
 							options: options,
-							cm: cm,
-							cmName: cm.name,
-							iCol: iCol
+							cm: options.cm,
+							cmName: options.cm != null ? options.cm.name : options.name,
+							iCol: options.iCol
 						});
 					}
 					break;

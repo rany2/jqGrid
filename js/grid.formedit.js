@@ -594,7 +594,8 @@
 								}
 								if (isEmptyString(tmp)) { tmp = ""; }
 							}
-							var opt = $.extend({}, cm.editoptions || {}, { id: nm, name: nm, rowId: rowid1, mode: mode }),
+							var opt = $.extend({}, cm.editoptions || {},
+									{ id: nm, name: nm, rowId: rowid1, mode: mode, cm: cm, iCol: iCol }),
 								frmopt = $.extend({}, { elmprefix: "", elmsuffix: "", rowabove: false, rowcontent: "" }, cm.formoptions || {}),
 								rp = parseInt(frmopt.rowpos, 10) || cnt + 1,
 								cp = parseInt((parseInt(frmopt.colpos, 10) || 1) * 2, 10);

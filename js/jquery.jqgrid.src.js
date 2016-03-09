@@ -7367,7 +7367,8 @@
 						}
 					}
 					feedback.call($t, "beforeEditCell", rowid, nm, tmp, iRow, iCol);
-					var opt = $.extend({}, cm.editoptions || {}, { id: iRow + "_" + nm, name: nm, rowId: rowid, mode: mode });
+					var opt = $.extend({}, cm.editoptions || {},
+						{ id: iRow + "_" + nm, name: nm, rowId: rowid, mode: mode, cm: cm, iCol: iCol });
 					var elc = jgrid.createEl.call($t, edittype, opt, tmp, true, $.extend({}, jgrid.ajaxOptions, p.ajaxSelectOptions || {})),
 						$dataFiled = cc,
 						editingColumnWithTreeGridIcon = p.treeGrid === true && nm === p.ExpandColumn;
@@ -8235,9 +8236,8 @@
 					break;
 				case "select":
 					elem = document.createElement("select");
-					var msl, ovm = [], iCol = p.iColByName[options.name], cm = p.colModel[iCol], isSelected;
+					var msl, ovm = [], isSelected;
 
-					if (cm == null) { return ""; }
 					if (options.multiple === true) {
 						msl = true;
 						elem.multiple = "multiple";
@@ -8253,7 +8253,7 @@
 					}
 					if (options.dataUrl !== undefined) {
 						var rowid = null, postData = options.postData || ajaxso.postData,
-							ajaxContext = { elem: elem, options: options, cm: cm, iCol: iCol, ovm: ovm };
+							ajaxContext = { elem: elem, options: options, cm: options.cm, iCol: options.iCol, ovm: ovm };
 						try {
 							rowid = options.rowId;
 						} catch (ignore) { }
@@ -8300,7 +8300,7 @@
 											elem: elem1,
 											options: options1,
 											cm: cm1,
-											cmName: cm1.name,
+											cmName: cm1 != null ? cm1.name : options1.name,
 											iCol: iCol1
 										});
 									}, 0);
@@ -8371,9 +8371,9 @@
 						jgrid.fullBoolFeedback.call($t, options.selectFilled, "jqGridSelectFilled", {
 							elem: elem,
 							options: options,
-							cm: cm,
-							cmName: cm.name,
-							iCol: iCol
+							cm: options.cm,
+							cmName: options.cm != null ? options.cm.name : options.name,
+							iCol: options.iCol
 						});
 					}
 					break;
@@ -10215,6 +10215,19 @@
 				getRes = function (property) {
 					return $(getGrid()).jqGrid("getGridRes", "search." + property);
 				},
+				getCmInfo = function (cmName) {
+					// the function convert column name or advanced property name to
+					// object with properties { cm: , iCol: }
+					var $t = getGrid(), iCol = $t.p.iColByName[cmName]; //iPropByName
+					if (iCol !== undefined) {
+						return { cm: $t.p.colModel[iCol], iCol: iCol };
+					}
+					iCol = $t.p.iPropByName[cmName];
+					if (iCol !== undefined) {
+						return { cm: $t.p.colModel[iCol], iCol: iCol, isAddProp: true };
+					}
+					return { cm: null, iCol: -1 };
+				},
 				errorClass = getGuiStyles("states.error"),
 				dialogContentClass = getGuiStyles("dialog.content");
 
@@ -10244,6 +10257,7 @@
 				if (!cl.label) {
 					cl.label = cl.name;
 				}
+				cl.cmName = cl.name;
 				if (cl.index) {
 					cl.name = cl.index;
 				}
@@ -10499,6 +10513,7 @@
 							{},
 							columns.editoptions || {},
 							columns.searchoptions || {},
+							getCmInfo(columns.cmName),
 							{ id: jgrid.randId(), name: columns.name, mode: "search" }
 						);
 					if (isIE && columns.inputtype === "text") {
@@ -10595,7 +10610,7 @@
 					}
 				}
 				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
-						$.extend({}, cm.editoptions || {}, cm.searchoptions || {}, { id: jgrid.randId(), name: cm.name }),
+						$.extend({}, cm.editoptions || {}, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name }),
 						rule.data, true, that.p.ajaxSelectOptions || {}, true);
 				if (rule.op === "nu" || rule.op === "nn") {
 					$(ruleDataInput).attr("readonly", "true");
@@ -11787,7 +11802,8 @@
 								}
 								if (isEmptyString(tmp)) { tmp = ""; }
 							}
-							var opt = $.extend({}, cm.editoptions || {}, { id: nm, name: nm, rowId: rowid1, mode: mode }),
+							var opt = $.extend({}, cm.editoptions || {},
+									{ id: nm, name: nm, rowId: rowid1, mode: mode, cm: cm, iCol: iCol }),
 								frmopt = $.extend({}, { elmprefix: "", elmsuffix: "", rowabove: false, rowcontent: "" }, cm.formoptions || {}),
 								rp = parseInt(frmopt.rowpos, 10) || cnt + 1,
 								cp = parseInt((parseInt(frmopt.colpos, 10) || 1) * 2, 10);
@@ -14545,7 +14561,8 @@
 						}
 						svr[nm] = tmp; // include only editable fields in svr object
 						$dataFiled.html("");
-						opt = $.extend({}, editoptions, { id: rowid + "_" + nm, name: nm, rowId: rowid, mode: options.mode });
+						opt = $.extend({}, editoptions,
+							{ id: rowid + "_" + nm, name: nm, rowId: rowid, mode: options.mode, cm: cm, iCol: iCol });
 						if (tmp === "&nbsp;" || tmp === "&#160;" || (tmp.length === 1 && tmp.charCodeAt(0) === 160)) { tmp = ""; }
 						elc = jgrid.createEl.call($t, edittype, opt, tmp, true, $.extend({}, jgrid.ajaxOptions, p.ajaxSelectOptions || {}));
 						$(elc).addClass("editable");

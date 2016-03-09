@@ -145,7 +145,8 @@
 						}
 					}
 					feedback.call($t, "beforeEditCell", rowid, nm, tmp, iRow, iCol);
-					var opt = $.extend({}, cm.editoptions || {}, { id: iRow + "_" + nm, name: nm, rowId: rowid, mode: mode });
+					var opt = $.extend({}, cm.editoptions || {},
+						{ id: iRow + "_" + nm, name: nm, rowId: rowid, mode: mode, cm: cm, iCol: iCol });
 					var elc = jgrid.createEl.call($t, edittype, opt, tmp, true, $.extend({}, jgrid.ajaxOptions, p.ajaxSelectOptions || {})),
 						$dataFiled = cc,
 						editingColumnWithTreeGridIcon = p.treeGrid === true && nm === p.ExpandColumn;
