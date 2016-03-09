@@ -3961,14 +3961,16 @@
 											query = query.or();
 										}
 										cmi1 = cmtypes[rule.field];
-										r = cmi1.reader;
-										query = compareFnMap[rule.op](query, opr)(
-											isFunction(r) ?
-													"jQuery.jgrid.getAccessor(this,jQuery(\"" + p.idSel + "\")[0].p.colModel[" + cmi1.iCol + "].jsonmap)" :
-													"jQuery.jgrid.getAccessor(this,'" + r + "')",
-											rule.data,
-											cmtypes[rule.field]
-										);
+										if (cmi1 != null) {
+											r = cmi1.reader;
+											query = compareFnMap[rule.op](query, opr)(
+												isFunction(r) ?
+														"jQuery.jgrid.getAccessor(this,jQuery(\"" + p.idSel + "\")[0].p.colModel[" + cmi1.iCol + "].jsonmap)" :
+														"jQuery.jgrid.getAccessor(this,'" + r + "')",
+												rule.data,
+												cmtypes[rule.field]
+											);
+										}
 									} else if (p.customSortOperations != null && p.customSortOperations[rule.op] != null && isFunction(p.customSortOperations[rule.op].filter)) {
 										query = query.custom(rule.op, rule.field, rule.data);
 									}
@@ -8191,6 +8193,9 @@
 					$(elm).attr("id", jgrid.randId());
 				}
 			}
+
+			if (options == null) { return ""; }
+
 			switch (eltype) {
 				case "textarea":
 					elem = document.createElement("textarea");
@@ -8231,6 +8236,8 @@
 				case "select":
 					elem = document.createElement("select");
 					var msl, ovm = [], iCol = p.iColByName[options.name], cm = p.colModel[iCol], isSelected;
+
+					if (cm == null) { return ""; }
 					if (options.multiple === true) {
 						msl = true;
 						elem.multiple = "multiple";
@@ -8867,7 +8874,11 @@
 							iColByName = p.iColByName, cm, soptions;
 						if (!filters) { return; }
 						if (typeof filters === "string") {
-							filters = $.parseJSON(filters);
+							try {
+								filters = $.parseJSON(filters);
+							} catch (ignore) {
+								filters = {};
+							}
 						}
 						rules = (filters || {}).rules;
 						if (filters == null ||

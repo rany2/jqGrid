@@ -3961,14 +3961,16 @@
 											query = query.or();
 										}
 										cmi1 = cmtypes[rule.field];
-										r = cmi1.reader;
-										query = compareFnMap[rule.op](query, opr)(
-											isFunction(r) ?
-													"jQuery.jgrid.getAccessor(this,jQuery(\"" + p.idSel + "\")[0].p.colModel[" + cmi1.iCol + "].jsonmap)" :
-													"jQuery.jgrid.getAccessor(this,'" + r + "')",
-											rule.data,
-											cmtypes[rule.field]
-										);
+										if (cmi1 != null) {
+											r = cmi1.reader;
+											query = compareFnMap[rule.op](query, opr)(
+												isFunction(r) ?
+														"jQuery.jgrid.getAccessor(this,jQuery(\"" + p.idSel + "\")[0].p.colModel[" + cmi1.iCol + "].jsonmap)" :
+														"jQuery.jgrid.getAccessor(this,'" + r + "')",
+												rule.data,
+												cmtypes[rule.field]
+											);
+										}
 									} else if (p.customSortOperations != null && p.customSortOperations[rule.op] != null && isFunction(p.customSortOperations[rule.op].filter)) {
 										query = query.custom(rule.op, rule.field, rule.data);
 									}

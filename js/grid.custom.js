@@ -275,7 +275,11 @@
 							iColByName = p.iColByName, cm, soptions;
 						if (!filters) { return; }
 						if (typeof filters === "string") {
-							filters = $.parseJSON(filters);
+							try {
+								filters = $.parseJSON(filters);
+							} catch (ignore) {
+								filters = {};
+							}
 						}
 						rules = (filters || {}).rules;
 						if (filters == null ||

@@ -381,6 +381,9 @@
 					$(elm).attr("id", jgrid.randId());
 				}
 			}
+
+			if (options == null) { return ""; }
+
 			switch (eltype) {
 				case "textarea":
 					elem = document.createElement("textarea");
@@ -421,6 +424,8 @@
 				case "select":
 					elem = document.createElement("select");
 					var msl, ovm = [], iCol = p.iColByName[options.name], cm = p.colModel[iCol], isSelected;
+
+					if (cm == null) { return ""; }
 					if (options.multiple === true) {
 						msl = true;
 						elem.multiple = "multiple";
