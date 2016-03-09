@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-08
+ * Date: 2016-03-09
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -4318,7 +4318,7 @@
 							break;
 						case "jsonstring":
 							beginReq.call(self);
-							dstr = typeof p.datastr === "string" ? $.parseJSON(p.datastr) : p.datastr;
+							dstr = p.datastr && typeof p.datastr === "string" ? $.parseJSON(p.datastr) : p.datastr;
 							readInput.call(self, dstr);
 							finalReportSteps();
 							if (p.forceClientSorting) { readLocal(); }

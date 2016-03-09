@@ -273,6 +273,7 @@
 					parseFilter = function () {
 						var j, filters = p.postData.filters, filter = {}, rules, rule,
 							iColByName = p.iColByName, cm, soptions;
+						if (!filters) { return; }
 						if (typeof filters === "string") {
 							filters = $.parseJSON(filters);
 						}
@@ -597,7 +598,7 @@
 					tr = $("<tr></tr>", { "class": "ui-search-toolbar", role: "row" });
 
 				if (o.loadFilterDefaults) {
-					currentFilters = parseFilter();
+					currentFilters = parseFilter() || {};
 				}
 				// create the row
 				$.each(colModel, function (ci) {
