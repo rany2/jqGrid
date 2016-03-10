@@ -7,7 +7,7 @@ jqGrid was developed mostly by [Tony Tomov](https://github.com/tonytomov) in the
 
 The code from the GitHib repository is the fork of jqGrid 4.7.0 - the latest version available under MIT/GPL-licenses. It will be provided under MIT/GPL-licenses.
 
-Below you can find short description of new features and bug fixes implemented in free jqGrid 4.13.0 (compared with version 4.12.1). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](http://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
+Below you can find short description of new features and bug fixes implemented in free jqGrid 4.13.1 (compared with version 4.13.0). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](http://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
 
 Read [Wiki](https://github.com/free-jqgrid/jqGrid/wiki) for more detailed information about the features of free-jqGrid. The preliminary version of the documentation can be found [here](http://free-jqgrid.github.io/).
 
@@ -17,15 +17,15 @@ One can install the package with respect of [bower](http://bower.io/search/?q=fr
 
 Free jqGrid is published on [cdnjs](https://cdnjs.com/libraries/free-jqgrid) and [jsDelivr CDN](http://www.jsdelivr.com/#!free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
 ```html
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.0/css/ui.jqgrid.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.0/js/i18n/grid.locale-de.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.0/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.1/css/ui.jqgrid.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.1/js/i18n/grid.locale-de.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.1/js/jquery.jqgrid.min.js"></script>
 ```
 or
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.13.0/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.0/js/i18n/grid.locale-de.min.js"></script>
-<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.0/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.13.1/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.1/js/i18n/grid.locale-de.min.js"></script>
+<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.1/js/jquery.jqgrid.min.js"></script>
 ```
 The locale file is optional. One can, but one don't need to include `grid.locale-en.min.js`, becusue the same information is already included in `jquery.jqgrid.min.js`.
 
@@ -37,64 +37,78 @@ If somebody want to test the *latest* version of free jqGrid, one can load it di
 ```
 All other language files and plugins are available from CDN too. See [the wiki article](https://github.com/free-jqgrid/jqGrid/wiki/Access-free-jqGrid-from-different-CDNs) for more details about the usage of free jqGrid from CDNs and RawGit.
 
-The package is published on [WebJars](http://www.webjars.org/) and it's deployed on [Maven Central]((http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22free-jqgrid%22)) too.
+The package is published on [WebJars](http://www.webjars.org/) and it's deployed on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cfree-jqgrid) too.
 
-Remark: the above URLs will be available **after publishing** the release of the version of 4.13.0.
+Remark: the above URLs will be available **after publishing** the release of the version of 4.13.1.
 
-### Main new features and improvements implemented in the version 4.13.0.
+### Main new features and improvements implemented in the version 4.13.1:
 
-* Free jqGrid can be used now without jQuery UI CSS, only with Bootstrap CSS and optional Font Awesome. One need just add `guiStyle: "bootstrap"` or `guiStyle: "bootstrapPrimary"` to existing grid.
-* New `iconSet: "glyph"` is supported now. It allows to use only Bootstrap CSS without Font Awesome.
-* One can customize the `iconSet` now more easy by usage of `baseIconSet` property.
-* The CSS settings of jqGrid are changed a little because of including support of Bootstrap CSS. As the results some width of columns and some other CSS setting could be changed a little. If you created the grids, which uses every pixel of the results exactly, then you could have to make some changes of the width and height values after upgrade to free jqGrid 4.13.0.
-* Some minor changes are made in `$.jgrid.viewModal`. Such changes can produces compatibility problems with the old code. It could be important **only if you call the method directly in your code**. In the case one should add `.call(gridDOM, ...` to the call of `$.jgrid.viewModal` to initialize `this` of `$.jgrid.viewModal` to the DOM element of the grid.
+* Add new `noFilterText` property of `searchoptions`, which allows to add the entry in the filter to clear filtering by the column.
+* New `loadFilterDefaults: true` option and `jqGridRefreshFilterValues` event added. It force filling the filter toolbar based of the filter applied to the grid. Only `postData.filters` will be supported.
+* The ruls of building ids of input elements of the filter toolbar are changed. The new `idMode` of `filterToolbar` allows to customize the changes or to force the usage of old id rules. See the comment to [the commit](https://github.com/free-jqgrid/jqGrid/commit/7cc612034a48d3521d97d2445456cf672a262b0c).
+* Performance improvement of scrolling.
 
-Some demos could be helpful for understanding how `guiStyle: "bootstrap"`, `guiStyle: "bootstrapPrimary"` and `iconSet` can be used:
+An example of the usage
+```JavaScript
+{ name: "ship_via", width: 85, align: "center", formatter: "select", autoResizing: { minColWidth: 85 },
+	edittype: "select", editoptions: { value: "FE:FedEx;TN:TNT;DH:DHL", defaultValue: "DH" },
+	stype: "select", searchoptions: { sopt: ["eq", "ne"], noFilterText: "Any" } }
+```
+instead of
+```JavaScript
+{ name: "ship_via", width: 85, align: "center", formatter: "select", autoResizing: { minColWidth: 85 },
+	edittype: "select", editoptions: { value: "FE:FedEx;TN:TNT;DH:DHL", defaultValue: "DH" },
+	stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;FE:FedEx;TN:TNT;DH:DHL" } }
+```
+Additional advantage of the usage of `noFilterText: "Any"`: the option `<option value="">Any</option>` will be included as the first entry *only in the filter toolbar*. Searching dialog will don't have the option.
 
-* [Bootstrap with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap.htm) - The demo demonstrates the usage of the new option `guiStyle: "bootstrap"`. No jQuery UI CSS is used in the demo.
-* [BootstrapPrimary with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrapPrimary.htm) - The demo is very close to the previous one, but it uses `guiStyle: "bootstrapPrimary"`. It changes the style of buttons in the modal dialogs.
-* [Bootstrap glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap-glyph.htm) - The demo uses no jQuery UI CSS and Font Awesome. All CSS and icons are from Bootstrap. It uses `iconSet: "glyph"`.
-* [TreeGrid with Bootstrap and custom iconSet based on glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/LocalAdjacencyTree-glyph.htm) - The demo domonstrates how one can ovewrite some icons from `iconSet: "glyph"`. The demo use custom icons for tree nodes and it uses no icons for leafs.
-* [Grouping with Bootstrap glyph fonts and custom colors](http://www.ok-soft-gmbh.com/jqGrid/OK/grouping-bootstrap-glyph.htm) - The demo uses `guiStyle: "bootstrap"` with data groupinh. It shows additionally how one can customize colors or border and background color of some jqGrid elements.
-* [jQuery UI](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui.htm) - the base demo which uses jQuery UI CSS and the icons from jQuery UI.
-* [jQuery UI with Font Awesome](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa.htm) - the same demo, but with Font Awesome CSS and the option `iconSet: "fontAwesome"`.
-* [jQuery UI with glyph fonts](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-glyph.htm) - the demo which uses jQuery UI CSS, but glyph icons from Bootsrap.
+The new default option `loadFilterDefaults: true` of the filter toolbar is very practical if one uses both the Filter Toolbar and the Searching Dialog in one grid. Setting simple filter via the Searching Dialog will be displayed in the filter toolbar. Another important case is preloading the grid with the filter applied.
 
-### The below is the full list of changes in the version 4.13.0 compared with 4.12.1.
+[the demo](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa1.htm) and [another one](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa-bootstrap.htm), but using Bootsrap gui style uses the following options
+```JavaScript
+search: true,
+postData: {
+    filters: {
+        groupOp: "AND",
+        rules: [
+            { op: "le", field: "tax", data: "20" },
+            { op: "gt", field: "amount", data: "250" }
+        ]
+    }
+}
+```
+and the filter will be displayed in the filter toolbar immediately during creating.
 
-Remark: The list below doesn’t include temporary changes and fixes, which are not important for the final state of the version 4.13.0.
+**BREAKING CHANGES**: The ruls of building ids of input elements of the filter toolbar are changed. Free jqGrid uses now the rule: `"gs_" + gridId + columnName` instead of using `"gs_" + columnName` before. It fixes problems, like the usage of jQuery UI Datepicker for the second grid on the page, in case of using the filter toolbar by multiple grids and having the same column names. The new option `idMode` allows to manage the rule of building ids. The option `idMode: "old"` forces the usage of old rule (`"gs_" + columnName`) for building of ids. The option `idMode: "compatibility"` creates the ids based on another rule: `"gs_" + idPrefix + columnName`. The rule would be helpful only if one uses `idPrefix` options with *different* `idPrefix` values for every grid. One can still have id duplicates if one don't use any `idPrefix` on multiple grids. The default value `idMode: "new"` uses `"gs_" + gridId + columnName`. It garantees no id duplicates in multiple grids.
 
-* New `baseIconSet` property can be used in the definition of new `iconSet` in `$.jgrid.icons`. It allows easy to define new `iconSet` by modifying of some settings of existing `iconSet` (currently `"jQueryUI"`, `"fontAwesome"` and `"glyph"`). In the same way the new `guiStyles` can be defined using `baseGuiStyle` property. The definition of the guiStyle `bootstrapPrimary` reference the setting of `bootstrap` and just overwrite *some properties*.
-* Some old and unused files are removed from GitHub repository. Gradle is not more used for the build process.
-* Unifications of checkbox formatters and templates. There are exist now only one `formatter: "checkbox"` and `template: "booleanCheckbox"`. The old `formatter: "checkboxFontAwesome4"` and `template: "booleanCheckboxFa"` are still supported, but contain just the reference to the implementation of `formatter: "checkbox"` and `template: "booleanCheckbox"`.
-* Including new methods `isBootstrapGuiStyle` and `isBootstrapGuiStyle` used internally to detect the `guiStyle` and the `iconSet`.
-* Include support of the third `iconSet`: glyphicons. One can now include Bootstrap CSS and to use `iconSet: "glyph"`.
-* Some renaming of internal variables in the code to prevent the usage of the names defined in outer scope.
-* Fix the usage of correct font of Alert dialog. It is now based on the `guiStyle` settings.
-* Drop `$.jgrid.parse` setting and use always `$.parseJSON` to parse JSON data.
-* Drop code fragment for IE7 and jQuery versions less the 1.6.
-* Bug fix: remove unneeded trimming of value of `<select>` of the searching toolbar created by `stype:"select"`.
-* Fix closing of Modal dialogs in case of click of right mouse button on the "Close" button of the dialog title.
-* Saving of the last position of Add/Edit dialog is *removed* from free jqGrid. The problem was incorrect restoring of the position in more complex CSS scenarios. The problem exist in advanced scenarios or in case of different combination of other dialog parameters (`toTop`, `overlay`, ..,). For example, if jqGrid is created inside of jQuery UI dialog or inside of inside of complex Bootstrap structurs or just inside of the hirarchy of parents of jqGrid which contains mix values of `position` settings (`position: absolute`, `position: relative`, ...) then the calculation of position is very complex. Between of two opening of the Edit dialog the position of the parents (jQuery UI Dialog, which contains the grid) of the grid could be changed and the old position could be outside of visible area. There are too many aspects and the simple saving of previos position become really complex. Because of the complexity and many bug reports in the past the new versions of free jqGrid dropped the feature. One can still use `onClose` and `afterShowForm` callbacks to implement the feature in more simple scenario.
-* Bug fix of processing of <kbd>Enter</kbd> key in `navGrid`. The old code produced incorrect results in View dialog on pressing <kbd>Enter</kbd> key.
-* Bug fix of `addRowData` by usage of array of data as the input.
-* Updated Catalan and Spanish translations: `grid.locale-ca.js` and `grid.locale-es.js`.
-* Reorganize many parts of code and internal structures of jqGrid to support new `guiStyle: "bootstrap"` option, which allows to format jqGrid using CSS classes of Bootstrap.
-* CSS structure of buttons of navigator, pager and `formatter: "actions"` is changed. The old "dancing" of buttons on hovering is not exist more (the "dancing" was before in case of zooming the page to any value exepting 100%, 200% and so on).
-* The bug with placing duplicates of rowids in `selarrrow`, in case of usage `multiPageSelection: true, multiselect: true` and clicking on "Select All" button, is fixed.
-* The bug with sorting of local grid filled *without* `id` values is fixed.
-* Resizable icon used with Font Awesome to resize the dialog is changed. Not one uses vector icon from Font Awesome.
-* The `$.jgrid.viewModal` is changed. It has to be called with `this` initialized to DOM of grid. **The code which uses the methods directrly have to be changed to intialize `this` to the DOM of the grid**.
-* Default value of `cols` for `edittype: "textarea"` is changed from 20 to 19 because of increasing the margin and padding values in the Add/Edit dialog.
-* Remove chaching of some jqGrid methods (`$.jgrid.viewModal`, `$.jgrid.hideModal`, `$.jgrid.createModal` and `$.jgrid.info_dialog`) from form editing module (`grid.formedit.js`). It allows to ovewrite (to subclass) the methods.
-* Fix `localData` property of `afterSetRow` callback.
-* Update Polish translation `grid.locale-pl.js`.
-* Improve the usage of `beforeSubmit` and `afterSubmit` callbacks of form editing. Old versions of the callbackes **required** that the methods return results as an array. If, for example, one forgets to return the value in the required format it produed unhandled exception. The new changes test the results of `beforeSubmit` and `afterSubmit` callbacks and continues the standard processing.
-* Improve performance of `showHideCol`, `hideCol`, `showCol` and `columnChooser`. New additional parameter of `showHideCol`, `hideCol` and `showCol` methods is object with three Boolean properties `skipSetGroupHeaders`, `skipFeedback`, `skipSetGridWidth`. Specifying of `true` values for any from the properties force skipping of the corresponding parts of `showHideCol` code. The usage of the options is very helpful in case of sequensial multipe calles, for example from `columnChooser`. Skipping of unneeded actions in the intermediate calls improves the performance and holds the same final results.
-* Bug fix `createEl` (existing in versions starting with the version 4.9.2) in parsing of option `value` of `edittype: "select"`.
+We recommend everybody to scan your existing code for the string `gs_`. If no such places will be found then you can be sure that your code will have no compatibility problems. If you will find such places in your code then you cab deside, whether to change the code and to include the grid id in your code or to force the usage of old or the compatibility rule, for example: `idMode: "compatibility"`. To force compatibility rule you can add the following code
+```JavaScript
+$.jgrid = $.jgrid || {};
+$.jgrid.search = $.jgrid.search || {};
+$.jgrid.search.idMode = "compatibility"; // or "old" instead of default
+"new", which creates safe id values
+```
+somewhere at the beginning of your code. Alternatively you can use `searching: {idMode: "compatibility"}` option or even `searching: {idMode: "old"}`
+
+### The below is the full list of changes in the version 4.13.1 compared with 4.13.0:
+
+* Bug fix of the usage of `idPrefix` in the form editing.
+* The ruls of building ids of input elements of the filter toolbar are changed. The new `idMode` of `filterToolbar` allows to customize the changes or to force the usage of old id rules.
+* New `loadFilterDefaults: true` option and `jqGridRefreshFilterValues` event added. It force filling the filter toolbar based of the filter applied to the grid. Only `postData.filters` will be supported.
+* Remove some additional places which works only for IE7 and lower.
+* Fix styling of legacy/simple subgrid for Bootstrap style.
+* Bug fix of compatibility to IE8 in `formatter: "checkbox"`.
+* Improvement performance of scrolling.
+* Add new `noFilterText` property of `searchoptions`, which allows to add the entry in the filter to clear filtering by the column.
+* Properties of `searchoptions` can be skipped if the same properties exists in `editoptions` and if `stype: "select"`.
+* Add normalizing of undefined values of the column with `formatter: "number"` or `formatter: "integer"`. Undefiled data for such cloumns will be interpreted now correctly as `0` during filtering.
+* remove usage global `jQuery` variable for local filtering. `jQuery.noConflict` is full supported now.
+* Bug fix in `getFullTreeNode` in case of usage numeric `id` (instead of string `id`).
+* Updated bootstrap styling for the "loading" mesage.
 
 Other readmes contain the list of the features and bug fixed implemented before:
 
+* [README4.13.0.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.0.md) contains the readme of free jqGrid 4.13.0.
 * [README4.12.1.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.12.1.md) contains the readme of free jqGrid 4.12.1.
 * [README4.12.0.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.12.0.md) contains the readme of free jqGrid 4.12.0.
 * [README4.11.1.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.11.1.md) contains the readme of free jqGrid 4.11.1.
