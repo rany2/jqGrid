@@ -15,7 +15,9 @@ Free jqGrid can be used *for free*. We still ask to contribute the development b
 
 One can install the package with respect of [bower](http://bower.io/search/?q=free-jqgrid) by using "bower install free-jqgrid", with respect of [npm](https://www.npmjs.com/package/free-jqgrid) by using "npm install free-jqgrid" or from [NuGet](https://www.nuget.org/packages/free-jqGrid) by using "Install-Package free-jqGrid".
 
-Free jqGrid is published on [cdnjs](https://cdnjs.com/libraries/free-jqgrid) and [jsDelivr CDN](http://www.jsdelivr.com/#!free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
+The package is published on [WebJars](http://www.webjars.org/) and it's deployed on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cfree-jqgrid) too.
+
+Free jqGrid is is available from [cdnjs](https://cdnjs.com/libraries/free-jqgrid) and [jsDelivr CDN](http://www.jsdelivr.com/#!free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
 ```html
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.1/css/ui.jqgrid.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.1/js/i18n/grid.locale-de.min.js"></script>
@@ -37,18 +39,16 @@ If somebody want to test the *latest* version of free jqGrid, one can load it di
 ```
 All other language files and plugins are available from CDN too. See [the wiki article](https://github.com/free-jqgrid/jqGrid/wiki/Access-free-jqGrid-from-different-CDNs) for more details about the usage of free jqGrid from CDNs and RawGit.
 
-The package is published on [WebJars](http://www.webjars.org/) and it's deployed on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cfree-jqgrid) too.
-
 Remark: the above URLs will be available **after publishing** the release of the version of 4.13.1.
 
 ### Main new features and improvements implemented in the version 4.13.1:
 
-* Add new `noFilterText` property of `searchoptions`, which allows to add the entry in the filter to clear filtering by the column.
-* New `loadFilterDefaults: true` option and `jqGridRefreshFilterValues` event added. It force filling the filter toolbar based of the filter applied to the grid. Only `postData.filters` will be supported.
-* The ruls of building ids of input elements of the filter toolbar are changed. The new `idMode` of `filterToolbar` allows to customize the changes or to force the usage of old id rules. See the comment to [the commit](https://github.com/free-jqgrid/jqGrid/commit/7cc612034a48d3521d97d2445456cf672a262b0c).
+* The new `noFilterText` property of `searchoptions` is added, which allows to add the entry in the filter to clear filtering by the column.
+* The new option `loadFilterDefaults: true` of the `filterToolbar` and the event `jqGridRefreshFilterValues` of jqGrid are added. They force filling the filter toolbar based of the filter applied to the grid. Only `postData.filters` is supported.
+* The ruls of building of ids of input elements of the filter toolbar are changed. The new option `idMode` of `filterToolbar` allows to customize the changes or to force the usage of old id rules. See the comment to [the commit](https://github.com/free-jqgrid/jqGrid/commit/7cc612034a48d3521d97d2445456cf672a262b0c).
 * Performance improvement of scrolling.
 
-An example of the usage
+For example, one can use now
 ```JavaScript
 { name: "ship_via", width: 85, align: "center", formatter: "select", autoResizing: { minColWidth: 85 },
 	edittype: "select", editoptions: { value: "FE:FedEx;TN:TNT;DH:DHL", defaultValue: "DH" },
@@ -60,11 +60,11 @@ instead of
 	edittype: "select", editoptions: { value: "FE:FedEx;TN:TNT;DH:DHL", defaultValue: "DH" },
 	stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;FE:FedEx;TN:TNT;DH:DHL" } }
 ```
-Additional advantage of the usage of `noFilterText: "Any"`: the option `<option value="">Any</option>` will be included as the first entry *only in the filter toolbar*. Searching dialog will don't have the option.
+Additional advantage of the usage of `noFilterText: "Any"`: the option `<option value="">Any</option>` will be included as the first entry *only in the filter toolbar*. The searching dialog will don't have the option.
 
-The new default option `loadFilterDefaults: true` of the filter toolbar is very practical if one uses both the Filter Toolbar and the Searching Dialog in one grid. Setting simple filter via the Searching Dialog will be displayed in the filter toolbar. Another important case is preloading the grid with the filter applied.
+The new default option `loadFilterDefaults: true` of the filter toolbar is very practical if one uses both the Filter Toolbar and the Searching Dialog in one grid. Setting of a simple filter via the Searching Dialog will be displayed in the filter toolbar. Another important case is loading the grid with the filter applied.
 
-[the demo](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa1.htm) and [another one](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa-bootstrap.htm), but using Bootsrap gui style uses the following options
+[The demo](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa1.htm) and [another one](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa-bootstrap.htm), which uses Bootsrap GUI style, use the following options:
 ```JavaScript
 search: true,
 postData: {
@@ -79,16 +79,15 @@ postData: {
 ```
 and the filter will be displayed in the filter toolbar immediately during creating.
 
-**BREAKING CHANGES**: The ruls of building ids of input elements of the filter toolbar are changed. Free jqGrid uses now the rule: `"gs_" + gridId + columnName` instead of using `"gs_" + columnName` before. It fixes problems, like the usage of jQuery UI Datepicker for the second grid on the page, in case of using the filter toolbar by multiple grids and having the same column names. The new option `idMode` allows to manage the rule of building ids. The option `idMode: "old"` forces the usage of old rule (`"gs_" + columnName`) for building of ids. The option `idMode: "compatibility"` creates the ids based on another rule: `"gs_" + idPrefix + columnName`. The rule would be helpful only if one uses `idPrefix` options with *different* `idPrefix` values for every grid. One can still have id duplicates if one don't use any `idPrefix` on multiple grids. The default value `idMode: "new"` uses `"gs_" + gridId + columnName`. It garantees no id duplicates in multiple grids.
+**BREAKING CHANGES**: The ruls of building ids of input elements of the filter toolbar are changed. Free jqGrid uses now the rule: `"gs_" + gridId + columnName` instead of using `"gs_" + columnName` before. It fixes problems, like the usage of jQuery UI Datepicker for the second grid on the page, in case of using the filter toolbar by multiple grids and having the same column names. The new option `idMode` allows to manage the rule of building ids. The option `idMode: "old"` forces the usage of old rule (`"gs_" + columnName`) for building of ids. The option `idMode: "compatibility"` creates the ids based on another rule: `"gs_" + idPrefix + columnName`. The rule would be helpful only if one uses `idPrefix` options with *different* `idPrefix` values for every grid. One can still have id duplicates if one don't use any `idPrefix` on multiple grids. The default value `idMode: "new"` uses `"gs_" + gridId + columnName`. It garantees, that there are no id duplicates in multiple grids.
 
-We recommend everybody to scan your existing code for the string `gs_`. If no such places will be found then you can be sure that your code will have no compatibility problems. If you will find such places in your code then you cab deside, whether to change the code and to include the grid id in your code or to force the usage of old or the compatibility rule, for example: `idMode: "compatibility"`. To force compatibility rule you can add the following code
+We recommend everybody to scan your existing code for the string `gs_`, which you could use for direct accessing of input fields of the filter toolbar. If no such places will be found, then you can be sure that your code will have no compatibility problems. If you will find such places in your code then you can decide yourself, whether to change the code and to include the grid id in your code or to force the usage of the "old" or the "compatibility" rule (`idMode: "old"` or `idMode: "compatibility"`). To force compatibility rule you can add the following code
 ```JavaScript
 $.jgrid = $.jgrid || {};
 $.jgrid.search = $.jgrid.search || {};
-$.jgrid.search.idMode = "compatibility"; // or "old" instead of default
-"new", which creates safe id values
+$.jgrid.search.idMode = "compatibility"; // or "old" instead of default "new", which creates safe id values
 ```
-somewhere at the beginning of your code. Alternatively you can use `searching: {idMode: "compatibility"}` option or even `searching: {idMode: "old"}`
+somewhere at the beginning of your code. Alternatively you can use `searching: {idMode: "compatibility"}` option (or `searching: {idMode: "old"}` option).
 
 ### The below is the full list of changes in the version 4.13.1 compared with 4.13.0:
 
