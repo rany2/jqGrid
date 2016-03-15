@@ -150,7 +150,7 @@
 		mouseDown += namespace + " mspointerdown" + namespace;
 		mouseMove += namespace + " mspointermove" + namespace;
 		mouseUp += namespace + " mspointerup";
-	} else {/*if (document.hasOwnProperty("ontouchend"))*/
+	} else { //if (Object.prototype.hasOwnProperty.call(document, "ontouchend")) { or "ontouchstart" in document.documentElement or "ontouchstart" in window
 		mouseDown += namespace + " touchstart" + namespace;
 		mouseMove += namespace + " touchmove" + namespace;
 		mouseUp += namespace + " touchend" + namespace;

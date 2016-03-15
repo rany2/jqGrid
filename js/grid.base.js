@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.13.1 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.13.2-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-10
+ * Date: 2016-03-15
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -353,7 +353,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.13.1",
+		version: "4.13.2-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -6386,7 +6386,7 @@
 		},
 		footerData: function (action, data, format) {
 			// TODO: add an additional parameter, which will inform whether the input data "data" is in formatted or unformatted form
-			var nm, success = false, res = {}, title;
+			var success = false, res = {};
 			function isEmpty(obj) {
 				var i;
 				for (i in obj) {
@@ -6398,23 +6398,31 @@
 			if (typeof format !== "boolean") { format = true; }
 			action = action.toLowerCase();
 			this.each(function () {
-				var t = this, p = t.p, vl;
+				var t = this, p = t.p, vl, $td, nm, iCol;
 				if (!t.grid || !p.footerrow) { return false; }
-				if (action === "set") { if (isEmpty(data)) { return false; } }
+				if (action === "set" && isEmpty(data)) { return false; }
 				success = true;
-				$(p.colModel).each(function (i) {
-					nm = this.name;
-					if (action === "set") {
-						if (data[nm] !== undefined) {
-							vl = format ? t.formatter("", data[nm], i, data, "edit") : data[nm];
-							title = this.title ? { "title": stripHtml(vl) } : {};
-							$("tr.footrow td:eq(" + i + ")", t.grid.sDiv).html(vl).attr(title);
-							success = true;
+				var ftable = $(t.grid.sDiv)
+						.children(".ui-jqgrid-hbox")
+						.children(".ui-jqgrid-ftable")[0];
+				if (ftable == null || ftable.rows == null) { return false; }
+				var cells = ftable.rows[0].cells,
+					fcells = t.grid.fsDiv == null ? {} : t.grid.fsDiv.children(".ui-jqgrid-ftable")[0].rows[0].cells;
+				for (nm in data) {
+					iCol = p.iColByName[nm];
+					if (data.hasOwnProperty(nm) && iCol !== undefined) {
+						if (action === "get") {
+							res[nm] = $(cells[iCol]).html();
+						} else if (action === "set") {
+							vl = format ? t.formatter("", data[nm], iCol, data, "edit") : data[nm];
+							$td = $(cells[iCol]).add(fcells[iCol]);
+							$td.html(vl);
+							if (p.colModel[iCol].title) {
+								$td.attr({ "title": stripHtml(vl) });
+							}
 						}
-					} else if (action === "get") {
-						res[nm] = $("tr.footrow td:eq(" + i + ")", t.grid.sDiv).html();
 					}
-				});
+				}
 			});
 			return action === "get" ? res : success;
 		},
@@ -6766,23 +6774,35 @@
 		},
 		setLabel: function (colname, nData, prop, attrp) {
 			return this.each(function () {
-				var $t = this, pos, p = $t.p;
+				var $t = this, iCol, p = $t.p, $th;
 				if (!$t.grid) { return; }
 				if (isNaN(colname)) {
-					pos = p.iColByName[colname];
-					if (pos === undefined) { return; }
-				} else { pos = parseInt(colname, 10); }
-				if (pos >= 0) {
-					var thecol = $("tr.ui-jqgrid-labels th:eq(" + pos + ")", $t.grid.hDiv);
+					iCol = p.iColByName[colname];
+					if (iCol === undefined) { return; }
+				} else { iCol = parseInt(colname, 10); }
+				if (iCol >= 0) {
+					$th = $($t.grid.headers[iCol].el);
+					if (p.frozenColumns) {
+						$th = $th.add($t.grid.fhDiv.find(".ui-jqgrid-htable tr.ui-jqgrid-labels th.ui-th-column").eq(iCol));
+					}
 					if (nData) {
-						var ico = $(".s-ico", thecol);
-						$("[id^=jqgh_]", thecol).empty().html(nData).append(ico);
-						p.colNames[pos] = nData;
+						$th.each(function () {
+							var $div = $("[id^=jqgh_]", this),
+								$textWrapper = $div.children("span.ui-jqgrid-cell-wrapper");
+							if ($textWrapper.length > 0) {
+								$textWrapper.html(nData);
+							} else {
+								var $ico = $(".s-ico", this);
+								$div.empty()
+									.html(nData)[p.sortIconsBeforeText ? "prepend" : "append"]($ico);
+							}
+						});
+						p.colNames[iCol] = nData;
 					}
 					if (prop) {
-						if (typeof prop === "string") { $(thecol).addClass(prop); } else { $(thecol).css(prop); }
+						if (typeof prop === "string") { $th.addClass(prop); } else { $th.css(prop); }
 					}
-					if (typeof attrp === "object") { $(thecol).attr(attrp); }
+					if (typeof attrp === "object") { $th.attr(attrp); }
 				}
 			});
 		},
