@@ -294,7 +294,7 @@
 						o.stringResult = o.multipleSearch;
 					}
 					$(fid + "_search").bind("click", function () {
-						var sdata = {}, res, filters, fl = $(fid), $inputs = fl.find(".input-elm");
+						var sdata = {}, res = "", filters, fl = $(fid), $inputs = fl.find(".input-elm");
 						if ($inputs.filter(":focus")) {
 							$inputs = $inputs.filter(":focus");
 						}
@@ -312,12 +312,10 @@
 						if (o.stringResult || p.datatype === "local") {
 							try {
 								// xmlJsonClass or JSON.stringify
-								res = xmlJsonClass.toJson(filters, "", "", false);
-							} catch (e) {
-								try {
-									res = JSON.stringify(filters);
-								} catch (ignore) { }
-							}
+								res = window.JSON && window.JSON.stringify ?
+										JSON.stringify(filters) :
+										xmlJsonClass.toJson(filters, "", "", false);
+							} catch (ignore) { }
 							if (typeof res === "string") {
 								sdata[o.sFilter] = res;
 								each([o.sField, o.sValue, o.sOper], function () { sdata[this] = ""; });
