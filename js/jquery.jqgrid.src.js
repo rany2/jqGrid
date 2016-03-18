@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-16
+ * Date: 2016-03-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -3221,7 +3221,7 @@
 					var cm = p.colModel[colpos], v;
 					if (cm.formatter !== undefined) {
 						rowId = String(p.idPrefix) !== "" ? stripGridPrefix(rowId) : rowId;
-						var opts = { rowId: rowId, colModel: cm, gid: p.id, pos: colpos, rowData: rdata };
+						var opts = { rowId: rowId, colModel: cm, gid: p.id, pos: colpos, rowData: rdata || rwdat };
 						if (isFunction(cm.cellBuilder)) {
 							v = cm.cellBuilder.call(ts, cellval, opts, rwdat, act);
 						} else if (isFunction(cm.formatter)) {
@@ -7489,7 +7489,7 @@
 								mode: "cell"
 							}),
 							formatoptions = cm.formatoptions || {};
-						if (cv[0] === true) {
+						if (cv == null || cv === true || cv[0] === true) {
 							var addpost = $self.triggerHandler("jqGridBeforeSubmitCell", [rowid, nm, v, iRow, iCol]) || {};
 							if ($.isFunction(p.beforeSubmitCell)) {
 								addpost = p.beforeSubmitCell.call($t, rowid, nm, v, iRow, iCol);
@@ -7532,10 +7532,10 @@
 											hDiv.loading = false;
 											if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 												var ret = $self.triggerHandler("jqGridAfterSubmitCell", [$t, jqXHR, postdata.id, nm, v, iRow, iCol]) || [true, ""];
-												if (ret[0] === true && $.isFunction(p.afterSubmitCell)) {
+												if (ret == null || ret === true || (ret[0] === true && $.isFunction(p.afterSubmitCell))) {
 													ret = p.afterSubmitCell.call($t, jqXHR, postdata.id, nm, v, iRow, iCol);
 												}
-												if (ret[0] === true) {
+												if (ret == null || ret === true || ret[0] === true) {
 													$self.jqGrid("setCell", rowid, iCol, v, false, false, true);
 													cc.addClass("dirty-cell");
 													$tr.addClass("edited");
@@ -12011,7 +12011,7 @@
 					});
 				}
 				function postIt() {
-					var ret = [true, "", ""], onClickSubmitResult = {}, opers = p.prmNames, idname, oper, key, selr, i, url, itm, iCol,
+					var successResult = [true, "", ""], ret = successResult, onClickSubmitResult = {}, opers = p.prmNames, idname, oper, key, selr, i, url, itm, iCol,
 						iRow = base.getInd.call($self, rowid),
 						tr = iRow === false ? null : $t.rows[iRow],
 						retvals = $self.triggerHandler("jqGridAddEditBeforeCheckValues", [$(frmgr), editOrAdd]);
@@ -12039,6 +12039,7 @@
 								td: tr == null ? null : tr.cells[iCol],
 								mode: rowid === "_empty" ? "addForm" : "editForm"
 							});
+							if (ret == null || ret === true) { ret = successResult; }
 							if (ret[0] === false) { break; }
 						}
 					}
@@ -12049,14 +12050,10 @@
 							onClickSubmitResult = o.onclickSubmit.call($t, o, postdata, editOrAdd) || {};
 						}
 						ret = $self.triggerHandler("jqGridAddEditBeforeSubmit", [postdata, $(frmgr), editOrAdd]);
-						if (ret == null) {
-							ret = [true, "", ""];
-						}
+						if (ret == null || ret === true) { ret = successResult; }
 						if (ret[0] && $.isFunction(o.beforeSubmit)) {
 							ret = o.beforeSubmit.call($t, postdata, $(frmgr), editOrAdd);
-							if (ret == null) {
-								ret = [true, "", ""];
-							}
+							if (ret == null || ret === true) { ret = successResult; }
 						}
 					}
 
@@ -12125,14 +12122,10 @@
 										// data is posted successful
 										// execute aftersubmit with the returned data from server
 										ret = $self.triggerHandler("jqGridAddEditAfterSubmit", [jqXHR, postdata, editOrAdd]);
-										if (ret == null) {
-											ret = [true, "", ""];
-										}
+										if (ret == null || ret === true) { ret = successResult; }
 										if (ret[0] && $.isFunction(o.afterSubmit)) {
 											ret = o.afterSubmit.call($t, jqXHR, postdata, editOrAdd);
-											if (ret == null) {
-												ret = [true, "", ""];
-											}
+											if (ret == null || ret === true) { ret = successResult; }
 										}
 									}
 									if (ret[0] === false) {
@@ -14725,7 +14718,7 @@
 								oldValue: savedRow != null ? savedRow[cm.name] : null,
 								newValue: v,
 								oldRowData: savedRow }));
-					if (cv[0] === false) {
+					if (cv != null && cv[0] === false) {
 						return false;
 					}
 					if (formatter === "date" && formatoptions.sendFormatted !== true) {
@@ -14741,7 +14734,7 @@
 					tmp[cm.name] = v;
 				});
 
-				if (cv[0] === false) {
+				if (cv != null && cv[0] === false) {
 					try {
 						var tr = $self.jqGrid("getGridRowById", rowid), positions = jgrid.findPos(tr);
 						infoDialog.call($t, errcap, cv[1], bClose, { left: positions[0], top: positions[1] + $(tr).outerHeight() });
@@ -14825,7 +14818,7 @@
 							if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 								var ret, sucret, j;
 								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [jqXHR, rowid, o]);
-								if (!$.isArray(sucret)) { sucret = [true, tmp]; }
+								if (sucret == null || sucret === true) { sucret = [true, tmp]; }
 								if (sucret[0] && $.isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR); }
 								if ($.isArray(sucret)) {
 									// expect array - status, data, rowid

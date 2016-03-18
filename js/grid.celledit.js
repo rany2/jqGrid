@@ -247,7 +247,7 @@
 								mode: "cell"
 							}),
 							formatoptions = cm.formatoptions || {};
-						if (cv[0] === true) {
+						if (cv == null || cv === true || cv[0] === true) {
 							var addpost = $self.triggerHandler("jqGridBeforeSubmitCell", [rowid, nm, v, iRow, iCol]) || {};
 							if ($.isFunction(p.beforeSubmitCell)) {
 								addpost = p.beforeSubmitCell.call($t, rowid, nm, v, iRow, iCol);
@@ -290,10 +290,10 @@
 											hDiv.loading = false;
 											if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 												var ret = $self.triggerHandler("jqGridAfterSubmitCell", [$t, jqXHR, postdata.id, nm, v, iRow, iCol]) || [true, ""];
-												if (ret[0] === true && $.isFunction(p.afterSubmitCell)) {
+												if (ret == null || ret === true || (ret[0] === true && $.isFunction(p.afterSubmitCell))) {
 													ret = p.afterSubmitCell.call($t, jqXHR, postdata.id, nm, v, iRow, iCol);
 												}
-												if (ret[0] === true) {
+												if (ret == null || ret === true || ret[0] === true) {
 													$self.jqGrid("setCell", rowid, iCol, v, false, false, true);
 													cc.addClass("dirty-cell");
 													$tr.addClass("edited");

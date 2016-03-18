@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-16
+ * Date: 2016-03-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -3221,7 +3221,7 @@
 					var cm = p.colModel[colpos], v;
 					if (cm.formatter !== undefined) {
 						rowId = String(p.idPrefix) !== "" ? stripGridPrefix(rowId) : rowId;
-						var opts = { rowId: rowId, colModel: cm, gid: p.id, pos: colpos, rowData: rdata };
+						var opts = { rowId: rowId, colModel: cm, gid: p.id, pos: colpos, rowData: rdata || rwdat };
 						if (isFunction(cm.cellBuilder)) {
 							v = cm.cellBuilder.call(ts, cellval, opts, rwdat, act);
 						} else if (isFunction(cm.formatter)) {

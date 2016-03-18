@@ -256,7 +256,7 @@
 								oldValue: savedRow != null ? savedRow[cm.name] : null,
 								newValue: v,
 								oldRowData: savedRow }));
-					if (cv[0] === false) {
+					if (cv != null && cv[0] === false) {
 						return false;
 					}
 					if (formatter === "date" && formatoptions.sendFormatted !== true) {
@@ -272,7 +272,7 @@
 					tmp[cm.name] = v;
 				});
 
-				if (cv[0] === false) {
+				if (cv != null && cv[0] === false) {
 					try {
 						var tr = $self.jqGrid("getGridRowById", rowid), positions = jgrid.findPos(tr);
 						infoDialog.call($t, errcap, cv[1], bClose, { left: positions[0], top: positions[1] + $(tr).outerHeight() });
@@ -356,7 +356,7 @@
 							if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 								var ret, sucret, j;
 								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [jqXHR, rowid, o]);
-								if (!$.isArray(sucret)) { sucret = [true, tmp]; }
+								if (sucret == null || sucret === true) { sucret = [true, tmp]; }
 								if (sucret[0] && $.isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR); }
 								if ($.isArray(sucret)) {
 									// expect array - status, data, rowid

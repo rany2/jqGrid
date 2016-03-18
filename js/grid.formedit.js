@@ -783,7 +783,7 @@
 					});
 				}
 				function postIt() {
-					var ret = [true, "", ""], onClickSubmitResult = {}, opers = p.prmNames, idname, oper, key, selr, i, url, itm, iCol,
+					var successResult = [true, "", ""], ret = successResult, onClickSubmitResult = {}, opers = p.prmNames, idname, oper, key, selr, i, url, itm, iCol,
 						iRow = base.getInd.call($self, rowid),
 						tr = iRow === false ? null : $t.rows[iRow],
 						retvals = $self.triggerHandler("jqGridAddEditBeforeCheckValues", [$(frmgr), editOrAdd]);
@@ -811,6 +811,7 @@
 								td: tr == null ? null : tr.cells[iCol],
 								mode: rowid === "_empty" ? "addForm" : "editForm"
 							});
+							if (ret == null || ret === true) { ret = successResult; }
 							if (ret[0] === false) { break; }
 						}
 					}
@@ -821,14 +822,10 @@
 							onClickSubmitResult = o.onclickSubmit.call($t, o, postdata, editOrAdd) || {};
 						}
 						ret = $self.triggerHandler("jqGridAddEditBeforeSubmit", [postdata, $(frmgr), editOrAdd]);
-						if (ret == null) {
-							ret = [true, "", ""];
-						}
+						if (ret == null || ret === true) { ret = successResult; }
 						if (ret[0] && $.isFunction(o.beforeSubmit)) {
 							ret = o.beforeSubmit.call($t, postdata, $(frmgr), editOrAdd);
-							if (ret == null) {
-								ret = [true, "", ""];
-							}
+							if (ret == null || ret === true) { ret = successResult; }
 						}
 					}
 
@@ -897,14 +894,10 @@
 										// data is posted successful
 										// execute aftersubmit with the returned data from server
 										ret = $self.triggerHandler("jqGridAddEditAfterSubmit", [jqXHR, postdata, editOrAdd]);
-										if (ret == null) {
-											ret = [true, "", ""];
-										}
+										if (ret == null || ret === true) { ret = successResult; }
 										if (ret[0] && $.isFunction(o.afterSubmit)) {
 											ret = o.afterSubmit.call($t, jqXHR, postdata, editOrAdd);
-											if (ret == null) {
-												ret = [true, "", ""];
-											}
+											if (ret == null || ret === true) { ret = successResult; }
 										}
 									}
 									if (ret[0] === false) {
