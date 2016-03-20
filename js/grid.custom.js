@@ -921,7 +921,9 @@
 							if (newFilters.hasOwnProperty(cmName)) {
 								filter = newFilters[cmName];
 								$input = $(getIdSel(cmName));
-								$input.val(filter.data);
+								if ($.trim($input.val()) !== filter.data) {
+									$input.val(filter.data);
+								}
 								$searchOper = $input.closest(".ui-search-input")
 										.siblings(".ui-search-oper")
 										.children(".soptclass");

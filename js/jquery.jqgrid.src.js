@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-18
+ * Date: 2016-03-20
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -9540,7 +9540,9 @@
 							if (newFilters.hasOwnProperty(cmName)) {
 								filter = newFilters[cmName];
 								$input = $(getIdSel(cmName));
-								$input.val(filter.data);
+								if ($.trim($input.val()) !== filter.data) {
+									$input.val(filter.data);
+								}
 								$searchOper = $input.closest(".ui-search-input")
 										.siblings(".ui-search-oper")
 										.children(".soptclass");
