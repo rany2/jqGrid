@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-20
+ * Date: 2016-03-28
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -8889,10 +8889,24 @@
 					getIdSel = function (cmName) {
 						return "#" + getId(cmName);
 					},
-					parseFilter = function () {
+					parseFilter = function (fillAll) {
 						var j, filters = p.postData.filters, filter = {}, rules, rule,
 							iColByName = p.iColByName, cm, soptions;
-						if (!filters) { return; }
+						if (fillAll) {
+							for (j = 0; j < colModel.length; j++) {
+								cm = colModel[j];
+								if (cm.search !== false) {
+									soptions = cm.searchoptions || {};
+									filter[cm.name] = {
+										op: soptions.sopt ?
+												soptions.sopt[0] :
+												cm.stype === "select" ? "eq" : o.defaultSearch,
+										data: soptions.defaultValue !== undefined ? soptions.defaultValue : ""
+									};
+								}
+							}
+						}
+						if (!filters || !p.search) { return filter; }
 						if (typeof filters === "string") {
 							try {
 								filters = $.parseJSON(filters);
@@ -8905,25 +8919,25 @@
 								filters.groupOp.toUpperCase() !== o.groupOp.toUpperCase() ||
 								rules == null || rules.length === 0 ||
 								(filters.groups != null && filters.groups.length > 0)) {
-							return;
+							return filter;
 						}
 						for (j = 0; j < rules.length; j++) {
 							rule = rules[j];
 							cm = colModel[iColByName[rule.field]];
 							if (cm == null || cm.search === false) {
-								return;
+								continue;
 							}
 							soptions = cm.searchoptions || {};
 							if (soptions.sopt) {
 								if ($.inArray(rule.op, soptions.sopt) < 0) {
-									return;
+									continue;
 								}
 							} else if (cm.stype === "select") {
 								if (rule.op !== "eq") {
-									return;
+									continue;
 								}
 							} else if (rule.op !== o.defaultSearch) {
-								return;
+								continue;
 							}
 							filter[cm.name] = { op: rule.op, data: rule.data };
 						}
@@ -9532,9 +9546,7 @@
 				$self.bind(
 					"jqGridRefreshFilterValues.filterToolbar" + (o.loadFilterDefaults ? " jqGridAfterLoadComplete.filterToolbar" : ""),
 					function () {
-						var cmName, filter, newFilters = parseFilter(), p = this.p, $input, $searchOper, i;
-
-						if (!p || !p.search || !newFilters) { return; }
+						var cmName, filter, newFilters = parseFilter(true) || {}, $input, $searchOper, i;
 
 						for (cmName in newFilters) {
 							if (newFilters.hasOwnProperty(cmName)) {
