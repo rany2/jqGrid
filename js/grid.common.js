@@ -14,7 +14,7 @@
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["jquery", "./jqdnr", "./jqmodal"], factory);
+		define(["jquery", "./grid.base", "./jqdnr", "./jqmodal"], factory);
 	} else if (typeof exports === "object") {
 		// Node/CommonJS
 		factory(require("jquery"));
