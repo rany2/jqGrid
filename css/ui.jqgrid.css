@@ -55,6 +55,7 @@
 }
 .ui-jqgrid-errorbar {
 	max-height: 100px;
+	margin-bottom: 0;
 	overflow: auto;
 }
 .ui-jqgrid .ui-jqgrid-caption,

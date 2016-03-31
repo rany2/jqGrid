@@ -634,6 +634,7 @@
 				rowFooter: "ui-widget-content",
 				gridTitle: "ui-widget-header ui-corner-top",
 				gridError: "ui-state-error",
+				gridErrorText: "",
 				titleButton: "ui-corner-all",
 				toolbarUpper: "ui-state-default",
 				toolbarBottom: "ui-state-default",
@@ -720,7 +721,8 @@
 				gridFooter: "table table-hover table-condensed table-bordered",
 				rowFooter: "",
 				gridTitle: "",
-				gridError: "", //"ui-state-error",
+				gridError: "alert alert-danger",
+				gridErrorText: "sr-only",
 				titleButton: "btn btn-xs btn-default",
 				actionsDiv: "",
 				actionsButton: "btn btn-xs btn-default",
@@ -4264,6 +4266,7 @@
 						if (!feedback.call(self, "beforeRequest")) { return; }
 						if (isFunction(p.datatype)) { p.datatype.call(self, p.postData, "load_" + p.id, rcnt, npage, adjust); return; }
 						dt = p.datatype.toLowerCase();
+						$(grid.eDiv).hide();
 						switch (dt) {
 						case "json":
 						case "jsonp":
@@ -5574,7 +5577,9 @@
 			}
 			$(grid.hDiv).after(grid.bDiv);
 			grid.eDiv = $("<div class='" + getGuiStyles("gridError", "ui-jqgrid-errorbar ui-jqgrid-errorbar-" + dir) +
-				"' style='display:none;'><span class='ui-jqgrid-error'></span></div>")[0];
+				"' style='display:none;'>" +
+				//($self0.jqGrid("isBootstrapGuiStyle") ? "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" : "") +
+				"<span class='" + getGuiStyles("gridErrorText", "ui-jqgrid-error") + "'></span></div>")[0];
 			$(grid.hDiv).after(grid.eDiv);
 			$(eg)
 				.click(myResizerClickHandler)
