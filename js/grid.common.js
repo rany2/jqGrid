@@ -121,7 +121,7 @@
 			mh.id = aIDs.modalhead;
 			$(mh).append("<span class='ui-jqdialog-title'>" + o.caption + "</span>");
 			var hoverClasses = getGuiStyles.call(this, "states.hover"),
-				ahr = $("<a class='" + getGuiStyles.call(this, "dialog.closeButton", "ui-jqdialog-titlebar-close") + "'></a>")
+				ahr = $("<a aria-label='Close' class='" + getGuiStyles.call(this, "dialog.closeButton", "ui-jqdialog-titlebar-close") + "'></a>")
 					.hover(function () { ahr.addClass(hoverClasses); },
 						function () { ahr.removeClass(hoverClasses); })
 					.append("<span class='" + base.getIconRes.call(this, "form.close") + "'></span>");
