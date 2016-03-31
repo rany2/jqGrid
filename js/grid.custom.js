@@ -237,7 +237,7 @@
 						defaultSearch: "bw",
 						idMode: "new", // support "old", "compatibility", "new"
 						searchOperators: false,
-						resetIcon: "x",
+						resetIcon: "&times;",
 						applyLabelClasses: true,
 						loadFilterDefaults: true, // this options activates loading of default filters from grid's postData for Multipe Search only.
 						operands: { "eq": "==", "ne": "!", "lt": "<", "le": "<=", "gt": ">", "ge": ">=", "bw": "^", "bn": "!^", "in": "=", "ni": "!=", "ew": "|", "en": "!@", "cn": "~", "nc": "!~", "nu": "#", "nn": "!#" }
@@ -268,7 +268,7 @@
 						return prefix + cmName;
 					},
 					getIdSel = function (cmName) {
-						return "#" + getId(cmName);
+						return "#" + jqID(getId(cmName));
 					},
 					parseFilter = function (fillAll) {
 						var j, filters = p.postData.filters, filter = {}, rules, rule,
