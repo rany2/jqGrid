@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-28
+ * Date: 2016-03-31
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -3605,7 +3605,7 @@
 							var colOrAddPropName = colOrAddProp.name,
 								nameReader = isXML ?
 									colOrAddProp.xmlmap || colOrAddPropName :
-									(datatype === "local" && !p.dataTypeOrg) || datatype === "json" || datatype === "jsonp" ? colOrAddProp.jsonmap || colOrAddPropName : colOrAddPropName;
+									(datatype === "local" && !p.dataTypeOrg) || datatype === "jsonstring" || datatype === "json" || datatype === "jsonp" ? colOrAddProp.jsonmap || colOrAddPropName : colOrAddPropName;
 
 							if (p.keyName !== false && colOrAddProp.key === true) {
 								p.keyName = colOrAddPropName; // TODO: replace nameReader to colOrAddPropName if we don't will read it at the second time
