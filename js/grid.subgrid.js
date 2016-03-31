@@ -169,12 +169,6 @@
 						$("#load_" + jqID(p.id)).hide();
 						return false;
 					},
-					subGridXml = function (sjxml, sbid) {
-						return subGridXmlOrJson(sjxml, sbid, fillXmlBody);
-					},
-					subGridJson = function (sjxml, sbid) {
-						return subGridXmlOrJson(sjxml, sbid, fillJsonBody);
-					},
 					populatesubgrid = function (rd) {
 						var sid = $(rd).attr("id"), dp = { nd_: (new Date().getTime()) }, iCol, j;
 						dp[p.prmNames.subgridid] = sid;
@@ -207,13 +201,33 @@
 										type: p.mtype,
 										url: $.isFunction(p.subGridUrl) ? p.subGridUrl.call(ts, dp) : p.subGridUrl,
 										dataType: p.subgridtype,
-										//data: $.isFunction(p.serializeSubGridData)? p.serializeSubGridData.call(ts, dp) : dp,
+										context: sid,
 										data: jgrid.serializeFeedback.call(ts, p.serializeSubGridData, "jqGridSerializeSubGridData", dp),
-										complete: function (jqXHR) {
-											if (p.subgridtype === "xml") {
-												subGridXml(jqXHR.responseXML, sid);
+										success: function (data) {
+											$(ts.grid.eDiv).hide();
+											subGridXmlOrJson(
+												data,
+												this,
+												p.subgridtype === "xml" ? fillXmlBody : fillJsonBody
+											);
+										},
+										error: function (jqXHR, textStatus, errorThrown) {
+											var loadError = p.loadSubgridError === undefined ?
+													p.loadError :
+													p.loadSubgridError;
+											if ($.isFunction(loadError)) {
+												loadError.call(ts, jqXHR, textStatus, errorThrown);
+											}
+											// for compatibility only
+											if (!p.subGridOptions.noEmptySubgridOnError) {
+												subGridXmlOrJson(
+													null,
+													this,
+													p.subgridtype === "xml" ? fillXmlBody : fillJsonBody
+												);
 											} else {
-												subGridJson($.parseJSON(jqXHR.responseText), sid);
+												ts.grid.hDiv.loading = false;
+												$("#load_" + jqID(p.id)).hide();
 											}
 										}
 									}, jgrid.ajaxOptions, p.ajaxSubgridOptions || {}));
@@ -314,10 +328,10 @@
 					});
 				}
 				ts.subGridXml = function (xml, sid) {
-					subGridXml(xml, sid);
+					return subGridXmlOrJson(xml, sid, fillXmlBody);
 				};
 				ts.subGridJson = function (json, sid) {
-					subGridJson(json, sid);
+					return subGridXmlOrJson(json, sid, fillJsonBody);
 				};
 			});
 		},

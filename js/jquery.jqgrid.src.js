@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-03-28
+ * Date: 2016-03-31
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -634,6 +634,7 @@
 				rowFooter: "ui-widget-content",
 				gridTitle: "ui-widget-header ui-corner-top",
 				gridError: "ui-state-error",
+				gridErrorText: "",
 				titleButton: "ui-corner-all",
 				toolbarUpper: "ui-state-default",
 				toolbarBottom: "ui-state-default",
@@ -720,7 +721,8 @@
 				gridFooter: "table table-hover table-condensed table-bordered",
 				rowFooter: "",
 				gridTitle: "",
-				gridError: "", //"ui-state-error",
+				gridError: "alert alert-danger",
+				gridErrorText: "sr-only",
 				titleButton: "btn btn-xs btn-default",
 				actionsDiv: "",
 				actionsButton: "btn btn-xs btn-default",
@@ -4264,6 +4266,7 @@
 						if (!feedback.call(self, "beforeRequest")) { return; }
 						if (isFunction(p.datatype)) { p.datatype.call(self, p.postData, "load_" + p.id, rcnt, npage, adjust); return; }
 						dt = p.datatype.toLowerCase();
+						$(grid.eDiv).hide();
 						switch (dt) {
 						case "json":
 						case "jsonp":
@@ -5574,7 +5577,9 @@
 			}
 			$(grid.hDiv).after(grid.bDiv);
 			grid.eDiv = $("<div class='" + getGuiStyles("gridError", "ui-jqgrid-errorbar ui-jqgrid-errorbar-" + dir) +
-				"' style='display:none;'><span class='ui-jqgrid-error'></span></div>")[0];
+				"' style='display:none;'>" +
+				//($self0.jqGrid("isBootstrapGuiStyle") ? "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" : "") +
+				"<span class='" + getGuiStyles("gridErrorText", "ui-jqgrid-error") + "'></span></div>")[0];
 			$(grid.hDiv).after(grid.eDiv);
 			$(eg)
 				.click(myResizerClickHandler)
@@ -7954,7 +7959,7 @@
 			mh.id = aIDs.modalhead;
 			$(mh).append("<span class='ui-jqdialog-title'>" + o.caption + "</span>");
 			var hoverClasses = getGuiStyles.call(this, "states.hover"),
-				ahr = $("<a class='" + getGuiStyles.call(this, "dialog.closeButton", "ui-jqdialog-titlebar-close") + "'></a>")
+				ahr = $("<a aria-label='Close' class='" + getGuiStyles.call(this, "dialog.closeButton", "ui-jqdialog-titlebar-close") + "'></a>")
 					.hover(function () { ahr.addClass(hoverClasses); },
 						function () { ahr.removeClass(hoverClasses); })
 					.append("<span class='" + base.getIconRes.call(this, "form.close") + "'></span>");
@@ -8856,7 +8861,7 @@
 						defaultSearch: "bw",
 						idMode: "new", // support "old", "compatibility", "new"
 						searchOperators: false,
-						resetIcon: "x",
+						resetIcon: "&times;",
 						applyLabelClasses: true,
 						loadFilterDefaults: true, // this options activates loading of default filters from grid's postData for Multipe Search only.
 						operands: { "eq": "==", "ne": "!", "lt": "<", "le": "<=", "gt": ">", "ge": ">=", "bw": "^", "bn": "!^", "in": "=", "ni": "!=", "ew": "|", "en": "!@", "cn": "~", "nc": "!~", "nu": "#", "nn": "!#" }
@@ -8887,7 +8892,7 @@
 						return prefix + cmName;
 					},
 					getIdSel = function (cmName) {
-						return "#" + getId(cmName);
+						return "#" + jqID(getId(cmName));
 					},
 					parseFilter = function (fillAll) {
 						var j, filters = p.postData.filters, filter = {}, rules, rule,
@@ -16810,12 +16815,6 @@
 						$("#load_" + jqID(p.id)).hide();
 						return false;
 					},
-					subGridXml = function (sjxml, sbid) {
-						return subGridXmlOrJson(sjxml, sbid, fillXmlBody);
-					},
-					subGridJson = function (sjxml, sbid) {
-						return subGridXmlOrJson(sjxml, sbid, fillJsonBody);
-					},
 					populatesubgrid = function (rd) {
 						var sid = $(rd).attr("id"), dp = { nd_: (new Date().getTime()) }, iCol, j;
 						dp[p.prmNames.subgridid] = sid;
@@ -16848,13 +16847,33 @@
 										type: p.mtype,
 										url: $.isFunction(p.subGridUrl) ? p.subGridUrl.call(ts, dp) : p.subGridUrl,
 										dataType: p.subgridtype,
-										//data: $.isFunction(p.serializeSubGridData)? p.serializeSubGridData.call(ts, dp) : dp,
+										context: sid,
 										data: jgrid.serializeFeedback.call(ts, p.serializeSubGridData, "jqGridSerializeSubGridData", dp),
-										complete: function (jqXHR) {
-											if (p.subgridtype === "xml") {
-												subGridXml(jqXHR.responseXML, sid);
+										success: function (data) {
+											$(ts.grid.eDiv).hide();
+											subGridXmlOrJson(
+												data,
+												this,
+												p.subgridtype === "xml" ? fillXmlBody : fillJsonBody
+											);
+										},
+										error: function (jqXHR, textStatus, errorThrown) {
+											var loadError = p.loadSubgridError === undefined ?
+													p.loadError :
+													p.loadSubgridError;
+											if ($.isFunction(loadError)) {
+												loadError.call(ts, jqXHR, textStatus, errorThrown);
+											}
+											// for compatibility only
+											if (!p.subGridOptions.noEmptySubgridOnError) {
+												subGridXmlOrJson(
+													null,
+													this,
+													p.subgridtype === "xml" ? fillXmlBody : fillJsonBody
+												);
 											} else {
-												subGridJson($.parseJSON(jqXHR.responseText), sid);
+												ts.grid.hDiv.loading = false;
+												$("#load_" + jqID(p.id)).hide();
 											}
 										}
 									}, jgrid.ajaxOptions, p.ajaxSubgridOptions || {}));
@@ -16955,10 +16974,10 @@
 					});
 				}
 				ts.subGridXml = function (xml, sid) {
-					subGridXml(xml, sid);
+					return subGridXmlOrJson(xml, sid, fillXmlBody);
 				};
 				ts.subGridJson = function (json, sid) {
-					subGridJson(json, sid);
+					return subGridXmlOrJson(json, sid, fillJsonBody);
 				};
 			});
 		},
