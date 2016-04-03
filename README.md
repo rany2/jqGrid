@@ -1,5 +1,7 @@
 # free fork of jqGrid
 ======
+[![npm version](https://img.shields.io/npm/v/free-jqgrid.svg?style=flat)](https://www.npmjs.com/package/free-jqgrid)&nbsp;![Image1](http://issuestats.com/github/free-jqgrid/jqGrid/badge/pr?style=flat-square)&nbsp;![Image2](http://issuestats.com/github/free-jqgrid/jqGrid/badge/issue?style=flat-square)
+---
 
 jqGrid is a popular jQuery Plugin for displaying and editing data in tabular form. It has some other more sophisticated features, like subgrids, TreeGrids, grouping and so on.
 
