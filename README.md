@@ -1,8 +1,5 @@
-# free fork of jqGrid
+# free fork of jqGrid <br>[![npm version](https://img.shields.io/npm/v/free-jqgrid.svg?style=flat)](https://www.npmjs.com/package/free-jqgrid)&nbsp;![Image1](http://issuestats.com/github/free-jqgrid/jqGrid/badge/pr?style=flat-square)&nbsp;![Image2](http://issuestats.com/github/free-jqgrid/jqGrid/badge/issue?style=flat-square)
 ======
-[![npm version](https://img.shields.io/npm/v/free-jqgrid.svg?style=flat)](https://www.npmjs.com/package/free-jqgrid)&nbsp;![Image1](http://issuestats.com/github/free-jqgrid/jqGrid/badge/pr?style=flat-square)&nbsp;![Image2](http://issuestats.com/github/free-jqgrid/jqGrid/badge/issue?style=flat-square)
----
-
 jqGrid is a popular jQuery Plugin for displaying and editing data in tabular form. It has some other more sophisticated features, like subgrids, TreeGrids, grouping and so on.
 
 jqGrid was developed mostly by [Tony Tomov](https://github.com/tonytomov) in the past and it was available under MIT/GPL-licenses till the version 4.7.0 published Dec 8, 2014 (see [here](https://github.com/tonytomov/jqGrid/tree/v4.7.0)). Short time after that the license agreement was changed (see <a href="https://github.com/tonytomov/jqGrid/commit/1b2cb55c93ee8b279f15a3faf5a2f82a98da3b4c">here</a>) and new 4.7.1 version was <a href="https://github.com/tonytomov/jqGrid/tree/v4.7.1">published</a>.
