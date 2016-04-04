@@ -271,7 +271,7 @@
 						return "#" + jqID(getId(cmName));
 					},
 					parseFilter = function (fillAll) {
-						var j, filters = p.postData.filters, filter = {}, rules, rule,
+						var i, j, filters = p.postData.filters, filter = {}, rules, rule,
 							iColByName = p.iColByName, cm, soptions;
 						if (fillAll) {
 							for (j = 0; j < colModel.length; j++) {
@@ -304,23 +304,28 @@
 						}
 						for (j = 0; j < rules.length; j++) {
 							rule = rules[j];
+							// find all columns in colModel, where
+							// colModel[i].index || colModel[i].name === rule.field
 							cm = colModel[iColByName[rule.field]];
-							if (cm == null || cm.search === false) {
-								continue;
-							}
-							soptions = cm.searchoptions || {};
-							if (soptions.sopt) {
-								if ($.inArray(rule.op, soptions.sopt) < 0) {
+							for (i = 0; i < colModel.length; i++) {
+								cm = colModel[i];
+								if ((cm.index || cm.name) !== rule.field || cm.search === false) {
 									continue;
 								}
-							} else if (cm.stype === "select") {
-								if (rule.op !== "eq") {
+								soptions = cm.searchoptions || {};
+								if (soptions.sopt) {
+									if ($.inArray(rule.op, soptions.sopt) < 0) {
+										continue;
+									}
+								} else if (cm.stype === "select") {
+									if (rule.op !== "eq") {
+										continue;
+									}
+								} else if (rule.op !== o.defaultSearch) {
 									continue;
 								}
-							} else if (rule.op !== o.defaultSearch) {
-								continue;
+								filter[cm.name] = { op: rule.op, data: rule.data };
 							}
-							filter[cm.name] = { op: rule.op, data: rule.data };
 						}
 						return filter;
 					},
