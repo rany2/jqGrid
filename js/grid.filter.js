@@ -183,7 +183,7 @@
 				// clear any error
 				p.error = false;
 				p.errmsg = "";
-				return $.isFunction(p.onChange) ? p.onChange.call(this, p) : false;
+				return $.isFunction(p.onChange) ? p.onChange.call(getGrid(), p, this) : false;
 			};
 			/*
 			 * Redraw the filter every time when new field is added/deleted
@@ -194,7 +194,7 @@
 				var t = this.createTableForGroup(p.filter, null);
 				$(this).append(t);
 				if ($.isFunction(p.afterRedraw)) {
-					p.afterRedraw.call(this, p);
+					p.afterRedraw.call(getGrid(), p, this);
 				}
 			};
 			/**
@@ -391,9 +391,12 @@
 						}
 					}
 					if (!columns) { return; }
+					var editoptions = $.extend({}, columns.editoptions || {});
+					delete editoptions.readonly;
+					delete editoptions.disabled;
 					var searchoptions = $.extend(
 							{},
-							columns.editoptions || {},
+							editoptions || {},
 							columns.searchoptions || {},
 							getCmInfo(columns.cmName),
 							{ id: jgrid.randId(), name: columns.name, mode: "search" }
@@ -491,8 +494,11 @@
 						cm.searchoptions.size = 10;
 					}
 				}
+				var editoptions = $.extend({}, cm.editoptions || {});
+				delete editoptions.readonly;
+				delete editoptions.disabled;
 				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
-						$.extend({}, cm.editoptions || {}, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name }),
+						$.extend({}, editoptions, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name }),
 						rule.data, true, that.p.ajaxSelectOptions || {}, true);
 				if (rule.op === "nu" || rule.op === "nn") {
 					$(ruleDataInput).attr("readonly", "true");
