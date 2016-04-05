@@ -294,10 +294,12 @@
 							} catch (ignore) {
 								filters = {};
 							}
+						} else {
+							filters = filters || {};
 						}
-						rules = (filters || {}).rules;
+						rules = filters.rules || {};
 						if (filters == null ||
-								filters.groupOp.toUpperCase() !== o.groupOp.toUpperCase() ||
+								(filters.groupOp != null && o.groupOp != null && filters.groupOp.toUpperCase() !== o.groupOp.toUpperCase()) ||
 								rules == null || rules.length === 0 ||
 								(filters.groups != null && filters.groups.length > 0)) {
 							return filter;
