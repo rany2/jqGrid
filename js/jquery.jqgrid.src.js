@@ -8911,6 +8911,7 @@
 								}
 							}
 						}
+
 						if (!filters || !p.search) { return filter; }
 						if (typeof filters === "string") {
 							try {
