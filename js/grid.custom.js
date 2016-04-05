@@ -408,9 +408,16 @@
 								sopt[nm] = so;
 								j++;
 							} else {
-								try {
-									delete p.postData[nm];
-								} catch (ignore) { }
+								if (sdata.hasOwnProperty(nm)) {
+									delete sdata[nm];
+								}
+								if (!(o.stringResult || o.searchOperators || p.datatype === "local")) {
+									try {
+										if (p.postData != null && p.postData.hasOwnProperty(nm)) {
+											delete p.postData[nm];
+										}
+									} catch (ignore) { }
+								}
 							}
 						});
 						var sd = j > 0 ? true : false;
