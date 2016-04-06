@@ -45,10 +45,13 @@
 				return (colModel.editoptions || {})[name];
 			}
 		},
+		encodeAttr = function (v) {
+			return String(v).replace(/\'/g, "&#39;");
+		},
 		parseCheckboxOptions = function (options) {
 			var colModel = options.colModel || options.cm, checked, unchecked,
 				title = colModel.title !== false ?
-						" title='" + (options.colName || colModel.name) + "'" :
+						" title='" + encodeAttr(options.colName || colModel.name) + "'" :
 						"",
 				getOption = function (name) {
 					return getOptionByName(colModel, name);
@@ -59,7 +62,7 @@
 				yes = typeof value === "string" ? (value.split(":")[0] || "Yes") : "Yes",
 				no = typeof value === "string" ? (value.split(":")[1] || "No") : "No",
 				buildCheckbox = function (classes) {
-					return "<i class='" + classes + "'" + title + "></i>";
+					return "<i class='" + encodeAttr(classes) + "'" + title + "></i>";
 				},
 				disabled = getOption("disabled");
 
@@ -307,7 +310,7 @@
 		};
 	$FnFmatter.email = function (cellval, opts) {
 		if (!fmatter.isEmpty(cellval)) {
-			return "<a href='mailto:" + cellval + "'>" + cellval + "</a>";
+			return "<a href='mailto:" + encodeAttr(cellval) + "'>" + cellval + "</a>";
 		}
 		return defaultFormat(cellval, opts);
 	};
@@ -345,7 +348,7 @@
 		}
 		if (op.target) { target = "target=" + op.target; }
 		if (!fmatter.isEmpty(cellval)) {
-			return "<a " + target + " href='" + cellval + "'>" + cellval + "</a>";
+			return "<a " + target + " href='" + encodeAttr(cellval) + "'>" + cellval + "</a>";
 		}
 		return defaultFormat(cellval, op);
 	};
@@ -394,7 +397,7 @@
 		}
 		if (typeof cellval === "string" || fmatter.isNumber(cellval) || $.isFunction(op.cellValue)) {
 			//add this one even if cellval is blank string
-			return "<a " + target + " href='" + idUrl + "'>" +
+			return "<a " + target + " href='" + encodeAttr(idUrl) + "'>" +
 				($.isFunction(op.cellValue) ? getOptionValue(op.cellValue) : cellval) +
 				"</a>";
 		}
@@ -446,7 +449,7 @@
 			}
 			if (typeof cellval === "string" || fmatter.isNumber(cellval) || $.isFunction(op.cellValue)) {
 				//add this one even if cellval is blank string
-				return "<a " + target + " href='" + idUrl + "'>" +
+				return "<a " + target + " href='" + encodeAttr(idUrl) + "'>" +
 					($.isFunction(op.cellValue) ? getOptionValue(op.cellValue) : cellval) +
 					"</a>";
 			}
@@ -782,13 +785,13 @@
 			actionButton = function (options) {
 				var action = options.action, actionName = options.actionName || action,
 					idPrefix = options.idPrefix !== undefined ? options.idPrefix : (action.charAt(0).toUpperCase() + action.substring(1));
-				return "<div title='" + op[action + "title"] +
+				return "<div title='" + encodeAttr(op[action + "title"]) +
 					(options.hidden ? "' style='display:none;" : "") +
-					"' class='" + $self.jqGrid("getGuiStyles", "actionsButton", "ui-pg-div ui-inline-" + action) + "' " +
-					(idPrefix !== null ? "id='j" + idPrefix + "Button_" + rowid : "") +
+					"' class='" + encodeAttr($self.jqGrid("getGuiStyles", "actionsButton", "ui-pg-div ui-inline-" + action)) + "' " +
+					(idPrefix !== null ? "id='j" + encodeAttr(idPrefix + "Button_" + rowid) : "") +
 					"' onclick=\"return jQuery.fn.fmatter.rowactions.call(this,event,'" + actionName + "');\" " +
 					(options.noHovering ? "" : hoverAttributes) + "><span class='" +
-					cssIconClass(action) + "'></span></div>";
+					encodeAttr(cssIconClass(action)) + "'></span></div>";
 			},
 			n = op.custom != null ? op.custom.length - 1 : -1;
 
@@ -808,7 +811,7 @@
 				str += actionButton(info);
 			}
 		}
-		return "<div class='" + $self.jqGrid("getGuiStyles", "actionsDiv", "ui-jqgrid-actions") + "'>" + str + "</div>";
+		return "<div class='" + encodeAttr($self.jqGrid("getGuiStyles", "actionsDiv", "ui-jqgrid-actions")) + "'>" + str + "</div>";
 	};
 	$FnFmatter.actions.pageFinalization = function (iCol) {
 		var $self = $(this), p = this.p, colModel = p.colModel, cm = colModel[iCol],
