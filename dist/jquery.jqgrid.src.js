@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.13.2 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.13.3-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-04-10
+ * Date: 2016-04-14
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -353,7 +353,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.13.2",
+		version: "4.13.3-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -14020,6 +14020,9 @@
 								vv = summary.v;
 							}
 							tmpdata = jgrid.format(summaryTpl, vv);
+							if (cm.summaryFormat) {
+								tmpdata = cm.summaryFormat.call($t, g, tmpdata, vv, cm);
+							}
 							break;
 						}
 					}
@@ -15618,7 +15621,7 @@
 					opts = $.extend({
 						cursor: "move",
 						axis: "y",
-						items: ">.jqgrow"
+						items: ">tbody>.jqgrow"
 					},
 					opts || {});
 					if (opts.start && $.isFunction(opts.start)) {
@@ -15655,7 +15658,7 @@
 							opts._update_.apply(this, [ev, ui]);
 						}
 					};
-					$($t.tBodies[0]).sortable(opts);
+					$($t).sortable(opts);
 					if ($.isFunction($.fn.disableSelection)) {
 						// The method disableSelection exists starting with jQuery UI 1.6,
 						// but it's declared as deprecated since jQuery UI 1.9

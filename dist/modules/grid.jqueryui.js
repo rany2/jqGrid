@@ -408,7 +408,7 @@
 					opts = $.extend({
 						cursor: "move",
 						axis: "y",
-						items: ">.jqgrow"
+						items: ">tbody>.jqgrow"
 					},
 					opts || {});
 					if (opts.start && $.isFunction(opts.start)) {
@@ -445,7 +445,7 @@
 							opts._update_.apply(this, [ev, ui]);
 						}
 					};
-					$($t.tBodies[0]).sortable(opts);
+					$($t).sortable(opts);
 					if ($.isFunction($.fn.disableSelection)) {
 						// The method disableSelection exists starting with jQuery UI 1.6,
 						// but it's declared as deprecated since jQuery UI 1.9
