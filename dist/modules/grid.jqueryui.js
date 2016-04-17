@@ -238,7 +238,12 @@
 				/* Function to get the permutation array, and pass it to the
 				   "done" function */
 				apply_perm: function () {
-					var perm = [], showHideColOptions = { skipSetGridWidth: true, skipSetGroupHeaders: true };
+					var perm = [],
+						showHideColOptions = {
+							notSkipFrozen: opts.notSkipFrozen === undefined ? false : opts.notSkipFrozen,
+							skipSetGridWidth: true,
+							skipSetGroupHeaders: true
+						};
 
 					$("option", select).each(function () {
 						if ($(this).is(":selected")) {

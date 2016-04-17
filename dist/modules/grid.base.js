@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-04-14
+ * Date: 2016-04-17
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2375,9 +2375,7 @@
 				},
 				stdLoadError = function (jqXHR, textStatus, errorThrown) {
 					if (textStatus !== "abort" && errorThrown !== "abort") {
-						var $errorDiv = $(this.grid.eDiv),
-							contentType = jqXHR.getResponseHeader ("Content-Type"),
-							$errorSpan = $errorDiv.children(".ui-jqgrid-error"),
+						var contentType = jqXHR.getResponseHeader ("Content-Type"),
 							message = jqXHR.responseText || "",
 							processHtmlError = function (msg) {
 								var div = document.createElement("div"), scripts, i, bodyMatch;
@@ -2430,14 +2428,7 @@
 								(message !== "" ? "<hr />" : "") +
 								message;
 						}
-						$errorSpan.html(message || textStatus || errorThrown);
-						$errorDiv.show();
-						if (p.errorDisplayTimeout) {
-							setTimeout(function () {
-								$errorSpan.empty();
-								$errorDiv.hide();
-							}, p.errorDisplayTimeout);
-						}
+						$self0.jqGrid("displayErrorMessage", message || textStatus || errorThrown);
 					}
 				};
 			if (pin == null) {
@@ -5688,6 +5679,21 @@
 		isBootstrapGuiStyle: function () {
 			return $.inArray("ui-jqgrid-bootstrap", $(this).jqGrid("getGuiStyles", "gBox").split(" ")) >= 0;
 		},
+		displayErrorMessage: function (message) {
+			var $t = this instanceof $ && this.length > 0 ? this[0] : this;
+			if (!$t || !$t.grid || !$t.p || !message) { return; }
+			var $errorDiv = $($t.grid.eDiv),
+				$errorSpan = $errorDiv.children(".ui-jqgrid-error");
+
+			$errorSpan.html(message);
+			$errorDiv.show();
+			if ($t.p.errorDisplayTimeout) {
+				setTimeout(function () {
+					$errorSpan.empty();
+					$errorDiv.hide();
+				}, $t.p.errorDisplayTimeout);
+			}
+		},
 		getIconRes: function (path) {
 			var $t = this instanceof $ && this.length > 0 ? this[0] : this;
 			if (!$t || !$t.p) { return ""; }
@@ -6449,13 +6455,13 @@
 
 				$(p.colModel).each(function (iCol) {
 					if ($.inArray(this.name, colname) !== -1 && this.hidden === sw) {
-						if (p.frozenColumns === true && this.frozen === true) {
+						if (p.frozenColumns === true && this.frozen === true && !options.notSkipFrozen) {
 							return true;
 						}
-						$("tr[role=row]", grid.hDiv).each(function () {
+						$("tr[role=row]", grid.hDiv).add($("tr[role=row]", grid.fhDiv)).each(function () {
 							$(this.cells[iCol]).css("display", show);
 						});
-						$($t.rows).each(function () {
+						$($t.rows).add(grid.fbRows).each(function () {
 							var cell = this.cells[iCol];
 							if (!$(this).hasClass("jqgroup") || (cell != null && cell.colSpan === 1)) {
 								$(cell).css("display", show);
@@ -6516,10 +6522,24 @@
 			return this.each(function () { base.showHideCol.call($(this), colname, "", options); });
 		},
 		remapColumns: function (permutation, updateCells, keepHeader) {
-			var ts = this[0], p = ts.p, grid = ts.grid, iCol, n, makeArray = $.makeArray;
+			var ts = this[0], p = ts.p, grid = ts.grid, iCol, n, makeArray = $.makeArray,
+				isFrozenColumns = p.frozenColumns === true, $toResort,
+				nFrozenColumns = this.jqGrid("getNumberOfFrozenColumns"),
+				permutationNormalized;
+			function normalizePermutation() {
+				var frozen = [], nonFrozen = [], i, l = permutation.length;
+				for (i = 0; i < l; i++) {
+					if (isFrozenColumns && permutation[i] < nFrozenColumns) {
+						frozen.push(permutation[i]);
+					} else {
+						nonFrozen.push(permutation[i]);
+					}
+				}
+				return frozen.concat(nonFrozen);
+			}
 			function resortArray(a) {
 				var ac = a.length ? makeArray(a) : $.extend({}, a);
-				$.each(permutation, function (i) {
+				$.each(permutationNormalized, function (i) {
 					a[i] = ac[this];
 				});
 			}
@@ -6527,40 +6547,78 @@
 				var $rows = selector ? $parent.children(selector) : $parent.children();
 				$rows.each(function () {
 					var row = this, elems = makeArray(row.cells);
-					$.each(permutation, function (i) {
+					$.each(permutationNormalized, function (i) {
 						var e = elems[this], oldElem = row.cells[i];
-						if (e.cellIndex !== i) { // if not already on the correct place
+						if (e != null && oldElem != null &&	e.cellIndex !== i) {
 							e.parentNode.insertBefore(e, oldElem);
 						}
 					});
 				});
 			}
 			if (grid == null || p == null) { return; }
+			// One have to "normalize" permutation array in case of usage frozen columns.
+			// The new index of frozen columns have to be less then nFrozenColumns
+			// (less then the number of frozen columns). In the same way the new index
+			// of non-frozen columns have to stay >=nFrozenColumns (non-frozen columns
+			// have to stay non-frozen)
+			permutationNormalized = normalizePermutation();
 			resortArray(p.colModel);
 			resortArray(p.colNames);
 			resortArray(grid.headers);
-			// $("thead:first", grid.hDiv)
-			resortRows($(grid.hDiv).find(">div>.ui-jqgrid-htable>thead"), keepHeader && ":not(.ui-jqgrid-labels)");
+			$toResort = $(grid.hDiv)
+					.children("div")
+					.children("table.ui-jqgrid-htable")
+					.children("thead");
+			if (isFrozenColumns && grid.fhDiv != null) {
+				$toResort = $toResort.add(
+					grid.fhDiv
+						.children("table.ui-jqgrid-htable")
+						.children("thead")
+				);
+			}
+			resortRows($toResort, keepHeader && ":not(.ui-jqgrid-labels)");
 			if (updateCells) {
-				resortRows($(ts.tBodies[0]), "tr.jqgfirstrow,tr.jqgrow,tr.jqfoot");
+				$toResort = $(ts.tBodies[0]);
+				if (isFrozenColumns && grid.fbDiv != null) {
+					$toResort = $toResort.add(
+						grid.fbDiv
+							.children("table.ui-jqgrid-btable")
+							.children("tbody")
+							.first()
+					);
+				}
+				resortRows($toResort, "tr.jqgfirstrow,tr.jqgrow,tr.jqfoot");
 			}
 			if (p.footerrow) {
-				resortRows($(grid.sDiv).find(">div>.ui-jqgrid-ftable>tbody").first());
+				$toResort = $(grid.sDiv)
+					.children("div")
+					.children("table.ui-jqgrid-ftable")
+					.children("tbody")
+					.first();
+				if (isFrozenColumns && grid.fsDiv != null) {
+					$toResort = $toResort.add(
+						grid.fsDiv
+							.children("table.ui-jqgrid-ftable")
+							.children("tbody")
+							.first()
+					);
+				}
+				resortRows($toResort);
 			}
 			if (p.remapColumns) {
 				if (!p.remapColumns.length) {
-					p.remapColumns = makeArray(permutation);
+					p.remapColumns = makeArray(permutationNormalized);
 				} else {
 					resortArray(p.remapColumns);
 				}
 			}
-			p.lastsort = $.inArray(p.lastsort, permutation);
+			p.lastsort = $.inArray(p.lastsort, permutationNormalized);
 			// rebuild iColByName
 			p.iColByName = {};
 			for (iCol = 0, n = p.colModel.length; iCol < n; iCol++) {
 				p.iColByName[p.colModel[iCol].name] = iCol;
 			}
-			feedback.call(ts, "onRemapColumns", permutation, updateCells, keepHeader);
+			feedback.call(ts, "onRemapColumns", permutationNormalized, updateCells, keepHeader);
 		},
 		remapColumnsByName: function (permutationByName, updateCells, keepHeader) {
 			var ts = this[0], p = ts.p, permutation = [], i, n, cmNames = permutationByName.slice(), inArray = $.inArray;
