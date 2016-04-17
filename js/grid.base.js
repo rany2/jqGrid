@@ -2375,9 +2375,7 @@
 				},
 				stdLoadError = function (jqXHR, textStatus, errorThrown) {
 					if (textStatus !== "abort" && errorThrown !== "abort") {
-						var $errorDiv = $(this.grid.eDiv),
-							contentType = jqXHR.getResponseHeader ("Content-Type"),
-							$errorSpan = $errorDiv.children(".ui-jqgrid-error"),
+						var contentType = jqXHR.getResponseHeader ("Content-Type"),
 							message = jqXHR.responseText || "",
 							processHtmlError = function (msg) {
 								var div = document.createElement("div"), scripts, i, bodyMatch;
@@ -2430,14 +2428,7 @@
 								(message !== "" ? "<hr />" : "") +
 								message;
 						}
-						$errorSpan.html(message || textStatus || errorThrown);
-						$errorDiv.show();
-						if (p.errorDisplayTimeout) {
-							setTimeout(function () {
-								$errorSpan.empty();
-								$errorDiv.hide();
-							}, p.errorDisplayTimeout);
-						}
+						$self0.jqGrid("displayErrorMessage", message || textStatus || errorThrown);
 					}
 				};
 			if (pin == null) {
@@ -5687,6 +5678,21 @@
 		},
 		isBootstrapGuiStyle: function () {
 			return $.inArray("ui-jqgrid-bootstrap", $(this).jqGrid("getGuiStyles", "gBox").split(" ")) >= 0;
+		},
+		displayErrorMessage: function (message) {
+			var $t = this instanceof $ && this.length > 0 ? this[0] : this;
+			if (!$t || !$t.grid || !$t.p || !message) { return; }
+			var $errorDiv = $($t.grid.eDiv),
+				$errorSpan = $errorDiv.children(".ui-jqgrid-error");
+
+			$errorSpan.html(message);
+			$errorDiv.show();
+			if ($t.p.errorDisplayTimeout) {
+				setTimeout(function () {
+					$errorSpan.empty();
+					$errorDiv.hide();
+				}, $t.p.errorDisplayTimeout);
+			}
 		},
 		getIconRes: function (path) {
 			var $t = this instanceof $ && this.length > 0 ? this[0] : this;
