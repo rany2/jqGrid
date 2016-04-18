@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-04-17
+ * Date: 2016-04-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -7418,8 +7418,8 @@
 						mode: mode
 					});
 				}
-				var highlightClasses = $self.jqGrid("getGuiStyles", "select", "edit-cell"),
-					hoverClasses = $self.jqGrid("getGuiStyles", "hover", "selected-row");
+				var highlightClasses = $self.jqGrid("getGuiStyles", "states.select", "edit-cell"),
+					hoverClasses = $self.jqGrid("getGuiStyles", "states.hover", "selected-row");
 				if (editable === true && ed === true && !cc.hasClass("not-editable-cell")) {
 					if (iColOld >= 0 && iRowOld >= 0) {
 						getTdByColumnIndex.call($t, $trOld[0], iColOld).removeClass(highlightClasses);
