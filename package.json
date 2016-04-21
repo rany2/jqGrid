@@ -57,7 +57,7 @@
     "grunt": "^1.0.1",
     "grunt-closure-tools": "^0.9.9",
     "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-concat": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^1.0.1",
     "grunt-contrib-jshint": "^1.0.0",
@@ -66,6 +66,6 @@
     "grunt-file-append": "^0.0.6",
     "grunt-jscs": "^2.8.0",
     "grunt-newer": "^1.2.0",
-    "grunt-replace": "^0.11.0"
+    "grunt-replace": "^1.0.1"
   }
 }
