@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-04-18
+ * Date: 2016-04-22
  */
 //jsHint options
 /*jshint eqnull:true */
