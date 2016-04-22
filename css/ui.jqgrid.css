@@ -224,7 +224,8 @@
 	margin: 0;
 }
 .ui-jqgrid-labels .ui-th-column-header,
-.ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+.ui-jqgrid .ui-jqgrid-labels th.ui-th-column,
+.ui-jqgrid .ui-jqgrid-legacy-subgrid .ui-th-subgrid {
 	overflow: hidden;
 	white-space: nowrap;
 	text-align: center;
@@ -377,7 +378,8 @@
 .ui-jqgrid tr.jqgrow > td,
 .ui-jqgrid tr.jqgroup > td,
 .ui-jqgrid tr.jqfoot > td,
-.ui-jqgrid tr.ui-subgrid > td {
+.ui-jqgrid tr.ui-subgrid > td,
+.ui-jqgrid tr.ui-subtblcell > td {
 	overflow: hidden;
 	white-space: pre;
 	vertical-align: middle;

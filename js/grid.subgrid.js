@@ -153,7 +153,7 @@
 						var $th, i,	subgridTableClasses = getSubgridStyle("legacyTable", "ui-jqgrid-legacy-subgrid" +
 								(p.altRows === true && $(ts).jqGrid("isBootstrapGuiStyle") ? " table-striped" : "")),
 							$table = $("<table" +
-								(subgridTableClasses ? " class='" + subgridTableClasses + "'" : "") +
+								(subgridTableClasses ? " style='width:1px' role='presentation' class='" + subgridTableClasses + "'" : "") +
 								"><thead></thead><tbody></tbody></table>"),
 							$tr = $("<tr></tr>");
 						for (i = 0; i < cm.name.length; i++) {
