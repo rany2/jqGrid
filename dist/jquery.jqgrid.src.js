@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-04-22
+ * Date: 2016-04-23
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -3543,7 +3543,7 @@
 						arrayReaderInfos = p.arrayReaderInfos, info, preloadedNodes = {},
 						attrReader = function (nodeName) {
 							return function (obj) {
-								var attrValue = obj.getAttribute(nodeName);
+								var attrValue = obj != null && isFunction(obj.getAttribute) ? obj.getAttribute(nodeName) : null;
 								return attrValue !== null ? attrValue : undefined;
 							};
 						},
