@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-04-23
+ * Date: 2016-04-30
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -5310,7 +5310,10 @@
 						return;
 					}
 					ri = $tr[0].id;
-					var scb = $(target).hasClass("cbox"), cSel = feedback.call(ts, "beforeSelectRow", ri, e),
+					var scb = $(target).hasClass("cbox") &&
+							$(target).is(":enabled") &&
+							!hasOneFromClasses(target, disabledStateClasses),
+						cSel = feedback.call(ts, "beforeSelectRow", ri, e),
 						editingInfo = jgrid.detectRowEditing.call(ts, ri),
 						locked = editingInfo != null && editingInfo.mode !== "cellEditing"; // editingInfo.savedRow.ic
 					if (target.tagName === "A" || (locked && !scb)) { return; }
@@ -6458,10 +6461,18 @@
 						if (p.frozenColumns === true && this.frozen === true && !options.notSkipFrozen) {
 							return true;
 						}
-						$("tr[role=row]", grid.hDiv).add($("tr[role=row]", grid.fhDiv)).each(function () {
+						var $rows = $(grid.hDiv).find("tr[role=row]");
+						if (p.frozenColumns === true && grid.fhDiv != null) {
+							$rows = $rows.add($(grid.fhDiv).find("tr[role=row]"));
+						}
+						$rows.each(function () {
 							$(this.cells[iCol]).css("display", show);
 						});
-						$($t.rows).add(grid.fbRows).each(function () {
+						$rows = $($t.rows);
+						if (p.frozenColumns === true && grid.fbRows != null) {
+							$rows = $rows.add(grid.fbRows);
+						}
+						$rows.each(function () {
 							var cell = this.cells[iCol];
 							if (!$(this).hasClass("jqgroup") || (cell != null && cell.colSpan === 1)) {
 								$(cell).css("display", show);
@@ -6470,7 +6481,15 @@
 							// grouping header row if ($(this).hasClass("jqgroup")) and decrement the value of
 							// colspan.
 						});
-						if (p.footerrow) { $("tr.footrow td:eq(" + iCol + ")", grid.sDiv).css("display", show); }
+						if (p.footerrow) {
+							$rows = $(grid.sDiv).find("tr.footrow");
+							if (p.frozenColumns === true && grid.fsDiv != null) {
+								$rows = $rows.add($(grid.fsDiv).find("tr.footrow"));
+							}
+							$rows.each(function () {
+								$(this.cells[iCol]).css("display", show);
+							});
+						}
 						cw = parseInt(this.width, 10);
 						if (show === "none") {
 							p.tblwidth -= cw + brd;
