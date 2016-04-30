@@ -107,7 +107,7 @@
 			this.each(function () {
 				var $t = this, grp = $t.p.groupingView, groups = grp.groups, counters = grp.counters,
 					lastvalues = grp.lastvalues, isInTheSameGroup = grp.isInTheSameGroup, groupLength = grp.groupField.length,
-					i, newGroup, counter, fieldName, v, displayName, displayValue, changed = false,
+					i, j, keys, newGroup, counter, fieldName, v, displayName, displayValue, changed = false,
 					groupingCalculationsHandler = base.groupingCalculations.handler,
 					buildSummary = function () {
 						var iSummary, summary, st;
@@ -136,7 +136,20 @@
 						displayValue = v;
 					}
 					if (v !== undefined) {
-						newGroup = { idx: i, dataIndex: fieldName, value: v, displayValue: displayValue, startRow: irow, cnt: 1, summary: [] };
+						keys = [];
+						for (j = 0; j <= i; j++) {
+							keys.push(record[grp.groupField[j]]);
+						}
+						newGroup = {
+							idx: i,
+							dataIndex: fieldName,
+							value: v,
+							displayValue: displayValue,
+							startRow: irow,
+							cnt: 1,
+							keys: keys,
+							summary: []
+						};
 						if (irow === 0) {
 							// First record always starts a new group
 							groups.push(newGroup);
