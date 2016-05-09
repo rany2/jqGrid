@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-05-05
+ * Date: 2016-05-09
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -9645,6 +9645,9 @@
 					"jqGridRefreshFilterValues.filterToolbar" + (o.loadFilterDefaults ? " jqGridAfterLoadComplete.filterToolbar" : ""),
 					function () {
 						var cmName, filter, newFilters = parseFilter(true) || {}, $input, $searchOper, i;
+						if (!o.stringResult && !o.searchOperators && p.datatype !== "local" && p.search) {
+							return; // do nothing on legacy searching
+						}
 
 						for (cmName in newFilters) {
 							if (newFilters.hasOwnProperty(cmName)) {

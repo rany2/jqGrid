@@ -943,6 +943,9 @@
 					"jqGridRefreshFilterValues.filterToolbar" + (o.loadFilterDefaults ? " jqGridAfterLoadComplete.filterToolbar" : ""),
 					function () {
 						var cmName, filter, newFilters = parseFilter(true) || {}, $input, $searchOper, i;
+						if (!o.stringResult && !o.searchOperators && p.datatype !== "local" && p.search) {
+							return; // do nothing on legacy searching
+						}
 
 						for (cmName in newFilters) {
 							if (newFilters.hasOwnProperty(cmName)) {
