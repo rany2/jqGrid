@@ -7,7 +7,7 @@ jqGrid was developed mostly by [Tony Tomov](https://github.com/tonytomov) in the
 
 The code from the GitHib repository is the fork of jqGrid 4.7.0 - the latest version available under MIT/GPL-licenses. It will be provided under MIT/GPL-licenses.
 
-Below you can find short description of minor new features and the bug fixes implemented in free jqGrid 4.13.3 (compared with version 4.13.2). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](http://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
+Below you can find short description of minor new features and the bug fixes implemented in free jqGrid 4.13.2 (compared with version 4.13.1). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](http://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
 
 Read [Wiki](https://github.com/free-jqgrid/jqGrid/wiki) for more detailed information about the features of free-jqGrid. The preliminary version of the documentation can be found [here](http://free-jqgrid.github.io/).
 
@@ -17,17 +17,17 @@ One can install the package with respect of [npm](https://www.npmjs.com/package/
 
 The package is published on [WebJars](http://www.webjars.org/) too and it's deployed to [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cfree-jqgrid).
 
-Free jqGrid is is available from [jsDelivr CDN](http://www.jsdelivr.com/#!free-jqgrid) and [cdnjs](https://cdnjs.com/libraries/free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
+Free jqGrid is is available from [cdnjs](https://cdnjs.com/libraries/free-jqgrid) and [jsDelivr CDN](http://www.jsdelivr.com/#!free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.13.3/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.3/js/i18n/grid.locale-de.min.js"></script>
-<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.3/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.2/css/ui.jqgrid.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.2/js/i18n/grid.locale-de.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.2/js/jquery.jqgrid.min.js"></script>
 ```
 or
 ```html
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.3/css/ui.jqgrid.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.3/js/i18n/grid.locale-de.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.3/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.13.2/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.2/js/i18n/grid.locale-de.min.js"></script>
+<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.2/js/jquery.jqgrid.min.js"></script>
 ```
 **The locale file is optional**. One can, but one don't need to include `grid.locale-en.min.js`, because the same information is already included in the `jquery.jqgrid.min.js` (or `jquery.jqgrid.src.js`).
 
@@ -39,25 +39,31 @@ If somebody want to test the *latest* version of free jqGrid, one can load it di
 ```
 All other language files and plugins are available from CDN too. See [the wiki article](https://github.com/free-jqgrid/jqGrid/wiki/Access-free-jqGrid-from-different-CDNs) for more details about the usage of free jqGrid from CDNs and RawGit.
 
-Remark: the above URLs will be available **after publishing** the release of the version of 4.13.3.
+Remark: the above URLs will be available **after publishing** the release of the version of 4.13.2.
 
-### Below one can see the full list of changes in the version 4.13.3 compared with 4.13.2:
+### Below one can see the full list of changes in the version 4.13.2 compared with 4.13.1:
 
-* Bug fix in `filterToolbar` in case of usage legacy (`stringResult: false`) searching mode.
-* Bug fix makes `setGroupHeaders` correct working if the grid is inside of hidden div (for example, inactive jQuery UI Tab).
-* Extending `newGroup` parameter of `summaryType` of data grouping. The property `keys` is added to `newGroup` parameter of the callback function `summaryType` of grouping. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/227) for more details.
-* Bug fix of `showHideCol` to correctly process working with multiple grids.
-* Improve the compatibility to old jqGrid in processing of XML input data which has no `id` attributes.
-* Bug fix in CSS of legacy/simplified subgrids.
-* Bug fix in highlighting of selected cells during cell editing.
-* Add new `displayErrorMessage` method, which simplifies placing custom error information in the error div.
-* Add support of frozen columns in `columnChooser`, `remapColumns`, `showCol`, `hideCol`, `showHideCol`. One can use `notSkipFrozen: true` to allow hiding/showing frozen columns. For example, `$(this).jqGrid("columnChooser", {notSkipFrozen: true});`.
-* Bug fix in `sortableRows`. The bug exist in all free jqGrid in versions between version 4.10.0 and 4.13.2.
-* Add callback function `summaryFormat` to `colModel` items. The callback will be used in grouping data.
+* Bug fix in encodding of attributes inside of predefined formatters (like `formatter: "showlink"`).
+* Making `parseFilter` safer, It will be used in `filterToolbar` to restore the values in the filter based on the value of `postData.filters`.
+* Bug fixes in `filterToolbar` in case of usage `searchOnEnter: true` option.
+* Bug fixes in Seaching Dialog: the usage of `readonly` and `disabled` attributes defined in `editoptions` will be not used in Searching Dialog.
+* The value of `this`, used in `afterRedraw` and `onChange` callbacks of the Searching Dialog, is fixed corresponds to the standard behavior of jqGrid.
+* Add more parameters in `onChange` callback and `jqGridFilterAfterChange` event.
+* Bug fix in `filterToolbar` in the wrong usage of `name` property of `colModel` instead of `index`.
+* Add icons on top of README with some statistic and links to NPM, Bower, NuGet and Maven Central.
+* Replace the usage `complete` to the usage of `success` & `error` callbacks inside of legacy/simplitied subgrid module.
+* Add `aria-label='Close'` to closing icons used in free jqGrid.
+* Some improvmenes in the error div used by Bootstrap. It will be used now `alert` and `alert-danger` Bootstrap classes.
+* Bug fix in the usage of `jsonmap` property of `colModel` in case of `datatype: "jsonstring"`.
+* Bug fix of missing dependencies used by `requireJs` for `grid.common`, `grid.treegrid` and `grid.import`.
+* Bug fix in the behavior of the filter toolbar after pressing of Reset buttons of Searching Dialog.
+* Bug fix in removing of trailing spaces from input fileds of the filter toolbar in case of usage `searchOnEnter: false` mode.
+* More save processing of `formatter` and return value of some callbacks of cell and form editing mode, which should return arrays like `[true]` or `[false, "error description"]`. Old code could produce exceptions if wrong `undefined` or `null` value will be returned from the callbacks. After the fix the `undefined`/`null` value will be intrpreted as no error (`[true]`).
+* Use `JSON.stringify` as the first choice instead of `xmlJsonClass.toJson` during processing of `postData.filters` in Searching Dialog.
+* Bug fix in `footerData` and `setLabel` for the case of usage frozen columns.
 
 Other readmes contain the list of the features and bug fixed implemented before:
 
-* [README4.13.2.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.2.md) contains the readme of free jqGrid 4.13.2.
 * [README4.13.1.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.1.md) contains the readme of free jqGrid 4.13.1.
 * [README4.13.0.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.0.md) contains the readme of free jqGrid 4.13.0.
 * [README4.12.1.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.12.1.md) contains the readme of free jqGrid 4.12.1.
