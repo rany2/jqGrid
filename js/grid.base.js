@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.13.3 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.13.4-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-05-10
+ * Date: 2016-05-17
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -353,7 +353,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.13.3",
+		version: "4.13.4-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -4092,7 +4092,17 @@
 						last = intNum(p.lastpage);
 						$(".selbox", pgboxes).prop("disabled", false);
 						if (p.pginput === true) {
-							$(".ui-pg-input", pgboxes).val(p.page);
+							var $pagerInputs = $(".ui-pg-input", pgboxes),
+								numberOfDigitsInPageNumber = String(p.page).length;
+							$pagerInputs.val(p.page);
+							// verify the value of size attribute of "input.ui-pg-input"
+							// and increase it if it's required.
+							$pagerInputs.each(function () {
+								var size = parseInt($(this).attr("size"), 10);
+								if (size > 0 && size < numberOfDigitsInPageNumber) {
+									$(this).attr("size", numberOfDigitsInPageNumber);
+								}
+							});
 							sppg = p.toppager ? "#sp_1" + tspg + ",#sp_1" + tspgTop : "#sp_1" + tspg;
 							$(sppg).html($.fmatter ? numberFormat(p.lastpage, fmt) : p.lastpage)
 								.closest(".ui-pg-table").each(function () {
