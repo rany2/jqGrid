@@ -383,7 +383,7 @@
 							}
 							tmpdata = jgrid.format(summaryTpl, vv);
 							if (cm.summaryFormat) {
-								tmpdata = cm.summaryFormat.call($t, g, tmpdata, vv, cm);
+								tmpdata = cm.summaryFormat.call($t, g, tmpdata, vv, cm, summary);
 							}
 							break;
 						}
