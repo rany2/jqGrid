@@ -1,4 +1,5 @@
-﻿module.exports = function (grunt) {
+﻿/*global module,require*/
+module.exports = function (grunt) {
 	grunt.initConfig({
 		pkgFreejqGrid: grunt.file.readJSON("package.json"),
 		clean: [
