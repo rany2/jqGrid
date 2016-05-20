@@ -288,6 +288,8 @@
 							}
 						}
 
+						// TODO: test for !o.stringResult && !o.searchOperators && p.datatype !== "local"
+						// and use p.postData[cm.index || cm.name] instead of filter[cm.name]
 						if (!filters || !p.search) { return filter; }
 						if (typeof filters === "string") {
 							try {
@@ -403,6 +405,7 @@
 										}
 										break;
 									default:
+										// TODO: call unformatter if it's defined.
 										break;
 								}
 							}
