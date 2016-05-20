@@ -88,6 +88,8 @@
 				};
 			}
 			var iColumn, len = p.columns.length, cl, isIE = /msie/i.test(navigator.userAgent) && !window.opera,
+				isFunction = $.isFunction,
+				fatalErrorFunction = jgrid.defaults != null && isFunction(jgrid.defaults.fatalError) ? jgrid.defaults.fatalError : alert,
 				getGrid = function () {
 					return $("#" + jgrid.jqID(p.id))[0] || null;
 				},
@@ -161,7 +163,7 @@
 			*/
 			var checkData = function (val, colModelItem) {
 				var ret = [true, ""], $t = getGrid();
-				if ($.isFunction(colModelItem.searchrules)) {
+				if (isFunction(colModelItem.searchrules)) {
 					ret = colModelItem.searchrules.call($t, val, colModelItem);
 				} else if (jgrid && jgrid.checkValues) {
 					try {
@@ -183,7 +185,7 @@
 				// clear any error
 				p.error = false;
 				p.errmsg = "";
-				return $.isFunction(p.onChange) ? p.onChange.call(getGrid(), p, this) : false;
+				return isFunction(p.onChange) ? p.onChange.call(getGrid(), p, this) : false;
 			};
 			/*
 			 * Redraw the filter every time when new field is added/deleted
@@ -193,7 +195,7 @@
 				$("table.group:first", this).remove();
 				var t = this.createTableForGroup(p.filter, null);
 				$(this).append(t);
-				if ($.isFunction(p.afterRedraw)) {
+				if (isFunction(p.afterRedraw)) {
 					p.afterRedraw.call(getGrid(), p, this);
 				}
 			};
@@ -454,7 +456,7 @@
 					jgrid.bindEv.call($t, elm, searchoptions);
 					$(".input-elm", trpar).bind("change", function (e) {
 						var elem = e.target;
-						rule.data = elem.nodeName.toUpperCase() === "SPAN" && searchoptions && $.isFunction(searchoptions.custom_value) ?
+						rule.data = elem.nodeName.toUpperCase() === "SPAN" && searchoptions && isFunction(searchoptions.custom_value) ?
 								searchoptions.custom_value.call($t, $(elem).children(".customelement:first"), "get") : elem.value;
 						that.onchange(); // signals that the filter has changed
 					});
@@ -607,7 +609,7 @@
 						try {
 							s += this.getStringForGroup(group.groups[index]);
 						} catch (eg) {
-							alert(eg);
+							fatalErrorFunction(eg);
 						}
 					}
 				}
@@ -621,7 +623,7 @@
 							s += this.getStringForRule(group.rules[index]);
 						}
 					} catch (e) {
-						alert(e);
+						fatalErrorFunction(e);
 					}
 				}
 
@@ -646,7 +648,7 @@
 						if (p.cops.hasOwnProperty(oper)) {
 							opC = oper;
 							operand = p.cops[oper].operand;
-							if ($.isFunction(p.cops[oper].buildQueryValue)) {
+							if (isFunction(p.cops[oper].buildQueryValue)) {
 								return p.cops[oper].buildQueryValue.call(p, { cmName: rule.field, searchValue: val, operand: operand });
 							}
 						}

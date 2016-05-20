@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-05-17
+ * Date: 2016-05-20
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1522,7 +1522,7 @@
 						if (infoDialog && $.isFunction(infoDialog)) {
 							infoDialog.call($t, getRes("errors.errcap"), errorText, getRes("edit.bClose"));
 						} else {
-							alert(errorText);
+							($.isFunction(defaults.fatalError) ? defaults.fatalError : alert)(errorText);
 						}
 					}
 					break;
@@ -1567,7 +1567,10 @@
 				// examples: "[id]", "rows[page]"
 				return m[1] ? $(m[1], obj).attr(m[2]) : $(obj).attr(m[2]);
 			}
-			if (obj === undefined) { alert("expr"); }
+			if (obj === undefined) {
+				//alert("expr");
+				return undefined;
+			}
 			// !!! one should never use another form $(expr, obj) if obj could be undefined
 			// In the case the $(expr, obj) could be $("someString") and jQuery can
 			// parse it as array of characters ($("someString").length will be "someString".length) !!!
@@ -4399,7 +4402,7 @@
 						str += "</select></td>";
 					}
 					if (dir === "rtl") { pgl += str; }
-					if (p.pginput === true) { pginp = "<td dir='" + dir + "'>" + jgrid.format(getDef("pgtext") || "", "<input class='" + getGuiStyles("pager.pagerInput", "ui-pg-input") + "' type='text' size='2' maxlength='7' value='0'/>", "<span id='sp_1_" + pgid + "'>0</span>") + "</td>"; }
+					if (p.pginput === true) { pginp = "<td dir='" + dir + "'>" + jgrid.format(getDef("pgtext") || "", "<input aria-label='Page No.' class='" + getGuiStyles("pager.pagerInput", "ui-pg-input") + "' type='text' size='2' maxlength='7' value='0'/>", "<span id='sp_1_" + pgid + "'>0</span>") + "</td>"; }
 					pgid = "#" + jqID(pgid); // modify to id selector
 					if (p.pgbuttons === true) {
 						var po = ["first", "prev", "next", "last"],
@@ -4955,7 +4958,7 @@
 
 				thead += "<div id='jqgh_" + p.id + "_" + cmi.name + "'" +
 					(isMSIE ? " class='ui-th-div-ie'" : "") +
-					(labelStyle === "" ? "" : " style='" + labelStyle + "'") + ">";
+					(labelStyle === "" ? "" : " style='" + labelStyle + "'") + " role='columnheader'>";
 				headerText = cmi.autoResizable && cmi.formatter !== "actions" ?
 							"<span class='" + p.autoResizing.wrapperClassName + "'>" + p.colNames[iCol] + "</span>" :
 							p.colNames[iCol];

@@ -66,7 +66,7 @@
 								}
 							}
 						} else {
-							alert("xml2json or parse are not present");
+							(jgrid.defaults != null && $.isFunction(jgrid.defaults.fatalError) ? jgrid.defaults.fatalError : alert)("xml2json or parse are not present");
 						}
 					},
 					jsonConvert = function (jsonstr, options) {

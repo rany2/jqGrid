@@ -303,7 +303,7 @@
 				if ($UiMultiselect && $UiMultiselect.defaults) {
 					if (!jgrid._multiselect) {
 						// should be in language file
-						alert("Multiselect plugin loaded after jqGrid. Please load the plugin before the jqGrid!");
+						(jgrid.defaults != null && $.isFunction(jgrid.defaults.fatalError) ? jgrid.defaults.fatalError : alert)("Multiselect plugin loaded after jqGrid. Please load the plugin before the jqGrid!");
 						return;
 					}
 					// ??? the next line uses $.ui.multiselect.defaults which will be typically undefined
