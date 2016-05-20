@@ -197,19 +197,22 @@
 		},
 		saveRow: function (rowid, successfunc, url, extraparam, aftersavefunc, errorfunc, afterrestorefunc, beforeSaveRow) {
 			// Compatible mode old versions
-			var args = $.makeArray(arguments).slice(1), o = {}, $t = this[0], $self = $($t), p = $t != null ? $t.p : null, editOrAdd, infoDialog = jgrid.info_dialog;
+			var args = $.makeArray(arguments).slice(1), o = {}, $t = this[0], $self = $($t),
+				p = $t != null ? $t.p : null, editOrAdd, infoDialog = jgrid.info_dialog,
+				isFunction = $.isFunction,
+				fatalErrorFunction = jgrid.defaults != null && isFunction(jgrid.defaults.fatalError) ? jgrid.defaults.fatalError : alert;
 			if (!$t.grid || p == null) { return; }
 
 			if ($.type(args[0]) === "object") {
 				o = args[0];
 			} else {
-				if ($.isFunction(successfunc)) { o.successfunc = successfunc; }
+				if (isFunction(successfunc)) { o.successfunc = successfunc; }
 				if (url !== undefined) { o.url = url; }
 				if (extraparam !== undefined) { o.extraparam = extraparam; }
-				if ($.isFunction(aftersavefunc)) { o.aftersavefunc = aftersavefunc; }
-				if ($.isFunction(errorfunc)) { o.errorfunc = errorfunc; }
-				if ($.isFunction(afterrestorefunc)) { o.afterrestorefunc = afterrestorefunc; }
-				if ($.isFunction(beforeSaveRow)) { o.beforeSaveRow = beforeSaveRow; }
+				if (isFunction(aftersavefunc)) { o.aftersavefunc = aftersavefunc; }
+				if (isFunction(errorfunc)) { o.errorfunc = errorfunc; }
+				if (isFunction(afterrestorefunc)) { o.afterrestorefunc = afterrestorefunc; }
+				if (isFunction(beforeSaveRow)) { o.beforeSaveRow = beforeSaveRow; }
 			}
 			var getRes = function (path) { return $self.jqGrid("getGridRes", path); };
 			o = $.extend(true, {
@@ -277,7 +280,7 @@
 						var tr = $self.jqGrid("getGridRowById", rowid), positions = jgrid.findPos(tr);
 						infoDialog.call($t, errcap, cv[1], bClose, { left: positions[0], top: positions[1] + $(tr).outerHeight() });
 					} catch (e) {
-						alert(cv[1]);
+						fatalErrorFunction(cv[1]);
 					}
 					return;
 				}
@@ -336,19 +339,19 @@
 					postData[idname] = jgrid.stripPref(p.idPrefix, postData[idname]);
 					if (p.autoEncodeOnEdit) {
 						$.each(postData, function (n, v) {
-							if (!$.isFunction(v)) {
+							if (!isFunction(v)) {
 								postData[n] = jgrid.oldEncodePostedData(v);
 							}
 						});
 					}
 
 					$.ajax($.extend({
-						url: $.isFunction(o.url) ? o.url.call($t, postData[idname], editOrAdd, postData, o) : o.url,
+						url: isFunction(o.url) ? o.url.call($t, postData[idname], editOrAdd, postData, o) : o.url,
 						data: jgrid.serializeFeedback.call($t,
-								$.isFunction(o.serializeSaveData) ? o.serializeSaveData : p.serializeRowData,
+								isFunction(o.serializeSaveData) ? o.serializeSaveData : p.serializeRowData,
 								"jqGridInlineSerializeSaveData",
 								postData),
-						type: $.isFunction(o.mtype) ? o.mtype.call($t, editOrAdd, o, postData[idname], postData) : o.mtype,
+						type: isFunction(o.mtype) ? o.mtype.call($t, editOrAdd, o, postData[idname], postData) : o.mtype,
 						complete: function (jqXHR, textStatus) {
 							$self.jqGrid("progressBar", { method: "hide", loadtype: o.saveui, htmlcontent: o.savetext });
 							// textStatus can be "abort", "timeout", "error", "parsererror" or some text from text part of HTTP error occurs
@@ -357,7 +360,7 @@
 								var ret, sucret, j;
 								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [jqXHR, rowid, o]);
 								if (sucret == null || sucret === true) { sucret = [true, tmp]; }
-								if (sucret[0] && $.isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR); }
+								if (sucret[0] && isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR); }
 								if ($.isArray(sucret)) {
 									// expect array - status, data, rowid
 									ret = sucret[0];
@@ -391,14 +394,14 @@
 						error: function (res, stat, err) {
 							$("#lui_" + jgrid.jqID(p.id)).hide();
 							$self.triggerHandler("jqGridInlineErrorSaveRow", [rowid, res, stat, err, o]);
-							if ($.isFunction(o.errorfunc)) {
+							if (isFunction(o.errorfunc)) {
 								o.errorfunc.call($t, rowid, res, stat, err);
 							} else {
 								var rT = res.responseText || res.statusText;
 								try {
 									infoDialog.call($t, errcap, '<div class="' + getGuiStateStyles.call($t, "error") + '">' + rT + "</div>", bClose, { buttonalign: "right" });
 								} catch (e1) {
-									alert(rT);
+									fatalErrorFunction(rT);
 								}
 							}
 							if (o.restoreAfterError === true) {

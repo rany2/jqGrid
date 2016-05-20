@@ -35,7 +35,7 @@
 		// Browser globals
 		factory(jQuery);
 	}
-}(function () {
+}(function ($) {
 	"use strict";
 	// begin module jsonxml
 	var xmlJsonClass = {
@@ -212,7 +212,7 @@
 					// document.node
 					o = this.toObj(xml.documentElement);
 				} else {
-					alert("unhandled node type: " + xml.nodeType);
+					($.jgrid != null && $.jgrid.defaults != null && $.isFunction($.jgrid.defaults.fatalError) ? $.jgrid.defaults.fatalError : alert)("unhandled node type: " + xml.nodeType);
 				}
 				return o;
 			},
