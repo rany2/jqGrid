@@ -178,22 +178,22 @@
 				var $t = this, p = $t.p;
 				if (!$t.grid || !p.treeGrid) { return; }
 				switch (p.treeGridModel) {
-				case "nested":
-					var level = p.treeReader.level_field;
-					$(p.data).each(function () {
-						if (parseInt(this[level], 10) === parseInt(p.tree_root_level, 10)) {
-							result.push(this);
-						}
-					});
-					break;
-				case "adjacency":
-					var parentId = p.treeReader.parent_id_field;
-					$(p.data).each(function () {
-						if (this[parentId] === null || String(this[parentId]).toLowerCase() === "null") {
-							result.push(this);
-						}
-					});
-					break;
+					case "nested":
+						var level = p.treeReader.level_field;
+						$(p.data).each(function () {
+							if (parseInt(this[level], 10) === parseInt(p.tree_root_level, 10)) {
+								result.push(this);
+							}
+						});
+						break;
+					case "adjacency":
+						var parentId = p.treeReader.parent_id_field;
+						$(p.data).each(function () {
+							if (this[parentId] === null || String(this[parentId]).toLowerCase() === "null") {
+								result.push(this);
+							}
+						});
+						break;
 				}
 			});
 			return result;
@@ -204,13 +204,13 @@
 				var $t = this, p = $t.p;
 				if (!$t.grid || !p.treeGrid) { return; }
 				switch (p.treeGridModel) {
-				case "nested":
-					var level = p.treeReader.level_field;
-					ret = parseInt(rc[level], 10) - parseInt(p.tree_root_level, 10);
-					break;
-				case "adjacency":
-					ret = base.getNodeAncestors.call($($t), rc).length;
-					break;
+					case "nested":
+						var level = p.treeReader.level_field;
+						ret = parseInt(rc[level], 10) - parseInt(p.tree_root_level, 10);
+						break;
+					case "adjacency":
+						ret = base.getNodeAncestors.call($($t), rc).length;
+						break;
 				}
 			});
 			return ret;
@@ -245,25 +245,25 @@
 				var $t = this, p = $t.p;
 				if (!$t.grid || !p.treeGrid) { return; }
 				switch (p.treeGridModel) {
-				case "nested":
-					var lftc = p.treeReader.left_field, rgtc = p.treeReader.right_field, levelc = p.treeReader.level_field,
-						lft = parseInt(rc[lftc], 10),
-						rgt = parseInt(rc[rgtc], 10),
-						level = parseInt(rc[levelc], 10);
-					$(p.data).each(function () {
-						if (parseInt(this[levelc], 10) === level + 1 && parseInt(this[lftc], 10) > lft && parseInt(this[rgtc], 10) < rgt) {
-							result.push(this);
-						}
-					});
-					break;
-				case "adjacency":
-					var parentId = p.treeReader.parent_id_field, dtid = p.localReader.id;
-					$(p.data).each(function () {
-						if (String(this[parentId]) === String(rc[dtid])) {
-							result.push(this);
-						}
-					});
-					break;
+					case "nested":
+						var lftc = p.treeReader.left_field, rgtc = p.treeReader.right_field, levelc = p.treeReader.level_field,
+							lft = parseInt(rc[lftc], 10),
+							rgt = parseInt(rc[rgtc], 10),
+							level = parseInt(rc[levelc], 10);
+						$(p.data).each(function () {
+							if (parseInt(this[levelc], 10) === level + 1 && parseInt(this[lftc], 10) > lft && parseInt(this[rgtc], 10) < rgt) {
+								result.push(this);
+							}
+						});
+						break;
+					case "adjacency":
+						var parentId = p.treeReader.parent_id_field, dtid = p.localReader.id;
+						$(p.data).each(function () {
+							if (String(this[parentId]) === String(rc[dtid])) {
+								result.push(this);
+							}
+						});
+						break;
 				}
 			});
 			return result;
@@ -274,33 +274,33 @@
 				var $t = this, p = $t.p, len;
 				if (!$t.grid || !p.treeGrid) { return; }
 				switch (p.treeGridModel) {
-				case "nested":
-					var lftc = p.treeReader.left_field, rgtc = p.treeReader.right_field, levelc = p.treeReader.level_field,
-						lft = parseInt(rc[lftc], 10),
-						rgt = parseInt(rc[rgtc], 10),
-						level = parseInt(rc[levelc], 10);
-					$(p.data).each(function () {
-						if (parseInt(this[levelc], 10) >= level && parseInt(this[lftc], 10) >= lft && parseInt(this[lftc], 10) <= rgt) {
-							result.push(this);
-						}
-					});
-					break;
-				case "adjacency":
-					if (rc) {
-						result.push(rc);
-						var parentId = p.treeReader.parent_id_field, dtid = p.localReader.id;
+					case "nested":
+						var lftc = p.treeReader.left_field, rgtc = p.treeReader.right_field, levelc = p.treeReader.level_field,
+							lft = parseInt(rc[lftc], 10),
+							rgt = parseInt(rc[rgtc], 10),
+							level = parseInt(rc[levelc], 10);
 						$(p.data).each(function () {
-							var i;
-							len = result.length;
-							for (i = 0; i < len; i++) {
-								if (String(result[i][dtid]) === String(this[parentId])) {
-									result.push(this);
-									break;
-								}
+							if (parseInt(this[levelc], 10) >= level && parseInt(this[lftc], 10) >= lft && parseInt(this[lftc], 10) <= rgt) {
+								result.push(this);
 							}
 						});
-					}
-					break;
+						break;
+					case "adjacency":
+						if (rc) {
+							result.push(rc);
+							var parentId = p.treeReader.parent_id_field, dtid = p.localReader.id;
+							$(p.data).each(function () {
+								var i;
+								len = result.length;
+								for (i = 0; i < len; i++) {
+									if (String(result[i][dtid]) === String(this[parentId])) {
+										result.push(this);
+										break;
+									}
+								}
+							});
+						}
+						break;
 				}
 			});
 			return result;
