@@ -512,7 +512,8 @@
 									value: sv[0],
 									innerHtml: sv[1],
 									selectValue: $.trim(sv[0]),
-									selectText: $.trim(sv[1])
+									selectText: $.trim(sv[1]),
+									selected: false
 								});
 							}
 						} else if (typeof options.value === "object") {
@@ -523,38 +524,52 @@
 										value: key,
 										innerHtml: oSv[key],
 										selectValue: $.trim(key),
-										selectText: $.trim(oSv[key])
+										selectText: $.trim(oSv[key]),
+										selected: false
 									});
 								}
 							}
 						}
+						
+						// mark selection
+						// 1) first by value
+						for (i = 0; i < optionInfos.length; i++) {
+							optionInfo = optionInfos[i];
+							if (!msl && optionInfo.selectValue === $.trim(vl)) {
+								optionInfo.selected = true;
+								isSelected = true;
+							}
+							if (msl && $.inArray(optionInfo.selectValue, ovm) > -1) {
+								optionInfo.selected = true;
+								isSelected = true;
+							}
+						}
+
+						// 2) when no selection by value, then by text
+						if (!isSelected) {
+							for (i = 0; i < optionInfos.length; i++) {
+								optionInfo = optionInfos[i];
+								if (!msl && optionInfo.selectText === $.trim(vl)) {
+									optionInfo.selected = true;
+								}
+								if (msl && $.inArray(optionInfo.selectText, ovm) > -1) {
+									optionInfo.selected = true;
+								}
+							}
+						}
+						
 						//$(elem).empty();
 						for (i = 0; i < optionInfos.length; i++) {
 							optionInfo = optionInfos[i];
 							ov = document.createElement("option");
 							ov.value = optionInfo.value;
 							ov.innerHTML = optionInfo.innerHtml;
+							if(optionInfo.selected) {
+								ov.selected = "selected";
+							}
 							elem.appendChild(ov);
-							if (!msl && optionInfo.selectValue === $.trim(vl)) {
-								ov.selected = "selected";
-								isSelected = true;
-							}
-							if (msl && $.inArray(optionInfo.selectValue, ovm) > -1) {
-								ov.selected = "selected";
-								isSelected = true;
-							}
 						}
-						if (!isSelected) {
-							for (i = 0; i < optionInfos.length; i++) {
-								optionInfo = optionInfos[i];
-								if (!msl && optionInfo.selectText === $.trim(vl)) {
-									ov.selected = "selected";
-								}
-								if (msl && $.inArray(optionInfo.selectText, ovm) > -1) {
-									ov.selected = "selected";
-								}
-							}
-						}
+						
 						setAttributes(elem, options, ["value"]);
 						jgrid.fullBoolFeedback.call($t, options.selectFilled, "jqGridSelectFilled", {
 							elem: elem,
