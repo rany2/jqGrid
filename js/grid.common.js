@@ -468,18 +468,20 @@
 									setTimeout(function () {
 										var isSelected1; // undefined
 										$("option", elem1).each(function (iOpt) {
-											//if(i===0) { this.selected = ""; }
+											//if(i===0) { this.selected = false; }
 											// fix IE8/IE7 problem with selecting of the first item on multiple=true
 											if (iOpt === 0 && elem1.multiple) { this.selected = false; }
 											if ($.inArray($.trim($(this).val()), ovm1) > -1) {
-												this.selected = "selected";
+												// this.setAttribute("selected", "selected");
+												this.selected = true;
 												isSelected1 = true;
 											}
 										});
 										if (!isSelected1) {
 											$("option", elem1).each(function () {
 												if ($.inArray($.trim($(this).text()), ovm1) > -1) {
-													this.selected = "selected";
+													// this.setAttribute("selected", "selected");
+													this.selected = true;
 												}
 											});
 										}
@@ -564,8 +566,8 @@
 							ov = document.createElement("option");
 							ov.value = optionInfo.value;
 							ov.innerHTML = optionInfo.innerHtml;
-							if(optionInfo.selected) {
-								ov.selected = "selected";
+							if (optionInfo.selected) {
+								ov.selected = true;
 							}
 							elem.appendChild(ov);
 						}
