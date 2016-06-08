@@ -64,7 +64,7 @@
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-file-append": "^0.0.6",
-    "grunt-jscs": "^2.8.0",
+    "grunt-jscs": "^3.0.0",
     "grunt-newer": "^1.2.0",
     "grunt-replace": "^1.0.1"
   }
