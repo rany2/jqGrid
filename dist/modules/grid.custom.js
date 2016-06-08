@@ -690,7 +690,14 @@
 							soptions.clearSearch = this.stype === "text" ? true : false;
 						}
 						if (soptions.clearSearch) {
-							var csv = (getRes("search.resetTitle") || "Clear Search Value") + " " + p.colNames[ci];
+							var csv = $.isFunction(o.resetTitle) ?
+									o.resetTitle.call($t, {
+										options: o,
+										cm: cm,
+										cmName: cm.name,
+										iCol: ci
+									}) :
+									(getRes("search.resetTitle") || "Clear Search Value") + " " + jgrid.stripHtml(p.colNames[ci]);
 							$("td", stbl)
 								.eq(2)
 								.append("<a title='" + csv + "' aria-label='" + csv + "' class='" +
