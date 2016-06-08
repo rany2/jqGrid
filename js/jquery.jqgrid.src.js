@@ -8460,7 +8460,7 @@
 								}
 							}
 						}
-						
+
 						// mark selection
 						// 1) first by value
 						for (i = 0; i < optionInfos.length; i++) {
@@ -8487,7 +8487,7 @@
 								}
 							}
 						}
-						
+
 						//$(elem).empty();
 						for (i = 0; i < optionInfos.length; i++) {
 							optionInfo = optionInfos[i];
@@ -8499,7 +8499,7 @@
 							}
 							elem.appendChild(ov);
 						}
-						
+
 						setAttributes(elem, options, ["value"]);
 						jgrid.fullBoolFeedback.call($t, options.selectFilled, "jqGridSelectFilled", {
 							elem: elem,
