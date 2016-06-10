@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-06-07
+ * Date: 2016-06-10
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -11648,11 +11648,11 @@
 						operands: o.operands,
 						ajaxSelectOptions: p.ajaxSelectOptions,
 						groupOps: o.groupOps,
-						onChange: function (filterOptions) {
-							if (this.p.showQuery) {
-								$(".query", this).html(this.toUserFriendlyString());
+						onChange: function (filterOptions, fOpt, filterDiv) {
+							if (filterOptions.showQuery) {
+								$(".query", filterDiv).text(fOpt.toUserFriendlyString());
 							}
-							fullBoolFeedback.call($t, o.afterChange, "jqGridFilterAfterChange", $(fid), o, filterOptions);
+							fullBoolFeedback.call($t, o.afterChange, "jqGridFilterAfterChange", $(fid), o, filterOptions, fOpt);
 						},
 						direction: p.direction,
 						id: p.id
