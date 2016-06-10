@@ -239,11 +239,11 @@
 						operands: o.operands,
 						ajaxSelectOptions: p.ajaxSelectOptions,
 						groupOps: o.groupOps,
-						onChange: function (filterOptions) {
-							if (this.p.showQuery) {
-								$(".query", this).html(this.toUserFriendlyString());
+						onChange: function (filterOptions, fOpt, filterDiv) {
+							if (filterOptions.showQuery) {
+								$(".query", filterDiv).text(fOpt.toUserFriendlyString());
 							}
-							fullBoolFeedback.call($t, o.afterChange, "jqGridFilterAfterChange", $(fid), o, filterOptions);
+							fullBoolFeedback.call($t, o.afterChange, "jqGridFilterAfterChange", $(fid), o, filterOptions, fOpt);
 						},
 						direction: p.direction,
 						id: p.id
