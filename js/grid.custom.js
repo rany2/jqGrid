@@ -809,6 +809,7 @@
 											ov = document.createElement("option");
 											ov.value = "";
 											ov.innerHTML = soptions.noFilterText;
+											ov.selected = true;
 											$(elem).prepend(ov);
 										}
 										if (soptions.defaultValue !== undefined) { $(elem).val(soptions.defaultValue); }
