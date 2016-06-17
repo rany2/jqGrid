@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-06-14
+ * Date: 2016-06-17
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6474,9 +6474,9 @@
 						if (p.frozenColumns === true && this.frozen === true && !options.notSkipFrozen) {
 							return true;
 						}
-						var $rows = $(grid.hDiv).find("tr[role=row]");
+						var $rows = $(grid.hDiv).find(".ui-jqgrid-htable>thead>tr");
 						if (p.frozenColumns === true && grid.fhDiv != null) {
-							$rows = $rows.add($(grid.fhDiv).find("tr[role=row]"));
+							$rows = $rows.add($(grid.fhDiv).find(".ui-jqgrid-htable>thead>tr"));
 						}
 						$rows.each(function () {
 							$(this.cells[iCol]).css("display", show);
