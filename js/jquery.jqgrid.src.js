@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-06-14
+ * Date: 2016-06-17
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6474,9 +6474,9 @@
 						if (p.frozenColumns === true && this.frozen === true && !options.notSkipFrozen) {
 							return true;
 						}
-						var $rows = $(grid.hDiv).find("tr[role=row]");
+						var $rows = $(grid.hDiv).find(".ui-jqgrid-htable>thead>tr");
 						if (p.frozenColumns === true && grid.fhDiv != null) {
-							$rows = $rows.add($(grid.fhDiv).find("tr[role=row]"));
+							$rows = $rows.add($(grid.fhDiv).find(".ui-jqgrid-htable>thead>tr"));
 						}
 						$rows.each(function () {
 							$(this.cells[iCol]).css("display", show);
@@ -8296,7 +8296,23 @@
 				getRes = function (path) { return getGridRes.call($($t), path); },
 				errcap = getRes("errors.errcap"), edit = getRes("edit"), editMsg = edit.msg, bClose = edit.bClose;
 			function setAttributes(elm, atr, exl) {
-				var exclude = ["dataInit", "dataEvents", "dataUrl", "buildSelect", "sopt", "searchhidden", "defaultValue", "attr", "custom_element", "custom_value", "selectFilled", "rowId", "mode"];
+				var exclude = [
+						"dataInit",
+						"dataEvents",
+						"dataUrl",
+						"buildSelect",
+						"sopt",
+						"searchhidden",
+						"defaultValue",
+						"attr",
+						"custom_element",
+						"custom_value",
+						"selectFilled",
+						"rowId",
+						"mode",
+						"cm",
+						"iCol"
+					];
 				if (exl !== undefined && $.isArray(exl)) {
 					$.merge(exclude, exl);
 				}
@@ -8351,7 +8367,7 @@
 					break;
 				case "select":
 					elem = document.createElement("select");
-					var msl, ovm = [], isSelected;
+					var msl, ovm = [], isSelected, rowid = null;
 
 					if (options.multiple === true) {
 						msl = true;
@@ -8366,16 +8382,24 @@
 					if (options.size === undefined) {
 						options.size = msl ? 3 : 1;
 					}
-					if (options.dataUrl !== undefined) {
-						var rowid = null, postData = options.postData || ajaxso.postData,
-							ajaxContext = { elem: elem, options: options, cm: options.cm, iCol: options.iCol, ovm: ovm };
-						try {
-							rowid = options.rowId;
-						} catch (ignore) { }
+					try {
+						rowid = options.rowId;
+					} catch (ignore) { }
 
-						if (p && p.idPrefix) {
-							rowid = jgrid.stripPref(p.idPrefix, rowid);
-						}
+					if (p && p.idPrefix) {
+						rowid = jgrid.stripPref(p.idPrefix, rowid);
+					}
+					if (options.dataUrl !== undefined) {
+						var postData = options.postData || ajaxso.postData,
+							ajaxContext = {
+								elem: elem,
+								options: options,
+								cm: options.cm,
+								mode: options.mode,
+								rowid: rowid,
+								iCol: options.iCol,
+								ovm: ovm
+							};
 						$.ajax($.extend({
 							url: $.isFunction(options.dataUrl) ? options.dataUrl.call($t, rowid, vl, String(options.name), ajaxContext) : options.dataUrl,
 							type: "GET",
@@ -8384,7 +8408,7 @@
 							context: ajaxContext,
 							success: function (data, textStatus, jqXHR) {
 								var ovm1 = this.ovm, elem1 = this.elem, cm1 = this.cm, iCol1 = this.iCol,
-									options1 = $.extend({}, this.options),
+									options1 = $.extend({}, this.options), rowid1 = this.rowid, mode1 = this.mode,
 									a = $.isFunction(options1.buildSelect) ? options1.buildSelect.call($t, data, jqXHR, cm1, iCol1) : data;
 								if (typeof a === "string") {
 									a = $($.trim(a)).html();
@@ -8418,6 +8442,8 @@
 											elem: elem1,
 											options: options1,
 											cm: cm1,
+											rowid: rowid1,
+											mode: mode1,
 											cmName: cm1 != null ? cm1.name : options1.name,
 											iCol: iCol1
 										});
@@ -8505,6 +8531,8 @@
 							elem: elem,
 							options: options,
 							cm: options.cm,
+							rowid: rowid,
+							mode: options.mode,
 							cmName: options.cm != null ? options.cm.name : options.name,
 							iCol: options.iCol
 						});
@@ -13667,6 +13695,7 @@
 						p.navOptions || {},
 						oMuligrid || {}
 					),
+					id = o.id,
 					hoverClasses = getGuiStateStyles.call($t, "hover"),
 					disabledClass = getGuiStateStyles.call($t, "disabled"),
 					navButtonClass = getGuiStyles.call($t, "navButton", "ui-pg-button");
@@ -13675,6 +13704,9 @@
 						base.navButtonAdd.call($($t), p.pager, o);
 						if (p.toppager) {
 							elem = p.toppager;
+							if (id) {
+								id += "_top";
+							}
 						} else {
 							return;
 						}
@@ -13685,7 +13717,7 @@
 				if (typeof elem === "string" && elem.indexOf("#") !== 0) { elem = "#" + jqID(elem); }
 				var findnav = $(".navtable", elem), commonIconClass = o.commonIconClass;
 				if (findnav.length > 0) {
-					if (o.id && findnav.find("#" + jqID(o.id)).length > 0) { return; }
+					if (id && findnav.find("#" + jqID(id)).length > 0) { return; }
 					var tbd = $("<div tabindex='0' role='button'></div>");
 					if (o.buttonicon.toString().toUpperCase() === "NONE") {
 						$(tbd).addClass(navButtonClass).append("<div class='ui-pg-div'>" +
@@ -13701,7 +13733,7 @@
 							(o.caption ? "<span class='ui-pg-button-text" + (o.iconsOverText ? " ui-pg-button-icon-over-text" : "") + "'>" + o.caption + "</span>" : "") +
 							"</div>");
 					}
-					if (o.id) { $(tbd).attr("id", o.id); }
+					if (id) { $(tbd).attr("id", id); }
 					if (o.position === "first" && findnav.children("div.ui-pg-button").length > 0) {
 						findnav.children("div.ui-pg-button").first().before(tbd);
 					} else {

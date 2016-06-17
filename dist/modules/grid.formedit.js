@@ -2257,6 +2257,7 @@
 						p.navOptions || {},
 						oMuligrid || {}
 					),
+					id = o.id,
 					hoverClasses = getGuiStateStyles.call($t, "hover"),
 					disabledClass = getGuiStateStyles.call($t, "disabled"),
 					navButtonClass = getGuiStyles.call($t, "navButton", "ui-pg-button");
@@ -2265,6 +2266,9 @@
 						base.navButtonAdd.call($($t), p.pager, o);
 						if (p.toppager) {
 							elem = p.toppager;
+							if (id) {
+								id += "_top";
+							}
 						} else {
 							return;
 						}
@@ -2275,7 +2279,7 @@
 				if (typeof elem === "string" && elem.indexOf("#") !== 0) { elem = "#" + jqID(elem); }
 				var findnav = $(".navtable", elem), commonIconClass = o.commonIconClass;
 				if (findnav.length > 0) {
-					if (o.id && findnav.find("#" + jqID(o.id)).length > 0) { return; }
+					if (id && findnav.find("#" + jqID(id)).length > 0) { return; }
 					var tbd = $("<div tabindex='0' role='button'></div>");
 					if (o.buttonicon.toString().toUpperCase() === "NONE") {
 						$(tbd).addClass(navButtonClass).append("<div class='ui-pg-div'>" +
@@ -2291,7 +2295,7 @@
 							(o.caption ? "<span class='ui-pg-button-text" + (o.iconsOverText ? " ui-pg-button-icon-over-text" : "") + "'>" + o.caption + "</span>" : "") +
 							"</div>");
 					}
-					if (o.id) { $(tbd).attr("id", o.id); }
+					if (id) { $(tbd).attr("id", id); }
 					if (o.position === "first" && findnav.children("div.ui-pg-button").length > 0) {
 						findnav.children("div.ui-pg-button").first().before(tbd);
 					} else {
