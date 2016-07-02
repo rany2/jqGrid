@@ -1,6 +1,6 @@
 /*!
  * jqGrid 4.13.4-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2016-06-17
+ * Date: 2016-07-02
  */
 
 /* Grid */
@@ -1397,6 +1397,12 @@ a.clearsearchclass {
 .searchFilter .form-control {
 	padding: .1em;
 	height: 22px;
+}
+.ui-jqgrid .searchFilter table.group td {
+	padding: 1px;
+}
+.ui-jqgrid .searchFilter table {
+	border-spacing: 2px;
 }
 .ui-jqdialog.ui-jqgrid-bootstrap .modal-header .close {
 	margin-top: -0.7em;
