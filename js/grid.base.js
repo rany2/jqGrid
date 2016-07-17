@@ -2079,6 +2079,21 @@
 						_sorting.push({ by: by, dir: dir, type: stype, datefmt: dfmt, sfunc: sfunc });
 						return self;
 					};
+					this.inSet = function (f, v, t) {
+						var val = v === undefined ? null : v,
+							swst = t.stype === undefined ? "text" : t.stype;
+
+						val = self._getStr("\"" + self._toStr(val) + "\"");
+						if (swst !== "text") {
+							// NOT yet implemented
+							return self._compareValues(self.equals, f, v, "==", t);
+						}
+
+						self._append("jQuery.inArray(" + self._getStr(f) + "," + val + ".split(',')) >= 0");
+						self._setCommand(self.inSet, f);
+						self._resetNegate();
+						return self;
+					};
 					this.custom = function (ruleOp, field, data) {
 						self._append("self.p.customSortOperations." + ruleOp + ".filter.call(self,{item:this,cmName:\"" + field + "\",searchValue:\"" + data + "\"})");
 						self._setCommand(self.custom, field);
@@ -3916,8 +3931,8 @@
 							"bn": function (queryObj, op) { return op === "OR" ? queryObj.orNot().startsWith : queryObj.andNot().startsWith; },
 							"en": function (queryObj, op) { return op === "OR" ? queryObj.orNot().endsWith : queryObj.andNot().endsWith; },
 							"ew": function (queryObj) { return queryObj.endsWith; },
-							"ni": function (queryObj, op) { return op === "OR" ? queryObj.orNot().equals : queryObj.andNot().equals; },
-							"in": function (queryObj) { return queryObj.equals; },
+							"ni": function (queryObj, op) { return op === "OR" ? queryObj.orNot().inSet : queryObj.andNot().inSet; },
+							"in": function (queryObj) { return queryObj.inSet; },
 							"nu": function (queryObj) { return queryObj.isNull; },
 							"nn": function (queryObj, op) { return op === "OR" ? queryObj.orNot().isNull : queryObj.andNot().isNull; }
 						},
