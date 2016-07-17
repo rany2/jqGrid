@@ -252,7 +252,7 @@
 					hoverClasses = getGuiStyles.call($t, "states.hover"),
 					highlightClass = getGuiStyles.call($t, "states.select"),
 					dataFieldClass = getGuiStyles.call($t, "filterToolbar.dataField"),
-					currentFilters,
+					currentFilters = {},
 					getId = function (cmName) {
 						var prefix = "gs_";
 						switch (o.idMode) {

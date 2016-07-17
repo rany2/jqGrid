@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-06-17
+ * Date: 2016-07-17
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -9012,7 +9012,7 @@
 					hoverClasses = getGuiStyles.call($t, "states.hover"),
 					highlightClass = getGuiStyles.call($t, "states.select"),
 					dataFieldClass = getGuiStyles.call($t, "filterToolbar.dataField"),
-					currentFilters,
+					currentFilters = {},
 					getId = function (cmName) {
 						var prefix = "gs_";
 						switch (o.idMode) {
