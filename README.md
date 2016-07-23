@@ -52,13 +52,13 @@ Remark: the above URLs will be available **after publishing** the release of the
 * Bug fix in `searchGrid` (Advanced Searching Dialog) to make `showQuery: true` option correctly working.
 * Bug fix of `edittype: "select"` element selection by text or value (if text and values are different, but no `formatter: "select"` are used).
 * Makes searching filter (created by `filterToolbar`) more compliant to WAI-ARIA 1.1 and WCAG 2.0 standards.
-* Add the usage of `$.jgrid.defaults.fatalError` instead of `alert` over the whole code (the mothod `$.jgrid.defaults.fatalError` can be replaced to any custom implementation).
-* Add `summary` parameter in `summaryFormat` callback used for data grouping. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/232) for more detailes.
-* Increases the value of the `size` attribute of the pager `<input>` based on the pager value. It improves the vivibility of the pager input if the total number of pages larger as 99.
+* Add the usage of `$.jgrid.defaults.fatalError` instead of `alert` over the whole code (the method `$.jgrid.defaults.fatalError` can be replaced to any custom implementation).
+* Add `summary` parameter in `summaryFormat` callback used for data grouping. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/232) for more details.
+* Increases the value of the `size` attribute of the pager `<input>` based on the pager value. It improves the visibility of the pager input if the total number of pages larger as 99.
 
 Other readmes contain the list of the features and bug fixed implemented before:
 
-* [README4.13.3.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.3.md) contains the readme of free jqGrid 4.13.2.
+* [README4.13.3.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.3.md) contains the readme of free jqGrid 4.13.3.
 * [README4.13.2.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.2.md) contains the readme of free jqGrid 4.13.2.
 * [README4.13.1.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.1.md) contains the readme of free jqGrid 4.13.1.
 * [README4.13.0.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.0.md) contains the readme of free jqGrid 4.13.0.
