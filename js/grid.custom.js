@@ -974,7 +974,9 @@
 							if (newFilters.hasOwnProperty(cmName)) {
 								filter = newFilters[cmName];
 								$input = $(getIdSel(cmName));
-								if ($.trim($input.val()) !== filter.data) {
+								if ($input[0].tagName.toUpperCase() === "SELECT" && $input[0].multiple) {
+									$input.val(filter.data.split(","));
+								} else if ($.trim($input.val()) !== filter.data) {
 									$input.val(filter.data);
 								}
 								$searchOper = $input.closest(".ui-search-input")
