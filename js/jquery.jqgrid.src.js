@@ -10758,7 +10758,7 @@
 							editoptions || {},
 							columns.searchoptions || {},
 							getCmInfo(columns.cmName),
-							{ id: jgrid.randId(), name: columns.name, mode: "search" }
+							{ id: jgrid.randId(), name: columns.name, mode: "search", column: columns }
 						);
 					if (isIE && columns.inputtype === "text") {
 						if (!searchoptions.size) {
