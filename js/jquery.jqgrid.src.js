@@ -10857,7 +10857,7 @@
 				delete editoptions.readonly;
 				delete editoptions.disabled;
 				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
-						$.extend({}, editoptions, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name }),
+						$.extend({}, editoptions, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name, column: cm }),
 						rule.data, true, that.p.ajaxSelectOptions || {}, true);
 				if (rule.op === "nu" || rule.op === "nn") {
 					$(ruleDataInput).attr("readonly", "true");
