@@ -401,8 +401,9 @@
 							editoptions || {},
 							columns.searchoptions || {},
 							getCmInfo(columns.cmName),
-							{ id: jgrid.randId(), name: columns.name, mode: "search", column: columns }
+							{ id: jgrid.randId(), name: columns.name, mode: "search" }
 						);
+					searchoptions.column = columns; // add reference to that.p.columns[k];
 					if (isIE && columns.inputtype === "text") {
 						if (!searchoptions.size) {
 							searchoptions.size = 10;
@@ -499,8 +500,9 @@
 				var editoptions = $.extend({}, cm.editoptions || {});
 				delete editoptions.readonly;
 				delete editoptions.disabled;
-				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
-						$.extend({}, editoptions, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name, column: cm }),
+				var searchoptions = $.extend({}, editoptions, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name });
+				searchoptions.column = cm;
+				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype, searchoptions,
 						rule.data, true, that.p.ajaxSelectOptions || {}, true);
 				if (rule.op === "nu" || rule.op === "nn") {
 					$(ruleDataInput).attr("readonly", "true");
