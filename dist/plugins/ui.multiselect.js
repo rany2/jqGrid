@@ -10,6 +10,9 @@
  * 
  * http://www.quasipartikel.at/multiselect/
  *
+ * UPDATED by Oleg Kiriljuk (oleg.kiriljuk@ok-soft-gmbh.com) to support jQuery 1.6 and hight
+ * (the usage of jQuery.attr and jQuery.removeAttr is replaced to the usage of jQuery.prop
+ *  in case of working with selected options of select)
  * 
  * Depends:
  *	ui.core.js
@@ -93,12 +96,13 @@ $.widget("ui.multiselect", {
 				update: function(event, ui) {
 					// apply the new sort order to the original selectbox
 					that.selectedList.find('li').each(function() {
-						if ($(this).data('optionLink'))
+						if ($(this).data('optionLink')) {
 							$(this).data('optionLink').remove().appendTo(that.element);
+						}
 					});
 				},
 				receive: function(event, ui) {
-					ui.item.data('optionLink').attr('selected', true);
+					ui.item.data('optionLink').prop('selected', true);
 					// increment count
 					that.count += 1;
 					that._updateCount();
@@ -126,18 +130,20 @@ $.widget("ui.multiselect", {
 		
 		// batch actions
 		this.container.find(".remove-all").click(function() {
-			that._populateLists(that.element.find('option').removeAttr('selected'));
+			that._populateLists(that.element.find('option').prop('selected', false));
 			return false;
 		});
 		
 		this.container.find(".add-all").click(function() {
-			var options = that.element.find('option').not("[selected]");
+			var options = that.element.find('option').not(":selected");
 			if (that.availableList.children('li:hidden').length > 1) {
 				that.availableList.children('li').each(function(i) {
-					if ($(this).is(":visible")) $(options[i-1]).attr('selected', 'selected'); 
+					if ($(this).is(":visible")) {
+						$(options[i-1]).prop('selected', true);
+					}
 				});
 			} else {
-				options.attr('selected', 'selected');
+				options.prop('selected', true);
 			}
 			that._populateLists(that.element.find('option'));
 			return false;
@@ -156,9 +162,11 @@ $.widget("ui.multiselect", {
 
 		var that = this;
 		var items = $(options.map(function(i) {
-			var isSelected = $(this).is("[selected]"), item = that._getOptionNode(this).appendTo(isSelected ? that.selectedList : that.availableList).show();
+			var isSelected = $(this).is(":selected"), item = that._getOptionNode(this).appendTo(isSelected ? that.selectedList : that.availableList).show();
 
-			if (isSelected) that.count += 1;
+			if (isSelected) {
+				that.count += 1;
+			}
 			that._applyItemState(item, isSelected);
 			item.data('idx', i);
 			return item[0];
@@ -187,7 +195,7 @@ $.widget("ui.multiselect", {
 		return clone;
 	},
 	_setSelected: function(item, selected) {
-		item.data('optionLink').attr('selected', selected);
+		item.data('optionLink').prop('selected', selected);
 
 		if (selected) {
 			var selectedItem = this._cloneWithData(item);
@@ -227,10 +235,11 @@ $.widget("ui.multiselect", {
 	},
 	_applyItemState: function(item, selected) {
 		if (selected) {
-			if (this.options.sortable)
+			if (this.options.sortable) {
 				item.children('span').addClass('ui-icon-arrowthick-2-n-s').removeClass('ui-helper-hidden').addClass('ui-icon');
-			else
+			} else {
 				item.children('span').removeClass('ui-icon-arrowthick-2-n-s').addClass('ui-helper-hidden').removeClass('ui-icon');
+			}
 			item.find('a.action span').addClass('ui-icon-minus').removeClass('ui-icon-plus');
 			this._registerRemoveEvents(item.find('a.action'));
 			
@@ -260,7 +269,9 @@ $.widget("ui.multiselect", {
 			rows.hide();
 
 			cache.each(function(i) {
-				if (this.indexOf(term)>-1) { scores.push(i); }
+				if (this.indexOf(term)>-1) {
+					scores.push(i);
+				}
 			});
 
 			$.each(scores, function() {
@@ -269,7 +280,9 @@ $.widget("ui.multiselect", {
 		}
 	},
 	_registerDoubleClickEvents: function(elements) {
-		if (!this.options.doubleClickable) return;
+		if (!this.options.doubleClickable) {
+			return;
+		}
 		elements.dblclick(function(ev) {
 			if ($(ev.target).closest('.action').length === 0) {
 				// This may be triggered with rapid clicks on actions as well. In that
@@ -332,8 +345,9 @@ $.widget("ui.multiselect", {
 			$(this).removeClass('ui-state-active');
 		})
 		.keypress(function(e) {
-			if (e.keyCode == 13)
+			if (e.keyCode == 13) {
 				return false;
+			}
 		})
 		.keyup(function() {
 			that._filter.apply(this, [that.availableList]);
