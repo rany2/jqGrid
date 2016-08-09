@@ -400,6 +400,13 @@
 				listHeight = Math.min(listHeight, $(window).height());
 				multiselectData.selectedList.css("height", listHeight);
 				multiselectData.availableList.css("height", listHeight);
+				if (multiselectData != null && multiselectData.options != null && multiselectData.options.sortable) {
+					multiselectData.selectedList.bind("sortupdate", function (e, ui) {
+						// remove fixed inline style values of width and height
+						// added during gragging
+						ui.item.css({ width: "", height: "" });
+					});
+				}
 			}
 		},
 		sortableRows: function (opts) {
