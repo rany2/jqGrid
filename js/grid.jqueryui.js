@@ -47,10 +47,9 @@
 		if ($UiMultiselect.prototype._setSelected) {
 			var setSelected = $UiMultiselect.prototype._setSelected;
 			$UiMultiselect.prototype._setSelected = function (item, selected) {
-				var self = this, ret = setSelected.call(self, item, selected);
-				if (selected && self.selectedList) {
-					var elt = self.element;
-					self.selectedList.find("li").each(function () {
+				var ret = setSelected.call(this, item, selected), elt = this.element;
+				if (selected && this.selectedList) {
+					this.selectedList.find("li").each(function () {
 						if ($(this).data("optionLink")) {
 							$(this).data("optionLink").remove().appendTo(elt);
 						}
