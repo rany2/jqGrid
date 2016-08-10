@@ -47,12 +47,11 @@
 		if ($UiMultiselect.prototype._setSelected) {
 			var setSelected = $UiMultiselect.prototype._setSelected;
 			$UiMultiselect.prototype._setSelected = function (item, selected) {
-				var self = this, ret = setSelected.call(self, item, selected);
-				if (selected && self.selectedList) {
-					var elt = self.element;
-					self.selectedList.find("li").each(function () {
-						if ($(self).data("optionLink")) {
-							$(self).data("optionLink").remove().appendTo(elt);
+				var ret = setSelected.call(this, item, selected), elt = this.element;
+				if (selected && this.selectedList) {
+					this.selectedList.find("li").each(function () {
+						if ($(this).data("optionLink")) {
+							$(this).data("optionLink").remove().appendTo(elt);
 						}
 					});
 				}
@@ -400,6 +399,19 @@
 				listHeight = Math.min(listHeight, $(window).height());
 				multiselectData.selectedList.css("height", listHeight);
 				multiselectData.availableList.css("height", listHeight);
+				if (multiselectData.options != null && multiselectData.options.sortable) {
+					multiselectData.selectedList.bind("sortupdate", function (e, ui) {
+						// remove fixed inline style values of width and height
+						// added during gragging
+						ui.item.css({ width: "", height: "" });
+						if ($.isFunction(opts.sortUpdate)) {
+							opts.sortUpdate.call(self, e, ui);
+						}
+					});
+				}
+				if ($.isFunction(opts.init)) {
+					opts.init.call(self, multiselectData);
+				}
 			}
 		},
 		sortableRows: function (opts) {
