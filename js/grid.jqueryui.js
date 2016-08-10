@@ -51,8 +51,8 @@
 				if (selected && self.selectedList) {
 					var elt = self.element;
 					self.selectedList.find("li").each(function () {
-						if ($(self).data("optionLink")) {
-							$(self).data("optionLink").remove().appendTo(elt);
+						if ($(this).data("optionLink")) {
+							$(this).data("optionLink").remove().appendTo(elt);
 						}
 					});
 				}
