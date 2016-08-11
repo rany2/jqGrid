@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-08-10
+ * Date: 2016-08-11
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -9834,7 +9834,7 @@
 			}, o || {});
 			return this.each(function () {
 				this.p.groupHeader = o;
-				var ts = this, i, cmi, skip = 0, $tr, $colHeader, th, $th, thStyle, iCol, cghi, numberOfColumns, titleText, cVisibleColumns, cColumns,
+				var ts = this, i, cmi, skip = 0, $tr, $colHeader, th, $th, thStyle, iCol, cghi, numberOfColumns, titleText, cVisibleColumns,
 					p = ts.p, colModel = p.colModel, cml = colModel.length, ths = ts.grid.headers, $theadInTable, thClasses,
 					$htable = $("table.ui-jqgrid-htable", ts.grid.hDiv), isCellClassHidden = jgrid.isCellClassHidden,
 					$trLabels = $htable.children("thead").children("tr.ui-jqgrid-labels"),
@@ -9876,8 +9876,7 @@
 						titleText = cghi.titleText;
 
 						// caclulate the number of visible columns from the next numberOfColumns columns
-						for (cVisibleColumns = 0, iCol = 0, cColumns = 0; iCol < numberOfColumns && (i + iCol < cml); iCol++) {
-							cColumns++;
+						for (cVisibleColumns = 0, iCol = 0; iCol < numberOfColumns && (i + iCol < cml); iCol++) {
 							if (!colModel[i + iCol].hidden && !isCellClassHidden(colModel[i + iCol].classes)) {
 								cVisibleColumns++;
 							}
@@ -9890,8 +9889,8 @@
 							.addClass(thClasses)
 							.css({ "height": "22px", "border-top": "0 none" })
 							.html(titleText);
-						if (cColumns > 1) {
-							$colHeader.attr("colspan", String(cColumns));
+						if (cVisibleColumns > 0) {
+							$colHeader.attr("colspan", String(cVisibleColumns));
 						}
 						if (p.headertitles) {
 							$colHeader.attr("title", $colHeader.text());
@@ -9910,11 +9909,6 @@
 						if (skip === 0) {
 							if (o.useColSpanStyle) {
 								// expand the header height to two rows
-								//
-								// !!! TODO: The value of rowspan could be too high
-								// in case of calling setGroupHeaders MULTIPLE times
-								// To calculate correct value one have to analyse the
-								// rows ABOVE the current one
 								$th.attr("rowspan", $trLabels.length + 1);
 							} else {
 								$("<th>")
