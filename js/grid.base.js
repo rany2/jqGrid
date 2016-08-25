@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-08-11
+ * Date: 2016-08-25
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2257,7 +2257,7 @@
 								{ rowid: rowid, iRow: irow, iCol: pos, data: item });
 					}
 					if (hasCbox) {
-						checkboxHtml = "<input type='checkbox'" + " id='jqg_" + p.id + "_" + rowid +
+						checkboxHtml = "<input type='checkbox' id='jqg_" + p.id + "_" + rowid +
 							"' class='cbox' name='jqg_" + p.id + "_" + rowid + "'" +
 							(checked ? " checked='checked' aria-checked='true'" : " aria-checked='false'") + "/>";
 					}
