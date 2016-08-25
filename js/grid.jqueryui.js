@@ -34,7 +34,207 @@
 	"use strict";
 	var jgrid = $.jgrid, jqID = jgrid.jqID;
 	// begin module grid.jqueryui
-	var $UiMultiselect = $.ui != null ? $.ui.multiselect : null;
+	var $UiMultiselect = $.ui != null ? $.ui.multiselect : null,
+		reorderSelectedColumns = function (iColItem) {
+			/* Background information:
+			 *
+			 * Multiselect contains the list of selected items this.selectedList,
+			 * which is jQuery wrapper of <ul> element.
+			 * The items of this.selectedList are <li> elements, which represent
+			 * visible (hidden:false) and movable (hidedlg:false) columns of the grid.
+			 * Additionally there are exist hidden <select multiple="multiple">.
+			 * Every <option> of the <select> corresponds the column of the grid.
+			 * The visible columns (hidden:false) are selected. The value of the <option>
+			 * contains the column index (iCol) in colModel.
+			 * <li> elements has data with the "optionLink" pointed to the corresponding
+			 * option of the hidden select.
+			 * this.grid is the DOM of the grid and this.newColOrder is the array with
+			 * ALL column names in the order, which should be applied after reordering
+			 * the grid. Additionally this.gh contains the COPY of p.groupHeader.groupHeaders.
+			 * It's important that startColumnName property of elements of
+			 * p.groupHeader.groupHeaders could be changed during reordering of the columns.
+			 * On the other side the user can't click Cancel button of columnChooser for
+			 * breaking reordering. Because of that this.gh contains the COPY of
+			 * p.groupHeader.groupHeaders and the original p.groupHeader.groupHeaders will be
+			 * not changed in the reorderSelectedColumns function */
+			if (this.grid != null && this.grid.p != null) {
+				var that = this, p = this.grid.p, iCol, j, iGrp, ghItem,
+					gh = this.gh, selectedList = this.selectedList,
+					items = selectedList.find("li"),
+					optionLink, headerItem, //iColOld,
+					inGroup = new Array(p.colModel.length), // allocate array with undefined values
+					indexOfAddedItem = items.length - 1,
+					enumSelected = function (callback, startIndex, reverse) {
+						var i, opt, items = selectedList.find("li");
+						if (startIndex === undefined) {
+							startIndex = reverse ? items.length - 1 : 0;
+						}
+						for (i = startIndex; !reverse ? i < items.length : i >= 0; !reverse ? i++ : i--) {
+							opt = $(items[i]).data("optionLink");
+							if (opt && callback.call(items[i], parseInt(opt.val(), 10), i)) {
+								return i;
+							}
+						}
+					},
+					enumPreviousAndInsertAfter = function (iCol) {
+						if (inGroup[iCol] === inGroup[iColItem]) {
+							$(this).after(items[indexOfAddedItem]);
+							updateNewColOrder();
+							return true; // stop enumeration
+						}
+					},
+					enumNextAndInsertBefore = function (iCol) {
+						if (inGroup[iCol] === inGroup[iColItem]) {
+							$(this).before(items[indexOfAddedItem]);
+							updateNewColOrder();
+							return true; // stop enumeration
+						}
+					},
+					updateStartColumn = function (iCol) {
+						if (inGroup[iCol] === inGroup[iColItem] && inGroup[iCol] !== undefined) {
+							gh[inGroup[iCol]].startColumnName = p.colModel[iCol].name;
+							return true; // stop enumeration
+						}
+					},
+					updateNewColOrder = function () {
+						// !!! the function set additionally indexOfAddedItem and update items
+
+						// remove iColItem from this.newColOrder
+						j = $.inArray(p.colModel[iColItem].name, that.newColOrder);
+						if (j >= 0) {
+							that.newColOrder.splice(j, 1);
+						}
+
+						// refill items
+						items = selectedList.find("li");
+
+						// iCol will be the index in newColOrder. The order of columns in items
+						// should be mostly THE SAME like in selectedList, but newColOrder
+						// contains additional elements (hidden and hidedlg). The array items
+						// on the other side contains just inserted iColItem element.
+
+						// we need find indexOfAddedItem - the index of <li> with iColItem
+						// in the list of this.selectedList.find("li") elements
+						iCol = 0;
+						enumSelected(
+							function (iColOld, index) {
+								if (iColOld === iColItem) {
+									indexOfAddedItem = index;
+									// if iColItem is in the same header group as p.colModel[iCol] or
+									// both belongs no header group then the column could be NOT in
+									// selectedList. I find better to insert the item AFTER the hidden
+									// or non-movable columns (like "rn", "subgrid" column or other)
+									while (iCol >= 0 && !p.colModel[iCol].hidden && p.colModel[iCol].hidedlg &&
+											//inGroup[iCol] !== undefined && inGroup[iColItem] !== undefined &&
+											inGroup[iCol] === inGroup[iColItem]) {
+										iCol++;
+									}
+									that.newColOrder.splice(iCol, 0, p.colModel[iColItem].name);
+									return true; // stop enumeration
+								}
+								// selectedList contains SUBSET of columns from colModel, but newColOrder
+								// contains ALL columns. It's important that all columns from selectedList
+								// exist in newColOrder IN THE SAME order. Thus iCol will be the current
+								// index in newColOrder array with p.colModel[iColOld].name column name.
+								iCol = $.inArray(p.colModel[iColOld].name, that.newColOrder, iCol);
+								if (iCol < 0) {
+									// to be sure that the code works in case of some errors too
+									iCol = $.inArray(p.colModel[iColOld].name, that.newColOrder);
+								}
+								iCol++;
+							}
+						);
+					};
+
+				// First of all we fill the helper array inGroup. It contains
+				// an item for every column. The value is undefined if the column
+				// not belongs to a header group and it is 0-based index of the
+				// header group (the index in gh array) if the column belongs to
+				// a header group. The array inGroup helps us to detect whether
+				// two columns belong to the same group or not.
+				if (gh) {
+					for (iGrp = 0; iGrp < gh.length; iGrp++) {
+						headerItem = gh[iGrp];
+						for (iCol = 0; iCol < headerItem.numberOfColumns; iCol++) {
+							inGroup[p.iColByName[headerItem.startColumnName] + iCol] = iGrp;
+						}
+					}
+				}
+
+				// Fix potition of added/moved item iColItem in that.newColOrder array.
+				// We syncronize only the initial state of newColOrder. The position of
+				// iColItem item can be changed later in both selectedList and newColOrder
+				updateNewColOrder();
+
+				if (gh && gh[inGroup[iColItem]] !== undefined) {
+					// the item belong to some group
+					ghItem = gh[inGroup[iColItem]];
+					for (j = 0; j < ghItem.numberOfColumns; j++) {
+						iCol = p.iColByName[ghItem.startColumnName] + j;
+						if (!p.colModel[iCol].hidden && !p.colModel[iCol].hidedlg) {
+							// the columns are displayed in the selectedList
+
+							// We need to enumerate items in reverse order and to find the index of the item
+							// in the array items comparing the items by $(items[j]).data("optionLink").val()
+							// If the item is found then append prevously found item AFTER this one.
+							// We can use j variable bacause the outer loop will be exit (see break below)
+							enumSelected(
+								enumPreviousAndInsertAfter,
+								indexOfAddedItem - 1,
+								true // enum in reverse order
+							);
+							// If step 2 didn't find the group then we need examin NEXT items and find
+							// the items from the same group. We should test the items in sequential order
+							// after the item found. If the item is found then apend prevously found
+							// item BEFORE this one.
+							enumSelected(
+								enumNextAndInsertBefore,
+								indexOfAddedItem + 1
+							);
+							// fix the name of the first column in the group
+							enumSelected(updateStartColumn);
+							break; // !!!
+						}
+					}
+				} else if (gh) {
+					// The item from no group is added/moved.
+					// We have to verify that the item is not dropped inside of some header group
+					// find the index of added/moved element in this.selectedList.find("li")
+					items = selectedList.find("li");
+					j = enumSelected(function (iCol) {
+						if (iCol === iColItem) {
+							return true;
+						}
+					});
+					if (j + 1 >= items.length || j < 0) {
+						return;
+					}
+					optionLink = $(items[j + 1]).data("optionLink");
+					if (optionLink) {
+						iGrp = inGroup[parseInt(optionLink.val(), 10)];
+						if (iGrp !== undefined) {
+							optionLink = $(items[j - 1]).data("optionLink");
+							if (optionLink && inGroup[parseInt(optionLink.val(), 10)] === iGrp) {
+								// The next and the previous items are in the same group, but
+								// the added/moved item in NOT in the group.
+								// We have to move the item items[j] AFTER the last item of the group.
+								var iColNotInTheGroup = enumSelected(
+									function (iCol) {
+										if (inGroup[iCol] !== iGrp) {
+											return true; // stop enumeration
+										}
+									},
+									j + 1 // start enumeration with the index
+								);
+								$(items[iColNotInTheGroup >= items.length ? items.length - 1 : iColNotInTheGroup - 1])
+									.after(items[indexOfAddedItem]);
+								updateNewColOrder();
+							}
+						}
+					}
+				}
+			}
+		};
 	if (jgrid.msie && jgrid.msiever() === 8) {
 		$.expr[":"].hidden = function (elem) {
 			return elem.offsetWidth === 0 || elem.offsetHeight === 0 ||
@@ -47,8 +247,19 @@
 		if ($UiMultiselect.prototype._setSelected) {
 			var setSelected = $UiMultiselect.prototype._setSelected;
 			$UiMultiselect.prototype._setSelected = function (item, selected) {
-				var ret = setSelected.call(this, item, selected), elt = this.element;
+				// the method will be called if the user clicks "+" button on the item of "available" list
+				// or if the user clicks "-" button on the item of "selected" list.
+				// The parameter "selected" is equal true on click on the item of "selected" list
+				// and false on click on the item of "available" list.
+				var ret = setSelected.call(this, item, selected), elt = this.element,
+					iColItem = parseInt(item.data("optionLink").val(), 10);
 				if (selected && this.selectedList) {
+					// reorder items of selectedList
+					// all items of selectedList from one group have to be together
+					// all items of availableList from one group have to be together
+					reorderSelectedColumns.call(this, iColItem);
+
+					// apply the new sort order to the original selectbox
 					this.selectedList.find("li").each(function () {
 						if ($(this).data("optionLink")) {
 							$(this).data("optionLink").remove().appendTo(elt);
@@ -136,7 +347,8 @@
 			});
 		},
 		columnChooser: function (opts) {
-			var $self = this, self = $self[0], p = self.p, selector, select, colMap = {}, fixedCols = [], dopts, mopts, $dialogContent, multiselectData, listHeight,
+			var $self = this, self = $self[0], p = self.p, selector, select, dopts, mopts,
+				$dialogContent, multiselectData, listHeight,
 				colModel = p.colModel, nCol = colModel.length, colNames = p.colNames,
 				getMultiselectWidgetData = function ($elem) {
 					return ($UiMultiselect && $UiMultiselect.prototype && $elem.data($UiMultiselect.prototype.widgetFullName || $UiMultiselect.prototype.widgetName)) ||
@@ -147,17 +359,6 @@
 			selector = $('<div id="colchooser_' + p.id + '" style="position:relative;overflow:hidden"><div><select multiple="multiple"></select></div></div>');
 			select = $("select", selector);
 
-			function insert(perm, i, v) {
-				var a, b;
-				if (i >= 0) {
-					a = perm.slice();
-					b = a.splice(i, Math.max(perm.length - i, i));
-					if (i > perm.length) { i = perm.length; }
-					a[i] = v;
-					return a.concat(b);
-				}
-				return perm;
-			}
 			function call(fn, obj) {
 				if (!fn) { return; }
 				if (typeof fn === "string") {
@@ -174,7 +375,7 @@
 				height: 240,
 				classname: null,
 				done: function (perm) {
-					if (perm && p.groupHeader == null) {
+					if (perm) {
 						$self.jqGrid("remapColumns", perm, true);
 					}
 				},
@@ -237,12 +438,19 @@
 				/* Function to get the permutation array, and pass it to the
 				   "done" function */
 				apply_perm: function () {
-					var perm = [],
+					var perm = new Array(p.colModel.length), i, gHead,
 						showHideColOptions = {
 							notSkipFrozen: opts.notSkipFrozen === undefined ? false : opts.notSkipFrozen,
 							skipSetGridWidth: true,
 							skipSetGroupHeaders: true
 						};
+
+					// we can use remapColumnsByName instead of remapColumns in general,
+					// but we try to hold the compatibility with old version. Thus we
+					// fill perm based on multiselectData.newColOrder
+					for (i = 0; i < p.colModel.length; i++) {
+						perm[i] = p.iColByName[multiselectData.newColOrder[i]];
+					}
 
 					$("option", select).each(function () {
 						if ($(this).is(":selected")) {
@@ -251,10 +459,15 @@
 							$self.jqGrid("hideCol", colModel[this.value].name, showHideColOptions);
 						}
 					});
+
+					if (opts.done) {
+						opts.done.call($self, perm);
+					}
 					if (p.groupHeader && (typeof p.groupHeader === "object" || $.isFunction(p.groupHeader))) {
 						$self.jqGrid("destroyGroupHeader", false);
+						p.groupHeader.groupHeaders = multiselectData.gh; // use modified groupHeader
 						if (p.pivotOptions != null && p.pivotOptions.colHeaders != null && p.pivotOptions.colHeaders.length > 1) {
-							var i, gHead = p.pivotOptions.colHeaders;
+							gHead = p.pivotOptions.colHeaders;
 							for (i = 0; i < gHead.length; i++) {
 								// Multiple calls of setGroupHeaders for one grid are wrong,
 								// but there are produces good results in case of usage
@@ -267,17 +480,6 @@
 						} else {
 							$self.jqGrid("setGroupHeaders", p.groupHeader);
 						}
-					}
-
-					//fixedCols.slice(0);
-					$("option", select).filter(":selected").each(function () { perm.push(parseInt(this.value, 10)); });
-					$.each(perm, function () { delete colMap[colModel[parseInt(this, 10)].name]; });
-					$.each(colMap, function () {
-						var ti = parseInt(this, 10);
-						perm = insert(perm, ti, ti);
-					});
-					if (opts.done) {
-						opts.done.call($self, perm);
 					}
 					$self.jqGrid("setGridWidth",
 						!p.autowidth && (p.widthOrg === undefined || p.widthOrg === "auto" || p.widthOrg === "100%") ? p.tblwidth : p.width,
@@ -326,11 +528,12 @@
 			}
 
 			select.empty();
-			var gh = p.groupHeader, colHeader = {}, k, j, l, iCol, ghItem;
+			var gh = p.groupHeader != null ? p.groupHeader.groupHeaders : 0,
+				colHeader = {}, k, j, iCol, ghItem;
 			// fill colHeader for columns which have column header
-			if (gh != null && gh.groupHeaders != null) {
-				for (k = 0, l = gh.groupHeaders.length; k < l; k++) {
-					ghItem = gh.groupHeaders[k];
+			if (gh) {
+				for (k = 0; k < gh.length; k++) {
+					ghItem = gh[k];
 					for (j = 0; j < ghItem.numberOfColumns; j++) {
 						iCol = p.iColByName[ghItem.startColumnName] + j;
 						colHeader[iCol] = $.isFunction(opts.buildItemText) ?
@@ -361,17 +564,11 @@
 				}
 			}
 			$.each(colModel, function (i) {
-
-				colMap[this.name] = i;
-				if (this.hidedlg) {
-					if (!this.hidden) {
-						fixedCols.push(i);
-					}
-					return;
+				if (!this.hidedlg) {
+					select.append("<option value='" + i + "'" +
+						(p.headertitles || this.headerTitle ? (" title='" + jgrid.stripHtml(typeof this.headerTitle === "string" ? this.headerTitle : colHeader[i]) + "'") : "") +
+						(this.hidden ? "" : " selected='selected'") + ">" + colHeader[i] + "</option>");
 				}
-				select.append("<option value='" + i + "'" +
-					(p.headertitles || this.headerTitle ? (" title='" + jgrid.stripHtml(typeof this.headerTitle === "string" ? this.headerTitle : colHeader[i]) + "'") : "") +
-					(this.hidden ? "" : " selected='selected'") + ">" + colHeader[i] + "</option>");
 			});
 
 			dopts = $.isFunction(opts.dlog_opts) ? opts.dlog_opts.call($self, opts) : opts.dlog_opts;
@@ -387,6 +584,14 @@
 
 			multiselectData = getMultiselectWidgetData(select);
 			if (multiselectData) {
+				// grid property will be used to access the grid inside of _setSelected
+				multiselectData.grid = self;
+				if (p.groupHeader != null) {
+					// make deep copy of groupHeaders to be able to hold changes of startColumnName,
+					// but to apply the changes only after the user click OK button (not Cancel)
+					multiselectData.gh = $.extend(true, [], p.groupHeader.groupHeaders);
+				}
+				multiselectData.newColOrder = $.map(colModel, function (cm) { return cm.name; });
 				multiselectData.container.css({ width: "100%", height: "100%", margin: "auto" });
 
 				multiselectData.selectedContainer.css({ width: multiselectData.options.dividerLocation * 100 + "%", height: "100%", margin: "auto", boxSizing: "border-box" });
@@ -403,6 +608,12 @@
 					multiselectData.selectedList.bind("sortupdate", function (e, ui) {
 						// remove fixed inline style values of width and height
 						// added during gragging
+						if (gh) {
+							reorderSelectedColumns.call(
+								multiselectData,
+								parseInt(ui.item.data("optionLink").val(), 10)
+							);
+						}
 						ui.item.css({ width: "", height: "" });
 						if ($.isFunction(opts.sortUpdate)) {
 							opts.sortUpdate.call(self, e, ui);
