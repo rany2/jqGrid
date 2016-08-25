@@ -2251,13 +2251,15 @@
 					return "<td role='gridcell' " + formatCol(pos, irow, v, srvr, rowId, rdata) + ">" + v + "</td>";
 				},
 				addMulti = function (rowid, pos, irow, checked, item) {
-					var checkboxHtml = "&nbsp;", hasCbox = true;
+					var checkboxHtml = "&nbsp;", hasCbox = true,
+						callbackParams = { rowid: rowid, iRow: irow, iCol: pos, data: item, checked: checked };
 					if ($.isFunction(p.hasMultiselectCheckBox)) {
-						hasCbox = p.hasMultiselectCheckBox.call(self,
-								{ rowid: rowid, iRow: irow, iCol: pos, data: item });
+						hasCbox = p.hasMultiselectCheckBox.call(self, callbackParams);
 					}
 					if (hasCbox) {
-						checkboxHtml = "<input type='checkbox' id='jqg_" + p.id + "_" + rowid +
+						checkboxHtml = $.isFunction(p.checkboxHtml) ?
+							p.checkboxHtml.call(self, callbackParams) :
+							"<input type='checkbox' id='jqg_" + p.id + "_" + rowid +
 							"' class='cbox' name='jqg_" + p.id + "_" + rowid + "'" +
 							(checked ? " checked='checked' aria-checked='true'" : " aria-checked='false'") + "/>";
 					}
@@ -2285,6 +2287,8 @@
 					} else {
 						selr = (idr === p.selrow);
 					}
+				} else {
+					selr = false;
 				}
 				iStartTrTag = rowData.length;
 				rowData.push(""); // it will be replaced. See rowData[iStartTrTag] below
