@@ -1071,14 +1071,14 @@
 				} else {
 					$firstHeaderRow.empty();
 				}
-				var inColumnHeader = function (text, columnHeaders) {
-					var length = columnHeaders.length, j;
-					for (j = 0; j < length; j++) {
-						if (columnHeaders[j].startColumnName === text) {
-							return j;
+				var inColumnHeader = function (cmName, columnHeaders) {
+					var j;
+					for (j = 0; j < columnHeaders.length; j++) {
+						if (columnHeaders[j].startColumnName === cmName) {
+							return columnHeaders[j];
 						}
 					}
-					return -1;
+					return 0; // falsy value
 				};
 
 				$(ts).prepend($thead);
@@ -1094,9 +1094,8 @@
 
 					th.style.width = ""; // remove unneeded style
 					thClasses = getGuiStyles.call(ts, "colHeaders", "ui-th-column-header ui-th-" + p.direction + " " + (o.applyLabelClasses ? cmi.labelClasses || "" : ""));
-					iCol = inColumnHeader(cmi.name, o.groupHeaders);
-					if (iCol >= 0) {
-						cghi = o.groupHeaders[iCol];
+					cghi = inColumnHeader(cmi.name, o.groupHeaders);
+					if (cghi) {
 						numberOfColumns = cghi.numberOfColumns;
 						titleText = cghi.titleText;
 
