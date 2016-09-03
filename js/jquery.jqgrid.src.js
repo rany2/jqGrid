@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-08-27
+ * Date: 2016-09-03
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -16095,13 +16095,20 @@
 						}
 					};
 					$($t).sortable(opts);
-					if ($.isFunction($.fn.disableSelection)) {
+					/*if ($.isFunction($.fn.disableSelection)) {
 						// The method disableSelection exists starting with jQuery UI 1.6,
 						// but it's declared as deprecated since jQuery UI 1.9
 						// see http://jqueryui.com/upgrade-guide/1.9/#deprecated-disableselection-and-enableselection
 						// so we use disableSelection only if it exists
-						$($t.tBodies[0]).children("tr.jqgrow").disableSelection();
-					}
+						var jQueryUiVersion = $.ui != null && typeof $.ui.version === "string" ?
+								$.ui.version.match(/(\d+)\.(\d+).(\d+)/) : [];
+						// jQuery UI version is: jQueryUiVersion[1].jQueryUiVersion[2].jQueryUiVersion[3]
+						if (jQueryUiVersion.length === 4 && jQueryUiVersion[1] === "1" &&
+							jQueryUiVersion[2] > 5 && jQueryUiVersion[2] < 9) {
+							// disable selection only for old jQuery UI
+							$($t.tBodies[0]).children("tr.jqgrow").disableSelection();
+						}
+					}*/
 				}
 			});
 		},
