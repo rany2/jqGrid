@@ -149,7 +149,7 @@
 					}
 				}
 				if ($(themodalSelector)[0] !== undefined) {
-					showFilter($("#fbox_" + jqID(p.idSel));
+					showFilter($("#fbox_" + jqID(p.idSel)));
 				} else {
 					var fil = $("<div><div id='" + fid + "' class='" +
 						getGuiStyles.call($t, "dialog.body", "searchFilter") +
