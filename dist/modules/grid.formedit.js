@@ -149,7 +149,7 @@
 					}
 				}
 				if ($(themodalSelector)[0] !== undefined) {
-					showFilter($("#fbox_" + p.idSel));
+					showFilter($("#fbox_" + jqID(p.id)));
 				} else {
 					var fil = $("<div><div id='" + fid + "' class='" +
 						getGuiStyles.call($t, "dialog.body", "searchFilter") +
@@ -427,7 +427,9 @@
 							viewPagerButtons: true,
 							overlayClass: getGuiStyles.call(this, "overlay"),
 							removemodal: true,
-							skipPostTypes: ["image", "file"]
+							skipPostTypes: ["image", "file"],
+							saveui: "enable",
+							savetext: getGridRes.call($self, "defaults.savetext") || "Saving..."
 						},
 						getGridRes.call($self, "edit"),
 						jgrid.edit,
@@ -880,6 +882,7 @@
 									"jqGridAddEditSerializeEditData",
 									postdata),
 								complete: function (jqXHR, textStatus) {
+									$self.jqGrid("progressBar", { method: "hide", loadtype: o.saveui });
 									$("#sData", frmtb2).removeClass(activeClass);
 									postdata[idname] = $("#id_g", frmtb).val();
 									if ((jqXHR.status >= 300 && jqXHR.status !== 304) || (jqXHR.status === 0 && jqXHR.readyState === 4)) {
@@ -988,6 +991,7 @@
 							}
 						}
 						if (ret[0]) {
+							$self.jqGrid("progressBar", { method: "show", loadtype: o.saveui, htmlcontent: o.savetext });
 							if (o.useDataProxy) {
 								var dpret = p.dataProxy.call($t, ajaxOptions, "set_" + gridId);
 								if (dpret === undefined) {

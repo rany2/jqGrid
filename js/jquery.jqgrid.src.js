@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-09-03
+ * Date: 2016-09-05
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -7567,9 +7567,9 @@
 		},
 		saveCell: function (iRow, iCol) {
 			return this.each(function () {
-				var $t = this, $self = $($t), p = $t.p, infoDialog = jgrid.info_dialog, jqID = jgrid.jqID;
+				var $t = this, $self = $($t), p = $t.p, grid = $t.grid, infoDialog = jgrid.info_dialog, jqID = jgrid.jqID;
 
-				if (!$t.grid || p.cellEdit !== true) {
+				if (!grid || p.cellEdit !== true) {
 					return;
 				}
 				var errors = $self.jqGrid("getGridRes", "errors"), errcap = errors.errcap,
@@ -7625,7 +7625,7 @@
 								if (p.cellurl) {
 									var postdata = {};
 									postdata[nm] = v;
-									var opers = p.prmNames, idname = opers.id, oper = opers.oper, hDiv = $t.grid.hDiv;
+									var opers = p.prmNames, idname = opers.id, oper = opers.oper;
 									postdata[idname] = jgrid.stripPref(p.idPrefix, rowid);
 									postdata[oper] = opers.editoper;
 									postdata = $.extend(addpost, postdata);
@@ -7636,16 +7636,15 @@
 											}
 										});
 									}
-									$self.jqGrid("progressBar", { method: "show", loadtype: p.loadui, htmlcontent: jgrid.defaults.savetext || "Saving..." });
-									hDiv.loading = true;
+									$self.jqGrid("progressBar", { method: "show", loadtype: p.loadui, htmlcontent: $self.jqGrid("getGridRes", "defaults.savetext") || "Saving..." });
+									grid.hDiv.loading = true;
 									$.ajax($.extend({
 										url: $.isFunction(p.cellurl) ? p.cellurl.call($t, p.cellurl, iRow, iCol, rowid, v, nm) : p.cellurl,
 										//data :$.isFunction(p.serializeCellData) ? p.serializeCellData.call($t, postdata) : postdata,
 										data: jgrid.serializeFeedback.call($t, p.serializeCellData, "jqGridSerializeCellData", postdata),
 										type: "POST",
 										complete: function (jqXHR) {
-											$self.jqGrid("progressBar", { method: "hide", loadtype: p.loadui });
-											hDiv.loading = false;
+											grid.endReq.call($t);
 											if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 												var ret = $self.triggerHandler("jqGridAfterSubmitCell", [$t, jqXHR, postdata.id, nm, v, iRow, iCol]) || [true, ""];
 												if (ret == null || ret === true || (ret[0] === true && $.isFunction(p.afterSubmitCell))) {
@@ -7664,8 +7663,6 @@
 											}
 										},
 										error: function (jqXHR, textStatus, errorThrown) {
-											$("#lui_" + jqID(p.id)).hide();
-											hDiv.loading = false;
 											$self.triggerHandler("jqGridErrorCell", [jqXHR, textStatus, errorThrown]);
 											if ($.isFunction(p.errorCell)) {
 												p.errorCell.call($t, jqXHR, textStatus, errorThrown);
@@ -8927,7 +8924,7 @@
 						$(p.pager).remove();
 					}
 					try {
-						$("#alertmod_" + p.idSel).remove();
+						$("#alertmod_" + jqID(p.id)).remove();
 						$(self).jqGrid("clearBeforeUnload");
 						$(p.gBox).remove();
 					} catch (ignore) { }
@@ -11605,7 +11602,7 @@
 					}
 				}
 				if ($(themodalSelector)[0] !== undefined) {
-					showFilter($("#fbox_" + p.idSel));
+					showFilter($("#fbox_" + jqID(p.id)));
 				} else {
 					var fil = $("<div><div id='" + fid + "' class='" +
 						getGuiStyles.call($t, "dialog.body", "searchFilter") +
@@ -11883,7 +11880,9 @@
 							viewPagerButtons: true,
 							overlayClass: getGuiStyles.call(this, "overlay"),
 							removemodal: true,
-							skipPostTypes: ["image", "file"]
+							skipPostTypes: ["image", "file"],
+							saveui: "enable",
+							savetext: getGridRes.call($self, "defaults.savetext") || "Saving..."
 						},
 						getGridRes.call($self, "edit"),
 						jgrid.edit,
@@ -12336,6 +12335,7 @@
 									"jqGridAddEditSerializeEditData",
 									postdata),
 								complete: function (jqXHR, textStatus) {
+									$self.jqGrid("progressBar", { method: "hide", loadtype: o.saveui });
 									$("#sData", frmtb2).removeClass(activeClass);
 									postdata[idname] = $("#id_g", frmtb).val();
 									if ((jqXHR.status >= 300 && jqXHR.status !== 304) || (jqXHR.status === 0 && jqXHR.readyState === 4)) {
@@ -12444,6 +12444,7 @@
 							}
 						}
 						if (ret[0]) {
+							$self.jqGrid("progressBar", { method: "show", loadtype: o.saveui, htmlcontent: o.savetext });
 							if (o.useDataProxy) {
 								var dpret = p.dataProxy.call($t, ajaxOptions, "set_" + gridId);
 								if (dpret === undefined) {
@@ -15063,7 +15064,7 @@
 								postData),
 						type: isFunction(o.mtype) ? o.mtype.call($t, editOrAdd, o, postData[idname], postData) : o.mtype,
 						complete: function (jqXHR, textStatus) {
-							$self.jqGrid("progressBar", { method: "hide", loadtype: o.saveui, htmlcontent: o.savetext });
+							$self.jqGrid("progressBar", { method: "hide", loadtype: o.saveui });
 							// textStatus can be "abort", "timeout", "error", "parsererror" or some text from text part of HTTP error occurs
 							// see the answer http://stackoverflow.com/a/3617710/315935 about xhr.readyState === 4 && xhr.status === 0
 							if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
@@ -15102,7 +15103,6 @@
 							}
 						},
 						error: function (res, stat, err) {
-							$("#lui_" + jgrid.jqID(p.id)).hide();
 							$self.triggerHandler("jqGridInlineErrorSaveRow", [rowid, res, stat, err, o]);
 							if (isFunction(o.errorfunc)) {
 								o.errorfunc.call($t, rowid, res, stat, err);
@@ -17269,6 +17269,9 @@
 								(subgridTableClasses ? " style='width:1px' role='presentation' class='" + subgridTableClasses + "'" : "") +
 								"><thead></thead><tbody></tbody></table>"),
 							$tr = $("<tr></tr>");
+
+						ts.grid.endReq.call(ts);
+
 						for (i = 0; i < cm.name.length; i++) {
 							$th = $("<th class='" + thSubgridClasses + "'></th>")
 									.html(cm.name[i])
@@ -17278,8 +17281,6 @@
 						$tr.appendTo($table[0].tHead);
 						fullBody(sjxml, $($table[0].tBodies[0]));
 						$("#" + jqID(p.id + "_" + sbid)).append($table);
-						ts.grid.hDiv.loading = false;
-						$("#load_" + jqID(p.id)).hide();
 						return false;
 					},
 					populatesubgrid = function (rd) {
@@ -17297,8 +17298,7 @@
 							}
 						}
 						if (!ts.grid.hDiv.loading) {
-							ts.grid.hDiv.loading = true;
-							$("#load_" + jqID(p.id)).show();
+							ts.grid.beginReq.call(ts);
 							if (!p.subgridtype) {
 								p.subgridtype = p.datatype;
 							}
@@ -17317,7 +17317,6 @@
 										context: sid,
 										data: jgrid.serializeFeedback.call(ts, p.serializeSubGridData, "jqGridSerializeSubGridData", dp),
 										success: function (data) {
-											$(ts.grid.eDiv).hide();
 											subGridXmlOrJson(
 												data,
 												this,
@@ -17328,6 +17327,8 @@
 											var loadError = p.loadSubgridError === undefined ?
 													p.loadError :
 													p.loadSubgridError;
+
+											ts.grid.endReq.call(ts);
 											if ($.isFunction(loadError)) {
 												loadError.call(ts, jqXHR, textStatus, errorThrown);
 											}
@@ -17338,9 +17339,6 @@
 													this,
 													p.subgridtype === "xml" ? fillXmlBody : fillJsonBody
 												);
-											} else {
-												ts.grid.hDiv.loading = false;
-												$("#load_" + jqID(p.id)).hide();
 											}
 										}
 									}, jgrid.ajaxOptions, p.ajaxSubgridOptions || {}));
