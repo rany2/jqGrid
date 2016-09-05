@@ -146,7 +146,7 @@
 						$(p.pager).remove();
 					}
 					try {
-						$("#alertmod_" + p.idSel).remove();
+						$("#alertmod_" + jqID(p.id)).remove();
 						$(self).jqGrid("clearBeforeUnload");
 						$(p.gBox).remove();
 					} catch (ignore) { }
