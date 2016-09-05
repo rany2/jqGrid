@@ -209,9 +209,9 @@
 		},
 		saveCell: function (iRow, iCol) {
 			return this.each(function () {
-				var $t = this, $self = $($t), p = $t.p, infoDialog = jgrid.info_dialog, jqID = jgrid.jqID;
+				var $t = this, $self = $($t), p = $t.p, grid = $t.grid, infoDialog = jgrid.info_dialog, jqID = jgrid.jqID;
 
-				if (!$t.grid || p.cellEdit !== true) {
+				if (!grid || p.cellEdit !== true) {
 					return;
 				}
 				var errors = $self.jqGrid("getGridRes", "errors"), errcap = errors.errcap,
@@ -267,7 +267,7 @@
 								if (p.cellurl) {
 									var postdata = {};
 									postdata[nm] = v;
-									var opers = p.prmNames, idname = opers.id, oper = opers.oper, hDiv = $t.grid.hDiv;
+									var opers = p.prmNames, idname = opers.id, oper = opers.oper;
 									postdata[idname] = jgrid.stripPref(p.idPrefix, rowid);
 									postdata[oper] = opers.editoper;
 									postdata = $.extend(addpost, postdata);
@@ -278,16 +278,15 @@
 											}
 										});
 									}
-									$self.jqGrid("progressBar", { method: "show", loadtype: p.loadui, htmlcontent: jgrid.defaults.savetext || "Saving..." });
-									hDiv.loading = true;
+									$self.jqGrid("progressBar", { method: "show", loadtype: p.loadui, htmlcontent: $self.jqGrid("getGridRes", "defaults.savetext") || "Saving..." });
+									grid.hDiv.loading = true;
 									$.ajax($.extend({
 										url: $.isFunction(p.cellurl) ? p.cellurl.call($t, p.cellurl, iRow, iCol, rowid, v, nm) : p.cellurl,
 										//data :$.isFunction(p.serializeCellData) ? p.serializeCellData.call($t, postdata) : postdata,
 										data: jgrid.serializeFeedback.call($t, p.serializeCellData, "jqGridSerializeCellData", postdata),
 										type: "POST",
 										complete: function (jqXHR) {
-											$self.jqGrid("progressBar", { method: "hide", loadtype: p.loadui });
-											hDiv.loading = false;
+											grid.endReq.call($t);
 											if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 												var ret = $self.triggerHandler("jqGridAfterSubmitCell", [$t, jqXHR, postdata.id, nm, v, iRow, iCol]) || [true, ""];
 												if (ret == null || ret === true || (ret[0] === true && $.isFunction(p.afterSubmitCell))) {
@@ -306,8 +305,6 @@
 											}
 										},
 										error: function (jqXHR, textStatus, errorThrown) {
-											$("#lui_" + jqID(p.id)).hide();
-											hDiv.loading = false;
 											$self.triggerHandler("jqGridErrorCell", [jqXHR, textStatus, errorThrown]);
 											if ($.isFunction(p.errorCell)) {
 												p.errorCell.call($t, jqXHR, textStatus, errorThrown);
