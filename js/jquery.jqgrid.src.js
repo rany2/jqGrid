@@ -9975,7 +9975,8 @@
 			}
 			return maxfrozen + 1;
 		},
-		setFrozenColumns: function () {
+		setFrozenColumns: function (o) {
+			o = o || {};
 			return this.each(function () {
 				var $t = this, $self = $($t), p = $t.p, grid = $t.grid;
 				if (!grid || p == null || p.frozenColumns === true) { return; }
@@ -10132,6 +10133,13 @@
 					$(p.gView).append(grid.fbDiv);
 					$(grid.bDiv).scroll(function () {
 						$(grid.fbDiv).scrollTop($(this).scrollTop());
+					});
+					$(grid.fbDiv).bind("mousewheel.setFrozenColumns DOMMouseScroll.setFrozenColumns", function (e) {
+						grid.bDiv.scrollTop += $.isFunction(o.mouseWheel) ?
+							o.mouseWheel.call($t, e) :
+							e.type === "mousewheel" ?
+								-e.originalEvent.wheelDelta / 10 :
+								e.originalEvent.detail * 6;
 					});
 					if (p.hoverrows === true) {
 						$(p.idSel).unbind("mouseover").unbind("mouseout");
@@ -10334,6 +10342,7 @@
 				if (!grid) { return; }
 				if (p.frozenColumns === true) {
 					$(grid.fhDiv).remove();
+					$(grid.fbDiv).unbind(".setFrozenColumns");
 					$(grid.fbDiv).remove();
 					grid.fhDiv = null;
 					grid.fbDiv = null;
