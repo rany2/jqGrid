@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-09-05
+ * Date: 2016-09-25
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -5331,7 +5331,7 @@
 			$self0.before(grid.hDiv)
 				.click(function (e) {
 					var highlightClass = getGuiStyles("states.select"), target = e.target,
-						$td = getTdFromTarget.call(this, target),
+						$td = getTdFromTarget.call(ts, target),
 						$tr = $td.parent();
 					// we uses ts.rows context below to be sure that we don't process the clicks in the subgrid
 					// probably one can change the rule and to step over the parents till one will have
@@ -5391,8 +5391,12 @@
 							var oldSelRow = p.selrow;
 							setSelection.call($self0, ri, true, e);
 							if (p.singleSelectClickMode === "toggle" && !p.multiselect && oldSelRow === ri) {
-								if (this.grid.fbRows) {
-									$tr = $tr.add(this.grid.fbRows[ri]);
+								if (ts.grid.fbRows) {
+									$tr = $tr.add(
+											ts.grid.fbRows[$tr[0].rowIndex] === $tr[0] ?
+												ts.rows[$tr[0].rowIndex] :
+												ts.grid.fbRows[$tr[0].rowIndex]
+										);
 								}
 								$tr.removeClass(highlightClass).attr({ "aria-selected": "false", "tabindex": "-1" });
 								p.selrow = null;
@@ -5459,7 +5463,7 @@
 					return false;
 				})
 				.dblclick(function (e) {
-					var $td = getTdFromTarget.call(this, e.target), $tr = $td.parent();
+					var $td = getTdFromTarget.call(ts, e.target), $tr = $td.parent();
 					// TODO: replace ts below to method which use $(this) in case of click
 					// on the grid and the table of the main grid if one click inside the FROZEN column
 					if ($td.length > 0 && !feedback.call(ts, "ondblClickRow", $tr.attr("id"), $tr[0].rowIndex, $td[0].cellIndex, e)) {
@@ -5467,7 +5471,7 @@
 					}
 				})
 				.bind("contextmenu", function (e) {
-					var $td = getTdFromTarget.call(this, e.target), $tr = $td.parent(), rowid = $tr.attr("id");
+					var $td = getTdFromTarget.call(ts, e.target), $tr = $td.parent(), rowid = $tr.attr("id");
 					if ($td.length === 0) { return; }
 					if (!p.multiselect) {
 						// TODO: replace $self0 and ts below to method which use $(this) in case of click
