@@ -324,8 +324,8 @@
 .ui-jqgrid .s-ico > .ui-icon-desc.ui-icon {
 	top: -16px;
 }
-.s-ico > .ui-icon-triangle-1-s {
-	background-position-x: -65px;
+.ui-jqgrid .s-ico > .ui-icon-triangle-1-s {
+    background-position: -65px -16px;
 }
 .ui-jqgrid .s-ico > .ui-icon.ui-sort-ltr {
 	margin-left: -3px;
