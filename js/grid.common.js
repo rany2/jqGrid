@@ -509,7 +509,7 @@
 												}
 											});
 										}
-										$(elem1).change();
+										//$(elem1).change();
 										jgrid.fullBoolFeedback.call($t, options1.selectFilled, "jqGridSelectFilled", {
 											elem: elem1,
 											options: options1,
