@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-09-27
+ * Date: 2016-10-05
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2337,6 +2337,99 @@
 				jgrid.clearArray(grpdata); //grpdata = null;
 			}
 			return rowData;
+		},
+		fillSelectOptions: function (elem, value, sep, delim, isMultiple, valuesToSelect) {
+			var i, so, sv, ov, optionInfo, optionInfos = [], isSelected, key, ovm,
+				isNoFilterValueExist = false,
+				mapFunc = function (n, ii) { if (ii > 0) { return n; } };
+
+			if (!value) { return; }
+			if (typeof value === "function") {
+				value = value();
+			}
+
+			if (typeof value === "string") {
+				so = value.split(delim);
+				for (i = 0; i < so.length; i++) {
+					sv = so[i].split(sep);
+					if (sv.length > 2) {
+						sv[1] = $.map(sv, mapFunc).join(sep);
+					}
+					optionInfos.push({
+						value: sv[0],
+						innerHtml: sv[1],
+						selectValue: $.trim(sv[0]),
+						selectText: $.trim(sv[1]),
+						selected: false
+					});
+					if (sv[0] === "") {
+						isNoFilterValueExist = true;
+					}
+				}
+			} else if (typeof value === "object") {
+				for (key in value) {
+					if (value.hasOwnProperty(key)) {
+						optionInfos.push({
+							value: key,
+							innerHtml: value[key],
+							selectValue: $.trim(key),
+							selectText: $.trim(value[key]),
+							selected: false
+						});
+					}
+					if (key === "") {
+						isNoFilterValueExist = true;
+					}
+				}
+			}
+
+			if (typeof valuesToSelect === "string") {
+				ovm = isMultiple ?
+						$.map(valuesToSelect.split(","), function (n) { return $.trim(n); }) :
+						[$.trim(valuesToSelect)];
+
+				valuesToSelect = $.trim(valuesToSelect);
+
+				// mark selection
+				// 1) first by value
+				for (i = 0; i < optionInfos.length; i++) {
+					optionInfo = optionInfos[i];
+					if (!isMultiple && optionInfo.selectValue === valuesToSelect) {
+						optionInfo.selected = true;
+						isSelected = true;
+					}
+					if (isMultiple && $.inArray(optionInfo.selectValue, ovm) > -1) {
+						optionInfo.selected = true;
+						isSelected = true;
+					}
+				}
+
+				// 2) when no selection by value, then by text
+				if (!isSelected) {
+					for (i = 0; i < optionInfos.length; i++) {
+						optionInfo = optionInfos[i];
+						if (!isMultiple && optionInfo.selectText === valuesToSelect) {
+							optionInfo.selected = true;
+						}
+						if (isMultiple && $.inArray(optionInfo.selectText, ovm) > -1) {
+							optionInfo.selected = true;
+						}
+					}
+				}
+			}
+
+			for (i = 0; i < optionInfos.length; i++) {
+				optionInfo = optionInfos[i];
+				ov = document.createElement("option");
+				ov.value = optionInfo.value;
+				ov.innerHTML = optionInfo.innerHtml;
+				if (optionInfo.selected) {
+					ov.selected = true;
+				}
+				elem.appendChild(ov);
+			}
+
+			return isNoFilterValueExist;
 		},
 		getMethod: function (name) {
 			// this should be $.jgrid object

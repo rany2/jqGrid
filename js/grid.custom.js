@@ -730,6 +730,10 @@
 												$td.append(data);
 											}
 											$select = $td.children("select");
+											$select.attr({ name: cm1.index || cm1.name, id: getId(cm1.name) });
+											if (soptions1.attr) { $select.attr(soptions1.attr); }
+											$select.addClass(dataFieldClass);
+											$select.css({ width: "100%" });
 											if ($select.find("option[value='']").length === 0 && typeof soptions.noFilterText === "string") {
 												ov = document.createElement("option");
 												ov.value = "";
@@ -738,10 +742,6 @@
 											}
 
 											if (soptions1.defaultValue !== undefined) { $select.val(soptions1.defaultValue); }
-											$select.attr({ name: cm1.index || cm1.name, id: getId(cm1.name) });
-											if (soptions1.attr) { $select.attr(soptions1.attr); }
-											$select.addClass(dataFieldClass);
-											$select.css({ width: "100%" });
 											// preserve autoserch
 											bindEv.call($t, $select[0], soptions1);
 											jgrid.fullBoolFeedback.call($t, soptions1.selectFilled, "jqGridSelectFilled", {
@@ -779,41 +779,22 @@
 											id: getId(cm.name),
 											"aria-describedby": p.id + "_" + cm.name
 										});
-										var sv, ov, key, k, isNoFilterValueExist;
-										if (typeof oSv === "string") {
-											so = oSv.split(delim);
-											for (k = 0; k < so.length; k++) {
-												sv = so[k].split(sep);
-												ov = document.createElement("option");
-												ov.value = sv[0];
-												if (sv[0] === "") {
-													isNoFilterValueExist = true;
-												}
-												ov.innerHTML = sv[1];
-												elem.appendChild(ov);
-											}
-										} else if (typeof oSv === "object") {
-											for (key in oSv) {
-												if (oSv.hasOwnProperty(key)) {
-													ov = document.createElement("option");
-													ov.value = key;
-													if (key === "") {
-														isNoFilterValueExist = true;
-													}
-													ov.innerHTML = oSv[key];
-													elem.appendChild(ov);
-												}
-											}
-										}
+										if (soptions.attr) { $(elem).attr(soptions.attr); }
+										var isNoFilterValueExist = jgrid.fillSelectOptions(
+												elem,
+												oSv,
+												sep,
+												delim,
+												soptions.attr != null && soptions.attr.multiple
+											);
 										if (!isNoFilterValueExist && typeof soptions.noFilterText === "string") {
-											ov = document.createElement("option");
+											var ov = document.createElement("option");
 											ov.value = "";
 											ov.innerHTML = soptions.noFilterText;
 											ov.selected = true;
 											$(elem).prepend(ov);
 										}
 										if (soptions.defaultValue !== undefined) { $(elem).val(soptions.defaultValue); }
-										if (soptions.attr) { $(elem).attr(soptions.attr); }
 										$(elem).addClass(dataFieldClass);
 										$(thd).append(stbl);
 										bindEv.call($t, elem, soptions);
