@@ -955,16 +955,18 @@
 							if (newFilters.hasOwnProperty(cmName)) {
 								filter = newFilters[cmName];
 								$input = $(getIdSel(cmName));
-								if ($input[0].tagName.toUpperCase() === "SELECT" && $input[0].multiple) {
-									$input.val(filter.data.split(","));
-								} else if ($.trim($input.val()) !== filter.data) {
-									$input.val(filter.data);
+								if ($input.length > 0) {
+									if ($input[0].tagName.toUpperCase() === "SELECT" && $input[0].multiple) {
+										$input.val(filter.data.split(","));
+									} else if ($.trim($input.val()) !== filter.data) {
+										$input.val(filter.data);
+									}
+									$searchOper = $input.closest(".ui-search-input")
+											.siblings(".ui-search-oper")
+											.children(".soptclass");
+									$searchOper.data("soper", filter.op);
+									$searchOper.text(o.operands[filter.op]);
 								}
-								$searchOper = $input.closest(".ui-search-input")
-										.siblings(".ui-search-oper")
-										.children(".soptclass");
-								$searchOper.data("soper", filter.op);
-								$searchOper.text(o.operands[filter.op]);
 							}
 						}
 						for (i = 0; i < p.colModel.length; i++) {
