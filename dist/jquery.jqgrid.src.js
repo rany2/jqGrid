@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-10-05
+ * Date: 2016-10-07
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6603,10 +6603,27 @@
 						if (p.frozenColumns === true && grid.fbRows != null) {
 							$rows = $rows.add(grid.fbRows);
 						}
-						$rows.each(function () {
+						$rows.each(function (iRow) {
 							var cell = this.cells[iCol];
 							if (!$(this).hasClass("jqgroup") || (cell != null && cell.colSpan === 1)) {
-								$(cell).css("display", show);
+								/* workaround for the bug of Microsoft Edge
+								/* The following bug: Microsoft Edge "optimize" the changes of styles on elements with "height:0"
+								 * on the empty grid. In other words, if the grid is empty then the code
+								 *     $(cell).css("display", "");
+								 * or
+								 *     cell.style.display = "";
+								 * will NOT change the style of the cell. One can examine cell.outerHTML to see something like
+								 *     <td role="gridcell" style="height:0;width:20px;display:none;"></td>
+								 * but still see that cell.style.display is changed. As the workaround we first temporary set
+								 * height of the cell from 0 to 1px, then changes "display" style and finally reset height to 0
+								 */
+								if (iRow === 0 && $rows.length === 1 && $(this).hasClass("jqgfirstrow")) {
+									$(cell).css("height", "1px");
+									$(cell).css("display", show);
+									$(cell).css("height", "0");
+								} else {
+									$(cell).css("display", show);
+								}
 							}
 							// to follow HTML standards exactly one should probably add hidden column in
 							// grouping header row if ($(this).hasClass("jqgroup")) and decrement the value of
