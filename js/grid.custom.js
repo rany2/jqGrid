@@ -85,8 +85,8 @@
 					grid.emptyRows.call(self, true, true); // this work quick enough and reduce the size of memory leaks if we have someone
 				}
 
-				$(document).off("mouseup.jqGrid" + p.id);
-				$(grid.hDiv).off("mousemove"); // TODO add namespace
+				$(document).off("mouseup.jqGrid" + p.id)
+					.off("mousemove.jqGrid");
 				$(self).off();
 
 				/*grid.dragEnd = null;
@@ -1293,9 +1293,6 @@
 					$(htbl).width(1);
 					// resizing stuff
 					$(grid.fhDiv).append(htbl)
-						.mousemove(function (e) {
-							if (grid.resizing) { grid.dragMove(e); return false; }
-						})
 						.scroll(function () {
 							// the fhDiv can be scrolled because of tab keyboard navigation
 							// we prevent horizontal scrolling of fhDiv
