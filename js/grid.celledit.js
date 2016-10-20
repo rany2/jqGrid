@@ -161,7 +161,7 @@
 					setTimeout(function () {
 						$(elc).focus();
 					}, 1);
-					$("input, select, textarea", $td).bind("keydown", function (e) {
+					$("input, select, textarea", $td).on("keydown", function (e) {
 						if (e.keyCode === 27) {
 							if ($("input.hasDatepicker", $td).length > 0) {
 								if ($(".ui-datepicker").is(":hidden")) {

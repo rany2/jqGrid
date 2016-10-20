@@ -485,7 +485,7 @@
 						td = td.firstChild;
 					}
 					if (td != null) {
-						$(td.firstChild).bind("click", onClick);
+						$(td.firstChild).on("click", onClick);
 					}
 				}
 			}
@@ -855,10 +855,10 @@
 			};
 		if (cm.formatoptions == null || !cm.formatoptions.editformbutton) {
 			// we use unbind to be sure that we don't register the same events multiple times
-			$self.unbind("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
-			$self.bind("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
-			$self.unbind("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
-			$self.bind("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
+			$self.off("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
+			$self.on("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
+			$self.off("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
+			$self.on("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
 		}
 	};
 	$.unformat = function (cellval, options, pos, cnt) {

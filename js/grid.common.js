@@ -320,7 +320,7 @@
 			// attach onclick after inserting into the dom
 			if (buttstr) {
 				$.each(mopt.buttons, function (j) {
-					$("#" + jgrid.jqID($t.id), "#info_id").bind("click", function () { mopt.buttons[j].onClick.call($("#info_dialog")); return false; });
+					$("#" + jgrid.jqID($t.id), "#info_id").on("click", function () { mopt.buttons[j].onClick.call($("#info_dialog")); return false; });
 				});
 			}
 			$("#closedialog", "#info_id").click(function () {
@@ -355,9 +355,9 @@
 			if (opt.dataEvents) {
 				$.each(opt.dataEvents, function () {
 					if (this.data !== undefined) {
-						$(el).bind(this.type, this.data, this.fn);
+						$(el).on(this.type, this.data, this.fn);
 					} else {
-						$(el).bind(this.type, this.fn);
+						$(el).on(this.type, this.fn);
 					}
 				});
 			}
