@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-10-07
+ * Date: 2016-10-20
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -15768,6 +15768,9 @@
 							o.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css("paddingTop") || 0, 10) - parseInt(self.currentItem.css("paddingBottom") || 0, 10));
 							o.width(self.currentItem.innerWidth() - parseInt(self.currentItem.css("paddingLeft") || 0, 10) - parseInt(self.currentItem.css("paddingRight") || 0, 10));
 						}
+					},
+					start: function () {
+						ts.grid.hDiv.scrollLeft = ts.grid.bDiv.scrollLeft;
 					},
 					update: function (event, ui) {
 						var th = $(">th", $(ui.item).parent()), tid1 = p.id + "_", permutation = [];
