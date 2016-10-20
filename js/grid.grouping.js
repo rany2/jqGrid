@@ -531,8 +531,8 @@
 					}
 				}
 			});
-			this.unbind(eventNames)
-				.bind(eventNames, function () { //e, show, cmName, iColShow) {
+			this.off(eventNames)
+				.on(eventNames, function () { //e, show, cmName, iColShow) {
 					// TODO fix the code after resorting columns
 					var iCol = p.iColByName[grp.iconColumnName], iRow, row, iColNew, i; //$cellData;
 					if ($.inArray("header", grp.groupSummaryPos) >= 0) {

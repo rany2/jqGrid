@@ -177,7 +177,7 @@
 							if (p.frozenColumns) {
 								$ind = $ind.add($t.grid.fbRows[ind.rowIndex]);
 							}
-							$ind.bind("keydown", function (e) {
+							$ind.on("keydown", function (e) {
 								if (e.keyCode === 27) {
 									$self.jqGrid("restoreRow", rowid, o.afterrestorefunc);
 									return false;
@@ -332,7 +332,7 @@
 					}
 					if (fr >= 0) { p.savedRow.splice(fr, 1); }
 					fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, resp, tmp, o);
-					$tr.removeClass("jqgrid-new-row").unbind("keydown");
+					$tr.removeClass("jqgrid-new-row").off("keydown");
 				} else {
 					$self.jqGrid("progressBar", { method: "show", loadtype: o.saveui, htmlcontent: o.savetext });
 					postData = $.extend({}, tmp, postData);
@@ -382,7 +382,7 @@
 									}
 									if (fr >= 0) { p.savedRow.splice(fr, 1); }
 									fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, jqXHR, tmp, o);
-									$tr.removeClass("jqgrid-new-row").unbind("keydown");
+									$tr.removeClass("jqgrid-new-row").off("keydown");
 								} else {
 									fullBoolFeedback.call($t, o.errorfunc, "jqGridInlineErrorSaveRow", rowid, jqXHR, textStatus, null, o);
 									if (o.restoreAfterError === true) {
@@ -459,7 +459,7 @@
 						}
 					});
 					$self.jqGrid("setRowData", rowid, ares);
-					$(ind).attr("editable", "0").unbind("keydown");
+					$(ind).attr("editable", "0").off("keydown");
 					p.savedRow.splice(fr, 1);
 					if ($("#" + jgrid.jqID(rowid), $t).hasClass("jqgrid-new-row")) {
 						setTimeout(function () {
@@ -703,7 +703,7 @@
 					$(gID + "_ilcancel").addClass(disabledClass);
 				}
 				if (o.restoreAfterSelect === true) {
-					$self.bind("jqGridSelectRow", function (e, rowid) {
+					$self.on("jqGridSelectRow", function (e, rowid) {
 						if (p.savedRow.length > 0 && p._inlinenav === true) {
 							var editingRowId = p.savedRow[0].id;
 							if (rowid !== editingRowId && typeof editingRowId !== "number") {
@@ -712,10 +712,10 @@
 						}
 					});
 				}
-				$self.bind("jqGridInlineAfterRestoreRow jqGridInlineAfterSaveRow", function () {
+				$self.on("jqGridInlineAfterRestoreRow jqGridInlineAfterSaveRow", function () {
 					$self.jqGrid("showAddEditButtons", false);
 				});
-				$self.bind("jqGridInlineEditRow", function (e, rowid) {
+				$self.on("jqGridInlineEditRow", function (e, rowid) {
 					$self.jqGrid("showAddEditButtons", true, rowid);
 				});
 			});

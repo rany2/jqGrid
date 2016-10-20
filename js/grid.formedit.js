@@ -250,7 +250,7 @@
 					});
 					fil.append(bt);
 					if (found && o.tmplFilters && o.tmplFilters.length) {
-						$(".ui-template", fil).bind("change", function () {
+						$(".ui-template", fil).on("change", function () {
 							var curtempl = $(this).val();
 							if (curtempl === "default") {
 								$(fid).jqFilter("addFilter", defaultFilters);
@@ -284,7 +284,7 @@
 						});
 					}
 					if (bQ) {
-						$(fid + "_query").bind("click", function () {
+						$(fid + "_query").on("click", function () {
 							$(".queryresult", fil).toggle();
 							return false;
 						});
@@ -293,7 +293,7 @@
 						// to provide backward compatibility, inferring stringResult value from multipleSearch
 						o.stringResult = o.multipleSearch;
 					}
-					$(fid + "_search").bind("click", function () {
+					$(fid + "_search").on("click", function () {
 						var sdata = {}, res = "", filters, fl = $(fid), $inputs = fl.find(".input-elm");
 						if ($inputs.filter(":focus")) {
 							$inputs = $inputs.filter(":focus");
@@ -341,7 +341,7 @@
 						}
 						return false;
 					});
-					$(fid + "_reset").bind("click", function () {
+					$(fid + "_reset").on("click", function () {
 						var sdata = {}, fl1 = $(fid);
 						p.search = false;
 						p.resetsearch = true;
@@ -1196,7 +1196,7 @@
 				});
 				if (o.checkOnUpdate) {
 					$("a.ui-jqdialog-titlebar-close span", themodalSelector).removeClass("jqmClose");
-					$("a.ui-jqdialog-titlebar-close", themodalSelector).unbind("click")
+					$("a.ui-jqdialog-titlebar-close", themodalSelector).off("click")
 						.click(function () {
 							if (!checkUpdates()) {
 								return false;
@@ -2234,7 +2234,7 @@
 						p._nvtd[1] = twd;
 					}
 					$t.nav = true;
-					navtbl.bind("keydown.jqGrid", clickOnEnter);
+					navtbl.on("keydown.jqGrid", clickOnEnter);
 				}
 				$self.triggerHandler("jqGridResetFrozenHeights");
 			});

@@ -313,9 +313,9 @@
 						$td1 = $(tr1.cells[pos]);
 						if ($td1.hasClass("ui-sgcollapsed")) {
 							if (p.scroll) {
-								$td1.unbind("click");
+								$td1.off("click");
 							}
-							$td1.bind("click", onClick);
+							$td1.on("click", onClick);
 						}
 					}
 					iRow++;
