@@ -61,7 +61,7 @@
 	jgrid.extend({
 		editCell: function (iRow, iCol, ed) {
 			return this.each(function () {
-				var $t = this, $self = $($t), p = $t.p, nm, tmp, cc, cm, rows = $t.rows;
+				var $t = this, $self = $($t), p = $t.p, nm, tmp, $td, cm, rows = $t.rows;
 				if (!$t.grid || p.cellEdit !== true || rows == null || rows[iRow] == null) {
 					return;
 				}
@@ -101,7 +101,7 @@
 				if (nm === "subgrid" || nm === "cb" || nm === "rn") {
 					return;
 				}
-				cc = getTdByColumnIndex.call($t, tr, iCol);
+				$td = getTdByColumnIndex.call($t, tr, iCol);
 				var editable = cm.editable, mode = "cell";
 				if ($.isFunction(editable)) {
 					editable = editable.call($t, {
@@ -115,21 +115,21 @@
 				}
 				var highlightClasses = $self.jqGrid("getGuiStyles", "states.select", "edit-cell"),
 					hoverClasses = $self.jqGrid("getGuiStyles", "states.hover", "selected-row");
-				if (editable === true && ed === true && !cc.hasClass("not-editable-cell")) {
+				if (editable === true && ed === true && !$td.hasClass("not-editable-cell")) {
 					if (iColOld >= 0 && iRowOld >= 0) {
 						getTdByColumnIndex.call($t, $trOld[0], iColOld).removeClass(highlightClasses);
 						$trOld.removeClass(hoverClasses);
 					}
-					cc.addClass(highlightClasses);
+					$td.addClass(highlightClasses);
 					$tr.addClass(hoverClasses);
 					if (!cm.edittype) {
 						cm.edittype = "text";
 					}
 					edittype = cm.edittype;
 					try {
-						tmp = $.unformat.call($t, cc, { rowId: rowid, colModel: cm }, iCol);
+						tmp = $.unformat.call($t, $td, { rowId: rowid, colModel: cm }, iCol);
 					} catch (ex) {
-						tmp = edittype === "textarea" ? cc.text() : cc.html();
+						tmp = edittype === "textarea" ? $td.text() : $td.html();
 					}
 					if (p.autoEncodeOnEdit) {
 						tmp = jgrid.oldDecodePostedData(tmp);
@@ -148,26 +148,26 @@
 					var opt = $.extend({}, cm.editoptions || {},
 						{ id: iRow + "_" + nm, name: nm, rowId: rowid, mode: mode, cm: cm, iCol: iCol });
 					var elc = jgrid.createEl.call($t, edittype, opt, tmp, true, $.extend({}, jgrid.ajaxOptions, p.ajaxSelectOptions || {})),
-						$dataFiled = cc,
+						$dataFiled = $td,
 						editingColumnWithTreeGridIcon = p.treeGrid === true && nm === p.ExpandColumn;
 					if (editingColumnWithTreeGridIcon) {
-						$dataFiled = cc.children("span.cell-wrapperleaf,span.cell-wrapper");
+						$dataFiled = $td.children("span.cell-wrapperleaf,span.cell-wrapper");
 					}
 					$dataFiled.html("").append(elc).attr("tabindex", "0");
 					if (editingColumnWithTreeGridIcon) { // && elc.style.width === "100%"
-						$(elc).width(cc.width() - cc.children("div.tree-wrap").outerWidth());
+						$(elc).width($td.width() - $td.children("div.tree-wrap").outerWidth());
 					}
 					jgrid.bindEv.call($t, elc, opt);
 					setTimeout(function () {
 						$(elc).focus();
 					}, 1);
-					$("input, select, textarea", cc).bind("keydown", function (e) {
+					$("input, select, textarea", $td).on("keydown", function (e) {
 						if (e.keyCode === 27) {
-							if ($("input.hasDatepicker", cc).length > 0) {
+							if ($("input.hasDatepicker", $td).length > 0) {
 								if ($(".ui-datepicker").is(":hidden")) {
 									$self.jqGrid("restoreCell", iRow, iCol);
 								} else {
-									$("input.hasDatepicker", cc).datepicker("hide");
+									$("input.hasDatepicker", $td).datepicker("hide");
 								}
 							} else {
 								$self.jqGrid("restoreCell", iRow, iCol);
@@ -198,9 +198,9 @@
 						getTdByColumnIndex.call($t, $trOld[0], iColOld).removeClass(highlightClasses);
 						$trOld.removeClass(hoverClasses);
 					}
-					cc.addClass(highlightClasses);
+					$td.addClass(highlightClasses);
 					$tr.addClass(hoverClasses);
-					tmp = cc.html().replace(/&#160;/ig, "");
+					tmp = $td.html().replace(/&#160;/ig, "");
 					feedback.call($t, "onSelectCell", rowid, nm, tmp, iRow, iCol);
 				}
 				p.iCol = iCol;
@@ -219,8 +219,8 @@
 					savedRow = p.savedRow, fr = savedRow.length >= 1 ? 0 : null;
 				if (fr !== null) {
 					var tr = $t.rows[iRow], rowid = tr.id, $tr = $(tr), cm = p.colModel[iCol], nm = cm.name, vv,
-						cc = getTdByColumnIndex.call($t, tr, iCol), valueText = {},
-						v = jgrid.getEditedValue.call($t, cc, cm, valueText);
+						$td = getTdByColumnIndex.call($t, tr, iCol), valueText = {},
+						v = jgrid.getEditedValue.call($t, $td, cm, valueText);
 
 					// The common approach is if nothing changed do not do anything
 					if (v !== savedRow[fr].v) {
@@ -243,7 +243,7 @@
 								iRow: iRow,
 								cm: cm,
 								tr: tr,
-								td: cc,
+								td: $td,
 								mode: "cell"
 							}),
 							formatoptions = cm.formatoptions || {};
@@ -255,8 +255,8 @@
 									addpost = {};
 								}
 							}
-							if ($("input.hasDatepicker", cc).length > 0) {
-								$("input.hasDatepicker", cc).datepicker("hide");
+							if ($("input.hasDatepicker", $td).length > 0) {
+								$("input.hasDatepicker", $td).datepicker("hide");
 							}
 							if (cm.formatter === "date" && formatoptions.sendFormatted !== true) {
 								// TODO: call all other predefined formatters!!! Not only formatter: "date" have the problem.
@@ -294,7 +294,7 @@
 												}
 												if (ret == null || ret === true || ret[0] === true) {
 													$self.jqGrid("setCell", rowid, iCol, v, false, false, true);
-													cc.addClass("dirty-cell");
+													$td.addClass("dirty-cell");
 													$tr.addClass("edited");
 													feedback.call($t, "afterSaveCell", rowid, nm, v, iRow, iCol);
 													savedRow.splice(0, 1);
@@ -326,7 +326,7 @@
 								$self.jqGrid("setCell", rowid, iCol,
 									cm.edittype === "select" && cm.formatter !== "select" ? valueText.text : v,
 									false, false, true);
-								cc.addClass("dirty-cell");
+								$td.addClass("dirty-cell");
 								$tr.addClass("edited");
 								feedback.call($t, "afterSaveCell", rowid, nm, v, iRow, iCol);
 								savedRow.splice(0, 1);
@@ -354,21 +354,21 @@
 				if (!$t.grid || p.cellEdit !== true) {
 					return;
 				}
-				var savedRow = p.savedRow, cc = getTdByColumnIndex.call($t, tr, iCol);
+				var savedRow = p.savedRow, $td = getTdByColumnIndex.call($t, tr, iCol);
 				if (savedRow.length >= 1) {
 					// datepicker fix
 					if ($.isFunction($.fn.datepicker)) {
 						try {
-							$("input.hasDatepicker", cc).datepicker("hide");
+							$("input.hasDatepicker", $td).datepicker("hide");
 						} catch (ignore) { }
 					}
 					cm = p.colModel[iCol];
 					if (p.treeGrid === true && cm.name === p.ExpandColumn) {
-						cc.children("span.cell-wrapperleaf,span.cell-wrapper").empty();
+						$td.children("span.cell-wrapperleaf,span.cell-wrapper").empty();
 					} else {
-						cc.empty();
+						$td.empty();
 					}
-					cc.attr("tabindex", "-1");
+					$td.attr("tabindex", "-1");
 					v = savedRow[0].v;
 					formatoptions = cm.formatoptions || {};
 					if (cm.formatter === "date" && formatoptions.sendFormatted !== true) {

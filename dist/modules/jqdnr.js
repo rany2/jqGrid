@@ -60,13 +60,13 @@
 			},
 			stop: function () {
 				//$mainDialog.css("opacity", dnr.o);
-				$(document).unbind(mouseMove, jqDnR.drag).unbind(mouseUp, jqDnR.stop);
+				$(document).off(mouseMove, jqDnR.drag).off(mouseUp, jqDnR.stop);
 			}
 		},
 		init = function ($this, handle, actionName, alsoResize) {
 			return $this.each(function () {
 				handle = handle ? $(handle, $this) : $this;
-				handle.bind(mouseDown, { e: $this, k: actionName }, function (e) {
+				handle.on(mouseDown, { e: $this, k: actionName }, function (e) {
 					var d = e.data, p = {}, $inputDatePicker, $mainDialog, dnrMainDialog, $alsoResize, dnrAlsoResize,
 						getCssProp = function ($elem, propertyName) {
 							return parseInt($elem.css(propertyName), 10) || false;
@@ -133,8 +133,8 @@
 						ar: $alsoResize,
 						dnrAr: dnrAlsoResize
 					};
-					$(document).bind(mouseMove, eventData, jqDnR.drag);
-					$(document).bind(mouseUp, eventData, jqDnR.stop);
+					$(document).on(mouseMove, eventData, jqDnR.drag);
+					$(document).on(mouseUp, eventData, jqDnR.stop);
 					return false;
 				});
 			});

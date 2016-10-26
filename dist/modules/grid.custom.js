@@ -85,9 +85,8 @@
 					grid.emptyRows.call(self, true, true); // this work quick enough and reduce the size of memory leaks if we have someone
 				}
 
-				$(document).unbind("mouseup.jqGrid" + p.id);
-				$(grid.hDiv).unbind("mousemove"); // TODO add namespace
-				$(self).unbind();
+				$(document).off("mousemove.jqGrid mouseup.jqGrid" + p.id);
+				$(self).off();
 
 				/*grid.dragEnd = null;
 				grid.dragMove = null;
@@ -943,7 +942,7 @@
 					$self.jqGrid("destroyFrozenColumns");
 					$self.jqGrid("setFrozenColumns");
 				}
-				$self.bind(
+				$self.on(
 					"jqGridRefreshFilterValues.filterToolbar" + (o.loadFilterDefaults ? " jqGridAfterLoadComplete.filterToolbar" : ""),
 					function () {
 						var cmName, filter, newFilters = parseFilter(true) || {}, $input, $searchOper, i;
@@ -1005,7 +1004,7 @@
 					thead = $("table.ui-jqgrid-htable thead", grid.hDiv);
 				if (!grid) { return; }
 
-				$($t).unbind(".setGroupHeaders");
+				$($t).off(".setGroupHeaders");
 				var $tr = $("<tr>", { role: "row" }).addClass("ui-jqgrid-labels");
 				var headers = grid.headers;
 				for (i = 0, l = headers.length; i < l; i++) {
@@ -1293,9 +1292,6 @@
 					$(htbl).width(1);
 					// resizing stuff
 					$(grid.fhDiv).append(htbl)
-						.mousemove(function (e) {
-							if (grid.resizing) { grid.dragMove(e); return false; }
-						})
 						.scroll(function () {
 							// the fhDiv can be scrolled because of tab keyboard navigation
 							// we prevent horizontal scrolling of fhDiv
@@ -1314,7 +1310,7 @@
 						$(grid.fsDiv).append(ftbl);
 					}
 					// sorting stuff
-					$self.bind("jqGridSortCol.setFrozenColumns", function (e, index, idxcol) {
+					$self.on("jqGridSortCol.setFrozenColumns", function (e, index, idxcol) {
 						var previousSelectedTh = $("tr.ui-jqgrid-labels:last th:eq(" + p.lastsort + ")", grid.fhDiv), newSelectedTh = $("tr.ui-jqgrid-labels:last th:eq(" + idxcol + ")", grid.fhDiv);
 
 						$("span.ui-grid-ico-sort", previousSelectedTh).addClass(disabledClass);
@@ -1335,7 +1331,7 @@
 					$(grid.bDiv).scroll(function () {
 						$(grid.fbDiv).scrollTop($(this).scrollTop());
 					});
-					$(grid.fbDiv).bind("mousewheel.setFrozenColumns DOMMouseScroll.setFrozenColumns", function (e) {
+					$(grid.fbDiv).on("mousewheel.setFrozenColumns DOMMouseScroll.setFrozenColumns", function (e) {
 						grid.bDiv.scrollTop += $.isFunction(o.mouseWheel) ?
 							o.mouseWheel.call($t, e) :
 							e.type === "mousewheel" ?
@@ -1343,7 +1339,7 @@
 								e.originalEvent.detail * 6;
 					});
 					if (p.hoverrows === true) {
-						$(p.idSel).unbind("mouseover").unbind("mouseout");
+						$(p.idSel).off("mouseover.jqGrid mouseout.jqGrid");
 					}
 					var safeHeightSet = function ($elem, newHeight) {
 							var height = $elem.height();
@@ -1429,7 +1425,7 @@
 							body: resizeAll
 						};
 
-					$self.bind("jqGridAfterGridComplete.setFrozenColumns", function () {
+					$self.on("jqGridAfterGridComplete.setFrozenColumns", function () {
 						$(p.idSel + "_frozen").remove();
 						$(grid.fbDiv).height(grid.hDiv.clientHeight);
 						// clone with data and events !!!
@@ -1496,12 +1492,12 @@
 								safeWidthSet($(grid.fsDiv), frozenWidth);
 							}
 						};
-					$(p.gBox).bind("resizestop.setFrozenColumns", function () {
+					$(p.gBox).on("resizestop.setFrozenColumns", function () {
 						setTimeout(function () {
 							myResize(fullResize);
 						}, 50);
 					});
-					$self.bind("jqGridInlineEditRow.setFrozenColumns jqGridInlineAfterRestoreRow.setFrozenColumns jqGridInlineAfterSaveRow.setFrozenColumns jqGridAfterEditCell.setFrozenColumns jqGridAfterRestoreCell.setFrozenColumns jqGridAfterSaveCell.setFrozenColumns jqGridResizeStop.setFrozenColumns", function (e, rowid) {
+					$self.on("jqGridInlineEditRow.setFrozenColumns jqGridInlineAfterRestoreRow.setFrozenColumns jqGridInlineAfterSaveRow.setFrozenColumns jqGridAfterEditCell.setFrozenColumns jqGridAfterRestoreCell.setFrozenColumns jqGridAfterSaveCell.setFrozenColumns jqGridResizeStop.setFrozenColumns", function (e, rowid) {
 						// TODO: probably one should handle additional events like afterSetRow
 						// and remove jqGridInlineAfterSaveRow and jqGridInlineAfterRestoreRow
 						var iRow = $self.jqGrid("getInd", rowid);
@@ -1524,10 +1520,10 @@
 							}
 						});
 					});
-					$self.bind("jqGridResizeStop.setFrozenColumns", function () {
+					$self.on("jqGridResizeStop.setFrozenColumns", function () {
 						myResize(fullResize);
 					});
-					$self.bind("jqGridResetFrozenHeights.setFrozenColumns", function (e, o) {
+					$self.on("jqGridResetFrozenHeights.setFrozenColumns", function (e, o) {
 						myResize(o || fullResize);
 					});
 					if (!grid.hDiv.loading) {
@@ -1543,7 +1539,7 @@
 				if (!grid) { return; }
 				if (p.frozenColumns === true) {
 					$(grid.fhDiv).remove();
-					$(grid.fbDiv).unbind(".setFrozenColumns");
+					$(grid.fbDiv).off(".setFrozenColumns");
 					$(grid.fbDiv).remove();
 					grid.fhDiv = null;
 					grid.fbDiv = null;
@@ -1552,15 +1548,15 @@
 						$(grid.fsDiv).remove();
 						grid.fsDiv = null;
 					}
-					$self.unbind(".setFrozenColumns");
+					$self.off(".setFrozenColumns");
 					if (p.hoverrows === true) {
 						var ptr, hoverClasses = getGuiStyles.call($t, "states.hover");
-						$self.bind("mouseover", function (e) {
+						$self.on("mouseover.jqGrid", function (e) {
 							ptr = $(e.target).closest("tr.jqgrow");
 							if ($(ptr).attr("class") !== "ui-subgrid") {
 								$(ptr).addClass(hoverClasses);
 							}
-						}).bind("mouseout", function (e) {
+						}).on("mouseout.jqGrid", function (e) {
 							ptr = $(e.target).closest("tr.jqgrow");
 							$(ptr).removeClass(hoverClasses);
 						});

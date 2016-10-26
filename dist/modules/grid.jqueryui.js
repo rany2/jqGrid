@@ -608,7 +608,7 @@
 				multiselectData.selectedList.css("height", listHeight);
 				multiselectData.availableList.css("height", listHeight);
 				if (multiselectData.options != null && multiselectData.options.sortable) {
-					multiselectData.selectedList.bind("sortupdate", function (e, ui) {
+					multiselectData.selectedList.on("sortupdate", function (e, ui) {
 						// remove fixed inline style values of width and height
 						// added during gragging
 						if (gh) {
