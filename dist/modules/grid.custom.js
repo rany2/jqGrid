@@ -1473,10 +1473,10 @@
 							// TODO: the width of all column headers can be changed
 							// so one should recalculate frozenWidth in other way.
 							if (resizeOptions.header.resizeDiv) {
-								fixDiv(grid.fhDiv, grid.hDiv, resizeOptions.header.iRowStart, resizeOptions.header.iRowEnd);
+								fixDiv(grid.fhDiv, grid.hDiv, resizeOptions.header.resizedRows.iRowStart, resizeOptions.header.resizedRows.iRowEnd);
 							}
 							if (resizeOptions.body.resizeDiv) {
-								fixDiv(grid.fbDiv, grid.bDiv, resizeOptions.body.iRowStart, resizeOptions.body.iRowEnd);
+								fixDiv(grid.fbDiv, grid.bDiv, resizeOptions.body.resizedRows.iRowStart, resizeOptions.body.resizedRows.iRowEnd);
 							}
 							if (resizeOptions.resizeFooter && grid.sDiv && resizeOptions.resizeFooter) {
 								fixDiv(grid.fsDiv, grid.sDiv, 0, -1);

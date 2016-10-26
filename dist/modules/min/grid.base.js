@@ -5,7 +5,7 @@
  Dual licensed under the MIT and GPL licenses
  http://www.opensource.org/licenses/mit-license.php
  http://www.gnu.org/licenses/gpl-2.0.html
- Date: 2016-10-20
+ Date: 2016-10-26
 */
 var $jscomp={scope:{},findInternal:function(b,L,q){b instanceof String&&(b=String(b));for(var H=b.length,M=0;M<H;M++){var K=b[M];if(L.call(q,K,M,b))return{i:M,v:K}}return{i:-1,v:void 0}}};$jscomp.defineProperty="function"==typeof Object.defineProperties?Object.defineProperty:function(b,L,q){if(q.get||q.set)throw new TypeError("ES3 does not support getters and setters.");b!=Array.prototype&&b!=Object.prototype&&(b[L]=q.value)};
 $jscomp.getGlobal=function(b){return"undefined"!=typeof window&&window===b?b:"undefined"!=typeof global?global:b};$jscomp.global=$jscomp.getGlobal(this);$jscomp.polyfill=function(b,L,q,H){if(L){q=$jscomp.global;b=b.split(".");for(H=0;H<b.length-1;H++){var M=b[H];M in q||(q[M]={});q=q[M]}b=b[b.length-1];H=q[b];L=L(H);L!=H&&null!=L&&$jscomp.defineProperty(q,b,{configurable:!0,writable:!0,value:L})}};

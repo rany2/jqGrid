@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-10-20
+ * Date: 2016-10-26
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -10301,10 +10301,10 @@
 							// TODO: the width of all column headers can be changed
 							// so one should recalculate frozenWidth in other way.
 							if (resizeOptions.header.resizeDiv) {
-								fixDiv(grid.fhDiv, grid.hDiv, resizeOptions.header.iRowStart, resizeOptions.header.iRowEnd);
+								fixDiv(grid.fhDiv, grid.hDiv, resizeOptions.header.resizedRows.iRowStart, resizeOptions.header.resizedRows.iRowEnd);
 							}
 							if (resizeOptions.body.resizeDiv) {
-								fixDiv(grid.fbDiv, grid.bDiv, resizeOptions.body.iRowStart, resizeOptions.body.iRowEnd);
+								fixDiv(grid.fbDiv, grid.bDiv, resizeOptions.body.resizedRows.iRowStart, resizeOptions.body.resizedRows.iRowEnd);
 							}
 							if (resizeOptions.resizeFooter && grid.sDiv && resizeOptions.resizeFooter) {
 								fixDiv(grid.fsDiv, grid.sDiv, 0, -1);
