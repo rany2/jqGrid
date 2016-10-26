@@ -3060,7 +3060,7 @@
 						}
 						self.curGbox = null;
 						document.onselectstart = function () { return true; };
-						$(document).off("mousemove.jqGrid").off("mouseup.jqGrid" + p.id);
+						$(document).off("mousemove.jqGrid mouseup.jqGrid" + p.id);
 					},
 					populateVisible: function () {
 						var self = this, $self = $(self), gridSelf = self.grid, bDiv = gridSelf.bDiv, $bDiv = $(bDiv);
@@ -5394,13 +5394,13 @@
 			}
 			if (p.cellEdit === false && p.hoverrows === true) {
 				$self0
-					.on("mouseover", function (e) {
+					.on("mouseover.jqGrid", function (e) {
 						ptr = $(e.target).closest("tr.jqgrow");
 						if ($(ptr).attr("class") !== "ui-subgrid") {
 							$(ptr).addClass(hoverStateClasses);
 						}
 					})
-					.on("mouseout", function (e) {
+					.on("mouseout.jqGrid", function (e) {
 						ptr = $(e.target).closest("tr.jqgrow");
 						$(ptr).removeClass(hoverStateClasses);
 					});

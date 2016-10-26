@@ -85,8 +85,7 @@
 					grid.emptyRows.call(self, true, true); // this work quick enough and reduce the size of memory leaks if we have someone
 				}
 
-				$(document).off("mouseup.jqGrid" + p.id)
-					.off("mousemove.jqGrid");
+				$(document).off("mousemove.jqGrid mouseup.jqGrid" + p.id);
 				$(self).off();
 
 				/*grid.dragEnd = null;
@@ -1340,7 +1339,7 @@
 								e.originalEvent.detail * 6;
 					});
 					if (p.hoverrows === true) {
-						$(p.idSel).off("mouseover").off("mouseout");
+						$(p.idSel).off("mouseover.jqGrid mouseout.jqGrid");
 					}
 					var safeHeightSet = function ($elem, newHeight) {
 							var height = $elem.height();
@@ -1552,12 +1551,12 @@
 					$self.off(".setFrozenColumns");
 					if (p.hoverrows === true) {
 						var ptr, hoverClasses = getGuiStyles.call($t, "states.hover");
-						$self.on("mouseover", function (e) {
+						$self.on("mouseover.jqGrid", function (e) {
 							ptr = $(e.target).closest("tr.jqgrow");
 							if ($(ptr).attr("class") !== "ui-subgrid") {
 								$(ptr).addClass(hoverClasses);
 							}
-						}).on("mouseout", function (e) {
+						}).on("mouseout.jqGrid", function (e) {
 							ptr = $(e.target).closest("tr.jqgrow");
 							$(ptr).removeClass(hoverClasses);
 						});
