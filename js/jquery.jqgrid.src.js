@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-10-26
+ * Date: 2016-10-27
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2308,21 +2308,28 @@
 							rowData.push(addCell(idr, rd[cmName], j, i + rcnt, cells, rd));
 					}
 				}
+				if (p.grouping && $j.groupingPrepare && !p.groupingView._locgr) {
+					$j.groupingPrepare.call($self, rd, i);
+					if ($.isFunction(p.groupingView.groupCollapse)) {
+						hiderow = p.groupingView.groupCollapse.call(self, {
+								group: p.groupingView.groups[p.groupingView.groups.length - 1],
+								rowid: idr,
+								data: rd
+							});
+					}
+				}
 				rowData[iStartTrTag] = self.constructTr(idr, hiderow, cn1, rd, cells, selr);
 				rowData.push("</tr>");
 				p.rowIndexes[idr] = rowIndex;
 				rowIndex++;
 				//TODO: fix p.rowIndexes in case of usage grouping.
-				if (p.grouping && $j.groupingPrepare) {
+				if (p.grouping) {
 					// we save the rowData in the array grpdata first.
 					// grpdata will collect HTML fragments of all rows of data
 					// of the current group. Later we call groupingRender, which
 					// will insert additional grouping row and concatinate all
 					// the HTML fragments of all rows of the group.
 					grpdata.push(rowData);
-					if (!p.groupingView._locgr) {
-						$j.groupingPrepare.call($self, rd, i);
-					}
 					rowData = []; // the data for rendering are moved in grpdata
 				}
 				if (rowData.length > p.maxItemsToJoin) {
@@ -14023,7 +14030,7 @@
 							keys.push(record[grp.groupField[j]]);
 						}
 						newGroup = {
-							idx: i,
+							idx: i, // index in grp.groupField array
 							dataIndex: fieldName,
 							value: v,
 							displayValue: displayValue,
@@ -14032,43 +14039,42 @@
 							keys: keys,
 							summary: []
 						};
+						counter = {
+							cnt: 1,
+							pos: groups.length,
+							summary: $.extend(true, [], grp.summary)
+						};
 						if (irow === 0) {
 							// First record always starts a new group
 							groups.push(newGroup);
 							lastvalues[i] = v;
-							counter = {
-								cnt: 1,
-								pos: groups.length - 1,
-								summary: $.extend(true, [], grp.summary)
-							};
 							counters[i] = counter;
-							groups[counter.pos].summary = buildSummary();
 						} else {
-							counter = {
-								cnt: 1,
-								pos: groups.length,
-								summary: $.extend(true, [], grp.summary)
-							};
 							if (typeof v !== "object" && ($.isArray(isInTheSameGroup) && $.isFunction(isInTheSameGroup[i]) ? !isInTheSameGroup[i].call($t, lastvalues[i], v, i, grp) : lastvalues[i] !== v)) {
 								// This record is not in same group as previous one
 								groups.push(newGroup);
 								lastvalues[i] = v;
 								changed = true;
 								counters[i] = counter;
-								groups[counter.pos].summary = buildSummary();
 							} else {
 								if (changed) {
 									// This group has changed because an earlier group changed.
 									groups.push(newGroup);
 									lastvalues[i] = v;
 									counters[i] = counter;
-									groups[counter.pos].summary = buildSummary();
 								} else {
 									counter = counters[i];
 									counter.cnt += 1;
 									groups[counter.pos].cnt = counter.cnt;
-									groups[counter.pos].summary = buildSummary();
 								}
+							}
+						}
+						groups[counter.pos].summary = buildSummary();
+						for (j = counter.pos - 1; j >= 0; j--) {
+							// find the parent group (the grouping header)
+							if (groups[j].idx < groups[counter.pos].idx) {
+								groups[counter.pos].parentGroup = groups[j];
+								break;
 							}
 						}
 					}
@@ -14213,9 +14219,8 @@
 			//        ... - all <td> elements of the last row
 			//    "</tr>" - closing tag of the last row of the group
 			// The input parameter rn corresponds to p.rowNum in the most cases.
-			var str = "", $t = this[0], p = $t.p, toEnd = 0, gv, cp = [], icon = "", hid, clid,
+			var str = "", $t = this[0], p = $t.p, toEnd = 0, cp = [],
 				grp = p.groupingView, sumreverse = $.makeArray(grp.groupSummary),
-				pmrtl = (grp.groupCollapse ? grp.plusicon : grp.minusicon) + " tree-wrap",
 				groupLength = grp.groupField.length, groups = grp.groups, colModel = p.colModel,
 				cmLength = colModel.length, page = p.page,
 				eventNames = "jqGridShowHideCol.groupingRender",
@@ -14326,19 +14331,37 @@
 
 			sumreverse.reverse();
 			$.each(groups, function (i, n) {
+				var gv, clid = p.id + "ghead_" + n.idx, hid = clid + "_" + i,
+					groupCollapse = $.isFunction(grp.groupCollapse) ?
+						grp.groupCollapse.call($t, { group: n, rowid: hid }) :
+						grp.groupCollapse,
+					jj, kk, ik, colspan = 1, offset = 0, sgr, gg, end, grpTextStr,
+					leaf = groupLength - 1 === n.idx, parentGroupCollapse,
+					icon = "<span style='cursor:pointer;margin-" +
+						(p.direction === "rtl" ? "right:" : "left:") + (n.idx * 12) +
+						"px;' class='" + grp.commonIconClass + " " +
+						(groupCollapse ? grp.plusicon : grp.minusicon) + " tree-wrap" +
+						"' onclick=\"jQuery('#" + jgrid.jqID(p.id).replace("\\", "\\\\") +
+						"').jqGrid('groupingToggle','" + hid + "', this);return false;\"></span>";
 				if (grp._locgr) {
 					if (!(n.startRow + n.cnt > (page - 1) * rn && n.startRow < page * rn)) {
 						return true;
 					}
 				}
+				// go over the parents of the current group n and find out
+				// whether the parent group is collapsed
+				for (jj = i - 1; jj >= 0; jj--) {
+					if (groups[jj].idx < n.idx && groups[jj].collapsed) {
+						// the parent group is found and it's collaped
+						parentGroupCollapse = true;
+						groupCollapse = true;
+						break;
+					}
+				}
+				if (groupCollapse !== undefined) {
+					n.collapsed = groupCollapse;
+				}
 				toEnd++;
-				clid = p.id + "ghead_" + n.idx;
-				hid = clid + "_" + i;
-				icon = "<span style='cursor:pointer;margin-" +
-						(p.direction === "rtl" ? "right:" : "left:") + (n.idx * 12) +
-						"px;' class='" + grp.commonIconClass + " " + pmrtl +
-						"' onclick=\"jQuery('#" + jgrid.jqID(p.id).replace("\\", "\\\\") +
-						"').jqGrid('groupingToggle','" + hid + "', this);return false;\"></span>";
 				try {
 					if ($.isArray(grp.formatDisplayField) && $.isFunction(grp.formatDisplayField[n.idx])) {
 						n.displayValue = grp.formatDisplayField[n.idx].call($t, n.displayValue, n.value, colModel[cp[n.idx]], n.idx, grp);
@@ -14350,13 +14373,11 @@
 					gv = n.displayValue;
 				}
 				str += "<tr id='" + hid + "' data-jqgrouplevel='" + n.idx + "' " +
-						(grp.groupCollapse && n.idx > 0 ? "style='display:none;' " : "") +
-						"role='row' class='" + jqgroupClass + " " + clid + "'>";
-				var grpTextStr = $.isFunction(grp.groupText[n.idx]) ?
-						grp.groupText[n.idx].call($t, gv, n.cnt, n.summary) :
-						jgrid.template(grp.groupText[n.idx], gv, n.cnt, n.summary),
-					colspan = 1, jj, kk, ik, offset = 0, sgr, gg, end,
-					leaf = groupLength - 1 === n.idx;
+					(groupCollapse && parentGroupCollapse ? "style='display:none;' " : "") +
+					"role='row' class='" + jqgroupClass + " " + clid + "'>";
+				grpTextStr = $.isFunction(grp.groupText[n.idx]) ?
+					grp.groupText[n.idx].call($t, gv, n.cnt, n.summary) :
+					jgrid.template(grp.groupText[n.idx], gv, n.cnt, n.summary);
 				if (typeof grpTextStr !== "string" && typeof grpTextStr !== "number") {
 					grpTextStr = gv;
 				}
@@ -14404,7 +14425,7 @@
 								continue;
 							}
 							str += "<tr data-jqfootlevel='" + (n.idx - ik) +
-									(grp.groupCollapse && ((n.idx - ik) > 0 || !grp.showSummaryOnHide) ? "' style='display:none;'" : "'") +
+									(groupCollapse && ((n.idx - ik) > 0 || !grp.showSummaryOnHide) ? "' style='display:none;'" : "'") +
 									" role='row' class='" + jqfootClass + "'>";
 							str += buildSummaryTd(i, ik, groups[n.idx - ik], 0);
 							str += "</tr>";
