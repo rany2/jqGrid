@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-10-26
+ * Date: 2016-10-27
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2308,21 +2308,28 @@
 							rowData.push(addCell(idr, rd[cmName], j, i + rcnt, cells, rd));
 					}
 				}
+				if (p.grouping && $j.groupingPrepare && !p.groupingView._locgr) {
+					$j.groupingPrepare.call($self, rd, i);
+					if ($.isFunction(p.groupingView.groupCollapse)) {
+						hiderow = p.groupingView.groupCollapse.call(self, {
+								group: p.groupingView.groups[p.groupingView.groups.length - 1],
+								rowid: idr,
+								data: rd
+							});
+					}
+				}
 				rowData[iStartTrTag] = self.constructTr(idr, hiderow, cn1, rd, cells, selr);
 				rowData.push("</tr>");
 				p.rowIndexes[idr] = rowIndex;
 				rowIndex++;
 				//TODO: fix p.rowIndexes in case of usage grouping.
-				if (p.grouping && $j.groupingPrepare) {
+				if (p.grouping) {
 					// we save the rowData in the array grpdata first.
 					// grpdata will collect HTML fragments of all rows of data
 					// of the current group. Later we call groupingRender, which
 					// will insert additional grouping row and concatinate all
 					// the HTML fragments of all rows of the group.
 					grpdata.push(rowData);
-					if (!p.groupingView._locgr) {
-						$j.groupingPrepare.call($self, rd, i);
-					}
 					rowData = []; // the data for rendering are moved in grpdata
 				}
 				if (rowData.length > p.maxItemsToJoin) {
