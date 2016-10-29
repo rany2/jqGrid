@@ -233,7 +233,7 @@
 			// End compatible
 			// TODO: add return this.each(function(){....}
 			var tmp = {}, tmp2 = {}, postData = {}, editable, k, fr, resp, cv, ind = $self.jqGrid("getInd", rowid, true), $tr = $(ind),
-				opers = p.prmNames, errcap = getRes("errors.errcap"), bClose = getRes("edit.bClose"), isRemoteSave;
+				opers = p.prmNames, errcap = getRes("errors.errcap"), bClose = getRes("edit.bClose"), isRemoteSave, isError;
 
 			if (ind === false) { return; }
 
@@ -260,6 +260,17 @@
 								newValue: v,
 								oldRowData: savedRow }));
 					if (cv != null && cv[0] === false) {
+						isError = true;
+						try {
+							var offsetData = $(options.td).offset();
+
+							infoDialog.call($t, errcap, cv[1], bClose, {
+								left: offsetData.left,
+								top: offsetData.top + $(options.td).outerHeight()
+							});
+						} catch (e) {
+							fatalErrorFunction(cv[1]);
+						}
 						return false;
 					}
 					if (formatter === "date" && formatoptions.sendFormatted !== true) {
@@ -275,13 +286,7 @@
 					tmp[cm.name] = v;
 				});
 
-				if (cv != null && cv[0] === false) {
-					try {
-						var tr = $self.jqGrid("getGridRowById", rowid), positions = jgrid.findPos(tr);
-						infoDialog.call($t, errcap, cv[1], bClose, { left: positions[0], top: positions[1] + $(tr).outerHeight() });
-					} catch (e) {
-						fatalErrorFunction(cv[1]);
-					}
+				if (isError) {
 					return;
 				}
 				var idname, oldRowId = rowid;
