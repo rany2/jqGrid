@@ -14071,6 +14071,18 @@
 			});
 			return this;
 		},
+		getGroupHeaderIndex: function (hid, clickedElem) {
+			var $self = this, self = $self[0], p = self.p,
+				$tr = clickedElem ?
+						$(clickedElem).closest("tr.jqgroup") :
+						$("#" + jgrid.jqID(hid)),
+				groupLevel = parseInt($tr.data("jqgrouplevel"), 10),
+				hPrefix = p.id + "ghead_" + groupLevel + "_";
+			if (isNaN(groupLevel) || !$tr.hasClass("jqgroup") || hid.length <= hPrefix.length) {
+				return -1;
+			}
+			return parseInt(hid.substring(hPrefix.length), 10);
+		},
 		groupingToggle: function (hid, clickedElem) {
 			this.each(function () {
 				var $t = this, p = $t.p, grp = p.groupingView,
