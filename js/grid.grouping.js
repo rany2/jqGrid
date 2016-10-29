@@ -184,6 +184,7 @@
 						for (j = counter.pos - 1; j >= 0; j--) {
 							// find the parent group (the grouping header)
 							if (groups[j].idx < groups[counter.pos].idx) {
+								groups[counter.pos].parentGroupIndex = j;
 								groups[counter.pos].parentGroup = groups[j];
 								break;
 							}
