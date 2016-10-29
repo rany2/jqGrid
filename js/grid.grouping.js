@@ -459,7 +459,10 @@
 						grp.groupCollapse.call($t, { group: n, rowid: hid }) :
 						grp.groupCollapse,
 					jj, kk, ik, colspan = 1, offset = 0, sgr, gg, end, grpTextStr,
-					leaf = groupLength - 1 === n.idx, parentGroupCollapse,
+					leaf = groupLength - 1 === n.idx,
+					parentGroupCollapse = n.parentGroup != null ?
+						n.parentGroup.collapsed :
+						false,
 					icon = "<span style='cursor:pointer;margin-" +
 						(p.direction === "rtl" ? "right:" : "left:") + (n.idx * 12) +
 						"px;' class='" + grp.commonIconClass + " " +
@@ -471,15 +474,8 @@
 						return true;
 					}
 				}
-				// go over the parents of the current group n and find out
-				// whether the parent group is collapsed
-				for (jj = i - 1; jj >= 0; jj--) {
-					if (groups[jj].idx < n.idx && groups[jj].collapsed) {
-						// the parent group is found and it's collaped
-						parentGroupCollapse = true;
-						groupCollapse = true;
-						break;
-					}
+				if (parentGroupCollapse) {
+					groupCollapse = true;
 				}
 				if (groupCollapse !== undefined) {
 					n.collapsed = groupCollapse;
