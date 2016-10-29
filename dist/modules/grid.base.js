@@ -4525,15 +4525,16 @@
 					pgid = "#" + jqID(pgid); // modify to id selector
 					if (p.pgbuttons === true) {
 						var po = ["first", "prev", "next", "last"],
+							poIcons = po.slice(),
 							buttonClasses = getGuiStyles("pager.pagerButton", "ui-pg-button"),
-							buildPagerButton = function (buttonName) {
+							buildPagerButton = function (buttonName, iconName) {
 								var titleText = getDef("pg" + buttonName);
 								return "<td role='button' tabindex='0' id='" + buttonName + tp + "' class='" + buttonClasses + "' " +
-									(titleText ? "title='" + titleText + "'" : "") + "><span class='" + getIcon("pager." + buttonName) + "'></span></td>";
+									(titleText ? "title='" + titleText + "'" : "") + "><span class='" + getIcon("pager." + iconName) + "'></span></td>";
 							};
 						if (dir === "rtl") { po.reverse(); }
 						for (i = 0; i < po.length; i++) {
-							pgl += buildPagerButton(po[i]);
+							pgl += buildPagerButton(po[i], poIcons[i]);
 							if (i === 1) {
 								pgl += pginp !== "" ? sep + pginp + sep : "";
 							}
