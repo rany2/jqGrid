@@ -33,7 +33,7 @@
 			pgnext: "صفحه بعد",
 			pgprev: "صفحه قبل",
 			pgrecs: "رکورد در صفحه",
-			showhide: "Toggle Expand Collapse Grid",
+			showhide: "تغییر وضعیت نمایش جدول",
 			savetext: "در حال ذخیره..."
 		},
 		search: {
@@ -62,11 +62,11 @@
 				{ op: "AND", text: "کل" },
 				{ op: "OR",  text: "مجموع" }
 			],
-			addGroupTitle: "Add subgroup",
-			deleteGroupTitle: "Delete group",
-			addRuleTitle: "Add rule",
-			deleteRuleTitle: "Delete rule",
-			operandTitle: "Click to select search operation.",
+			addGroupTitle: "اضافه کردن عنوان گروه",
+			deleteGroupTitle: "حذف عنوان گروه",
+			addRuleTitle: "اضافه کردن  عنوانقانون",
+			deleteRuleTitle: "حذف عنوان قانون",
+			operandTitle: "برای انتخاب گزینه های جستجو کلیک کنید",
 			resetTitle: "تنظیم مجدد مقدار جستجو"
 		},
 		edit: {
@@ -155,8 +155,14 @@
 				defaultValue: "0"
 			},
 			date: {
-				dayNames: ["يک", "دو", "سه", "چهار", "پنج", "جمع", "شنب", "يکشنبه", "دوشنبه", "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"],
-				monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "ژانويه", "فوريه", "مارس", "آوريل", "مه", "ژوئن", "ژوئيه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "December"],
+				dayNames: [
+					"يک", "دو", "سه", "چهار", "پنج", "جمع", "شنب",
+					"یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"
+				],
+				monthNames: [
+					"ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "دسامبر",
+					"ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"
+				],
 				AmPm: ["ب.ظ", "ب.ظ", "ق.ظ", "ق.ظ"],
 				S: function (b) {
 					return b < 11 || b > 13 ? ["st", "nd", "rd", "th"][Math.min((b - 1) % 10, 3)] : "th";
