@@ -505,7 +505,7 @@
 								x.dataName,
 					frozen: o.frozenStaticCols
 				};
-				if (i < xlen - 1) {
+				if (i < xlen - 1 && !x.skipGrouping) {
 					// based on xDimension levels build grouping
 					groupingView.groupField.push(cm.name);
 					groupingView.groupSummary.push(o.groupSummary);
