@@ -157,9 +157,8 @@
 					"Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"
 				],
 				monthNames: [
-					"Jan", "Feb", "Maa", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Oct",
-					"Nov", "Dec", "Januari", "Februari", "Maart", "April", "Mei", "Juni",
-					"Juli", "Augustus", "September", "October", "November", "December"
+					"Jan", "Feb", "Maa", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+					"Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "October", "November", "December"
 				],
 				AmPm: ["am", "pm", "AM", "PM"],
 				S: function (b) {
