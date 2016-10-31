@@ -16709,6 +16709,7 @@
 				aggrlen = isArray(aggregates) ? aggregates.length : 0,
 				headerLevels = ylen - (aggrlen === 1 ? 1 : 0),
 				colHeaders = [], hasGroupTotal = [], colModel = [], outputItems = [],
+				additionalProperties = ["pivotInfos"],
 				aggrContextTotalRows = new Array(aggrlen), aggrContextGroupTotalRows = new Array(ylen),
 				xIndexLength, indexesOfDataWithTheSameXValues, iYData, itemYData, indexesOfDataWithTheSameYValues,
 				iRows, agr, outputItem, previousY, groupHeaders, iRowsY, xIndex, yIndex, yIndexLength,
@@ -16884,7 +16885,7 @@
 								x.dataName,
 					frozen: o.frozenStaticCols
 				};
-				if (i < xlen - 1 && !x.skipGrouping) {
+				if (i < xlen - 1 && !x.skipGrouping && !x.additionalProperty) {
 					// based on xDimension levels build grouping
 					groupingView.groupField.push(cm.name);
 					groupingView.groupSummary.push(o.groupSummary);
@@ -16893,12 +16894,16 @@
 				cm = $.extend(cm, x);
 				delete cm.dataName;
 				delete cm.footerText;
-				colModel.push(cm);
+				if (!x.additionalProperty) {
+					colModel.push(cm);
+					groupOptions.sortname = cm.name;
+				} else {
+					additionalProperties.push(cm.name);
+				}
 			}
 			if (xlen < 2) {
 				groupOptions.grouping = false; // no grouping is needed
 			}
-			groupOptions.sortname = colModel[xlen - 1].name;
 			groupingView.hideFirstGroupCol = true;
 
 			// Fill hasGroupTotal and groupColumnsPerLevel arrays
@@ -17119,7 +17124,15 @@
 
 			// return the final result.
 			options.colHeaders = colHeaders;
-			return { colModel: colModel, options: options, rows: outputItems, groupOptions: groupOptions, groupHeaders: colHeaders, summary: summaries };
+			return {
+				colModel: colModel,
+				additionalProperties: additionalProperties,
+				options: options,
+				rows: outputItems,
+				groupOptions: groupOptions,
+				groupHeaders: colHeaders,
+				summary: summaries
+			};
 		},
 		jqPivot: function (data, pivotOpt, gridOpt, ajaxOpt) {
 			return this.each(function () {
@@ -17156,8 +17169,8 @@
 						footerrow: footerrow,
 						userDataOnFooter: footerrow,
 						colModel: pivotGrid.colModel,
+						additionalProperties: pivotGrid.additionalProperties,
 						pivotOptions: pivotGrid.options,
-						additionalProperties: ["pivotInfos"],
 						viewrecords: true,
 						sortname: pivotOpt.xDimension[0].dataName // ?????
 					}, pivotGrid.groupOptions, gridOpt || {}));
