@@ -44,11 +44,6 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests",
-    "gradlew.bat",
-    "gradle/wrapper",
-    ".gradle",
-    "gradlew"
+    "tests"
   ]
 }
