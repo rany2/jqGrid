@@ -402,8 +402,15 @@
 					var id = getAccessor(rc, p.localReader.id);
 					if (!treeGridFeedback.call($t, "beforeCollapseNode", { rowid: id, item: rc })) { return; }
 					rc[expanded] = false;
-					var rc1 = $("#" + p.idPrefix + jqID(id), $t.grid.bDiv)[0];
-					$("div.treeclick", rc1).removeClass(p.treeIcons.minus + " tree-minus").addClass(p.treeIcons.commonIconClass).addClass(p.treeIcons.plus + " tree-plus");
+					$("#" + p.idPrefix + jqID(id), $t.grid.bDiv) // $tr
+						.find("div.treeclick")
+						.removeClass(p.treeIcons.minus + " tree-minus")
+						.addClass(p.treeIcons.commonIconClass)
+						.addClass(p.treeIcons.plus + " tree-plus");
+					if (p.unloadNodeOnCollapse === true || ($.isFunction(p.unloadNodeOnCollapse) && p.unloadNodeOnCollapse.call($t, rc))) {
+						rc[p.treeReader.loaded] = false;
+						$($t).jqGrid("delTreeNode", id, true);
+					}
 					treeGridFeedback.call($t, "afterCollapseNode", { rowid: id, item: rc });
 				}
 			});
@@ -453,7 +460,7 @@
 			});
 			return success;
 		},
-		delTreeNode: function (rowid) {
+		delTreeNode: function (rowid, skipSelf) {
 			return this.each(function () {
 				var $t = this, p = $t.p, myright, width, res, key, rid = p.localReader.id, i, $self = $($t),
 					left = p.treeReader.left_field,
@@ -467,7 +474,9 @@
 					var dr = base.getFullTreeNode.call($self, p.data[rc]);
 					if (dr.length > 0) {
 						for (i = 0; i < dr.length; i++) {
-							base.delRowData.call($self, dr[i][rid]);
+							if (!skipSelf || rowid !== dr[i][rid]) {
+								base.delRowData.call($self, dr[i][rid]);
+							}
 						}
 					}
 					if (p.treeGridModel === "nested") {
