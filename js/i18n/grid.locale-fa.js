@@ -120,9 +120,9 @@
 			viewtext: "",
 			viewtitle: "نمایش رکورد های انتخاب شده",
 			savetext: "",
-			savetitle: "Save row",
+			savetitle: "ذخیره سطر",
 			canceltext: "",
-			canceltitle: "Cancel row editing"
+			canceltitle: "انصراف از تغییر سطر"
 		},
 		col: {
 			caption: "نمايش/عدم نمايش ستون",
