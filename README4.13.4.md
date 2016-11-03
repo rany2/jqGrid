@@ -7,7 +7,7 @@ jqGrid was developed originally by [Tony Tomov](https://github.com/tonytomov) an
 
 The code from the GitHib repository is the fork of jqGrid 4.7.0 - the latest version available under MIT/GPL-licenses. It will be provided under MIT/GPL-licenses.
 
-Below you can find short description of minor new features and the bug fixes implemented in free jqGrid 4.13.5 (compared with version 4.13.4). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](http://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
+Below you can find short description of minor new features and the bug fixes implemented in free jqGrid 4.13.4 (compared with version 4.13.3). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](http://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
 
 Read [Wiki](https://github.com/free-jqgrid/jqGrid/wiki) for more detailed information about the features of free-jqGrid. The preliminary version of the documentation can be found [here](http://free-jqgrid.github.io/).
 
@@ -19,15 +19,15 @@ The package is published on [WebJars](http://www.webjars.org/) too and it's depl
 
 Free jqGrid is is available from [jsDelivr CDN](http://www.jsdelivr.com/#!free-jqgrid) and [cdnjs](https://cdnjs.com/libraries/free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.13.5/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.5/js/i18n/grid.locale-de.min.js"></script>
-<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.5/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.13.4/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.4/js/i18n/grid.locale-de.min.js"></script>
+<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.4/js/jquery.jqgrid.min.js"></script>
 ```
 or
 ```html
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.5/css/ui.jqgrid.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.5/js/i18n/grid.locale-de.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.5/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.4/css/ui.jqgrid.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.4/js/i18n/grid.locale-de.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.4/js/jquery.jqgrid.min.js"></script>
 ```
 **The locale file is optional**. One can, but one don't need to include `grid.locale-en.min.js`, because the same information is already included in the `jquery.jqgrid.min.js` (or `jquery.jqgrid.src.js`).
 
@@ -39,48 +39,25 @@ If somebody want to test the *latest* version of free jqGrid, one can load it di
 ```
 All other language files and plugins are available from CDN too. See [the wiki article](https://github.com/free-jqgrid/jqGrid/wiki/Access-free-jqGrid-from-different-CDNs) for more details about the usage of free jqGrid from CDNs and RawGit.
 
-Remark: the above URLs will be available **after publishing** the release of the version of 4.13.5.
+Remark: the above URLs will be available **after publishing** the release of the version of 4.13.4.
 
-### Below one can see the full list of changes in the version 4.13.5 compared with 4.13.4:
+### Below one can see the full list of changes in the version 4.13.4 compared with 4.13.3:
 
-* Add new option `unloadNodeOnCollapse`, which can be used in TreeGrid to remove previously loaded nodes of TreeGrid. It can improve the performance of TreeGrid in case of usage lagre number of nodes. See the comment to [the commit](https://github.com/free-jqgrid/jqGrid/commit/bc6fea06154851fd7e5c73a82ba8bbf7910fd768) for more detailes. [The demo](http://www.ok-soft-gmbh.com/jqGrid/OK/LocalAdjacencyTreeLoadOnDemand.htm) demonstrates unloading of all not on-top nodes on collapsing the parent node
-* Add new `additionalProperty:true` allows to specify additional property in `xDimension` of `jqPivot` method without the usage of unneeded hidden columns
-* Add more localization of Persian and Korean language locale files: grid.locale-fa.js and `grid.locale-kr.js`
-* Add `parentGroupIndex` property to the group header info (in case of usage data grouping)
-* Introduce the helper function `getGroupHeaderIndex`, which provides the information about the grouping headers. See [the demo](http://www.ok-soft-gmbh.com/jqGrid/OK/grouping2-groupCollapseAsFunction.htm) and [another one](http://www.ok-soft-gmbh.com/jqGrid/OK/grouping2-groupCollapseAsFunction1.htm)
-* Bug fix the order of paging buttons in the RTL languages. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/275) for more detailes.
-* Bug fix the position of modal dialog in case of grid with scrolled data. See [here](http://stackoverflow.com/q/40316269/315935) for more details.
-* Add support of `groupCollapse` property of `groupingView` defined as callback function. The callback function allows to define more sofisticated rules of collapsing some groups. See [the demo](http://www.ok-soft-gmbh.com/jqGrid/OK/grouping2-groupCollapseAsFunction.htm) and [another one](http://www.ok-soft-gmbh.com/jqGrid/OK/grouping2-groupCollapseAsFunction1.htm) and the comment to [the commit](https://github.com/free-jqgrid/jqGrid/commit/df91c0dbc5728a30578f19ce37dfbd8eda52230d) for more details.
-* Bug fix in frozen columns in processing of dynamical changing of the row height (starting inline editing, for example)
-* Use event namespace in `moseup` and `mousemove` events
-* Bug fix of resizing of the footer in case of using frozen columns
-* Replace `jQuery` methods `bind` and `unbind` to `on` and `off`, introduced in jQuery 1.7. Starting with jQuery 3.0 the methods `bind` and `unbind` are declared as deprecated (see [here](http://api.jquery.com/category/deprecated/deprecated-3.0/)), but there are still exist in the code. We replace `bind` and `unbind` to `on` and `off` to make the code more relible for the next versions of jQuery.
-* Bug fix horizontal scroll position in `sortableColumns`
-* Bug fix: prevent possible exception in processing of `jqGridRefreshFilterValues` event. See [here](http://stackoverflow.com/q/39867662/315935) for more information
-* Move the part of the code of `createEl` in new `fillSelectOptions` method and use it in the filter toolbar too
-* Bug fix of the position of sorting icons of the column headers in case of usage jQuery UI 1.12.x
-* Add support of `mousewheel`/`DOMMouseScroll` in vertical scrolling of frozen columns (`setfrozenColumns`). New `mouseWheel` callback of `setFrozenColumns` allows to customize the default calculation algorithm of scrolling positing based of the changes of the value of wheel button
-* Bug fix click handler on frozen column in default `singleSelectClickMode:"toggle"` mode
-* Small clean-up of subgrid module in the working with loading div
-* Small clean-up of `saveCell` method in the working with loading div
-* Remove unneeded `htmlcontent` parameter of `progressBar`
-* Add the usage of `progressBar` and the options `saveui`, `savetext` like in inline editing
-* Bug fix of the wrong usage of `idSel` in some cases of `alert` dialog of Searching Dialog (`searchGrid`) and `GridDestroy` method
-* Remove the usage of deprecated `disableSelection` method of jQuery UI from `sortableRows`
-* The code optimizations of `getRowData`
-* Add support of moving position of column headers in `columnChooser` in case of usage grouping headers
-* Bug fix in `setGroupHeaders` in case if the grid inside of hidden div (for example inactive jQuery UI Tab)
-* Add support of new callback functions: `init` and `sortUpdate` in `columnChooser` method
-* Bug fix in columnChooser in the order of columns
-* Bug fix of width of items after drop in selected column in the Column Chooser
-* Bug fix in `ui.multiselect.js` and the Column Chooser
-* Improve performance of resizing the columns
-* Add `column` property to options of `createEl` and `bindEv` of Searching Dialog (`jqFilter` method). The `columns` parameter contains typically the deep **copy** of `colModel`. The new `column` property allows to access the copy of the item of `columns` by usage `options.column`. Thus one should be able to modify `searchoptions` by modifying of  `options.column.searchoptions`.
-* Add support of multiple:true selects in the filter toolbar inside of jqGridRefreshFilterValues event (in case of usage default loadFilterDefaults:true option of `filterToolbar`)
+* Add support on `IN` operation for local searching. The values should be comma separated.
+* Bug fix initializing of `currentFilters` variable to {}. It's used in `filterToolbar`. The fix is important in case of usage `loadFilterDefaults: false` option of `filterToolbar`.
+* Bug fix of idents in Searching Dialog in case of usage `overlay: 0` searching option.
+* Add `mode` and `rowid` properties in the options of `selectFilled` callback and `jqGridSelectFilled` event.
+* Bug fix: prevent id duplicates in `navButtonAdd` if id option is specified and there are more as one navigation bar (both `pager` and `toppager` are set).
+* Bug fix of `selected` option in Chrome/Firefox in `filterToolbar` if `searchoptions.noFilterText` is used.
+* Bug fix in `searchGrid` (Advanced Searching Dialog) to make `showQuery: true` option correctly working.
+* Bug fix of `edittype: "select"` element selection by text or value (if text and values are different, but no `formatter: "select"` are used).
+* Makes searching filter (created by `filterToolbar`) more compliant to WAI-ARIA 1.1 and WCAG 2.0 standards.
+* Add the usage of `$.jgrid.defaults.fatalError` instead of `alert` over the whole code (the method `$.jgrid.defaults.fatalError` can be replaced to any custom implementation).
+* Add `summary` parameter in `summaryFormat` callback used for data grouping. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/232) for more details.
+* Increases the value of the `size` attribute of the pager `<input>` based on the pager value. It improves the visibility of the pager input if the total number of pages larger as 99.
 
-Other old readmes contain the list of the features and bug fixed implemented before:
+Other readmes contain the list of the features and bug fixed implemented before:
 
-* [README4.13.4.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.4.md) contains the readme of free jqGrid 4.13.4.
 * [README4.13.3.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.3.md) contains the readme of free jqGrid 4.13.3.
 * [README4.13.2.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.2.md) contains the readme of free jqGrid 4.13.2.
 * [README4.13.1.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.1.md) contains the readme of free jqGrid 4.13.1.
