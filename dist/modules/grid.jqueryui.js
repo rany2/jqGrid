@@ -226,7 +226,7 @@
 									},
 									j + 1 // start enumeration with the index
 								);
-								$(items[iColNotInTheGroup >= items.length ? items.length - 1 : iColNotInTheGroup - 1])
+								$(items[iColNotInTheGroup === undefined || iColNotInTheGroup >= items.length ? items.length - 1 : iColNotInTheGroup - 1])
 									.after(items[indexOfAddedItem]);
 								updateNewColOrder();
 							}
