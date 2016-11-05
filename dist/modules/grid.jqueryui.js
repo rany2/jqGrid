@@ -133,7 +133,7 @@
 									// selectedList. I find better to insert the item AFTER the hidden
 									// or non-movable columns (like "rn", "subgrid" column or other)
 									while (iCol >= 0 && iCol < p.colModel.length &&
-											!p.colModel[iCol].hidden && !p.colModel[iCol].hidedlg &&
+											(p.colModel[iCol].hidden || p.colModel[iCol].hidedlg) &&
 											//inGroup[iCol] !== undefined && inGroup[iColItem] !== undefined &&
 											inGroup[iCol] === inGroup[iColItem]) {
 										iCol++;
