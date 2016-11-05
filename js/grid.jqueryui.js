@@ -132,7 +132,8 @@
 									// both belongs no header group then the column could be NOT in
 									// selectedList. I find better to insert the item AFTER the hidden
 									// or non-movable columns (like "rn", "subgrid" column or other)
-									while (iCol >= 0 && !p.colModel[iCol].hidden && p.colModel[iCol].hidedlg &&
+									while (iCol >= 0 && iCol < p.colModel.length &&
+											!p.colModel[iCol].hidden && !p.colModel[iCol].hidedlg &&
 											//inGroup[iCol] !== undefined && inGroup[iColItem] !== undefined &&
 											inGroup[iCol] === inGroup[iColItem]) {
 										iCol++;
