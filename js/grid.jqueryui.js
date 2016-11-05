@@ -39,15 +39,17 @@
 			/* Background information:
 			 *
 			 * Multiselect contains the list of selected items this.selectedList,
-			 * which is jQuery wrapper of <ul> element.
-			 * The items of this.selectedList are <li> elements, which represent
-			 * visible (hidden:false) and movable (hidedlg:false) columns of the grid.
+			 * which is jQuery wrapper of <ul> element. The items of this.selectedList
+			 * are <li> elements, which represent visible (hidden:false) and movable
+			 * (hidedlg:false) columns of the grid.
+			 *
 			 * Additionally there are exist hidden <select multiple="multiple">.
 			 * Every <option> of the <select> corresponds the column of the grid.
 			 * The visible columns (hidden:false) are selected. The value of the <option>
-			 * contains the column index (iCol) in colModel.
-			 * <li> elements has data with the "optionLink" pointed to the corresponding
+			 * contains the column index (iCol) in colModel. <li> elements of
+			 * this.selectedLis have data with the "optionLink" pointed to the corresponding
 			 * option of the hidden select.
+			 *
 			 * this.grid is the DOM of the grid and this.newColOrder is the array with
 			 * ALL column names in the order, which should be applied after reordering
 			 * the grid. Additionally this.gh contains the COPY of p.groupHeader.groupHeaders.
@@ -56,13 +58,19 @@
 			 * On the other side the user can't click Cancel button of columnChooser for
 			 * breaking reordering. Because of that this.gh contains the COPY of
 			 * p.groupHeader.groupHeaders and the original p.groupHeader.groupHeaders will be
-			 * not changed in the reorderSelectedColumns function */
+			 * not changed in the reorderSelectedColumns function.
+			 *
+			 * An important implementation problem: reorderSelectedColumns function will be
+			 * called after ONE reordering of the columns. On the other side, the user can
+			 * reorder the columns MULTIPLE TIMES before saving the new order. Thus, one
+			 * have to take in consideration not only the original order of columns in
+			 * colModel, but THE CURRENT order of the columns saved only internally in
+			 * the dialog in this.newColOrder.
+			 */
 			if (this.grid != null && this.grid.p != null) {
 				var that = this, p = this.grid.p, iCol, j, iGrp, ghItem,
-					gh = this.gh, selectedList = this.selectedList,
-					items = selectedList.find("li"),
-					optionLink, headerItem, //iColOld,
-					inGroup = new Array(p.colModel.length), // allocate array with undefined values
+					gh = this.gh, selectedList = this.selectedList, inGroup = this.inGroup,
+					items = selectedList.find("li"), optionLink,
 					indexOfAddedItem = items.length - 1,
 					enumSelected = function (callback, startIndex, reverse) {
 						var i, opt, items = selectedList.find("li");
@@ -145,21 +153,6 @@
 							}
 						);
 					};
-
-				// First of all we fill the helper array inGroup. It contains
-				// an item for every column. The value is undefined if the column
-				// not belongs to a header group and it is 0-based index of the
-				// header group (the index in gh array) if the column belongs to
-				// a header group. The array inGroup helps us to detect whether
-				// two columns belong to the same group or not.
-				if (gh) {
-					for (iGrp = 0; iGrp < gh.length; iGrp++) {
-						headerItem = gh[iGrp];
-						for (iCol = 0; iCol < headerItem.numberOfColumns; iCol++) {
-							inGroup[p.iColByName[headerItem.startColumnName] + iCol] = iGrp;
-						}
-					}
-				}
 
 				// Fix potition of added/moved item iColItem in that.newColOrder array.
 				// We syncronize only the initial state of newColOrder. The position of
@@ -589,10 +582,26 @@
 			if (multiselectData) {
 				// grid property will be used to access the grid inside of _setSelected
 				multiselectData.grid = self;
-				if (p.groupHeader != null) {
+				if (gh) {
 					// make deep copy of groupHeaders to be able to hold changes of startColumnName,
 					// but to apply the changes only after the user click OK button (not Cancel)
-					multiselectData.gh = $.extend(true, [], p.groupHeader.groupHeaders);
+					multiselectData.gh = $.extend(true, [], gh);
+
+					// filling the helper array inGroup. It contains
+					// an item for every column. The value is undefined if the column
+					// not belongs to a header group and it is 0-based index of the
+					// header group (the index in gh array) if the column belongs to
+					// a header group. The array inGroup helps us to detect whether
+					// two columns belong to the same group or not.
+					multiselectData.inGroup = new Array(p.colModel.length); // allocate array with undefined values
+
+					var iGrp, headerItem;
+					for (iGrp = 0; iGrp < gh.length; iGrp++) {
+						headerItem = gh[iGrp];
+						for (iCol = 0; iCol < headerItem.numberOfColumns; iCol++) {
+							multiselectData.inGroup[p.iColByName[headerItem.startColumnName] + iCol] = iGrp;
+						}
+					}
 				}
 				multiselectData.newColOrder = $.map(colModel, function (cm) { return cm.name; });
 				multiselectData.container.css({ width: "100%", height: "100%", margin: "auto" });
