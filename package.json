@@ -53,7 +53,7 @@
   },
   "homepage": "https://github.com/free-jqgrid/jqGrid",
   "devDependencies": {
-    "google-closure-compiler": "^20161024.1.0",
+    "google-closure-compiler": "^20161024.3.0",
     "grunt": "^1.0.1",
     "grunt-closure-tools": "^0.9.9",
     "grunt-contrib-clean": "^1.0.0",
