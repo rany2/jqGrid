@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-11-05
+ * Date: 2016-11-15
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -15566,26 +15566,6 @@
 							}
 						}
 					},
-					enumPreviousAndInsertAfter = function (iCol) {
-						if (inGroup[iCol] === inGroup[iColItem]) {
-							$(this).after(items[indexOfAddedItem]);
-							updateNewColOrder();
-							return true; // stop enumeration
-						}
-					},
-					enumNextAndInsertBefore = function (iCol) {
-						if (inGroup[iCol] === inGroup[iColItem]) {
-							$(this).before(items[indexOfAddedItem]);
-							updateNewColOrder();
-							return true; // stop enumeration
-						}
-					},
-					updateStartColumn = function (iCol) {
-						if (inGroup[iCol] === inGroup[iColItem] && inGroup[iCol] !== undefined) {
-							gh[inGroup[iCol]].startColumnName = p.colModel[iCol].name;
-							return true; // stop enumeration
-						}
-					},
 					updateNewColOrder = function () {
 						// !!! the function set additionally indexOfAddedItem and update items
 
@@ -15616,6 +15596,7 @@
 									// or non-movable columns (like "rn", "subgrid" column or other)
 									while (iCol >= 0 && iCol < p.colModel.length &&
 											(p.colModel[iCol].hidden || p.colModel[iCol].hidedlg) &&
+											inGroup != null &&
 											//inGroup[iCol] !== undefined && inGroup[iColItem] !== undefined &&
 											inGroup[iCol] === inGroup[iColItem]) {
 										iCol++;
@@ -15635,6 +15616,26 @@
 								iCol++;
 							}
 						);
+					},
+					enumPreviousAndInsertAfter = function (iCol) {
+						if (inGroup[iCol] === inGroup[iColItem]) {
+							$(this).after(items[indexOfAddedItem]);
+							updateNewColOrder();
+							return true; // stop enumeration
+						}
+					},
+					enumNextAndInsertBefore = function (iCol) {
+						if (inGroup[iCol] === inGroup[iColItem]) {
+							$(this).before(items[indexOfAddedItem]);
+							updateNewColOrder();
+							return true; // stop enumeration
+						}
+					},
+					updateStartColumn = function (iCol) {
+						if (inGroup[iCol] === inGroup[iColItem] && inGroup[iCol] !== undefined) {
+							gh[inGroup[iCol]].startColumnName = p.colModel[iCol].name;
+							return true; // stop enumeration
+						}
 					};
 
 				// Fix potition of added/moved item iColItem in that.newColOrder array.
@@ -15960,9 +15961,10 @@
 							$self.jqGrid("setGroupHeaders", p.groupHeader);
 						}
 					}
-					$self.jqGrid("setGridWidth",
-						!p.autowidth && (p.widthOrg === undefined || p.widthOrg === "auto" || p.widthOrg === "100%") ? p.tblwidth : p.width,
-						p.shrinkToFit);
+					var newWidth = !p.autowidth && (p.widthOrg === undefined || p.widthOrg === "auto" || p.widthOrg === "100%") ? p.tblwidth : p.width;
+					if (newWidth !== p.width) {
+						$self.jqGrid("setGridWidth", newWidth, p.shrinkToFit);
+					}
 				},
 				/* Function to cleanup the dialog, and select. Also calls the
 				   done function with no permutation (to indicate that the
@@ -16103,12 +16105,10 @@
 					multiselectData.selectedList.on("sortupdate", function (e, ui) {
 						// remove fixed inline style values of width and height
 						// added during gragging
-						if (gh) {
-							reorderSelectedColumns.call(
-								multiselectData,
-								parseInt(ui.item.data("optionLink").val(), 10)
-							);
-						}
+						reorderSelectedColumns.call(
+							multiselectData,
+							parseInt(ui.item.data("optionLink").val(), 10)
+						);
 						ui.item.css({ width: "", height: "" });
 						if ($.isFunction(opts.sortUpdate)) {
 							opts.sortUpdate.call(self, e, ui);
