@@ -84,26 +84,6 @@
 							}
 						}
 					},
-					enumPreviousAndInsertAfter = function (iCol) {
-						if (inGroup[iCol] === inGroup[iColItem]) {
-							$(this).after(items[indexOfAddedItem]);
-							updateNewColOrder();
-							return true; // stop enumeration
-						}
-					},
-					enumNextAndInsertBefore = function (iCol) {
-						if (inGroup[iCol] === inGroup[iColItem]) {
-							$(this).before(items[indexOfAddedItem]);
-							updateNewColOrder();
-							return true; // stop enumeration
-						}
-					},
-					updateStartColumn = function (iCol) {
-						if (inGroup[iCol] === inGroup[iColItem] && inGroup[iCol] !== undefined) {
-							gh[inGroup[iCol]].startColumnName = p.colModel[iCol].name;
-							return true; // stop enumeration
-						}
-					},
 					updateNewColOrder = function () {
 						// !!! the function set additionally indexOfAddedItem and update items
 
@@ -154,6 +134,26 @@
 								iCol++;
 							}
 						);
+					},
+					enumPreviousAndInsertAfter = function (iCol) {
+						if (inGroup[iCol] === inGroup[iColItem]) {
+							$(this).after(items[indexOfAddedItem]);
+							updateNewColOrder();
+							return true; // stop enumeration
+						}
+					},
+					enumNextAndInsertBefore = function (iCol) {
+						if (inGroup[iCol] === inGroup[iColItem]) {
+							$(this).before(items[indexOfAddedItem]);
+							updateNewColOrder();
+							return true; // stop enumeration
+						}
+					},
+					updateStartColumn = function (iCol) {
+						if (inGroup[iCol] === inGroup[iColItem] && inGroup[iCol] !== undefined) {
+							gh[inGroup[iCol]].startColumnName = p.colModel[iCol].name;
+							return true; // stop enumeration
+						}
 					};
 
 				// Fix potition of added/moved item iColItem in that.newColOrder array.
