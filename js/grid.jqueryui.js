@@ -479,9 +479,10 @@
 							$self.jqGrid("setGroupHeaders", p.groupHeader);
 						}
 					}
-					$self.jqGrid("setGridWidth",
-						!p.autowidth && (p.widthOrg === undefined || p.widthOrg === "auto" || p.widthOrg === "100%") ? p.tblwidth : p.width,
-						p.shrinkToFit);
+					var newWidth = !p.autowidth && (p.widthOrg === undefined || p.widthOrg === "auto" || p.widthOrg === "100%") ? p.tblwidth : p.width;
+					if (newWidth !== p.width) {
+						$self.jqGrid("setGridWidth", newWidth, p.shrinkToFit);
+					}
 				},
 				/* Function to cleanup the dialog, and select. Also calls the
 				   done function with no permutation (to indicate that the
