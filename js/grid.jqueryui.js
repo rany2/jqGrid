@@ -134,6 +134,7 @@
 									// or non-movable columns (like "rn", "subgrid" column or other)
 									while (iCol >= 0 && iCol < p.colModel.length &&
 											(p.colModel[iCol].hidden || p.colModel[iCol].hidedlg) &&
+											inGroup != null &&
 											//inGroup[iCol] !== undefined && inGroup[iColItem] !== undefined &&
 											inGroup[iCol] === inGroup[iColItem]) {
 										iCol++;
@@ -621,12 +622,10 @@
 					multiselectData.selectedList.on("sortupdate", function (e, ui) {
 						// remove fixed inline style values of width and height
 						// added during gragging
-						if (gh) {
-							reorderSelectedColumns.call(
-								multiselectData,
-								parseInt(ui.item.data("optionLink").val(), 10)
-							);
-						}
+						reorderSelectedColumns.call(
+							multiselectData,
+							parseInt(ui.item.data("optionLink").val(), 10)
+						);
 						ui.item.css({ width: "", height: "" });
 						if ($.isFunction(opts.sortUpdate)) {
 							opts.sortUpdate.call(self, e, ui);
