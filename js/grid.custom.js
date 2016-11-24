@@ -630,26 +630,26 @@
 						});
 					},
 					timeoutHnd,
-					tr = $("<tr></tr>", { "class": "ui-search-toolbar", role: "row form" });
+					$tr = $("<tr></tr>", { "class": "ui-search-toolbar", role: "row form" });
 
 				if (o.loadFilterDefaults) {
 					currentFilters = parseFilter() || {};
 				}
 				// create the row
 				$.each(colModel, function (ci) {
-					var cm = this, soptions, mode = "filter", surl, self, sot, so, i, searchoptions = cm.searchoptions || {}, editoptions = cm.editoptions || {},
-						th = $("<th></th>", {
+					var cm = this, soptions, mode = "filter", surl, sot, so, i, searchoptions = cm.searchoptions || {}, editoptions = cm.editoptions || {},
+						$th = $("<th></th>", {
 							"class": getGuiStyles.call($t, "colHeaders", "ui-th-column ui-th-" + p.direction + " " + (o.applyLabelClasses ? cm.labelClasses || "" : "")),
 							role: "gridcell",
 							"aria-describedby": p.id + "_" + cm.name
 						}),
-						thd = $("<div></div>"),
+						$thd = $("<div></div>"),
 						$stable = $("<table class='ui-search-table'><tbody><tr><td class='ui-search-oper'></td><td class='ui-search-input'></td><td class='ui-search-clear' style='width:1px'></td></tr></tbody></table>"),
 						$tds = $stable.children("tbody").children("tr").children("td"),
 						$tdOper = $tds.eq(0),
 						$tdInput = $tds.eq(1),
 						$tdClear = $tds.eq(2);
-					if (this.hidden === true) { $(th).css("display", "none"); }
+					if (this.hidden === true) { $th.css("display", "none"); }
 					this.search = this.search === false ? false : true;
 					if (this.stype === undefined) { this.stype = "text"; }
 					soptions = $.extend({ mode: mode }, searchoptions);
@@ -708,14 +708,13 @@
 						} else {
 							$tdClear.hide();
 						}
+						$thd.append($stable);
 						switch (this.stype) {
 							case "select":
 								surl = this.surl || soptions.dataUrl;
 								if (surl) {
 									// data returned should have already constructed html select
 									// primitive jQuery load
-									self = thd;
-									$(self).append($stable);
 									$.ajax($.extend({
 										url: surl,
 										context: { $tdInput: $tdInput, options: soptions, cm: cm, iCol: ci },
@@ -774,14 +773,14 @@
 										delim = editoptions.delimiter === undefined ? ";" : editoptions.delimiter;
 									}
 									if (oSv) {
-										var elem = document.createElement("select");
+										var elem = document.createElement("select"), $elem = $(elem);
 										elem.style.width = "100%";
-										$(elem).attr({
+										$elem.attr({
 											name: cm.index || cm.name,
 											id: getId(cm.name),
 											"aria-describedby": p.id + "_" + cm.name
 										});
-										if (soptions.attr) { $(elem).attr(soptions.attr); }
+										if (soptions.attr) { $elem.attr(soptions.attr); }
 										var isNoFilterValueExist = jgrid.fillSelectOptions(
 												elem,
 												oSv,
@@ -794,11 +793,10 @@
 											ov.value = "";
 											ov.innerHTML = soptions.noFilterText;
 											ov.selected = true;
-											$(elem).prepend(ov);
+											$elem.prepend(ov);
 										}
-										if (soptions.defaultValue !== undefined) { $(elem).val(soptions.defaultValue); }
-										$(elem).addClass(dataFieldClass);
-										$(thd).append($stable);
+										if (soptions.defaultValue !== undefined) { $elem.val(soptions.defaultValue); }
+										$elem.addClass(dataFieldClass);
 										bindEv.call($t, elem, soptions);
 										$tdInput.append(elem);
 										jgrid.fullBoolFeedback.call($t, soptions.selectFilled, "jqGridSelectFilled", {
@@ -810,7 +808,7 @@
 											mode: mode
 										});
 										if (o.autosearch === true) {
-											$(elem).change(function () {
+											$elem.change(function () {
 												triggerToolbar();
 												return false;
 											});
@@ -819,20 +817,18 @@
 								}
 								break;
 							case "text":
-								var df = soptions.defaultValue !== undefined ? soptions.defaultValue : "";
-
-								$tdInput.append("<input role='search' type='text' class='" + dataFieldClass +
+								var $input = $("<input role='search' type='text' class='" + dataFieldClass +
 									"' name='" + (cm.index || cm.name) +
 									"' id='" + getId(cm.name) +
 									"' aria-labelledby='" + "jqgh_" + p.id + "_" + cm.name +
-									"' value='" + df + "'/>");
-								$(thd).append($stable);
+									"' value='" + (soptions.defaultValue !== undefined ? soptions.defaultValue : "") + "'/>");
 
-								if (soptions.attr) { $("input", thd).attr(soptions.attr); }
-								bindEv.call($t, $("input", thd)[0], soptions);
+								$tdInput.append($input);
+								if (soptions.attr) { $input.attr(soptions.attr); }
+								bindEv.call($t, $input[0], soptions);
 								if (o.autosearch === true) {
 									if (o.searchOnEnter) {
-										$("input", thd).keypress(function (e) {
+										$input.keypress(function (e) {
 											var key1 = e.charCode || e.keyCode || 0;
 											if (key1 === 13) {
 												triggerToolbar();
@@ -841,7 +837,7 @@
 											return this;
 										});
 									} else {
-										$("input", thd).keydown(function (e) {
+										$input.keydown(function (e) {
 											var key1 = e.which;
 											switch (key1) {
 												case 13:
@@ -864,13 +860,12 @@
 								break;
 							case "custom":
 								$tdInput.append("<span style='width:100%;padding:0;box-sizing:border-box;' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='" + getId(cm.name) + "'/>");
-								$(thd).append($stable);
 								try {
 									if ($.isFunction(soptions.custom_element)) {
 										var celm = soptions.custom_element.call($t, soptions.defaultValue !== undefined ? soptions.defaultValue : "", soptions);
 										if (celm) {
 											celm = $(celm).addClass("customelement");
-											$(thd).find("span[name='" + (cm.index || cm.name) + "']").append(celm);
+											$thd.find("span[name='" + (cm.index || cm.name) + "']").append(celm);
 										} else {
 											throw "e2";
 										}
@@ -890,21 +885,21 @@
 								break;
 						}
 					}
-					$(th).append(thd);
-					$(th).find(".ui-search-oper .soptclass,.ui-search-clear .clearsearchclass")
+					$th.append($thd);
+					$th.find(".ui-search-oper .soptclass,.ui-search-clear .clearsearchclass")
 						.hover(function () {
 							$(this).addClass(hoverClasses);
 						}, function () {
 							$(this).removeClass(hoverClasses);
 						});
-					$(tr).append(th);
+					$tr.append($th);
 					if (!o.searchOperators) {
 						$tdOper.hide();
 					}
 				});
-				$(grid.hDiv).find(">div>.ui-jqgrid-htable>thead").append(tr);
+				$(grid.hDiv).find(">div>.ui-jqgrid-htable>thead").append($tr);
 				if (o.searchOperators) {
-					$(".soptclass", tr).click(function (e) {
+					$(".soptclass", $tr).click(function (e) {
 						var offset = $(this).offset(),
 							left = (offset.left),
 							top = (offset.top);
@@ -917,7 +912,7 @@
 						}
 					});
 				}
-				$(".clearsearchclass", tr).click(function () {
+				$(".clearsearchclass", $tr).click(function () {
 					var ptr = $(this).parents("tr").first(),
 						coli = parseInt($("td.ui-search-oper", ptr).data("colindex"), 10),
 						sval = $.extend({}, colModel[coli].searchoptions || {}),
