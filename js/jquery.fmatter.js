@@ -170,7 +170,7 @@
 					}
 					return newValue;
 				},
-				stype: "select", searchoptions: { sopt: ["eq", "ne"], value: "true:Yes;false:No", noFilterText: "Any" }
+				stype: "checkbox", searchoptions: { sopt: ["eq"], value: "true:false" }
 			},
 			// TODO: add cmTemplate for currency and date
 			actions: function () {
