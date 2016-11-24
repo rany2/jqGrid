@@ -333,6 +333,31 @@
 						}
 						return filter;
 					},
+					setThreeStateCheckbox = function ($checkbox, state) {
+						switch (state) {
+							case 1: // make checked
+								$checkbox.data("state", 1)
+									.prop({
+										checked: true,
+										indeterminate: false
+									});
+								break;
+							case 0: // make unchecked
+								$checkbox.data("state", 0)
+									.prop({
+										checked: false,
+										indeterminate: false
+									});
+								break;
+							default: // make indeterminate
+								$checkbox.data("state", -1)
+									.prop({
+										checked: false,
+										indeterminate: true
+									});
+								break;
+						}
+					},
 					triggerToolbar = function () {
 						var sdata = {}, j = 0, sopt = {};
 						$.each(colModel, function () {
@@ -353,7 +378,7 @@
 							if (o.searchOperators) {
 								so = $elem.parent().prev().children("a").data("soper") || o.defaultSearch;
 							} else {
-								so = searchoptions.sopt ? searchoptions.sopt[0] : cm.stype === "select" ? "eq" : o.defaultSearch;
+								so = searchoptions.sopt ? searchoptions.sopt[0] : (cm.stype === "select" || cm.stype === "checkbox") ? "eq" : o.defaultSearch;
 							}
 							/* the format of element of the searching toolbar if ANOTHER
 							 * as the format of cells in the grid. So one can't use
@@ -366,6 +391,20 @@
 								v = searchoptions.custom_value.call($t, $elem.children(".customelement").first(), "get");
 							} else if (cm.stype === "select") {
 								v = $elem.val();
+							} else if (cm.stype === "checkbox") {
+								switch ($elem.data("state")) {
+									case -1:   // has indeterminate state
+										v = "";
+										break;
+									case 0:    // is unchecked
+										// make indeterminate
+										v = "false";
+										break;
+									default:    // is checked
+										// make unchecked
+										v = "true";
+										break;
+								}
 							} else {
 								v = $.trim($elem.val());
 								switch (cm.formatter) {
@@ -471,6 +510,10 @@
 							if (searchoptions.defaultValue !== undefined) { v = searchoptions.defaultValue; }
 							nm = cm.index || cm.name;
 							switch (cm.stype) {
+								case "checkbox":
+									// set indeterminate state
+									setThreeStateCheckbox($elem, -1);
+									break;
 								case "select":
 									isSindleSelect = $elem.length > 0 ? !$elem[0].multiple : true;
 									$elem.find("option").each(function (i) {
@@ -583,7 +626,7 @@
 						var cm = colModel[i], options = $.extend({}, cm.searchoptions), odataItem, item, itemOper, itemOperand, itemText;
 						if (!options.sopt) {
 							options.sopt = [];
-							options.sopt[0] = cm.stype === "select" ? "eq" : o.defaultSearch;
+							options.sopt[0] = (cm.stype === "select" || cm.stype === "checkbox") ? "eq" : o.defaultSearch;
 						}
 						$.each(odata, function () { aoprs.push(this.oper); });
 						// append aoprs array with custom operations defined in customSortOperations parameter jqGrid
@@ -620,7 +663,7 @@
 								oper = $(this).data("oper");
 							$self.triggerHandler("jqGridToolbarSelectOper", [v, oper, elem]);
 							$("#sopt_menu").hide();
-							$(elem).text(oper).data("soper", v);
+							$(elem).data("soper", v).text(oper);
 							if (o.autosearch === true) {
 								var inpelm = $(elem).parent().next().children()[0];
 								if ($(inpelm).val() || v === "nu" || v === "nn") {
@@ -659,7 +702,7 @@
 							if (p.search && currentFilters[this.name] != null) {
 								so = currentFilters[this.name].op;
 							} else {
-								so = (soptions.sopt) ? soptions.sopt[0] : cm.stype === "select" ? "eq" : o.defaultSearch;
+								so = (soptions.sopt) ? soptions.sopt[0] : (cm.stype === "select" || cm.stype === "checkbox") ? "eq" : o.defaultSearch;
 							}
 							for (i = 0; i < odata.length; i++) {
 								if (odata[i].oper === so) {
@@ -711,6 +754,41 @@
 						}
 						$thd.append($stable);
 						switch (this.stype) {
+							case "checkbox":
+								var state = soptions.defaultValue !== undefined ? soptions.defaultValue : "-1";
+								$elem = $("<input role='search' type='checkbox' class='" + dataFieldClass +
+									"' name='" + (cm.index || cm.name) +
+									"' id='" + getId(cm.name) +
+									"' aria-labelledby='" + "jqgh_" + p.id + "_" + cm.name +
+									"' data-state='" + state + "'/>");
+								if (state === "-1") {
+									$elem.prop("indeterminate", true);
+								} else if (state === "1") {
+									$elem.prop("checked", true);
+								}
+								$elem.click(function () {
+									var $checkbox = $(this);
+									switch ($checkbox.data("state")) {
+										case -1: // has indeterminate state
+											// make checked
+											setThreeStateCheckbox($checkbox, 1);
+											break;
+										case 0: // is unchecked
+											// set indeterminate state
+											setThreeStateCheckbox($checkbox, -1);
+											break;
+										default: // is checked
+											// make unchecked
+											setThreeStateCheckbox($checkbox, 0);
+											break;
+									}
+									if (o.autosearch === true) {
+										triggerToolbar();
+									}
+								});
+								$tdInput.append($elem);
+								if (soptions.attr) { $elem.attr(soptions.attr); }
+								bindings.push({ elem: $elem[0], options: soptions });								break;
 							case "select":
 								surl = this.surl || soptions.dataUrl;
 								if (surl) {
@@ -741,6 +819,9 @@
 												ov.value = "";
 												ov.innerHTML = soptions.noFilterText;
 												$select.prepend(ov);
+												if ($($select[0].options[$select[0].selectedIndex]).attr("selected") == null && !$select[0].multiple) {
+													$select[0].selectedIndex = 0;
+												}
 											}
 
 											if (soptions1.defaultValue !== undefined) { $select.val(soptions1.defaultValue); }
@@ -828,7 +909,6 @@
 
 								$tdInput.append($elem);
 								if (soptions.attr) { $elem.attr(soptions.attr); }
-								//bindEv.call($t, $elem[0], soptions);
 								bindings.push({ elem: $elem[0], options: soptions });
 								if (o.autosearch === true) {
 									if (o.searchOnEnter) {
@@ -925,15 +1005,23 @@
 						$tdInput = $tdOper.siblings(".ui-search-input"),
 						sval = $.extend({}, colModel[coli].searchoptions || {}),
 						dval = sval.defaultValue || "";
-					if (colModel[coli].stype === "select") {
-						if (dval) {
-							$tdInput.find("select").val(dval);
-						} else {
-							$tdInput.find("select")[0].selectedIndex = 0;
-						}
-					} else {
-						$tdInput.find("input").val(dval);
+					switch (colModel[coli].stype) {
+						case "select":
+							if (dval) {
+								$tdInput.find("select").val(dval);
+							} else {
+								$tdInput.find("select")[0].selectedIndex = 0;
+							}
+							break;
+						case "checkbox":
+							// set indeterminate state
+							setThreeStateCheckbox($tdInput.find("input[type=checkbox]"), -1);
+							break;
+						default:
+							$tdInput.find("input").val(dval);
+							break;
 					}
+
 					// ToDo custom search type
 					if (o.autosearch === true) {
 						triggerToolbar();
@@ -963,6 +1051,24 @@
 								if ($input.length > 0) {
 									if ($input[0].tagName.toUpperCase() === "SELECT" && $input[0].multiple) {
 										$input.val(filter.data.split(","));
+									} else if ($input.is("input[type=checkbox]")) {
+										var $th = $input.closest("th.ui-th-column");
+										if ($th.length > 0) {
+											var soptions = (p.colModel[$th[0].cellIndex] || {}).searchoptions || {},
+												offValue = "off",
+												onValue = "on";
+											if (soptions.value != null) {
+												var cbval = soptions.value.split(":");
+												onValue = cbval[0];
+												offValue = cbval[1];
+											}
+											setThreeStateCheckbox(
+												$input,
+												filter.data === onValue ?
+													1 :
+													(filter.data === offValue ? 0 : -1)
+											);
+										}
 									} else if ($.trim($input.val()) !== filter.data) {
 										$input.val(filter.data);
 									}
