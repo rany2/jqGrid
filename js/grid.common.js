@@ -368,6 +368,7 @@
 						"custom_value",
 						"selectFilled",
 						"rowId",
+						"column",
 						"mode",
 						"cm",
 						"iCol"
