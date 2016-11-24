@@ -777,6 +777,7 @@
 										elem.style.width = "100%";
 										$elem = $(elem).attr({
 											name: cm.index || cm.name,
+											role: "search",
 											id: getId(cm.name),
 											"aria-describedby": p.id + "_" + cm.name
 										});
