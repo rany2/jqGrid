@@ -217,7 +217,7 @@
 		filterToolbar: function (oMuligrid) {
 			// if one uses jQuery wrapper with multiple grids, then oMultiple specify the object with common options
 			return this.each(function () {
-				var $t = this, grid = $t.grid, $self = $($t), p = $t.p, bindEv = jgrid.bindEv, infoDialog = jgrid.info_dialog, htmlEncode = jgrid.htmlEncode;
+				var $t = this, grid = $t.grid, $self = $($t), p = $t.p, infoDialog = jgrid.info_dialog, htmlEncode = jgrid.htmlEncode;
 				if (this.ftoolbar) { return; }
 				// make new copy of the options and use it for ONE specific grid.
 				// p.searching can contains grid specific options
@@ -630,6 +630,7 @@
 						});
 					},
 					timeoutHnd,
+					bindings = [],
 					$tr = $("<tr></tr>", { "class": "ui-search-toolbar", role: "row form" });
 
 				if (o.loadFilterDefaults) {
@@ -744,7 +745,7 @@
 
 											if (soptions1.defaultValue !== undefined) { $select.val(soptions1.defaultValue); }
 											// preserve autoserch
-											bindEv.call($t, $select[0], soptions1);
+											jgrid.bindEv.call($t, $select[0], soptions1);
 											jgrid.fullBoolFeedback.call($t, soptions1.selectFilled, "jqGridSelectFilled", {
 												elem: $select[0],
 												options: soptions1,
@@ -798,7 +799,8 @@
 										}
 										if (soptions.defaultValue !== undefined) { $elem.val(soptions.defaultValue); }
 										$elem.addClass(dataFieldClass);
-										bindEv.call($t, elem, soptions);
+										//bindEv.call($t, elem, soptions);
+										bindings.push({ elem: elem, options: soptions });
 										$tdInput.append(elem);
 										jgrid.fullBoolFeedback.call($t, soptions.selectFilled, "jqGridSelectFilled", {
 											elem: elem,
@@ -826,7 +828,8 @@
 
 								$tdInput.append($elem);
 								if (soptions.attr) { $elem.attr(soptions.attr); }
-								bindEv.call($t, $elem[0], soptions);
+								//bindEv.call($t, $elem[0], soptions);
+								bindings.push({ elem: $elem[0], options: soptions });
 								if (o.autosearch === true) {
 									if (o.searchOnEnter) {
 										$elem.keypress(function (e) {
@@ -899,6 +902,9 @@
 					}
 				});
 				$(grid.hDiv).find(">div>.ui-jqgrid-htable>thead").append($tr);
+				$.each(bindings, function () {
+					jgrid.bindEv.call($t, this.elem, this.options);
+				});
 				if (o.searchOperators) {
 					$(".soptclass", $tr).click(function (e) {
 						var offset = $(this).offset(),
