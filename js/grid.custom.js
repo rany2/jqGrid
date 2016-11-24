@@ -637,14 +637,18 @@
 				}
 				// create the row
 				$.each(colModel, function (ci) {
-					var cm = this, soptions, mode = "filter", surl, self, select = "", sot, so, i, searchoptions = cm.searchoptions || {}, editoptions = cm.editoptions || {},
+					var cm = this, soptions, mode = "filter", surl, self, sot, so, i, searchoptions = cm.searchoptions || {}, editoptions = cm.editoptions || {},
 						th = $("<th></th>", {
 							"class": getGuiStyles.call($t, "colHeaders", "ui-th-column ui-th-" + p.direction + " " + (o.applyLabelClasses ? cm.labelClasses || "" : "")),
 							role: "gridcell",
 							"aria-describedby": p.id + "_" + cm.name
 						}),
 						thd = $("<div></div>"),
-						stbl = $("<table class='ui-search-table'><tr><td class='ui-search-oper'></td><td class='ui-search-input'></td><td class='ui-search-clear' style='width:1px'></td></tr></table>");
+						$stable = $("<table class='ui-search-table'><tbody><tr><td class='ui-search-oper'></td><td class='ui-search-input'></td><td class='ui-search-clear' style='width:1px'></td></tr></tbody></table>"),
+						$tds = $stable.children("tbody").children("tr").children("td"),
+						$tdOper = $tds.eq(0),
+						$tdInput = $tds.eq(1),
+						$tdClear = $tds.eq(2);
 					if (this.hidden === true) { $(th).css("display", "none"); }
 					this.search = this.search === false ? false : true;
 					if (this.stype === undefined) { this.stype = "text"; }
@@ -673,14 +677,15 @@
 								}
 							}
 							if (sot === undefined) { sot = "="; }
-							var st = soptions.searchtitle != null ? soptions.searchtitle : getRes("search.operandTitle");
-							select = "<a title='" + st + "' data-soper='" + so + "' class='" +
+							$tdOper.append("<a title='" +
+								(soptions.searchtitle != null ? soptions.searchtitle : getRes("search.operandTitle")) +
+								"' data-soper='" + so + "' class='" +
 								getGuiStyles.call($t, "searchToolbar.operButton", "soptclass") +
-								"' data-colname='" + this.name + "'>" + sot + "</a>";
+								"' data-colname='" + this.name + "'>" + sot + "</a>");
 						}
-						$("td", stbl).first().data("colindex", ci).append(select);
+						$tdOper.data("colindex", ci);
 						if (soptions.sopt == null || soptions.sopt.length === 1) {
-							$("td.ui-search-oper", stbl).hide();
+							$tdOper.hide();
 						}
 						if (p.search && currentFilters[this.name] != null) {
 							soptions.defaultValue = currentFilters[this.name].data;
@@ -697,13 +702,11 @@
 										iCol: ci
 									}) :
 									(getRes("search.resetTitle") || "Clear Search Value") + " " + jgrid.stripHtml(p.colNames[ci]);
-							$("td", stbl)
-								.eq(2)
-								.append("<a title='" + csv + "' aria-label='" + csv + "' class='" +
+							$tdClear.append("<a title='" + csv + "' aria-label='" + csv + "' class='" +
 									getGuiStyles.call($t, "searchToolbar.clearButton", "clearsearchclass") +
 									"'><span>" + o.resetIcon + "</span></a>");
 						} else {
-							$("td", stbl).eq(2).hide();
+							$tdClear.hide();
 						}
 						switch (this.stype) {
 							case "select":
@@ -712,14 +715,14 @@
 									// data returned should have already constructed html select
 									// primitive jQuery load
 									self = thd;
-									$(self).append(stbl);
+									$(self).append($stable);
 									$.ajax($.extend({
 										url: surl,
-										context: { stbl: stbl, options: soptions, cm: cm, iCol: ci },
+										context: { $tdInput: $tdInput, options: soptions, cm: cm, iCol: ci },
 										dataType: "html",
 										success: function (data, textStatus, jqXHR) {
 											var cm1 = this.cm, iCol1 = this.iCol, soptions1 = this.options, d,
-												$td = this.stbl.find(">tbody>tr>td.ui-search-input"), $select;
+												$td = this.$tdInput, $select;
 											if (soptions1.buildSelect !== undefined) {
 												d = soptions1.buildSelect.call($t, data, jqXHR, cm1, iCol1);
 												if (d) {
@@ -795,9 +798,9 @@
 										}
 										if (soptions.defaultValue !== undefined) { $(elem).val(soptions.defaultValue); }
 										$(elem).addClass(dataFieldClass);
-										$(thd).append(stbl);
+										$(thd).append($stable);
 										bindEv.call($t, elem, soptions);
-										$("td", stbl).eq(1).append(elem);
+										$tdInput.append(elem);
 										jgrid.fullBoolFeedback.call($t, soptions.selectFilled, "jqGridSelectFilled", {
 											elem: elem,
 											options: cm.searchoptions || editoptions,
@@ -818,12 +821,12 @@
 							case "text":
 								var df = soptions.defaultValue !== undefined ? soptions.defaultValue : "";
 
-								$("td", stbl).eq(1).append("<input role='search' type='text' class='" + dataFieldClass +
+								$tdInput.append("<input role='search' type='text' class='" + dataFieldClass +
 									"' name='" + (cm.index || cm.name) +
 									"' id='" + getId(cm.name) +
 									"' aria-labelledby='" + "jqgh_" + p.id + "_" + cm.name +
 									"' value='" + df + "'/>");
-								$(thd).append(stbl);
+								$(thd).append($stable);
 
 								if (soptions.attr) { $("input", thd).attr(soptions.attr); }
 								bindEv.call($t, $("input", thd)[0], soptions);
@@ -860,8 +863,8 @@
 								}
 								break;
 							case "custom":
-								$("td", stbl).eq(1).append("<span style='width:100%;padding:0;box-sizing:border-box;' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='" + getId(cm.name) + "'/>");
-								$(thd).append(stbl);
+								$tdInput.append("<span style='width:100%;padding:0;box-sizing:border-box;' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='" + getId(cm.name) + "'/>");
+								$(thd).append($stable);
 								try {
 									if ($.isFunction(soptions.custom_element)) {
 										var celm = soptions.custom_element.call($t, soptions.defaultValue !== undefined ? soptions.defaultValue : "", soptions);
@@ -896,7 +899,7 @@
 						});
 					$(tr).append(th);
 					if (!o.searchOperators) {
-						$("td", stbl).eq(0).hide();
+						$tdOper.hide();
 					}
 				});
 				$(grid.hDiv).find(">div>.ui-jqgrid-htable>thead").append(tr);
