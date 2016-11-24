@@ -643,7 +643,7 @@
 							role: "gridcell",
 							"aria-describedby": p.id + "_" + cm.name
 						}),
-						$thd = $("<div></div>"),
+						$thd = $("<div></div>"), elem, $elem,
 						$stable = $("<table class='ui-search-table'><tbody><tr><td class='ui-search-oper'></td><td class='ui-search-input'></td><td class='ui-search-clear' style='width:1px'></td></tr></tbody></table>"),
 						$tds = $stable.children("tbody").children("tr").children("td"),
 						$tdOper = $tds.eq(0),
@@ -773,9 +773,9 @@
 										delim = editoptions.delimiter === undefined ? ";" : editoptions.delimiter;
 									}
 									if (oSv) {
-										var elem = document.createElement("select"), $elem = $(elem);
+										elem = document.createElement("select");
 										elem.style.width = "100%";
-										$elem.attr({
+										$elem = $(elem).attr({
 											name: cm.index || cm.name,
 											id: getId(cm.name),
 											"aria-describedby": p.id + "_" + cm.name
@@ -817,18 +817,18 @@
 								}
 								break;
 							case "text":
-								var $input = $("<input role='search' type='text' class='" + dataFieldClass +
+								$elem = $("<input role='search' type='text' class='" + dataFieldClass +
 									"' name='" + (cm.index || cm.name) +
 									"' id='" + getId(cm.name) +
 									"' aria-labelledby='" + "jqgh_" + p.id + "_" + cm.name +
 									"' value='" + (soptions.defaultValue !== undefined ? soptions.defaultValue : "") + "'/>");
 
-								$tdInput.append($input);
-								if (soptions.attr) { $input.attr(soptions.attr); }
-								bindEv.call($t, $input[0], soptions);
+								$tdInput.append($elem);
+								if (soptions.attr) { $elem.attr(soptions.attr); }
+								bindEv.call($t, $elem[0], soptions);
 								if (o.autosearch === true) {
 									if (o.searchOnEnter) {
-										$input.keypress(function (e) {
+										$elem.keypress(function (e) {
 											var key1 = e.charCode || e.keyCode || 0;
 											if (key1 === 13) {
 												triggerToolbar();
@@ -837,7 +837,7 @@
 											return this;
 										});
 									} else {
-										$input.keydown(function (e) {
+										$elem.keydown(function (e) {
 											var key1 = e.which;
 											switch (key1) {
 												case 13:
@@ -913,18 +913,19 @@
 					});
 				}
 				$(".clearsearchclass", $tr).click(function () {
-					var ptr = $(this).parents("tr").first(),
-						coli = parseInt($("td.ui-search-oper", ptr).data("colindex"), 10),
+					var $tdOper = $(this).closest(".ui-search-clear"),
+						coli = parseInt($tdOper.siblings(".ui-search-oper").data("colindex"), 10),
+						$tdInput = $tdOper.siblings(".ui-search-input"),
 						sval = $.extend({}, colModel[coli].searchoptions || {}),
 						dval = sval.defaultValue || "";
 					if (colModel[coli].stype === "select") {
 						if (dval) {
-							$("td.ui-search-input select", ptr).val(dval);
+							$tdInput.find("select").val(dval);
 						} else {
-							$("td.ui-search-input select", ptr)[0].selectedIndex = 0;
+							$tdInput.find("select")[0].selectedIndex = 0;
 						}
 					} else {
-						$("td.ui-search-input input", ptr).val(dval);
+						$tdInput.find("input").val(dval);
 					}
 					// ToDo custom search type
 					if (o.autosearch === true) {
