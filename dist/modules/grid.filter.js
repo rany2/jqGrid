@@ -458,7 +458,12 @@
 					$(".input-elm", trpar).on("change", function (e) {
 						var elem = e.target;
 						rule.data = elem.nodeName.toUpperCase() === "SPAN" && searchoptions && isFunction(searchoptions.custom_value) ?
-								searchoptions.custom_value.call($t, $(elem).children(".customelement:first"), "get") : elem.value;
+								searchoptions.custom_value.call($t, $(elem).children(".customelement:first"), "get") :
+								elem.value;
+						if ($(elem).is("input[type=checkbox]") && !$(elem).is(":checked")) {
+							// value of checkbox contains checked value
+							rule.data = $(elem).data("offval");
+						}
 						that.onchange(); // signals that the filter has changed
 					});
 					setTimeout(function () { //IE, Opera, Chrome
@@ -570,6 +575,10 @@
 				$(ruleDataInput).addClass(getGuiStyles("searchDialog.elem", "input-elm"))
 					.on("change", function () {
 						rule.data = cm.inputtype === "custom" ? cm.searchoptions.custom_value.call($t, $(this).children(".customelement:first"), "get") : $(this).val();
+						if ($(this).is("input[type=checkbox]") && !$(this).is(":checked")) {
+							// value of checkbox contains checked value
+							rule.data = $(this).data("offval");
+						}
 						that.onchange(); // signals that the filter has changed
 					});
 
