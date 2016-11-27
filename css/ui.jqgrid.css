@@ -1344,6 +1344,13 @@ a.clearsearchclass {
 .ui-search-input select.form-control {
 	padding: 0;
 }
+.ui-search-input input[type=checkbox].form-control {
+	width: auto;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 0;
+	background: 0 transparent;
+}
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-actions .ui-pg-div.btn {
 	padding: 0;
 	margin: 0;
