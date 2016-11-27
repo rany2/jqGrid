@@ -1335,11 +1335,11 @@ a.clearsearchclass {
 .ui-search-input .form-control {
 	height: 18px;
 }
-.ui-search-input input[type="text"] {
+.ui-search-input input[type=text] {
 	padding: 0;
 }
-.ui-search-input input[type="text"].form-control {
-	padding: .3em;
+.ui-search-input input[type=text].form-control {
+	padding: 0 .3em;
 }
 .ui-search-input select.form-control {
 	padding: 0;
