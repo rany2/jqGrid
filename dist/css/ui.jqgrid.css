@@ -1,6 +1,6 @@
 /*!
  * jqGrid 4.13.6-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2016-11-24
+ * Date: 2016-11-27
  */
 
 /* Grid */
@@ -368,6 +368,7 @@
 	table-layout: fixed;
 	margin: 0;
 	outline-style: none;
+	height: 1px;
 }
 .ui-jqgrid tr.jqgrow,
 .ui-jqgrid tr.jqgroup {
@@ -405,8 +406,13 @@
 	padding: 0 2px 0 2px;
 	border-top: 0 none;
 	border-left: 0 none;
-	border-right: 1px solid;
+	height: 0;
+	border-right-width: 1px;
+	border-right-style: solid;
 	border-bottom: 0 none;
+}
+.ui-jqgrid-jquery-ui.ui-jqgrid tr.jqgfirstrow > td {
+	border-right-color: inherit;
 }
 .ui-jqgrid tr.jqgfirstrow > td.td_cbox {
 	padding: 0;
@@ -1307,10 +1313,13 @@ a.clearsearchclass {
 	font-weight: bold;
 }
 .ui-jqgrid .jqgfirstrow {
-	border: 0;
+	border-bottom: 0 none;
+	border-top: 0 none;
+	height: 0;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap .jqgfirstrow td {
-	border: none;
+	border-bottom: 0 none;
+	border-top: 0 none;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-pg-table .ui-pg-button.ui-state-disabled:hover {
 	margin: 0;
@@ -1334,6 +1343,13 @@ a.clearsearchclass {
 }
 .ui-search-input select.form-control {
 	padding: 0;
+}
+.ui-search-input input[type=checkbox].form-control {
+	width: auto;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 0;
+	background: 0 transparent;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-actions .ui-pg-div.btn {
 	padding: 0;
