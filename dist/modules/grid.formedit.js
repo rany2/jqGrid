@@ -9,7 +9,7 @@
 
 /*jshint eqeqeq:false, eqnull:true, devel:true */
 /*jslint browser: true, eqeq: true, plusplus: true, unparam: true, vars: true, nomen: true, continue: true, white: true, todo: true */
-/*global jQuery, define, xmlJsonClass */
+/*global jQuery, define, xmlJsonClass, exports, require */
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {

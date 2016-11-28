@@ -8,7 +8,7 @@
 */
 
 /*jshint eqeqeq:false */
-/*global jQuery, define, HTMLElement */
+/*global jQuery, define, HTMLElement, exports, require */
 /*jslint browser: true, eqeq: true, plusplus: true, unparam: true, white: true, vars: true */
 (function (factory) {
 	"use strict";

@@ -16,7 +16,7 @@
 /*jslint
     browser, devel, for, multivar, this, white
 */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 
 (function (factory) {
 	"use strict";
@@ -93,14 +93,14 @@
 			};
 		},
 		// http://jsperf.com/regex-vs-indexof-vs-in/12
-		/*YesObject = Object.create(null, {
+		/*yesObject = Object.create(null, {
 			1: { value: 1 },
 			x: { value: 1 },
 			"true": { value: 1 },
 			yes: { value: 1 },
 			on: { value: 1 }
 		}),
-		NoObject = Object.create(null, {
+		noObject = Object.create(null, {
 			0: { value: 1 },
 			"false": { value: 1 },
 			no: { value: 1 },
@@ -109,8 +109,8 @@
 		// one can use typeof Object.create != "function" and use either
 		// Object.create or simple object firm, but the performance differences
 		// are so low, that the compatibility to IE8 is more important
-		YesObject = { 1: 1, x: 1, "true": 1, yes: 1, on: 1 },
-		NoObject = { 0: 1, "false": 1, no: 1, off: 1 };
+		yesObject = { 1: 1, x: 1, "true": 1, yes: 1, on: 1 },
+		noObject = { 0: 1, "false": 1, no: 1, off: 1 };
 	$.extend(true, jgrid, {
 		formatter: { // setting common formatter settings, which are independent from the language and locale
 			date: {
@@ -163,9 +163,9 @@
 						checkboxOptions = parseCheckboxOptions.call(this, options),
 						lowerCaseNewData = String(newValue).toLowerCase();
 
-					if (YesObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.yes.toLowerCase()) {
+					if (yesObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.yes.toLowerCase()) {
 						newValue = true;
-					} else if (NoObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.no.toLowerCase()) {
+					} else if (noObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.no.toLowerCase()) {
 						newValue = false;
 					}
 					return newValue;
@@ -298,13 +298,13 @@
 			if (cellValue === undefined || fmatter.isEmpty(cellValue)) {
 				var defaultValue = getOptionByName(colModel, "defaultValue");
 				if (defaultValue === undefined) {
-					cellValue = checkboxOptions.no;
+					defaultValue = checkboxOptions.no;
 				}
 				cellValue = defaultValue;
 			}
 			// see http://jsperf.com/regex-vs-indexof-vs-in/12
 			cellValue = String(cellValue).toLowerCase();
-			return YesObject[cellValue] || cellValue === checkboxOptions.yes.toLowerCase() ?
+			return yesObject[cellValue] || cellValue === checkboxOptions.yes.toLowerCase() ?
 					checkboxOptions.checked :
 					checkboxOptions.unchecked;
 		};

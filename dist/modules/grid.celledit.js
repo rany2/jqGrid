@@ -28,7 +28,7 @@
 **/
 
 /*jshint eqeqeq:false */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 /*jslint browser: true, eqeq: true, plusplus: true, vars: true, white: true, todo: true */
 (function (factory) {
 	"use strict";
@@ -289,7 +289,7 @@
 											grid.endReq.call($t);
 											if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 												var ret = $self.triggerHandler("jqGridAfterSubmitCell", [$t, jqXHR, postdata.id, nm, v, iRow, iCol]) || [true, ""];
-												if (ret == null || ret === true || (ret[0] === true && $.isFunction(p.afterSubmitCell))) {
+												if (ret === true || (ret[0] === true && $.isFunction(p.afterSubmitCell))) {
 													ret = p.afterSubmitCell.call($t, jqXHR, postdata.id, nm, v, iRow, iCol);
 												}
 												if (ret == null || ret === true || ret[0] === true) {

@@ -8,7 +8,7 @@
 **/
 
 /*jshint eqeqeq:false */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 /*jslint eqeq: true, nomen: true, plusplus: true, unparam: true, white: true */
 (function (factory) {
 	"use strict";
@@ -78,7 +78,7 @@
 				hasSubgrid = $.isFunction(subGridOptions.hasSubgrid) ?
 					subGridOptions.hasSubgrid.call(self, { rowid: rowid, iRow: iRow, iCol: pos, data: item }) :
 					true;
-			return self == null || self.p == null || subGridOptions == null ? "" :
+			return self.p == null ? "" :
 					"<td role='gridcell' class='" + base.getGuiStyles.call(this, "subgrid.tdStart", hasSubgrid ? "ui-sgcollapsed sgcollapsed" : "") + "' " +
 					self.formatCol(pos, iRow) + ">" +
 					(hasSubgrid ? "<div class='" + base.getGuiStyles.call(this, "subgrid.buttonDiv", "sgbutton-div") +

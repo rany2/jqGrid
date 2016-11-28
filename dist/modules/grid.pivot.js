@@ -10,7 +10,7 @@
 */
 
 /*jshint eqeqeq:false */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 /*jslint eqeq: true, plusplus: true, continue: true, white: true */
 (function (factory) {
 	"use strict";

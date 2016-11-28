@@ -9,7 +9,7 @@
 
 /*jshint eqeqeq:false */
 /*jslint browser: true, eqeq: true, plusplus: true, nomen: true, unparam: true, vars: true, white: true, todo: true */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {

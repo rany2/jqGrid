@@ -20,7 +20,7 @@
 	Author:      Tony Tomov
 */
 
-/*global alert, define */
+/*global jQuery, alert, define, exports, require */
 /*jslint browser: true, vars: true, regexp: true, white: true */
 
 (function (factory) {

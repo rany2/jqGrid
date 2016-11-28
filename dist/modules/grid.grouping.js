@@ -1,5 +1,5 @@
 /*jshint eqeqeq:false, eqnull:true */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 /*jslint plusplus: true, unparam: true, eqeq: true, nomen: true, todo: true, continue: true */
 // Grouping module
 (function (factory) {

@@ -7,7 +7,7 @@
 **/
 
 /*jshint eqeqeq:false, eqnull:true, devel:true */
-/*global jQuery, define, xmlJsonClass */
+/*global jQuery, define, xmlJsonClass, exports, require */
 /*jslint browser: true, devel: true, white: true */
 (function (factory) {
 	"use strict";
@@ -23,6 +23,7 @@
 	}
 }(function ($) {
 	"use strict";
+	var jgrid = $.jgrid;
 	// begin module grid.import
 	$.jgrid.extend({
 		jqGridImport: function (o) {
