@@ -821,7 +821,7 @@
 											$select.addClass(dataFieldClass);
 											$select.css({ width: "100%" });
 											if ($select.find("option[value='']").length === 0 && typeof soptions.noFilterText === "string") {
-											    ov1 = document.createElement("option");
+												ov1 = document.createElement("option");
 												ov1.value = "";
 												ov1.innerHTML = soptions.noFilterText;
 												$select.prepend(ov1);

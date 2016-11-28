@@ -22,8 +22,8 @@
 		factory(jQuery);
 	}
 }(function ($) {
-    "use strict";
-    var jgrid = $.jgrid;
+	"use strict";
+	var jgrid = $.jgrid;
 	// begin module grid.import
 	$.jgrid.extend({
 		jqGridImport: function (o) {
