@@ -5,7 +5,7 @@
  radiobuttons then the jqGrid is made selectable.
 */
 /*jslint browser: true, plusplus: true, white: true */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 // Addition - selector can be a class or id
 (function (factory) {
 	"use strict";

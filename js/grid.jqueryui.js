@@ -9,7 +9,7 @@
 **/
 
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 /*jslint browser: true, devel: true, eqeq: true, nomen: true, plusplus: true, unparam: true, vars: true, white: true */
 (function (factory) {
 	"use strict";

@@ -11,7 +11,7 @@
 
 /*jshint eqeqeq:false */
 /*jslint browser: true, devel: true, eqeq: true, nomen: true, plusplus: true, vars: true, unparam: true, white: true, todo: true */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
@@ -805,7 +805,7 @@
 										context: { $tdInput: $tdInput, options: soptions, cm: cm, iCol: ci },
 										dataType: "html",
 										success: function (data, textStatus, jqXHR) {
-											var cm1 = this.cm, iCol1 = this.iCol, soptions1 = this.options, d,
+											var cm1 = this.cm, iCol1 = this.iCol, soptions1 = this.options, d, ov1,
 												$td = this.$tdInput, $select;
 											if (soptions1.buildSelect !== undefined) {
 												d = soptions1.buildSelect.call($t, data, jqXHR, cm1, iCol1);
@@ -821,10 +821,10 @@
 											$select.addClass(dataFieldClass);
 											$select.css({ width: "100%" });
 											if ($select.find("option[value='']").length === 0 && typeof soptions.noFilterText === "string") {
-												ov = document.createElement("option");
-												ov.value = "";
-												ov.innerHTML = soptions.noFilterText;
-												$select.prepend(ov);
+											    ov1 = document.createElement("option");
+												ov1.value = "";
+												ov1.innerHTML = soptions.noFilterText;
+												$select.prepend(ov1);
 												if ($($select[0].options[$select[0].selectedIndex]).attr("selected") == null && !$select[0].multiple) {
 													$select[0].selectedIndex = 0;
 												}
