@@ -9208,17 +9208,23 @@
 							} else if (cm.stype === "select") {
 								v = $elem.val();
 							} else if (cm.stype === "checkbox") {
+								var offValue = "off", onValue = "on";
+								if (searchoptions.value != null) {
+									var cbval = searchoptions.value.split(":");
+									onValue = cbval[0];
+									offValue = cbval[1];
+								}
 								switch ($elem.data("state")) {
 									case -1:   // has indeterminate state
 										v = "";
 										break;
 									case 0:    // is unchecked
 										// make indeterminate
-										v = "false";
+										v = offValue;
 										break;
 									default:    // is checked
 										// make unchecked
-										v = "true";
+										v = onValue;
 										break;
 								}
 							} else {
