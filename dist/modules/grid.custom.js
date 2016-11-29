@@ -269,6 +269,14 @@
 					getIdSel = function (cmName) {
 						return "#" + jqID(getId(cmName));
 					},
+					getOnOffValue = function (soptions) {
+						var checkboxValue = (soptions.value || "").split(":");
+
+						return {
+							on: checkboxValue[0] || "on",
+							off: checkboxValue[1] || "off"
+						};
+					},
 					parseFilter = function (fillAll) {
 						var i, j, filters = p.postData.filters, filter = {}, rules, rule,
 							iColByName = p.iColByName, cm, soptions;
@@ -280,7 +288,7 @@
 									filter[cm.name] = {
 										op: soptions.sopt ?
 												soptions.sopt[0] :
-												cm.stype === "select" ? "eq" : o.defaultSearch,
+												(cm.stype === "select" || cm.stype === "checkbox") ? "eq" : o.defaultSearch,
 										data: soptions.defaultValue !== undefined ? soptions.defaultValue : ""
 									};
 								}
@@ -321,7 +329,7 @@
 									if ($.inArray(rule.op, soptions.sopt) < 0) {
 										continue;
 									}
-								} else if (cm.stype === "select") {
+								} else if (cm.stype === "select" || cm.stype === "checkbox") {
 									if (rule.op !== "eq") {
 										continue;
 									}
@@ -392,23 +400,19 @@
 							} else if (cm.stype === "select") {
 								v = $elem.val();
 							} else if (cm.stype === "checkbox") {
-								var offValue = "off", onValue = "on";
-								if (searchoptions.value != null) {
-									var cbval = searchoptions.value.split(":");
-									onValue = cbval[0];
-									offValue = cbval[1];
-								}
+								var onOffValue = getOnOffValue(searchoptions);
+
 								switch ($elem.data("state")) {
 									case -1:   // has indeterminate state
 										v = "";
 										break;
 									case 0:    // is unchecked
 										// make indeterminate
-										v = offValue;
+										v = onOffValue.off;
 										break;
 									default:    // is checked
 										// make unchecked
-										v = onValue;
+										v = onOffValue.on;
 										break;
 								}
 							} else {
@@ -1060,19 +1064,12 @@
 									} else if ($input.is("input[type=checkbox]")) {
 										var $th = $input.closest("th.ui-th-column");
 										if ($th.length > 0) {
-											var soptions = (p.colModel[$th[0].cellIndex] || {}).searchoptions || {},
-												offValue = "off",
-												onValue = "on";
-											if (soptions.value != null) {
-												var cbval = soptions.value.split(":");
-												onValue = cbval[0];
-												offValue = cbval[1];
-											}
+											var onOffValue = getOnOffValue((p.colModel[$th[0].cellIndex] || {}).searchoptions || {});
 											setThreeStateCheckbox(
 												$input,
-												filter.data === onValue ?
+												filter.data === onOffValue.on ?
 													1 :
-													(filter.data === offValue ? 0 : -1)
+													(filter.data === onOffValue.off ? 0 : -1)
 											);
 										}
 									} else if ($.trim($input.val()) !== filter.data) {
