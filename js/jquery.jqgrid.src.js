@@ -6588,55 +6588,53 @@
 				}
 
 				$(p.colModel).each(function (iCol) {
+					var setDisplayCssOnRows = function (rows) {
+							var iRow, nRow, row, cell;
+							for (iRow = 0, nRow = rows.length; iRow < nRow; iRow++) {
+								row = rows[iRow];
+								cell = row.cells[iCol];
+								if (!$(row).hasClass("jqgroup") || (cell != null && cell.colSpan === 1)) {
+									/* workaround for the bug of Microsoft Edge
+									/* The following bug: Microsoft Edge "optimize" the changes of styles on elements with "height:0"
+									 * on the empty grid. In other words, if the grid is empty then the code
+									 *     $(cell).css("display", "");
+									 * or
+									 *     cell.style.display = "";
+									 * will NOT change the style of the cell. One can examine cell.outerHTML to see something like
+									 *     <td role="gridcell" style="height:0;width:20px;display:none;"></td>
+									 * but still see that cell.style.display is changed. As the workaround we first temporary set
+									 * height of the cell from 0 to 1px, then changes "display" style and finally reset height to 0
+									 */
+									if (iRow === 0 && $(row).hasClass("jqgfirstrow")) {
+										$(cell).css("height", "1px");
+										$(cell).css("display", show);
+										$(cell).css("height", "0");
+									} else {
+										$(cell).css("display", show);
+									}
+								}
+								// to follow HTML standards exactly one should probably add hidden column in
+								// grouping header row if ($(row).hasClass("jqgroup")) and decrement the value of
+								// colspan.
+							}
+						};
 					if ($.inArray(this.name, colname) !== -1 && this.hidden === sw) {
 						if (p.frozenColumns === true && this.frozen === true && !options.notSkipFrozen) {
 							return true;
 						}
-						var $rows = $(grid.hDiv).find(".ui-jqgrid-htable>thead>tr");
+						setDisplayCssOnRows($(grid.hDiv).find(".ui-jqgrid-htable>thead>tr"));
 						if (p.frozenColumns === true && grid.fhDiv != null) {
-							$rows = $rows.add($(grid.fhDiv).find(".ui-jqgrid-htable>thead>tr"));
+							setDisplayCssOnRows($(grid.fhDiv).find(".ui-jqgrid-htable>thead>tr"));
 						}
-						$rows.each(function () {
-							$(this.cells[iCol]).css("display", show);
-						});
-						$rows = $($t.rows);
+						setDisplayCssOnRows($t.rows);
 						if (p.frozenColumns === true && grid.fbRows != null) {
-							$rows = $rows.add(grid.fbRows);
+							setDisplayCssOnRows($t.rows);
 						}
-						$rows.each(function (iRow) {
-							var cell = this.cells[iCol];
-							if (!$(this).hasClass("jqgroup") || (cell != null && cell.colSpan === 1)) {
-								/* workaround for the bug of Microsoft Edge
-								/* The following bug: Microsoft Edge "optimize" the changes of styles on elements with "height:0"
-								 * on the empty grid. In other words, if the grid is empty then the code
-								 *     $(cell).css("display", "");
-								 * or
-								 *     cell.style.display = "";
-								 * will NOT change the style of the cell. One can examine cell.outerHTML to see something like
-								 *     <td role="gridcell" style="height:0;width:20px;display:none;"></td>
-								 * but still see that cell.style.display is changed. As the workaround we first temporary set
-								 * height of the cell from 0 to 1px, then changes "display" style and finally reset height to 0
-								 */
-								if (iRow === 0 && $rows.length === 1 && $(this).hasClass("jqgfirstrow")) {
-									$(cell).css("height", "1px");
-									$(cell).css("display", show);
-									$(cell).css("height", "0");
-								} else {
-									$(cell).css("display", show);
-								}
-							}
-							// to follow HTML standards exactly one should probably add hidden column in
-							// grouping header row if ($(this).hasClass("jqgroup")) and decrement the value of
-							// colspan.
-						});
 						if (p.footerrow) {
-							$rows = $(grid.sDiv).find("tr.footrow");
+							setDisplayCssOnRows($(grid.sDiv).find("tr.footrow"));
 							if (p.frozenColumns === true && grid.fsDiv != null) {
-								$rows = $rows.add($(grid.fsDiv).find("tr.footrow"));
+								setDisplayCssOnRows($(grid.fsDiv).find("tr.footrow"));
 							}
-							$rows.each(function () {
-								$(this.cells[iCol]).css("display", show);
-							});
 						}
 						cw = parseInt(this.width, 10);
 						if (show === "none") {
