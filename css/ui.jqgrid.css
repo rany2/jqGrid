@@ -795,6 +795,10 @@ span.ui-jqgrid-cell-wrapper {
 .ui-jqdialog.ui-jqgrid-jquery-ui {
 	padding: .2em;
 }
+.ui-jqgrid-bootstrap.modal {
+	right: auto;
+	left: auto;
+}
 .ui-jqdialog-content,
 .ui-jqdialog .ui-jqdialog-content {
 	border: 0;
