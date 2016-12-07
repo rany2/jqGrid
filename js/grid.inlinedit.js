@@ -262,11 +262,11 @@
 					if (cv != null && cv[0] === false) {
 						isError = true;
 						try {
-							var offsetData = $(options.td).offset();
+							var relativeRect = jgrid.getRelativeRect.call($t, options.td);
 
 							infoDialog.call($t, errcap, cv[1], bClose, {
-								left: offsetData.left,
-								top: offsetData.top + $(options.td).outerHeight()
+								top: relativeRect.top,
+								left: relativeRect.left + $($t).closest(".ui-jqgrid").offset().left
 							});
 						} catch (e) {
 							fatalErrorFunction(cv[1]);
