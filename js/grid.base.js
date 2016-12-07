@@ -884,6 +884,28 @@
 			}
 			return height;
 		},
+		getRelativeRect: function (elem) {
+			var relativeTo = elem instanceof $ && elem.length > 0 ? elem[0] : elem,
+				relativeToOuterHeight = $(relativeTo).outerHeight(),
+				gbox = $(this).closest(".ui-jqgrid")[0],
+				rectRelativeTo, rectGbox;
+
+			if (!gbox) {
+				return { top: 0, left: 0 };
+			}
+			rectRelativeTo = relativeTo.getBoundingClientRect != null ?
+				relativeTo.getBoundingClientRect() :
+				$(relativeTo).offset();
+			rectGbox = gbox.getBoundingClientRect != null ?
+				gbox.getBoundingClientRect() :
+				$(gbox).offset();
+
+			return {
+				top: rectRelativeTo.top + relativeToOuterHeight - rectGbox.top,
+				//right: rectGbox.right - rectRelativeTo.right,
+				left: rectRelativeTo.left - rectGbox.left
+			};
+		},
 		getCellIndex: function (cell) {
 			var c = $(cell);
 			if (c.is("tr")) { return -1; }
