@@ -669,13 +669,7 @@
 		var $tr = $(this).closest("tr.jqgrow"), rid = $tr.attr("id"),
 			$id = $(this).closest("table.ui-jqgrid-btable").attr("id").replace(/_frozen([^_]*)$/, "$1"),
 			$grid = $("#" + jgrid.jqID($id)), $t = $grid[0], p = $t.p, i, n, customAction, actop,
-			getTop = function () {
-				var tr = $tr[0], gbox = $grid.closest(".ui-jqgrid")[0];
-				if (tr.getBoundingClientRect != null && gbox.getBoundingClientRect != null) {
-					return tr.getBoundingClientRect().top + $tr.outerHeight() - gbox.getBoundingClientRect().top;
-				}
-				return $tr.offset().top + $tr.outerHeight() - $(gbox).offset().top;
-			},
+			relativeTop = jgrid.getRelativeRect.call($t, $tr).top,
 			cm = p.colModel[jgrid.getCellIndex(this)],
 			op = $.extend(true, { extraparam: {} }, jgrid.actionsNav || {},	p.actionsNavOptions || {}, cm.formatoptions || {});
 
@@ -719,14 +713,14 @@
 			case "del":
 				op.delOptions = op.delOptions || {};
 				if (op.delOptions.top === undefined) {
-					op.delOptions.top = getTop();
+					op.delOptions.top = relativeTop;
 				}
 				$grid.jqGrid("delGridRow", rid, op.delOptions);
 				break;
 			case "formedit":
 				op.editOptions = op.editOptions || {};
 				if (op.editOptions.top === undefined) {
-					op.editOptions.top = getTop();
+					op.editOptions.top = relativeTop;
 					op.editOptions.recreateForm = true;
 				}
 				$grid.jqGrid("editGridRow", rid, op.editOptions);

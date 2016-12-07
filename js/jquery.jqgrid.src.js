@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-11-29
+ * Date: 2016-12-07
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -884,6 +884,28 @@
 			}
 			return height;
 		},
+		getRelativeRect: function (elem) {
+			var relativeTo = elem instanceof $ && elem.length > 0 ? elem[0] : elem,
+				relativeToOuterHeight = $(relativeTo).outerHeight(),
+				gbox = $(this).closest(".ui-jqgrid")[0],
+				rectRelativeTo, rectGbox;
+
+			if (!gbox) {
+				return { top: 0, left: 0 };
+			}
+			rectRelativeTo = relativeTo.getBoundingClientRect != null ?
+				relativeTo.getBoundingClientRect() :
+				$(relativeTo).offset();
+			rectGbox = gbox.getBoundingClientRect != null ?
+				gbox.getBoundingClientRect() :
+				$(gbox).offset();
+
+			return {
+				top: rectRelativeTo.top + relativeToOuterHeight - rectGbox.top,
+				//right: rectGbox.right - rectRelativeTo.right,
+				left: rectRelativeTo.left - rectGbox.left
+			};
+		},
 		getCellIndex: function (cell) {
 			var c = $(cell);
 			if (c.is("tr")) { return -1; }
@@ -1540,22 +1562,22 @@
 		getAccessor: function (obj, expr) {
 			var ret, p, prm = [], i;
 			if ($.isFunction(expr)) { return expr(obj); }
-			ret = obj[expr];
-			if (ret === undefined) {
-				try {
-					if (typeof expr === "string") {
-						prm = expr.split(".");
-					}
-					i = prm.length;
-					if (i) {
-						ret = obj;
-						while (ret && i--) {
-							p = prm.shift();
-							ret = ret[p];
-						}
-					}
-				} catch (ignore) { }
+			if (obj != null && obj.hasOwnProperty(expr)) {
+				return obj[expr];
 			}
+			try {
+				if (typeof expr === "string") {
+					prm = expr.split(".");
+				}
+				i = prm.length;
+				if (i) {
+					ret = obj;
+					while (ret != null && i--) {
+						p = prm.shift();
+						ret = ret[p];
+					}
+				}
+			} catch (ignore) { }
 			return ret;
 		},
 		getXmlData: function (obj, expr, returnObj) {
@@ -7804,8 +7826,12 @@
 						} else {
 							try {
 								setTimeout(function () {
-									infoDialog.call($t, errcap, v + " " + cv[1], bClose);
-								}, 100);
+									var relativeRect = jgrid.getRelativeRect.call($t, $td);
+									infoDialog.call($t, errcap, v + " " + cv[1], bClose, {
+										top: relativeRect.top,
+										left: relativeRect.left + $($t).closest(".ui-jqgrid").offset().left
+									});
+								}, 50);
 								$self.jqGrid("restoreCell", iRow, iCol);
 							} catch (ignore) { }
 						}
@@ -15144,11 +15170,11 @@
 					if (cv != null && cv[0] === false) {
 						isError = true;
 						try {
-							var offsetData = $(options.td).offset();
+							var relativeRect = jgrid.getRelativeRect.call($t, options.td);
 
 							infoDialog.call($t, errcap, cv[1], bClose, {
-								left: offsetData.left,
-								top: offsetData.top + $(options.td).outerHeight()
+								top: relativeRect.top,
+								left: relativeRect.left + $($t).closest(".ui-jqgrid").offset().left
 							});
 						} catch (e) {
 							fatalErrorFunction(cv[1]);
@@ -19443,13 +19469,7 @@
 		var $tr = $(this).closest("tr.jqgrow"), rid = $tr.attr("id"),
 			$id = $(this).closest("table.ui-jqgrid-btable").attr("id").replace(/_frozen([^_]*)$/, "$1"),
 			$grid = $("#" + jgrid.jqID($id)), $t = $grid[0], p = $t.p, i, n, customAction, actop,
-			getTop = function () {
-				var tr = $tr[0], gbox = $grid.closest(".ui-jqgrid")[0];
-				if (tr.getBoundingClientRect != null && gbox.getBoundingClientRect != null) {
-					return tr.getBoundingClientRect().top + $tr.outerHeight() - gbox.getBoundingClientRect().top;
-				}
-				return $tr.offset().top + $tr.outerHeight() - $(gbox).offset().top;
-			},
+			relativeTop = jgrid.getRelativeRect.call($t, $tr).top,
 			cm = p.colModel[jgrid.getCellIndex(this)],
 			op = $.extend(true, { extraparam: {} }, jgrid.actionsNav || {},	p.actionsNavOptions || {}, cm.formatoptions || {});
 
@@ -19493,14 +19513,14 @@
 			case "del":
 				op.delOptions = op.delOptions || {};
 				if (op.delOptions.top === undefined) {
-					op.delOptions.top = getTop();
+					op.delOptions.top = relativeTop;
 				}
 				$grid.jqGrid("delGridRow", rid, op.delOptions);
 				break;
 			case "formedit":
 				op.editOptions = op.editOptions || {};
 				if (op.editOptions.top === undefined) {
-					op.editOptions.top = getTop();
+					op.editOptions.top = relativeTop;
 					op.editOptions.recreateForm = true;
 				}
 				$grid.jqGrid("editGridRow", rid, op.editOptions);
