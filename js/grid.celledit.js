@@ -334,8 +334,12 @@
 						} else {
 							try {
 								setTimeout(function () {
-									infoDialog.call($t, errcap, v + " " + cv[1], bClose);
-								}, 100);
+									var relativeRect = jgrid.getRelativeRect.call($t, $td);
+									infoDialog.call($t, errcap, v + " " + cv[1], bClose, {
+										top: relativeRect.top,
+										left: relativeRect.left + $($t).closest(".ui-jqgrid").offset().left
+									});
+								}, 50);
 								$self.jqGrid("restoreCell", iRow, iCol);
 							} catch (ignore) { }
 						}
