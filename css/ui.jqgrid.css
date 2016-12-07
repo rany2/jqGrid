@@ -789,9 +789,11 @@ span.ui-jqgrid-cell-wrapper {
 	display: none;
 	width: 300px;
 	position: absolute;
-	padding: .2em;
 	font-size: 11px;
 	overflow: visible;
+}
+.ui-jqdialog.ui-jqgrid-jquery-ui {
+	padding: .2em;
 }
 .ui-jqdialog-content,
 .ui-jqdialog .ui-jqdialog-content {
@@ -1212,6 +1214,9 @@ a.clearsearchclass {
 }
 .ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view > .ui-jqgrid-sdiv td {
 	background-color: #f9f9f9
+}
+.ui-jqdialog.ui-jqgrid-bootstrap > .modal-dialog {
+	margin-top: 0;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-titlebar .ui-jqgrid-title,
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-errorbar .ui-jqgrid-error,
