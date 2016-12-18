@@ -1,6 +1,6 @@
 /*!
  * jqGrid 4.13.6-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2016-12-07
+ * Date: 2016-12-18
  */
 
 /* Grid */
@@ -876,9 +876,11 @@ span.ui-jqgrid-cell-wrapper {
 .ui-jqdialog-content td.navButton-rtl > .fm-button {
 	float: right;
 }
-.ui-jqdialog-content input.FormElement {
-	padding: .3em;
+.ui-jqdialog-content .FormElement {
+	width: 100%;
+	box-sizing: border-box;
 }
+.ui-jqdialog-content input.FormElement,
 .ui-jqdialog-content select.FormElement {
 	padding: .3em;
 }
@@ -894,11 +896,27 @@ span.ui-jqgrid-cell-wrapper {
 }
 .ui-jqdialog-content .DataTD {
 	padding: 2px;
-	border: 0 none;
+	border-width: 0;
+	border-style: none;
 	vertical-align: top;
 }
-.ui-jqdialog-content .form-view-data {
+/*.ui-jqdialog-content .form-view-data {
 	white-space: pre;
+}*/
+.ui-jqgrid-jquery-ui.ui-jqdialog .form-view-data > span {
+	border-width: 1px;
+	border-style: solid;
+	border-color: inherit;
+	border-radius: 3px;
+	display: block;
+	padding: .2em;
+}
+.ui-jqgrid-jquery-ui.ui-jqdialog .form-view-label > label {
+	font-weight: bold;
+}
+.ui-jqgrid-bootstrap.ui-jqdialog .ui-jqdialog-content .form-view-data > span {
+	height: 100%;
+	width: auto;
 }
 .ui-jqdialog .fm-button {
 	display: inline-block;
