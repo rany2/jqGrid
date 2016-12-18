@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-12-07
+ * Date: 2016-12-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -607,8 +607,10 @@
 					closeButton: "ui-corner-all",
 					fmButton: "ui-state-default",
 					dataField: "ui-widget-content ui-corner-all",
-					viewLabel: "ui-widget-content",
-					viewData: "ui-widget-content",
+					viewCellLabel: "ui-widget-content",
+					viewLabel: "",
+					viewCellData: "ui-widget-content",
+					viewData: "",
 					leftCorner: "ui-corner-left",
 					rightCorner: "ui-corner-right",
 					defaultCorner: "ui-corner-all"
@@ -695,7 +697,9 @@
 					closeButton: "btn btn-xs btn-default",
 					fmButton: "btn btn-default",
 					dataField: "form-control",
-					viewLabel: "",
+					viewCellLabel: "",
+					viewLabel: "control-label",
+					viewCellData: "",
 					viewData: "form-control",
 					leftCorner: "",
 					rightCorner: "",

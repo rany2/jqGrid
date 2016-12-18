@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-12-07
+ * Date: 2016-12-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -607,8 +607,10 @@
 					closeButton: "ui-corner-all",
 					fmButton: "ui-state-default",
 					dataField: "ui-widget-content ui-corner-all",
-					viewLabel: "ui-widget-content",
-					viewData: "ui-widget-content",
+					viewCellLabel: "ui-widget-content",
+					viewLabel: "",
+					viewCellData: "ui-widget-content",
+					viewData: "",
 					leftCorner: "ui-corner-left",
 					rightCorner: "ui-corner-right",
 					defaultCorner: "ui-corner-all"
@@ -695,7 +697,9 @@
 					closeButton: "btn btn-xs btn-default",
 					fmButton: "btn btn-default",
 					dataField: "form-control",
-					viewLabel: "",
+					viewCellLabel: "",
+					viewLabel: "control-label",
+					viewCellData: "",
 					viewData: "form-control",
 					leftCorner: "",
 					rightCorner: "",
@@ -12983,7 +12987,7 @@
 							resize: true,
 							//jqModal: true,
 							closeOnEscape: false,
-							labelswidth: "30%",
+							labelswidth: "", //"30%",
 							navkeys: [false, 38, 40],
 							onClose: null,
 							beforeShowForm: null,
@@ -13025,14 +13029,19 @@
 					}
 				}
 				function createData(rowid1, tb, maxcols) {
-					var nm, hc, trdata, cnt = 0, tmp, dc, retpos = [], ind = base.getInd.call($self, rowid1), i,
-						viewDataClasses = getGuiStyles.call($t, "dialog.viewData", "DataTD form-view-data"),
-						viewLabelClasses = getGuiStyles.call($t, "dialog.viewLabel", "CaptionTD form-view-label"),
-						tdtmpl = "<td class='" + viewLabelClasses + "' width='" + o.labelswidth + "'>&#160;</td><td class='" + viewDataClasses + " ui-helper-reset'>&#160;</td>", tmpl = "",
-						tdtmpl2 = "<td class='" + viewLabelClasses + "'></td><td class='" + viewDataClasses + "'></td>",
-						fmtnum = ["integer", "number", "currency"], max1 = 0, max2 = 0, maxw, setme, viewfld;
-					for (i = 1; i <= maxcols; i++) {
-						tmpl += i === 1 ? tdtmpl : tdtmpl2;
+					var nm, hc, $trdata, cnt = 0, tmp, dc, retpos = [], ind = base.getInd.call($self, rowid1), i,
+						viewDataClasses = getGuiStyles.call($t, "dialog.viewData"),
+						viewLabelClasses = getGuiStyles.call($t, "dialog.viewLabel"),
+						labelsWidth = String(o.labelswidth) + (!o.labelswidth || isNaN(o.labelswidth) ? "" : "px"),
+						tdtmpl = "<td class='" +
+							getGuiStyles.call($t, "dialog.viewCellLabel", "CaptionTD form-view-label") +
+							(labelsWidth ? "' style='width:" + labelsWidth + ";" : "") +
+							"'>&#160;</td><td class='" +
+							getGuiStyles.call($t, "dialog.viewCellData", "DataTD form-view-data") +
+							"'>&#160;</td>",
+						tmpl = "", fmtnum = ["integer", "number", "currency"], max1 = 0, max2 = 0, maxw, setme, viewfld;
+					for (i = 0; i < maxcols; i++) {
+						tmpl += tdtmpl;
 					}
 					// find max number align rigth with property formatter
 					$(colModel).each(function () {
@@ -13074,19 +13083,25 @@
 								$(tb).append(newdata);
 								newdata[0].rp = rp;
 							}
-							trdata = $(tb).find("tr[data-rowpos=" + rp + "]");
-							if (trdata.length === 0) {
-								trdata = $("<tr " + dc + " data-rowpos='" + rp + "'></tr>").addClass("FormData").attr("id", "trv_" + nm);
-								$(trdata).append(tmpl);
-								$(tb).append(trdata);
-								trdata[0].rp = rp;
+							$trdata = $(tb).find("tr[data-rowpos=" + rp + "]");
+							if ($trdata.length === 0) {
+								$trdata = $("<tr " + dc + " data-rowpos='" + rp + "'></tr>")
+										.addClass("FormData")
+										.attr("id", "trv_" + nm);
+								$trdata.append(tmpl);
+								$(tb).append($trdata);
+								$trdata[0].rp = rp;
 							}
 							var labelText = (frmopt.label === undefined ? p.colNames[iCol] : frmopt.label),
-								$data = $("td:eq(" + (cp - 1) + ")", trdata[0]);
-							$("td:eq(" + (cp - 2) + ")", trdata[0]).html("<b>" + (labelText || "&nbsp;") + "</b>");
-							$data[isEmptyString($data.html()) ? "html" : "append"]("<span>" + (tmp || "&nbsp;") + "</span>").attr("id", "v_" + nm);
+								$data = $("td:eq(" + (cp - 1) + ")", $trdata[0]);
+							$("td:eq(" + (cp - 2) + ")", $trdata[0]).html("<label for='" + nm + "'" +
+								(viewLabelClasses ? " class='" + viewLabelClasses + "'>" : ">") +
+								(labelText || "&nbsp;") + "</label>");
+							$data[isEmptyString($data.html()) ? "html" : "append"]("<span id='" + nm + "'" +
+								(viewDataClasses ? " class='" + viewDataClasses + "'>" : ">") +
+								(tmp || "&nbsp;") + "</span>").attr("id", "v_" + nm);
 							if (setme) {
-								$("td:eq(" + (cp - 1) + ") span", trdata[0]).css({ "text-align": "right", width: maxw + "px" });
+								$("td:eq(" + (cp - 1) + ") span", $trdata[0]).css({ "text-align": "right", width: maxw + "px" });
 							}
 							retpos[cnt] = iCol;
 							cnt++;
