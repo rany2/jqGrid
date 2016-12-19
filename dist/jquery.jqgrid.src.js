@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-12-18
+ * Date: 2016-12-19
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1372,7 +1372,7 @@
 			}
 			for (i = 0; i < p.savedRow.length; i++) {
 				savedRowInfo = p.savedRow[i];
-				// sell editing saves in savedRow array items like {id: iRow, ic: iCol, name: colModel[iCol].name, v: cellValue}
+				// cell editing saves in savedRow array items like {id: iRow, ic: iCol, name: colModel[iCol].name, v: cellValue}
 				if (typeof savedRowInfo.id === "number" && typeof savedRowInfo.ic === "number" &&
 						savedRowInfo.name !== undefined && savedRowInfo.v !== undefined &&
 						rows[savedRowInfo.id] != null && rows[savedRowInfo.id].id === rowid &&
@@ -9676,6 +9676,16 @@
 												if ($($select[0].options[$select[0].selectedIndex]).attr("selected") == null && !$select[0].multiple) {
 													$select[0].selectedIndex = 0;
 												}
+											}
+											if ($select[0].multiple && $select.find("option[selected]").length === 0 && $select[0].selectedIndex !== -1) {
+												// It can be that multiselect (select with multiple attribute) will be returned from surl
+												// or build with respect of buildSelect WITHOUT having multiple attribute
+												// (just as <select>...</select> instead of <select multiple="multiple">...</select>)
+												// and the multiple attribute will be assigned via soptions.attr (attr: { multiple: "multiple" }).
+												// One will have non-multiple select initially, where the first element will be automatically selected.
+												// After assigning the attribute multiple="multiple" the select will be able to have no selected elements,
+												// but it will be too late. To fix the case we will unselect the first element in the special case.
+												$select[0].options[$select[0].selectedIndex].selected = false;
 											}
 
 											if (soptions1.defaultValue !== undefined) { $select.val(soptions1.defaultValue); }
