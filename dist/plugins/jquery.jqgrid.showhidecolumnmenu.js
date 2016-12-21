@@ -11,7 +11,14 @@
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["jquery", "./jqdnr", "./jqmodal"], factory);
+		// TODO: one have to have the reference to "../js/grid.base"
+		// in the non-minimized file and to "../js/min/grid.base"
+		// in minimized file. One can patch "../js/grid.base" to "../js/min/grid.base"
+		// before miminizing, but such patching will breaks the corresponding
+		// map file, created during minimizing.
+		// It's better, probably, to make the COPY of the patched file
+		// (with the reference to "..../min/grid.base") in the separate min folder.
+		define(["jquery", , "./jquery.contextmenu-ui", "free-jqgrid/grid.base"], factory);
 	} else if (typeof exports === "object") {
 		// Node/CommonJS
 		factory(require("jquery"));
