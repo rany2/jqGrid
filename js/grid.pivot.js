@@ -366,8 +366,8 @@
 											{ aggregate: agr1, iAggregate: iAggr, pivotOptions: o } :
 											{ yIndex: yIndex.getItem(iyData), aggregate: agr1, iAggregate: iAggr, yLevel: level, pivotOptions: o })) :
 									(jgrid.template.apply(self, colType === 2 ?
-											[label, agr1.aggregator, agr1.member, iAggr] :
-											[label, agr1.aggregator, agr1.member, yIndex.getItem(iyData)[level], level]))
+											[String(label), agr1.aggregator, agr1.member, iAggr] :
+											[String(label), agr1.aggregator, agr1.member, yIndex.getItem(iyData)[level], level]))
 					});
 					delete cmItem.member;
 					delete cmItem.aggregator;
@@ -399,7 +399,7 @@
 									titleText: ((headerOnTop && j === iLevel + 1) || (!headerOnTop && j === headerLevels - 1)) ?
 											($.isFunction(totalHeader) ?
 													totalHeader.call(self, previousY1, iLevel) :
-													jgrid.template.call(self, totalHeader || "", previousY1[iLevel], iLevel)) :
+													jgrid.template.call(self, String(totalHeader || ""), previousY1[iLevel], iLevel)) :
 											"",
 									startColumnName: "y" + (iyData - 1) + "t" + iLevel + (aggrlen === 1 ? "" : "a0"),
 									numberOfColumns: aggrlen
