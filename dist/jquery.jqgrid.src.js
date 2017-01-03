@@ -8572,6 +8572,7 @@
 								iCol: options.iCol,
 								ovm: ovm
 							};
+						setAttributes(elem, options, postData ? ["postData"] : undefined);
 						$.ajax($.extend({
 							url: $.isFunction(options.dataUrl) ? options.dataUrl.call($t, rowid, vl, String(options.name), ajaxContext) : options.dataUrl,
 							type: "GET",
@@ -8588,7 +8589,6 @@
 								if (a) {
 									//$(elem1).empty(); // ???
 									$(elem1).append(a);
-									setAttributes(elem1, options1, postData ? ["postData"] : undefined);
 									setTimeout(function () {
 										var isSelected1; // undefined
 										$("option", elem1).each(function (iOpt) {
