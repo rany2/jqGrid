@@ -2,27 +2,39 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.13.6 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.13.7-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2016-12-24
+ * Date: 2017-01-03
  */
 //jsHint options
 /*jshint eqnull:true */
 /*jslint browser: true, evil: true, devel: true, white: true */
-/*global jQuery, define, HTMLElement, HTMLTableRowElement, exports, require */
+/*global jQuery, define, HTMLElement, HTMLTableRowElement, module, require */
 
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(["jquery"], factory);
-	} else if (typeof exports === "object") {
+	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
-		factory(require("jquery"));
+		module.exports = function (root, $) {
+			if ($ === undefined) {
+				// require("jquery") returns a factory that requires window to
+				// build a jQuery instance, we normalize how we use modules
+				// that require this pattern but the window provided is a noop
+				// if it's defined (how jquery works)
+				$ = typeof window !== "undefined" ?
+						require("jquery") :
+						require("jquery")(root || window);
+			}
+			factory($);
+			return $;
+		};
 	} else {
 		// Browser globals
 		factory(jQuery);
@@ -353,7 +365,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.13.6",
+		version: "4.13.7-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -2180,18 +2192,29 @@
 			args.unshift(callback);
 			return jgrid.fullBoolFeedback.apply(self, args);
 		},
-		builderSortIcons: function (/*iCol*/) {
+		builderSortIcons: function (iCol) {
 			// iCol is unused currently, but one can modify the code to set for example different sorting
 			// icons for columns based on sorttype option of colModel
-			var ts = this, p = ts.p,
-				disabledStateClasses = $(this).jqGrid("getGuiStyles", "states.disabled"),
+			var ts = this, p = ts.p, $self = $(ts),
+				disabledStateClasses = $self.jqGrid("getGuiStyles", "states.disabled"),
 				getClasses = function (ascOrDesc) {
+					var cm = p.colModel[iCol],
+						sortIconFunc = cm != null && $.isFunction(cm.sortIconName) ?
+							cm.sortIconName :
+							p.sortIconName;
+					var sortIconName = $.isFunction(sortIconFunc) ?
+							sortIconFunc.call(ts, {
+								order: ascOrDesc,
+								iCol: iCol,
+								cm: cm
+							}) :
+							$self.jqGrid("getIconRes", "sort." + ascOrDesc);
 					return jgrid.mergeCssClasses(
 						"ui-grid-ico-sort",
 						"ui-icon-" + ascOrDesc,
 						p.viewsortcols[1] === "horizontal" ? "ui-i-" + ascOrDesc : "",
 						disabledStateClasses,
-						$(ts).jqGrid("getIconRes", "sort." + ascOrDesc),
+						sortIconName,
 						"ui-sort-" + p.direction
 					);
 				};
