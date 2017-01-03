@@ -509,7 +509,7 @@
 				searchoptions.column = cm;
 				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype, searchoptions,
 						rule.data, true, that.p.ajaxSelectOptions || {}, true);
-				if (rule.op === "nu" || rule.op === "nn") {
+				if (rule.op === "nu" || rule.op === "nn" || $.inArray(rule.op, $t.p.customUnaryOperations) >= 0) {
 					$(ruleDataInput).attr("readonly", "true");
 					$(ruleDataInput).attr("disabled", "true");
 				} //retain the state of disabled text fields in case of null ops
@@ -520,7 +520,7 @@
 					rule.op = $(ruleOperatorSelect).val();
 					var trpar = $(this).parents("tr:first"),
 						rd = $(".input-elm", trpar)[0];
-					if (rule.op === "nu" || rule.op === "nn") { // disable for operator "is null" and "is not null"
+					if (rule.op === "nu" || rule.op === "nn" || $.inArray(rule.op, $t.p.customUnaryOperations) >= 0) { // disable for operator "is null" and "is not null"
 						rule.data = "";
 						if (rd.tagName.toUpperCase() !== "SELECT") { rd.value = ""; }
 						rd.setAttribute("readonly", "true");
@@ -689,7 +689,7 @@
 				if (p.errorcheck) {
 					checkData(rule.data, cm);
 				}
-				if ($.inArray(cm.searchtype, numtypes) !== -1 || opC === "nn" || opC === "nu") {
+				if ($.inArray(cm.searchtype, numtypes) !== -1 || opC === "nn" || opC === "nu" || $.inArray(opC, getGrid().p.customUnaryOperations) >= 0) {
 					ret = rule.field + " " + operand + " " + val;
 				} else {
 					ret = rule.field + " " + operand + ' "' + val + '"';
