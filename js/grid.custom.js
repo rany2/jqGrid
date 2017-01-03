@@ -457,7 +457,7 @@
 										break;
 								}
 							}
-							if (v || so === "nu" || so === "nn") {
+							if (v || so === "nu" || so === "nn" || $.inArray(so, p.customUnaryOperations) >= 0) {
 								sdata[nm] = v;
 								sopt[nm] = so;
 								j++;
@@ -676,7 +676,7 @@
 							$(elem).data("soper", v).text(oper);
 							if (o.autosearch === true) {
 								var inpelm = $(elem).parent().next().children()[0];
-								if ($(inpelm).val() || v === "nu" || v === "nn") {
+								if ($(inpelm).val() || v === "nu" || v === "nn" || $.inArray(v, p.customUnaryOperations) >= 0) {
 									triggerToolbar();
 								}
 							}
