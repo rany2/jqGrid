@@ -328,6 +328,7 @@
 					}
 					tmp = $.extend({}, tmp, p.inlineData || {}, o.extraparam);
 				}
+				if (!editFeedback.call($t, o, "saveRowValidation", o, rowid, tmp, editOrAdd)) { return; }
 				if (!isRemoteSave) {
 					tmp = $.extend({}, tmp, tmp2);
 					resp = $self.jqGrid("setRowData", rowid, tmp);
