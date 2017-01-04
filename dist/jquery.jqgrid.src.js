@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-03
+ * Date: 2017-01-04
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -9888,11 +9888,15 @@
 				}
 				$(".clearsearchclass", $tr).click(function () {
 					var $tdOper = $(this).closest(".ui-search-clear"),
-						coli = parseInt($tdOper.siblings(".ui-search-oper").data("colindex"), 10),
+						$tdSearchOper = $tdOper.siblings(".ui-search-oper"),
+						$oper = $tdSearchOper.children("a"),
+						soper = $oper.data("soper"), v, operText,
+						coli = parseInt($tdSearchOper.data("colindex"), 10),
 						$tdInput = $tdOper.siblings(".ui-search-input"),
-						sval = $.extend({}, colModel[coli].searchoptions || {}),
+						cm = colModel[coli],
+						sval = $.extend({}, cm.searchoptions || {}),
 						dval = sval.defaultValue || "";
-					switch (colModel[coli].stype) {
+					switch (cm.stype) {
 						case "select":
 							if (dval) {
 								$tdInput.find("select").val(dval);
@@ -9907,6 +9911,21 @@
 						default:
 							$tdInput.find("input").val(dval);
 							break;
+					}
+
+					if (soper === "nu" || soper === "nn" || $.inArray(soper, p.customUnaryOperations) >= 0) {
+						// one need reset an unary operation to default search operation
+						v = sval.sopt ?
+								sval.sopt[0] :
+								(cm.stype === "select" || cm.stype === "checkbox") ?
+									"eq" :
+									o.defaultSearch;
+
+						operText = customSortOperations != null && customSortOperations[v] != null ?
+							customSortOperations[v].operand :
+							o.operands[v] || "";
+
+						$oper.data("soper", v).text(operText);
 					}
 
 					// ToDo custom search type
@@ -15284,6 +15303,7 @@
 					}
 					tmp = $.extend({}, tmp, p.inlineData || {}, o.extraparam);
 				}
+				if (!editFeedback.call($t, o, "saveRowValidation", o, rowid, tmp, editOrAdd)) { return; }
 				if (!isRemoteSave) {
 					tmp = $.extend({}, tmp, tmp2);
 					resp = $self.jqGrid("setRowData", rowid, tmp);
