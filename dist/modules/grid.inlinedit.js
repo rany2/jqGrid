@@ -232,8 +232,20 @@
 			}, jgrid.inlineEdit, p.inlineEditing || {}, o);
 			// End compatible
 			// TODO: add return this.each(function(){....}
-			var tmp = {}, tmp2 = {}, postData = {}, editable, k, fr, resp, cv, ind = $self.jqGrid("getInd", rowid, true), $tr = $(ind),
-				opers = p.prmNames, errcap = getRes("errors.errcap"), bClose = getRes("edit.bClose"), isRemoteSave, isError;
+			var tmp = {}, tmp2 = {}, postData = {}, editable, k, fr, resp, cv, savedRow, ind = $self.jqGrid("getInd", rowid, true), $tr = $(ind),
+				opers = p.prmNames, errcap = getRes("errors.errcap"), bClose = getRes("edit.bClose"), isRemoteSave, isError,
+				displayErrorMessage = function (text, relativeElem) {
+					try {
+						var relativeRect = jgrid.getRelativeRect.call($t, relativeElem);
+
+						infoDialog.call($t, errcap, text, bClose, {
+							top: relativeRect.top,
+							left: relativeRect.left + $($t).closest(".ui-jqgrid").offset().left
+						});
+					} catch (e) {
+						fatalErrorFunction(text);
+					}
+				};
 
 			if (ind === false) { return; }
 
@@ -245,10 +257,10 @@
 			o.url = o.url || p.editurl;
 			isRemoteSave = o.url !== "clientArray";
 			if (editable === "1") {
+				savedRow = ($.jgrid.detectRowEditing.call($t, rowid) || {}).savedRow;
 				jgrid.enumEditableCells.call($t, ind, $tr.hasClass("jqgrid-new-row") ? "add" : "edit", function (options) {
 					var cm = options.cm, formatter = cm.formatter, editoptions = cm.editoptions || {},
 						formatoptions = cm.formatoptions || {}, valueText = {},
-						savedRow = ($.jgrid.detectRowEditing.call($t, rowid) || {}).savedRow,
 						v = jgrid.getEditedValue.call($t, $(options.dataElement), cm, valueText, options.editable);
 
 					if (cm.edittype === "select" && cm.formatter !== "select") {
@@ -261,16 +273,7 @@
 								oldRowData: savedRow }));
 					if (cv != null && cv[0] === false) {
 						isError = true;
-						try {
-							var relativeRect = jgrid.getRelativeRect.call($t, options.td);
-
-							infoDialog.call($t, errcap, cv[1], bClose, {
-								top: relativeRect.top,
-								left: relativeRect.left + $($t).closest(".ui-jqgrid").offset().left
-							});
-						} catch (e) {
-							fatalErrorFunction(cv[1]);
-						}
+						displayErrorMessage(cv[1], options.td);
 						return false;
 					}
 					if (formatter === "date" && formatoptions.sendFormatted !== true) {
@@ -328,7 +331,21 @@
 					}
 					tmp = $.extend({}, tmp, p.inlineData || {}, o.extraparam);
 				}
-				if (!editFeedback.call($t, o, "saveRowValidation", o, rowid, tmp, editOrAdd)) { return; }
+				var validationOptions = {
+						options: o,
+						rowid: rowid,
+						tr: ind,
+						iRow: ind.rowIndex,
+						savedRow: savedRow,
+						newData: tmp,
+						mode: editOrAdd
+					};
+				if (!editFeedback.call($t, o, "saveRowValidation", validationOptions)) {
+					if (validationOptions.errorText) {
+						displayErrorMessage(validationOptions.errorText, ind);
+					}
+					return;
+				}
 				if (!isRemoteSave) {
 					tmp = $.extend({}, tmp, tmp2);
 					resp = $self.jqGrid("setRowData", rowid, tmp);
