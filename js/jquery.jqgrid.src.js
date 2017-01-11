@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-04
+ * Date: 2017-01-11
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -783,6 +783,96 @@
 					addGroupButton: "btn btn-xs btn-primary",
 					deleteGroupButton: "btn btn-xs btn-primary"
 				}
+			},
+			bootstrap4: {
+				gBox: "ui-jqgrid-bootstrap",
+				gView: "card",
+				overlay: "modal-backdrop",
+				loading: "alert alert-info",
+				hDiv: "",
+				hTable: "table table-hover table-sm table-bordered",
+				colHeaders: "",
+				states: {
+					select: "table-success",
+					disabled: "disabled ui-jqgrid-disablePointerEvents",
+					hover: "active",
+					error: "danger",
+					active: "active",
+					textOfClickable: ""
+				},
+				dialog: {
+					header: "modal-header",
+					window: "modal ui-jqgrid-bootstrap",
+					document: "modal-dialog",
+					subdocument: "modal-content",
+					body: "modal-body",
+					footer: "modal-footer",
+					content: "modal-content",
+					hr: "hidden",
+					closeButton: "btn btn-xs btn-secondary",
+					fmButton: "btn btn-secondary",
+					dataField: "form-control",
+					viewCellLabel: "",
+					viewLabel: "control-label",
+					viewCellData: "",
+					viewData: "form-control",
+					leftCorner: "",
+					rightCorner: "",
+					defaultCorner: ""
+				},
+				filterToolbar: {
+					dataField: "form-control"
+				},
+				subgrid: {
+					thSubgrid: "",
+					rowSubTable: "",
+					row: "",
+					tdStart: "",
+					tdWithIcon: "",
+					buttonDiv: "",
+					button: "btn btn-xs",
+					tdData: "",
+					legacyTable: "table table-condensed table-hover table-bordered"
+				},
+				grid: "table table-condensed table-hover table-bordered",
+				gridRow: "",
+				rowNum: "",
+				gridFooter: "table table-hover table-condensed table-bordered",
+				rowFooter: "",
+				gridTitle: "",
+				gridError: "alert alert-danger",
+				gridErrorText: "sr-only",
+				titleButton: "btn btn-xs btn-secondary",
+				actionsDiv: "",
+				actionsButton: "btn btn-xs btn-secondary",
+				toolbarUpper: "",
+				toolbarBottom: "",
+				pager: {
+					pager: "card-footer",
+					pagerButton: "btn btn-xs",
+					pagerInput: "form-control",
+					pagerSelect: "form-control"
+				},
+				navButton: "btn btn-xs",
+				searchDialog: {
+					operator: "form-control",
+					label: "form-control",
+					elem: "form-control",
+					operationGroup: "form-inline",
+					addRuleButton: "btn btn-xs btn-secondary",
+					deleteRuleButton: "btn btn-xs btn-secondary",
+					operationSelect: "form-control",
+					addGroupButton: "btn btn-xs btn-secondary",
+					deleteGroupButton: "btn btn-xs btn-secondary"
+				},
+				searchToolbar: {
+					menu: "dropdown-menu",
+					operButton: "btn btn-xs btn-secondary",
+					clearButton: "btn btn-xs btn-secondary"
+				},
+				top: "ui-jqgrid-bootstrap-corner-top",
+				bottom: "ui-jqgrid-bootstrap-corner-bottom",
+				resizer: "ui-jqgrid-bootstrap"
 			}
 		},
 		htmlDecode: function (value) {
