@@ -1,6 +1,6 @@
 /*!
- * jqGrid 4.13.6 - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2016-12-24
+ * jqGrid 4.13.7-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
+ * Date: 2017-01-11
  */
 
 /* Grid */
@@ -626,6 +626,9 @@ span.ui-jqgrid-cell-wrapper {
 	margin: 0;
 	line-height: inherit;
 }
+select.form-control.ui-pg-selbox:not([size]):not([multiple]) {
+	height: auto;
+}
 .ui-jqgrid .ui-pg-table .ui-pg-selbox {
 	display: block;
 	padding: 1px;
@@ -1248,7 +1251,8 @@ a.clearsearchclass {
 .ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view {
 	font-size: 12px;
 }
-.ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view .fa {
+.ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view .fa,
+.ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-pager .fa {
 	font-size: 14px;
 }
 .ui-jqdialog.ui-jqgrid-bootstrap {
