@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-11
+ * Date: 2017-01-14
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1726,7 +1726,8 @@
 					.is(":hidden");
 			$testDiv.remove();
 			return isHidden;
-		},		cell_width: true,
+		},
+		cell_width: true,
 		ajaxOptions: {},
 		from: function (source) {
 			// Original Author Hugo Bonacci
@@ -17060,7 +17061,11 @@
 							break;
 						//case 0: // standard column
 						default:
-							label = aggrlen > 1 ? agr1.label || "{0}" : yIndex.getItem(iyData)[level];
+							label = aggrlen > 1 ?
+									agr1.label || "{0}" :
+									($.isFunction(yDimension[level].label) ?
+										yDimension[level].label :
+										yIndex.getItem(iyData)[level]);
 							name = "y" + iyData;
 							break;
 					}
@@ -17069,7 +17074,9 @@
 						label: $.isFunction(label) ?
 									(label.call(self, colType === 2 ?
 											{ aggregate: agr1, iAggregate: iAggr, pivotOptions: o } :
-											{ yIndex: yIndex.getItem(iyData), aggregate: agr1, iAggregate: iAggr, yLevel: level, pivotOptions: o })) :
+											(colType === 1 ?
+												{ yIndex: yIndex.getItem(iyData), aggregate: agr1, iAggregate: iAggr, yLevel: level, pivotOptions: o } :
+												{ yData: yIndex.getItem(iyData)[level], yIndex: yIndex.getItem(iyData), yLevel: level, pivotOptions: o }))) :
 									(jgrid.template.apply(self, colType === 2 ?
 											[String(label), agr1.aggregator, agr1.member, iAggr] :
 											[String(label), agr1.aggregator, agr1.member, yIndex.getItem(iyData)[level], level]))
@@ -17284,7 +17291,9 @@
 				colHeaders.push({
 					useColSpanStyle: o.useColSpanStyle,
 					groupHeaders: [{
-						titleText: previousY[k],
+						titleText: ($.isFunction(yDimension[k].label) ?
+										yDimension[k].label.call(self, { yData: previousY[k], yIndex: previousY, yLevel: k, pivotOptions: o }) :
+										previousY[k]),
 						startColumnName: aggrlen === 1 ? "y0" : "y0a0",
 						numberOfColumns: aggrlen
 					}]
@@ -17300,7 +17309,9 @@
 				// add column headers which corresponds the main data
 				for (k = headerLevels - 1; k >= i; k--) {
 					colHeaders[k].groupHeaders.push({
-						titleText: itemYData[k],
+						titleText: ($.isFunction(yDimension[k].label) ?
+										yDimension[k].label.call(self, { yData: itemYData[k], yIndex: itemYData, yLevel: k, pivotOptions: o }) :
+										itemYData[k]),
 						startColumnName: "y" + iYData + (aggrlen === 1 ? "" : "a0"),
 						numberOfColumns: aggrlen
 					});

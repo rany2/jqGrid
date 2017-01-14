@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-11
+ * Date: 2017-01-14
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1726,7 +1726,8 @@
 					.is(":hidden");
 			$testDiv.remove();
 			return isHidden;
-		},		cell_width: true,
+		},
+		cell_width: true,
 		ajaxOptions: {},
 		from: function (source) {
 			// Original Author Hugo Bonacci
