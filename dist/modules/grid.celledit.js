@@ -108,7 +108,7 @@
 						rowid: rowid,
 						iCol: iCol,
 						iRow: iRow,
-						name: nm,
+						cmName: nm,
 						cm: cm,
 						mode: mode
 					});
@@ -404,7 +404,7 @@
 							rowid: rows[iRow].id,
 							iCol: i,
 							iRow: iRow,
-							name: cm.name,
+							cmName: cm.name,
 							cm: cm,
 							mode: "cell"
 						});
@@ -438,7 +438,7 @@
 							rowid: rows[iRow].id,
 							iCol: i,
 							iRow: iRow,
-							name: cm.name,
+							cmName: cm.name,
 							cm: cm,
 							mode: "cell"
 						});
