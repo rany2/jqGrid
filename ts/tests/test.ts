@@ -1,4 +1,4 @@
-﻿/// <reference path="free-jqgrid.d.ts" />
+﻿/// <reference path="../free-jqgrid.d.ts" />
 
 $(() => {
     "use strict";
