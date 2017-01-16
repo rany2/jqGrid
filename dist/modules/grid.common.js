@@ -279,6 +279,7 @@
 			}
 			var dh = isNaN(mopt.dataheight) ? mopt.dataheight : mopt.dataheight + "px",
 				cn = "text-align:" + mopt.align + ";",
+				$dlg = $("#info_dialog"),
 				cnt = "<div id='info_id'>";
 			cnt += "<div id='infocnt' style='margin:0px;padding-bottom:1em;width:100%;overflow:auto;position:relative;height:" + dh + ";" + cn + "'>" + content + "</div>";
 			if (closeButtonText || buttstr !== "") {
@@ -289,10 +290,10 @@
 			cnt += "</div>";
 
 			try {
-				if ($("#info_dialog").attr("aria-hidden") === "false") {
+				if ($dlg.attr("aria-hidden") === "false") {
 					jgrid.hideModal("#info_dialog", { jqm: jm });
 				}
-				$("#info_dialog").remove();
+				$dlg.remove();
 			} catch (ignore) { }
 			jgrid.createModal.call($t,
 				{
@@ -305,16 +306,25 @@
 				mopt,
 				"", "", true);
 			// attach onclick after inserting into the dom
+			$dlg = $("#info_dialog");
 			if (buttstr) {
-				$.each(mopt.buttons, function (j) {
-					$("#" + jgrid.jqID($t.id), "#info_id").on("click", function () { mopt.buttons[j].onClick.call($("#info_dialog")); return false; });
+				$.each(mopt.buttons, function () {
+					$("#" + jgrid.jqID(this.id), "#info_id")
+						.on("click",
+							{ click: this.onClick },
+							function (e) {
+								if ($.isFunction(e.data.click)) {
+									e.data.click.call($t, e, $dlg);
+								}
+								return false;
+							});
 				});
 			}
 			$("#closedialog", "#info_id").click(function () {
 				jgrid.hideModal("#info_dialog", {
 					jqm: jm,
-					onClose: $("#info_dialog").data("onClose") || mopt.onClose,
-					gb: $("#info_dialog").data("gbox") || mopt.gbox
+					onClose: $dlg.data("onClose") || mopt.onClose,
+					gb: $dlg.data("gbox") || mopt.gbox
 				});
 				return false;
 			});
@@ -332,7 +342,7 @@
 				jqm: jm
 			});
 			if ($.isFunction(mopt.afterOpen)) { mopt.afterOpen(); }
-			try { $("#info_dialog").focus(); } catch (ignore) { }
+			try { $dlg.focus(); } catch (ignore) { }
 		},
 		bindEv: function (el, opt) {
 			var $t = this;
