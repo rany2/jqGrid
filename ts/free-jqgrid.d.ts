@@ -287,44 +287,218 @@ declare namespace FreeJqGrid {
 		dataElement: Element;
 		dataWidth: number;
 	}
+	interface IconsInfo {
+		baseIconSet?: string;
+		common?: string; // "ui-icon",
+		pager?: {
+			common?: string;
+			first?: string; // "ui-icon-seek-first",
+			prev?: string; // "ui-icon-seek-prev",
+			next?: string; // "ui-icon-seek-next",
+			last?: string; // "ui-icon-seek-end"
+		},
+		sort?: {
+			common?: string;
+			asc?: string; // "ui-icon-triangle-1-n",
+			desc?: string; // "ui-icon-triangle-1-s"
+		},
+		gridMinimize?: {
+			common?: string;
+			visible?: string; // "ui-icon-circle-triangle-n",
+			hidden?: string; // "ui-icon-circle-triangle-s"
+		},
+		nav?: {
+			common?: string;
+			edit?: string; // "ui-icon-pencil",
+			add?: string; // "ui-icon-plus",
+			del?: string; // "ui-icon-trash",
+			search?: string; // "ui-icon-search",
+			refresh?: string; // "ui-icon-refresh",
+			view?: string; // "ui-icon-document",
+			save?: string; // "ui-icon-disk",
+			cancel?: string; // "ui-icon-cancel",
+			newbutton?: string; // "ui-icon-newwin"
+		},
+		actions?: {
+			common?: string; // string;
+			edit?: string; // "ui-icon-pencil",
+			del?: string; // "ui-icon-trash",
+			save?: string; // "ui-icon-disk",
+			cancel?: string; // "ui-icon-cancel"
+		},
+		form?: {
+			common?: string;
+			close?: string; // "ui-icon-closethick",
+			prev?: string; // "ui-icon-triangle-1-w",
+			next?: string; // "ui-icon-triangle-1-e",
+			save?: string; // "ui-icon-disk",
+			undo?: string; // "ui-icon-close",
+			del?: string; // "ui-icon-scissors",
+			cancel?: string; // "ui-icon-cancel",
+			resizableLtr?: string; // "ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se"
+		},
+		search?: {
+			common?: string;
+			search?: string; // "ui-icon-search",
+			reset?: string; // "ui-icon-arrowreturnthick-1-w",
+			query?: string; // "ui-icon-comment"
+		},
+		subgrid?: {
+			common?: string;
+			plus?: string; // "ui-icon-plus",
+			minus?: string; // "ui-icon-minus",
+			openLtr?: string; // "ui-icon-carat-1-sw",
+			openRtl?: string; // "ui-icon-carat-1-se"
+		},
+		grouping?: {
+			common?: string; // string;
+			plus?: string; // "ui-icon-circlesmall-plus",
+			minus?: string; // "ui-icon-circlesmall-minus"
+		},
+		treeGrid?: {
+			common?: string;
+			minus?: string; // "ui-icon-triangle-1-s",
+			leaf?: string; // "ui-icon-radio-off",
+			plusLtr?: string; // "ui-icon-triangle-1-e",
+			plusRtl?: string; // "ui-icon-triangle-1-w"
+		}
+	}
+	interface GuiStyleInfo {
+		baseGuiStyle?: string;
+		gBox?: string; // "ui-jqgrid-jquery-ui ui-widget ui-widget-content ui-corner-all",  // ui-widget-content??? for the children of gbox
+		gView?: string; // "",
+		overlay?: string; // "ui-widget-overlay",
+		loading?: string; // "ui-state-default ui-state-active",
+		hDiv?: string; // "ui-state-default ui-corner-top",
+		hTable?: string; // "",
+		colHeaders?: string; // "ui-state-default",
+		states?: {
+			select?: string; // "ui-state-highlight",
+			disabled?: string; // "ui-state-disabled ui-jqgrid-disablePointerEvents",
+			hover?: string; // "ui-state-hover",    // can be table-hover on <table> only and style like .table-hover tbody tr:hover td
+			error?: string; // "ui-state-error",
+			active?: string; // "ui-state-active",
+			textOfClickable?: string; // "ui-state-default"
+		},
+		dialog?: {
+			header?: string; // "ui-widget-header ui-dialog-titlebar ui-corner-all ui-helper-clearfix",
+			window?: string; // "ui-jqgrid-jquery-ui ui-widget ui-widget-content ui-corner-all ui-front",
+			document?: string; // "",
+			subdocument?: string; // "",
+			body?: string; // "",
+			footer?: string; // "",
+			content?: string; // "ui-widget-content",
+			hr?: string; // "ui-widget-content",
+			closeButton?: string; // "ui-corner-all",
+			fmButton?: string; // "ui-state-default",
+			dataField?: string; // "ui-widget-content ui-corner-all",
+			viewCellLabel?: string; // "ui-widget-content",
+			viewLabel?: string; // "",
+			viewCellData?: string; // "ui-widget-content",
+			viewData?: string; // "",
+			leftCorner?: string; // "ui-corner-left",
+			rightCorner?: string; // "ui-corner-right",
+			defaultCorner?: string; // "ui-corner-all"
+		},
+		filterToolbar?: {
+			dataField?: string; // "ui-widget-content"
+		},
+		subgrid?: {
+			thSubgrid?: string; // "ui-state-default", // used only with subGridModel
+			rowSubTable?: string; // "ui-widget-content", // used only with subGridModel additionally to ui-subtblcell
+			row?: string; // "ui-widget-content", // class of the subgrid row, additional to ui-subgrid
+			tdStart?: string; // "", // it can be with span over rownumber and multiselect columns
+			tdWithIcon?: string; // "ui-widget-content", // class of cell with +- icon, additional to subgrid-cell
+			buttonDiv?: string; // "",
+			button?: string; // "",
+			tdData?: string; // "ui-widget-content", // class of main td with span over the grid, additional subgrid-data
+			legacyTable?: string; // ""
+		},
+		grid?: string; // "",
+		gridRow?: string; // "ui-widget-content",
+		rowNum?: string; // "ui-state-default",
+		gridFooter?: string; // "",
+		rowFooter?: string; // "ui-widget-content",
+		gridTitle?: string; // "ui-widget-header ui-corner-top",
+		gridError?: string; // "ui-state-error",
+		gridErrorText?: string; // "",
+		titleButton?: string; // "ui-corner-all",
+		toolbarUpper?: string; // "ui-state-default",
+		toolbarBottom?: string; // "ui-state-default",
+		actionsDiv?: string; // "ui-widget-content",
+		actionsButton?: string; // "ui-corner-all",
+		pager?: {
+			pager?: string; // "ui-state-default",
+			pagerButton?: string; // "ui-corner-all",
+			pagerInput?: string; // "ui-widget-content",
+			pagerSelect?: string; // "ui-widget-content"
+		},
+		navButton?: string; // "ui-corner-all",
+		searchDialog?: {
+			operator?: string; // "ui-corner-all",
+			label?: string; // "ui-corner-all",
+			elem?: string; // "ui-corner-all",
+			operationGroup?: string; // "",
+			addRuleButton?: string; // "ui-corner-all",
+			deleteRuleButton?: string; // "ui-corner-all",
+			operationSelect?: string; // "ui-corner-all",
+			addGroupButton?: string; // "ui-corner-all",
+			deleteGroupButton?: string; // "ui-corner-all"
+		},
+		searchToolbar?: {
+			menu?: string; // "ui-menu-jqueryui",
+			operButton?: string; // "ui-corner-all",
+			clearButton?: string; // "ui-corner-all"
+		},
+		top?: string; // "ui-corner-top",
+		bottom?: string; // "ui-corner-bottom",
+		resizer?: string; // "ui-widget-header"
+	}
 	interface JqGridStatic extends JqGridStaticLocaleOptions {
-		_multiselect: boolean;
-		ajaxOptions: JQueryAjaxSettings;
+		_multiselect?: boolean;
+		ajaxOptions?: JQueryAjaxSettings;
 		cell_width: boolean;
-		cellattr: { [key: string]: (rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string; };
-		cmTemplate: { [key: string]: ColumnModel; };
+		cellattr?: { [key: string]: (rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string; };
+		cmTemplate?: { [key: string]: ColumnModel; };
 		defaults: { locale: string, [propName: string]: any };
-		formatter: any;
 		guid: number;
-		guiStyles: any;
-		icons: any;
-		inlineEdit: any;
-		jqModal: any; // { toTop: true }
+		guiStyles: {
+			jQueryUI: GuiStyleInfo;
+			bootstrap: GuiStyleInfo;
+			bootstrapPrimary: GuiStyleInfo;
+			bootstrap4: GuiStyleInfo;
+			[propName: string]: GuiStyleInfo;
+		};
+		icons: {
+			jQueryUI: IconsInfo;
+			fontAwesome: IconsInfo;
+			glyph: IconsInfo;
+			[propName: string]: IconsInfo;
+		}
+		inlineEdit?: any;
+		jqModal?: any; // { toTop: true }
 		locales: { [key: string]: JqGridStaticLocaleOptions; };
 		msie: boolean;
-		nav: any;
-		no_legacy_api: boolean;
+		no_legacy_api?: boolean;
 		productName: "free jqGrid";
-		search: any;
 		uidPref: string;
 		version: string; // like "4.13.7" for example
-		view: any;
 		bindEv(element: Element | JQuery, options: any): any;
-		builderFmButon(id: string, text?: string, icon?: string, iconOnLeftOrRight?: "right" | "left", conner?: "right" | "left" | "default"): any;
-		builderSortIcons(iCol: number): string;
+		builderFmButon(this: BodyTable, id: string, text?: string, icon?: string, iconOnLeftOrRight?: "right" | "left" | undefined, conner?: "right" | "left" | undefined): any;
+		builderSortIcons(this: BodyTable, iCol: number): string;
 		cellWidth(): boolean;
 		checkDate(format: string, date: string): boolean;
 		checkTime(time: string): boolean;
 		checkValues(value: any, iCol: number | string, customobject?: any, name?: string, options?: any): boolean;
 		clearArray(array: any[]): void;
 		closeModal(h: ModalHash): void;
-		convertOnSaveLocally(nData: any, cm: any, oData: any, rowid: string, item: any, iCol: number): any;
+		convertOnSaveLocally(this: BodyTable, nData: any, cm: any, oData: any, rowid: string, item: any, iCol: number): any;
 		createEl(elementType: string, options: any, value: string, autoWidth?: boolean, ajaxso?: any): Element;
 		createModal(aIDs: any, content: Element | JQuery, o: any, insertSelector: string | Element | JQuery, posSelector: string | Element | JQuery, appendsel?: boolean | string | Element | JQuery, css?: any): void;
 		//detectRowEditing(rowid: string): RowEditingInfo;
-		detectRowEditing(rowid: string): { mode: "inlineEditing" | "cellEditing"; savedRow: any[]; };
-		enumEditableCells(tr: HTMLTableRowElement, mode: "add" | "edit", callback: (options: EditableCellInfo) => boolean): void;
-		extend(methods: any): void;
+		detectRowEditing(this: BodyTable, rowid: string): { mode: "inlineEditing" | "cellEditing"; savedRow: any[]; };
+		enumEditableCells(this: BodyTable, tr: HTMLTableRowElement, mode: "add" | "edit", callback: (options: EditableCellInfo) => boolean): void;
+		extend(this: JqGridStatic, methods: any): void;
 		feedback(this: BodyTable | JQuery, p: any, eventPrefix: string, callbackSuffix: string, callbackName: string): boolean;
 		fillSelectOptions(element, value: any, separator: string, delimiter: string, isMultiple: boolean, valuesToSelect?: string): boolean;
 		fixMaxHeightOfDiv(height: number): number;
@@ -338,10 +512,10 @@ declare namespace FreeJqGrid {
 		getDataFieldOfCell(this: BodyTable, tr: HTMLTableRowElement | JQuery, iCol: number): JQuery;
 		getEditedValue(this: BodyTable, $dataFiled: JQuery, cm: any, valueText: Object, editable: boolean | "hidden" | "readonly"): string;
 		getGridComponent(componentName: ComponentName, $p: HTMLElement | JQuery): JQuery;
-		getGridComponentId(componentName: ComponentName): string;
-		getGridComponentIdSelector(componentName: ComponentName): string;
-		getMethod(this: BodyTable, methodName: string): Function;
-		getRelativeRect(element: Element | JQuery): JQueryCoordinates;
+		getGridComponentId(this: BodyTable, componentName: ComponentName): string;
+		getGridComponentIdSelector(this: BodyTable, componentName: ComponentName): string;
+		getMethod(this: JqGridStatic, methodName: string): Function;
+		getRelativeRect(this: BodyTable, element: Element | JQuery): JQueryCoordinates;
 		getRes(basePath: Object, path: string): any;
 		getXmlData(obj: Node, dotSeparatedNamesOrFunc: string | ((obj: any) => any), returnObj?: boolean): string;
 		hasAllClasses(element: Element | JQuery, spaceSeparatedCssClasses: string): boolean;
@@ -467,7 +641,7 @@ declare namespace FreeJqGrid {
 		ajaxEditOptions?: JQueryAjaxSettings;
 		beforeInitData?: (this: BodyTable, $form: JQuery, editOrAdd: "edit" | "add") => void;
 		beforeShowForm?: (this: BodyTable, $form: JQuery, editOrAdd: "edit" | "add") => void;
-		beforeSubmit?: (this: BodyTable, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") => void;
+		beforeSubmit?: (this: BodyTable, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") => [true] | [true, any] | true | null | undefined | [false, string];
 		bottominfo?: string;
 		checkOnSubmit?: boolean;
 		checkOnUpdate?: boolean;
@@ -508,6 +682,36 @@ declare namespace FreeJqGrid {
 		width?: number | "auto" | "100%" | string; // "auto"
 		[propName: string]: any; // allow to have any number of other properties
 	}
+	interface FormDeletingOptions extends DeleteFormLocaleOptions {
+		afterShowForm?: null;
+		afterSubmit?: null;
+		ajaxDelOptions?: JQueryAjaxSettings;
+		beforeInitData?: null;
+		beforeShowForm?: null;
+		beforeSubmit?: (this: BodyTable, postdata: Object | string, $form: JQuery) => [true] | [true, any] | undefined | [false, string];
+		cancelicon?: any[]; // [true,"left","fa fa-ban"]
+		closeOnEscape?: boolean;
+		commonIconClass?: string; // "fa"
+		dataheight: number | "auto" | "100%" | string; // "auto"
+		datawidth: number | "auto" | "100%" | string; // "auto"
+		delData?: any;
+		delicon?: any[]; // [true,"left","fa fa-trash-o"]
+		drag?: boolean;
+		height: number | "auto" | "100%" | string; // "auto"
+		left?: number;
+		mtype?: string; // "POST"
+		onclickSubmit?: (this: BodyTable, options: FormDeletingOptions, postdata: Object | string) => Object | string;
+		onClose?: (this: BodyTable, selector: string | Element | JQuery) => boolean;
+		processing?: boolean; // internal used
+		reloadAfterSubmit?: boolean;
+		removemodal?: boolean;
+		resize?: boolean;
+		serializeDelData?: (this: BodyTable, postdata: Object | string) => Object | string;
+		top?: number;
+		url?: string | ((this: BodyTable, rowid: string, postdata: Object | string, options: FormDeletingOptions) => string);
+		useDataProxy?: boolean;
+		width?: number | "auto" | "100%" | string; // "auto"
+	}
 	interface JqGridOptions {
 		colModel: ColumnModel[];
 		colNames?: string[];
@@ -546,7 +750,7 @@ interface JQuery {
 	on(eventName: "jqGridAddEditAfterSubmit", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, postdata: Object | string, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditBeforeInitData", handler: (eventObject: JQueryEventObject, $form: JQuery, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditBeforeShowForm", handler: (eventObject: JQueryEventObject, $form: JQuery, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridAddEditBeforeSubmit", handler: (eventObject: JQueryEventObject, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridAddEditBeforeSubmit", handler: (eventObject: JQueryEventObject, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") =>  [true] | [true, any] | true | null | undefined | [false, string]): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditClickPgButtons", handler: (eventObject: JQueryEventObject, whichButton: "next" | "prev", $form: JQuery, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditClickSubmit", handler: (eventObject: JQueryEventObject, options: FreeJqGrid.FormEditingOptions, postdata: Object | string, editOrAdd: "edit" | "add") => Object | string): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditInitializeForm", handler: (eventObject: JQueryEventObject, $form: JQuery, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
