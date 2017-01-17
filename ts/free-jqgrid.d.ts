@@ -227,27 +227,28 @@ declare namespace FreeJqGrid {
 		prefix?: string;
 		suffix?: string;
 	}
+	interface FormatterDateLocaleOptions {
+		dayNames?: string[];
+		monthNames?: string[];
+		AmPm?: string[];
+		S?: (j: number) => string;
+		srcformat?: string;
+		newformat?: string;
+		masks?: {
+			ShortDate?: string;
+			LongDate?: string;
+			FullDateTime?: string;
+			MonthDay?: string;
+			ShortTime?: string;
+			LongTime?: string;
+			YearMonth?: string;
+		}
+	}
 	interface FormattersLocaleOptions {
 		integer?: FormatterIntegerLocaleOptions;
 		number?: FormatterNumberLocaleOptions;
 		currency?: FormatterCurrencyLocaleOptions;
-		date?: {
-			dayNames?: string[];
-			monthNames?: string[];
-			AmPm?: string[];
-			S?: (j: number) => string;
-			srcformat?: string;
-			newformat?: string;
-			masks?: {
-				ShortDate?: string;
-				LongDate?: string;
-				FullDateTime?: string;
-				MonthDay?: string;
-				ShortTime?: string;
-				LongTime?: string;
-				YearMonth?: string;
-			}
-		};
+		date?: FormatterDateLocaleOptions;
 		[propName: string]: any;
 	}
 	interface JqGridStaticLocaleOptions {
@@ -460,7 +461,9 @@ declare namespace FreeJqGrid {
 		cell_width: boolean;
 		cellattr?: { [key: string]: (rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string; };
 		cmTemplate?: { [key: string]: ColumnModel; };
-		defaults: { locale: string, [propName: string]: any };
+		defaults: JqGridOptions;
+		del?: FormDeletingOptions;
+		edit?: FormEditingOptions;
 		guid: number;
 		guiStyles: {
 			jQueryUI: GuiStyleInfo;
@@ -631,15 +634,21 @@ declare namespace FreeJqGrid {
 		xmlmap?: (item: any) => any;
 		[propName: string]: any; // allow to have any number of other properties
 	}
+	interface ReloadGridOptions {
+		current?: boolean;
+		fromServer?: boolean;
+		page?: number;
+	}
 	interface FormEditingOptions extends EditFormLocaleOptions {
 		_savedData?: { [propName: string]: any };
-		addedrow?: string;
+		addedrow?: "first" | "last" | "before" | "after" | "afterSelected" | "beforeSelected";
 		afterclickPgButtons?: (this: BodyTable, whichButton: "next" | "prev", $form: JQuery, rowid: string) => void;
 		afterComplete?: (this: BodyTable, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") => void;
 		afterShowForm?: (this: BodyTable, $form: JQuery, editOrAdd: "edit" | "add") => void;
 		afterSubmit?: (this: BodyTable, jqXhr: JQueryXHR, postdata: Object | string, editOrAdd: "edit" | "add") => void;
 		ajaxEditOptions?: JQueryAjaxSettings;
-		beforeInitData?: (this: BodyTable, $form: JQuery, editOrAdd: "edit" | "add") => void;
+		beforeCheckValues?: (this: BodyTable, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") => Object | void;
+		beforeInitData?: (this: BodyTable, $form: JQuery, editOrAdd: "edit" | "add") => boolean | "stop" | void;
 		beforeShowForm?: (this: BodyTable, $form: JQuery, editOrAdd: "edit" | "add") => void;
 		beforeSubmit?: (this: BodyTable, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") => [true] | [true, any] | true | null | undefined | [false, string];
 		bottominfo?: string;
@@ -654,9 +663,12 @@ declare namespace FreeJqGrid {
 		datawidth?: number | "auto" | "100%" | string; // "auto"
 		drag?: boolean;
 		editData?: any;
+		errorTextFormat?: (this: BodyTable, jqXhr: JQueryXHR, editOrAdd: "edit" | "add") => void;
+		jqModal?: boolean;
 		height?: number | "auto" | "100%" | string; // "auto"
 		left?: number;
-		mtype?: string; // "POST"
+		modal?: boolean;
+		mtype?: string | ((this: BodyTable, rowid: string, editOrAdd: "edit" | "add", options: FormEditingOptions, postdata: Object | string) => string);
 		navkeys?: any[]; // [false,38,40]
 		nextIcon?: string; // "fa fa-caret-right"
 		onclickPgButtons?: (this: BodyTable, whichButton: "next" | "prev", $form: JQuery, rowid: string) => void;
@@ -667,27 +679,30 @@ declare namespace FreeJqGrid {
 		prevIcon?: string; // "fa fa-caret-left"
 		processing?: boolean;
 		reloadAfterSubmit?: boolean;
+		reloadGridOptions?: ReloadGridOptions;
 		removemodal?: boolean;
 		resize?: boolean;
-		saveicon?: any[]; // [true,"left","fa fa-floppy-o"]
-		savekey?: any[]; // [false,13]
+		saveicon?: [boolean, string, string]; // [true,"left","fa fa-floppy-o"]
+		savekey?: [boolean, number]; // [false,13]
 		savetext?: string;
 		saveui?: string; //"enable"
 		serializeEditData?: (this: BodyTable, postdata: Object) => Object | string;
-		skipPostTypes?: any[]; // ["image","file"]
+		skipPostTypes?: string[]; // ["image","file"]
 		top?: number;
 		topinfo?: string;
+		useDataProxy?: boolean;
 		url: string | ((this: BodyTable, rowid: string, editOrAdd: "edit" | "add", postdata: Object | string, options: FormEditingOptions) => string);
 		viewPagerButtons?: boolean;
 		width?: number | "auto" | "100%" | string; // "auto"
 		[propName: string]: any; // allow to have any number of other properties
 	}
 	interface FormDeletingOptions extends DeleteFormLocaleOptions {
-		afterShowForm?: null;
-		afterSubmit?: null;
+		afterComplete?: (this: BodyTable, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery) => void;
+		afterShowForm?: (this: BodyTable, $form: JQuery) => void;
+		afterSubmit?: (this: BodyTable, $form: JQuery) => void;
 		ajaxDelOptions?: JQueryAjaxSettings;
-		beforeInitData?: null;
-		beforeShowForm?: null;
+		beforeInitData?: (this: BodyTable, $form: JQuery) => boolean | "stop" | void;
+		beforeShowForm?: (this: BodyTable, $form: JQuery) => void;
 		beforeSubmit?: (this: BodyTable, postdata: Object | string, $form: JQuery) => [true] | [true, any] | undefined | [false, string];
 		cancelicon?: any[]; // [true,"left","fa fa-ban"]
 		closeOnEscape?: boolean;
@@ -704,6 +719,7 @@ declare namespace FreeJqGrid {
 		onClose?: (this: BodyTable, selector: string | Element | JQuery) => boolean;
 		processing?: boolean; // internal used
 		reloadAfterSubmit?: boolean;
+		reloadGridOptions?: ReloadGridOptions;
 		removemodal?: boolean;
 		resize?: boolean;
 		serializeDelData?: (this: BodyTable, postdata: Object | string) => Object | string;
@@ -717,7 +733,10 @@ declare namespace FreeJqGrid {
 		colNames?: string[];
 		data?: any[];
 		formEditing?: FormEditingOptions;
+		formDeleting?: FormDeletingOptions;
+		locale?: string;
 		onSelectRow?: (this: BodyTable, rowid: string, state: boolean, eventObject: JQueryEventObject) => void;
+		reloadGridOptions?: ReloadGridOptions;
 		[propName: string]: any; // allow to have any number of other properties
 	}
 }
@@ -737,17 +756,18 @@ interface JQuery {
 
 	getDataIDs?(): string[];
 	jqGrid(methodName: "getDataIDs"): string[];
-	
+
 	editGridRow?(rowid: string, options: FreeJqGrid.FormEditingOptions): void;
 	jqGrid(methodName: "editGridRow", rowid: string, options: FreeJqGrid.FormEditingOptions): any;
-	
+
 	on(eventName: "jqGridSelectRow", handler: (eventObject: JQueryEventObject, rowid: string, state: boolean, orgEventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
-	
+
 	// form editing events
 	on(eventName: "jqGridAddEditAfterClickPgButtons", handler: (eventObject: JQueryEventObject, whichButton: "next" | "prev", $form: JQuery, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditAfterComplete", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditAfterShowForm", handler: (eventObject: JQueryEventObject, $form: JQuery, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditAfterSubmit", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, postdata: Object | string, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridAddEditBeforeCheckValues", handler: (eventObject: JQueryEventObject, $form: JQuery, editOrAdd: "edit" | "add") => Object | void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditBeforeInitData", handler: (eventObject: JQueryEventObject, $form: JQuery, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditBeforeShowForm", handler: (eventObject: JQueryEventObject, $form: JQuery, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditBeforeSubmit", handler: (eventObject: JQueryEventObject, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") =>  [true] | [true, any] | true | null | undefined | [false, string]): FreeJqGrid.JQueryJqGrid;
@@ -755,4 +775,10 @@ interface JQuery {
 	on(eventName: "jqGridAddEditClickSubmit", handler: (eventObject: JQueryEventObject, options: FreeJqGrid.FormEditingOptions, postdata: Object | string, editOrAdd: "edit" | "add") => Object | string): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditInitializeForm", handler: (eventObject: JQueryEventObject, $form: JQuery, editOrAdd: "edit" | "add") => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAddEditSerializeEditData", handler: (eventObject: JQueryEventObject, postdata: Object) => Object | string): FreeJqGrid.JQueryJqGrid;
+
+	// form deleting events
+	on(eventName: "jqGridDeleteAfterShowForm", handler: (eventObject: JQueryEventObject, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridAddEditAfterComplete", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridDeleteBeforeInitData", handler: (eventObject: JQueryEventObject, $form: JQuery) => boolean | "stop" | void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridDeleteBeforeShowForm", handler: (eventObject: JQueryEventObject, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
 }
