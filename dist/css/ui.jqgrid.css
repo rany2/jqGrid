@@ -579,6 +579,16 @@ span.ui-jqgrid-cell-wrapper {
 	border-bottom: 0;
 	border-top: 0;
 }
+.ui-pager-control .ui-jqgrid-pg-left {
+	text-align: left;
+}
+.ui-pager-control .ui-jqgrid-pg-center {
+	text-align: center;
+	white-space: pre;
+}
+.ui-pager-control .ui-jqgrid-pg-right {
+	text-align: right;
+}
 .ui-jqgrid .ui-pg-table {
 	position: relative;
 	padding: 0;

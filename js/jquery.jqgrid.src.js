@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-16
+ * Date: 2017-01-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -4633,9 +4633,9 @@
 					rgt = pgid + "_right";
 					$("#" + jqID(pgid))
 						.append("<div id='" + pgcnt + "' class='ui-pager-control' role='group'><table class='ui-pg-table' style='width:100%;table-layout:fixed;height:100%;'><tbody><tr>" +
-							"<td id='" + lft + "' style='text-align:left;" + (p.pagerLeftWidth !== undefined ? "width:" + p.pagerLeftWidth + "px;" : "") + "'></td>" +
-							"<td id='" + cent + "' style='text-align:center;white-space:pre;" + (p.pagerCenterWidth !== undefined ? "width:" + p.pagerCenterWidth + "px;" : "") + "'></td>" +
-							"<td id='" + rgt + "' style='text-align:right;" + (p.pagerRightWidth !== undefined ? "width:" + p.pagerRightWidth + "px;" : "") + "'></td></tr></tbody></table></div>")
+							"<td id='" + lft + "' class='ui-jqgrid-pg-left'" + (p.pagerLeftWidth !== undefined ? " style='width:" + p.pagerLeftWidth + "px;'" : "") + "></td>" +
+							"<td id='" + cent + "' class='ui-jqgrid-pg-center'" + (p.pagerCenterWidth !== undefined ? " style='width:" + p.pagerCenterWidth + "px;'" : "") + "></td>" +
+							"<td id='" + rgt + "' class='ui-jqgrid-pg-right'" + (p.pagerRightWidth !== undefined ? " style='width:" + p.pagerRightWidth + "px;'" : "") + "></td></tr></tbody></table></div>")
 						.attr("dir", "ltr"); //explicit setting
 					pgcnt = "#" + jqID(pgcnt); // modify to id selector
 					if (p.rowList.length > 0) {
