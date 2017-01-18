@@ -49,6 +49,14 @@ module.exports = function (grunt) {
 						flatten: true
 					},
 					{
+						src: ["ts/*.d.ts"],
+						dest: "dist/ts/",
+						//timestamp: true,
+						expand: true,
+						filter: "isFile",
+						flatten: true
+					},
+					{
 						src: ["js/jquery.jqgrid.src.js", "js/jquery.jqgrid.min.js", "js/jquery.jqgrid.min.map"],
 						dest: "dist/",
 						expand: true,
