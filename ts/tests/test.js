@@ -16,14 +16,40 @@ $(function () {
     });
     var grid = $grid[0].grid;
     var t1 = $("#grid").jqGrid("getGridParam", "data");
-    var t11 = $("#grid").getGridParam("data");
+    var t11 = $("#grid").jqGrid("getGridParam", "data");
     var ids = $("#grid").jqGrid("getDataIDs");
-    alert("We use " + $.jgrid.productName + " " + $.jgrid.version);
-    alert($.jgrid.locales[$.jgrid.defaults.locale].defaults.emptyrecords);
-    alert($.jgrid.locales[$.jgrid.defaults.locale].search.odata[0].text);
-    $.jgrid.clearArray(mydata);
     var gridDom = $("#grid")[0];
     var headers = gridDom.grid.headers;
     var colHeaderHeight = $(headers[1].el).height();
+    QUnit.test("grid exists", function (assert) {
+        assert.equal($grid.length, 1, "Passed!");
+    });
+    QUnit.test("gbox exists", function (assert) {
+        assert.equal($grid.closest(".ui-jqgrid").length, 1, "Passed!");
+    });
+    QUnit.test("grid expando exists", function (assert) {
+        assert.notEqual($grid[0].grid, undefined, "Passed!");
+    });
+    QUnit.test("p expando exists", function (assert) {
+        assert.notEqual($grid[0].p, undefined, "Passed!");
+    });
+    QUnit.test("rows of grid exist - it's table", function (assert) {
+        assert.notEqual($grid[0].rows, undefined, "Passed!");
+    });
+    QUnit.test("grid has 6 rows", function (assert) {
+        assert.equal($grid[0].rows.length, 6, "Passed!");
+    });
+    QUnit.test("grid has 1 hidden first rows (with class jqgfirstrow)", function (assert) {
+        assert.equal($($grid[0].rows[0]).hasClass("jqgfirstrow"), true, "Passed!");
+    });
+    QUnit.test("grid has 5 data rows (with class jqgrow)", function (assert) {
+        assert.equal($grid.find(">tbody>tr.jqgrow").length, 5, "Passed!");
+    });
+    QUnit.test("1-st cell of the 1-st row contain \"Angela\"", function (assert) {
+        assert.equal($($grid[0].rows[1].cells[0]).text(), "Angela", "Passed!");
+    });
+    QUnit.test("2-d cell of the 1-st row contain \"Merkel\"", function (assert) {
+        assert.equal($($grid[0].rows[1].cells[1]).text(), "Merkel", "Passed!");
+    });
 });
 //# sourceMappingURL=test.js.map
