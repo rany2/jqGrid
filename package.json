@@ -22,6 +22,7 @@
   "version": "4.13.6",
   "description": "grid as jQuery plugin - fork of jqGrid before licensing change",
   "main": "js/jquery.jqgrid.src.js",
+  "style": "css/ui.jqgrid.css",
   "types": "ts/free-jqgrid.d.ts",
   "filename": "js/jquery.jqgrid.src.js",
   "scripts": {
