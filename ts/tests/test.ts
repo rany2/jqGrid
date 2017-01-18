@@ -17,15 +17,15 @@ $(() => {
         data: mydata
     });
     const grid: FreeJqGrid.GridInfo = $grid[0].grid;
-    var t1 = $("#grid").jqGrid("getGridParam", "data");
-    var t11 = $("#grid").getGridParam("data");
-    var ids: string[] = $("#grid").jqGrid("getDataIDs");
+    let t1 = $("#grid").jqGrid("getGridParam", "data");
+    let t11 = $("#grid").getGridParam("data");
+    let ids: string[] = $("#grid").jqGrid("getDataIDs");
     //var t2 = $("#grid").jqGrid("getGridParam", 1);
     //var t3 = $("#grid").jqGrid("getGridParam", "data", t1);
     //if (ids != null && ids.length > 0) {
     //	alert(ids[0].substr(0));
     //}
-	
+	//$.jgrid.del.
     //var d = $("#grid").jqGrid("getGridParam", "data", 2); // error: Supplied parameters do not match any signature of call target
     //var currentData = $("#grid").getGridParam(4); // error: Argument of type '4' is not assignable to parameter of type 'string'.
     //var ids1 = $("#grid").jqGrid("getDataIDs", 4); // error: Argument of type '"getDataIDs"' is not assignable to parameter of type '"getGridParam"'.
@@ -37,5 +37,5 @@ $(() => {
     const gridDom = <FreeJqGrid.BodyTable>$("#grid")[0];
     const headers = gridDom.grid.headers;
     //headers: { el: HTMLTableHeaderCellElement; width: number; }[]
-    const colHeaderHeight = $(headers[1].el).height();
+    const colHeaderHeight: number = $(headers[1].el).height();
 });

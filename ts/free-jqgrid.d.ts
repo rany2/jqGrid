@@ -242,7 +242,7 @@ declare namespace FreeJqGrid {
 			ShortTime?: string;
 			LongTime?: string;
 			YearMonth?: string;
-		}
+		};
 	}
 	interface FormattersLocaleOptions {
 		integer?: FormatterIntegerLocaleOptions;
@@ -297,17 +297,17 @@ declare namespace FreeJqGrid {
 			prev?: string; // "ui-icon-seek-prev",
 			next?: string; // "ui-icon-seek-next",
 			last?: string; // "ui-icon-seek-end"
-		},
+		};
 		sort?: {
 			common?: string;
 			asc?: string; // "ui-icon-triangle-1-n",
 			desc?: string; // "ui-icon-triangle-1-s"
-		},
+		};
 		gridMinimize?: {
 			common?: string;
 			visible?: string; // "ui-icon-circle-triangle-n",
 			hidden?: string; // "ui-icon-circle-triangle-s"
-		},
+		};
 		nav?: {
 			common?: string;
 			edit?: string; // "ui-icon-pencil",
@@ -319,14 +319,14 @@ declare namespace FreeJqGrid {
 			save?: string; // "ui-icon-disk",
 			cancel?: string; // "ui-icon-cancel",
 			newbutton?: string; // "ui-icon-newwin"
-		},
+		};
 		actions?: {
 			common?: string; // string;
 			edit?: string; // "ui-icon-pencil",
 			del?: string; // "ui-icon-trash",
 			save?: string; // "ui-icon-disk",
 			cancel?: string; // "ui-icon-cancel"
-		},
+		};
 		form?: {
 			common?: string;
 			close?: string; // "ui-icon-closethick",
@@ -337,32 +337,32 @@ declare namespace FreeJqGrid {
 			del?: string; // "ui-icon-scissors",
 			cancel?: string; // "ui-icon-cancel",
 			resizableLtr?: string; // "ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se"
-		},
+		};
 		search?: {
 			common?: string;
 			search?: string; // "ui-icon-search",
 			reset?: string; // "ui-icon-arrowreturnthick-1-w",
 			query?: string; // "ui-icon-comment"
-		},
+		};
 		subgrid?: {
 			common?: string;
 			plus?: string; // "ui-icon-plus",
 			minus?: string; // "ui-icon-minus",
 			openLtr?: string; // "ui-icon-carat-1-sw",
 			openRtl?: string; // "ui-icon-carat-1-se"
-		},
+		};
 		grouping?: {
 			common?: string; // string;
 			plus?: string; // "ui-icon-circlesmall-plus",
 			minus?: string; // "ui-icon-circlesmall-minus"
-		},
+		};
 		treeGrid?: {
 			common?: string;
 			minus?: string; // "ui-icon-triangle-1-s",
 			leaf?: string; // "ui-icon-radio-off",
 			plusLtr?: string; // "ui-icon-triangle-1-e",
 			plusRtl?: string; // "ui-icon-triangle-1-w"
-		}
+		};
 	}
 	interface GuiStyleInfo {
 		baseGuiStyle?: string;
@@ -380,7 +380,7 @@ declare namespace FreeJqGrid {
 			error?: string; // "ui-state-error",
 			active?: string; // "ui-state-active",
 			textOfClickable?: string; // "ui-state-default"
-		},
+		};
 		dialog?: {
 			header?: string; // "ui-widget-header ui-dialog-titlebar ui-corner-all ui-helper-clearfix",
 			window?: string; // "ui-jqgrid-jquery-ui ui-widget ui-widget-content ui-corner-all ui-front",
@@ -400,10 +400,10 @@ declare namespace FreeJqGrid {
 			leftCorner?: string; // "ui-corner-left",
 			rightCorner?: string; // "ui-corner-right",
 			defaultCorner?: string; // "ui-corner-all"
-		},
+		};
 		filterToolbar?: {
 			dataField?: string; // "ui-widget-content"
-		},
+		};
 		subgrid?: {
 			thSubgrid?: string; // "ui-state-default", // used only with subGridModel
 			rowSubTable?: string; // "ui-widget-content", // used only with subGridModel additionally to ui-subtblcell
@@ -414,7 +414,7 @@ declare namespace FreeJqGrid {
 			button?: string; // "",
 			tdData?: string; // "ui-widget-content", // class of main td with span over the grid, additional subgrid-data
 			legacyTable?: string; // ""
-		},
+		};
 		grid?: string; // "",
 		gridRow?: string; // "ui-widget-content",
 		rowNum?: string; // "ui-state-default",
@@ -433,7 +433,7 @@ declare namespace FreeJqGrid {
 			pagerButton?: string; // "ui-corner-all",
 			pagerInput?: string; // "ui-widget-content",
 			pagerSelect?: string; // "ui-widget-content"
-		},
+		};
 		navButton?: string; // "ui-corner-all",
 		searchDialog?: {
 			operator?: string; // "ui-corner-all",
@@ -445,12 +445,12 @@ declare namespace FreeJqGrid {
 			operationSelect?: string; // "ui-corner-all",
 			addGroupButton?: string; // "ui-corner-all",
 			deleteGroupButton?: string; // "ui-corner-all"
-		},
+		};
 		searchToolbar?: {
 			menu?: string; // "ui-menu-jqueryui",
 			operButton?: string; // "ui-corner-all",
 			clearButton?: string; // "ui-corner-all"
-		},
+		};
 		top?: string; // "ui-corner-top",
 		bottom?: string; // "ui-corner-bottom",
 		resizer?: string; // "ui-widget-header"
@@ -477,7 +477,7 @@ declare namespace FreeJqGrid {
 			fontAwesome: IconsInfo;
 			glyph: IconsInfo;
 			[propName: string]: IconsInfo;
-		}
+		};
 		inlineEdit?: any;
 		jqModal?: any; // { toTop: true }
 		locales: { [key: string]: JqGridStaticLocaleOptions; };
@@ -548,10 +548,10 @@ declare namespace FreeJqGrid {
 		[propName: string]: any;
 	}
 	interface JqGridFmatter {
-		isEmpty: (any) => boolean;
-		isNumber: (any) => boolean;
-		isObject: (any) => boolean;
-		isValue: (any) => boolean;
+		isEmpty: (o: any) => boolean;
+		isNumber: (o: any) => boolean;
+		isObject: (o: any) => boolean;
+		isValue: (o: any) => boolean;
 		NumberFormat: (nData: number, opts: { decimalSeparator: string, decimalPlaces: number, thousandsSeparator: string }) => string;
 	}
 	interface JqGridFormatters {
@@ -559,7 +559,7 @@ declare namespace FreeJqGrid {
 	}
 	interface EditOptions {
 		buildSelect: (this: BodyTable, data: any, jqXhr: JQueryXHR, cm: ColumnModel, iCol: number) => string;
-		dataEvents?: { type: string, data?: any, fn: (e) => void }[]
+		dataEvents?: { type: string, data?: any, fn: (e) => void }[];
 		dataInit?: (this: BodyTable, element: Element, options: EditOptions) => void;
 		dataUrl?: string | ((this: BodyTable, rowid: string, value: string, cmName: string, ajaxContext: { elem: Element, options: any, cm: ColumnModel, mode: "cell" | "addForm" | "editForm" | "add" | "edit", rowid: string, iCol: number, ovm: string[] }) => string);
 		value?: string | { [propName: string]: string };
