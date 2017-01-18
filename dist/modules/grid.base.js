@@ -3490,7 +3490,7 @@
 						v = cellVal(cellval);
 					}
 					v = cm.autoResizable && cm.formatter !== "actions" ? "<span class='" + p.autoResizing.wrapperClassName + "'>" + v + "</span>" : v;
-					if (p.treeGrid && act !== "edit" && ((p.ExpandColumn === undefined && colpos === 0) || (p.ExpandColumn === cm.name))) {
+					if (p.treeGrid && act !== "edit" && ((p.ExpandColumn == null && colpos === 0) || (p.ExpandColumn === cm.name))) {
 						if (rdata == null) { rdata = p.data[p._index[rowId]]; }
 						var curLevel = parseInt(rdata[p.treeReader.level_field] || 0, 10), levelOffset = 18,
 							rootLevel = parseInt(p.tree_root_level, 10),

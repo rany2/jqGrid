@@ -3490,7 +3490,7 @@
 						v = cellVal(cellval);
 					}
 					v = cm.autoResizable && cm.formatter !== "actions" ? "<span class='" + p.autoResizing.wrapperClassName + "'>" + v + "</span>" : v;
-					if (p.treeGrid && act !== "edit" && ((p.ExpandColumn === undefined && colpos === 0) || (p.ExpandColumn === cm.name))) {
+					if (p.treeGrid && act !== "edit" && ((p.ExpandColumn == null && colpos === 0) || (p.ExpandColumn === cm.name))) {
 						if (rdata == null) { rdata = p.data[p._index[rowId]]; }
 						var curLevel = parseInt(rdata[p.treeReader.level_field] || 0, 10), levelOffset = 18,
 							rootLevel = parseInt(p.tree_root_level, 10),
@@ -13857,7 +13857,7 @@
 					onAdd = function () {
 						if (!hasOneFromClasses(this, disabledClass)) {
 							if ($.isFunction(o.addfunc)) {
-								o.addfunc.call($t);
+								o.addfunc.call($t, pAdd);
 							} else {
 								base.editGridRow.call($self, "new", pAdd);
 							}
@@ -13869,7 +13869,7 @@
 							var sr = p.selrow;
 							if (sr) {
 								if ($.isFunction(func)) {
-									func.call($t, sr);
+									func.call($t, sr, param);
 								} else {
 									base[methodName].call($self, sr, param);
 								}
@@ -13896,7 +13896,7 @@
 							}
 							if (dr) {
 								if ($.isFunction(o.delfunc)) {
-									o.delfunc.call($t, dr);
+									o.delfunc.call($t, dr, pDel);
 								} else {
 									base.delGridRow.call($self, dr, pDel);
 								}

@@ -2073,7 +2073,7 @@
 					onAdd = function () {
 						if (!hasOneFromClasses(this, disabledClass)) {
 							if ($.isFunction(o.addfunc)) {
-								o.addfunc.call($t);
+								o.addfunc.call($t, pAdd);
 							} else {
 								base.editGridRow.call($self, "new", pAdd);
 							}
@@ -2085,7 +2085,7 @@
 							var sr = p.selrow;
 							if (sr) {
 								if ($.isFunction(func)) {
-									func.call($t, sr);
+									func.call($t, sr, param);
 								} else {
 									base[methodName].call($self, sr, param);
 								}
@@ -2112,7 +2112,7 @@
 							}
 							if (dr) {
 								if ($.isFunction(o.delfunc)) {
-									o.delfunc.call($t, dr);
+									o.delfunc.call($t, dr, pDel);
 								} else {
 									base.delGridRow.call($self, dr, pDel);
 								}
