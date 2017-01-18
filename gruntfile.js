@@ -1,4 +1,4 @@
-﻿/*global module,require*/
+/*global module,require*/
 module.exports = function (grunt) {
 	grunt.initConfig({
 		pkgFreejqGrid: grunt.file.readJSON("package.json"),
@@ -16,6 +16,8 @@ module.exports = function (grunt) {
 			"plugins/*.min.css",
 			"plugins/*.min.css.map",
 			"plugins/*.min.map",
+			"ts/tests/*.js",
+			"ts/tests/*.map",
 			"js/i18n/grid.locale-*.min.js",
 			"js/i18n/grid.locale-*.min.map"
 		],
@@ -163,12 +165,30 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+		tslint: {
+			options: {
+				configuration: "tslint.json",
+				force: false,
+				fix: false
+			},
+			files: {
+				src: [
+					"ts/free-jqgrid.d.ts",
+					"ts/tests/*.ts"
+				]
+			}
+		},
 		jscs: {
 			all: {
 				src: ["gruntfile.js", "js/*.js", "!js/*.min.js"],
 				options: {
 					config: ".jscsrc"
 				}
+			}
+		},
+		ts: {
+			default: {
+				src: ["**/*.ts", "!node_modules/**/*.ts"]
 			}
 		},
 		cssmin: {
@@ -217,9 +237,13 @@ module.exports = function (grunt) {
 				"plugins/*.js",
 				"css/*.css",
 				"plugins/*.css",
+				"ts/free-jqgrid.d.ts",
+				"ts/tests/*.ts",
 				"!css/*.min.css",
 				"!js/*.min.js",
 				"!js/min/*.js",
+				"!ts/*.js",
+				"!ts/tests/*.js",
 				"!js/jquery.jqgrid.*.js",
 				"!plugins/*.min.js",
 				"!plugins/*.min.css",
@@ -322,6 +346,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-clean");
 	grunt.loadNpmTasks("grunt-contrib-copy");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
+	grunt.loadNpmTasks("grunt-tslint");
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-closure-tools");
 	//grunt.loadNpmTasks("grunt-contrib-uglify");
@@ -329,6 +354,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-replace");
 	grunt.loadNpmTasks("grunt-file-append");
 	grunt.loadNpmTasks("grunt-jscs");
+	grunt.loadNpmTasks("grunt-ts");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-newer");
 
@@ -481,7 +507,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask("closureCompilerAll", closureCompilerTasks);
 
-	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:jscs:all", "closureCompilerAll",
+	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:tslint", "newer:ts", "newer:jscs:all", "closureCompilerAll",
 		"newer:cssmin:target", "newer:replace:cssmin_jqgrid", "newer:replace:cssmin_multiselect",
 		"copy"]);
 	grunt.registerTask("all", ["clean", "default"]);
