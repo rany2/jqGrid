@@ -1,6 +1,6 @@
 /*!
  * jqGrid 4.13.7-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2017-01-11
+ * Date: 2017-01-18
  */
 
 /* Grid */
@@ -696,10 +696,13 @@ select.form-control.ui-pg-selbox:not([size]):not([multiple]) {
 	margin: 2px;
 	vertical-align: middle;
 }
-.ui-jqgrid .navtable .ui-pg-div span.ui-pg-button-text,
 .ui-jqgrid .navtable .ui-pg-div span.ui-pg-button-text {
 	padding-left: 0.2em;
 	padding-right: 0.2em;
+}
+.ui-pg-button:hover > .ui-pg-div > .ui-pg-button-text,
+.ui-pg-button.ui-state-hover > .ui-pg-div > .ui-pg-button-text {
+	font-weight: normal;
 }
 .ui-jqgrid .ui-pg-div {
 	text-align: center;
