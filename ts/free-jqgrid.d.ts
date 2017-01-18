@@ -27,21 +27,21 @@ declare namespace FreeJqGrid {
 		grid: GridInfo;
 		ftoolbar?: boolean;
 		nav?: boolean;
-		addJSONData(this: BodyTable, data: any[], rcnt?: number, more?: boolean, adjust?: number): void;
-		addXmlData(this: BodyTable, data: any[], rcnt?: number, more?: boolean, adjust?: number): void;
-		clearToolbar?(trigger: boolean): void;
-		constructTr(id: string, hide: boolean, spaceSeparatedCssClasses: string, rd: any, cur: any, selected: boolean): string;
-		fixScrollOffsetAndhBoxPadding(this: BodyTable): void;
-		formatCol(pos: number, rowInd: number, tv: string, rawObject: any, rowId: string, rdata?: any): string;
-		formatter(rowId: string, cellval: any, colpos: number, rwdat: any, act?: "add" | "edit", rdata?: any): string;
-		modalAlert?(): any;
-		rebuildRowIndexes(this: BodyTable): void;
-		refreshIndex(): void;
-		setHeadCheckBox(this: BodyTable, checked: boolean): void;
-		sortData(this: BodyTable, index: string, idxcol: number, reload: boolean, sor: string, obj: HTMLTableHeaderCellElement): void;
-		toogleToolbar?(): void;
-		triggerToolbar?(): void;
-		updatepager(this: BodyTable, rn: boolean, dnd: boolean): void;
+		addJSONData: (this: BodyTable, data: any[], rcnt?: number, more?: boolean, adjust?: number) => void;
+		addXmlData: (this: BodyTable, data: any[], rcnt?: number, more?: boolean, adjust?: number) => void;
+		clearToolbar?: (trigger: boolean) => void;
+		constructTr: (id: string, hide: boolean, spaceSeparatedCssClasses: string, rd: any, cur: any, selected: boolean) => string;
+		fixScrollOffsetAndhBoxPadding: (this: BodyTable) => void;
+		formatCol: (pos: number, rowInd: number, tv: string, rawObject: any, rowId: string, rdata?: any) => string;
+		formatter: (rowId: string, cellval: any, colpos: number, rwdat: any, act?: "add" | "edit", rdata?: any) => string;
+		modalAlert?: () => void;
+		rebuildRowIndexes?: (this: BodyTable) => void;
+		refreshIndex?: () => void;
+		setHeadCheckBox?: (this: BodyTable, checked: boolean) => void;
+		sortData: (this: BodyTable, index: string, idxcol: number, reload: boolean, sor: string, obj: HTMLTableHeaderCellElement) => void;
+		toogleToolbar?: () => void;
+		triggerToolbar?: () => void;
+		updatepager?: (this: BodyTable, rn: boolean, dnd: boolean) => void;
 	}
 	interface JQueryJqGrid extends JQuery {
 		[index: number]: BodyTable;
@@ -483,10 +483,13 @@ declare namespace FreeJqGrid {
 		jqModal?: any; // { toTop: true }
 		locales: { [key: string]: JqGridStaticLocaleOptions; };
 		msie: boolean;
+		nav?: NavOptions;
 		no_legacy_api?: boolean;
 		productName: "free jqGrid";
+		search?: SearchingOptions;
 		uidPref: string;
 		version: string; // like "4.13.7" for example
+		view?: FormViewingOptions;
 		bindEv(element: Element | JQuery, options: any): any;
 		builderFmButon(this: BodyTable, id: string, text?: string, icon?: string, iconOnLeftOrRight?: "right" | "left" | undefined, conner?: "right" | "left" | undefined): any;
 		builderSortIcons(this: BodyTable, iCol: number): string;
@@ -509,7 +512,7 @@ declare namespace FreeJqGrid {
 		fixScrollOffsetAndhBoxPadding(this: BodyTable): void;
 		format(format: string, ...rest: any[]): string;
 		from(source: any): QueryObject;
-		fullBoolFeedback(this: BodyTable, callback: (...rest: any[]) => false | "stop" | undefined, eventName: string, ...rest: any[]): boolean;
+		fullBoolFeedback(this: BodyTable, callback: (...rest: any[]) => false | "stop" | void, eventName: string, ...rest: any[]): boolean;
 		getAccessor(obj: any, dotSeparatedNamesOrFunc: string | ((obj: any) => any)): any;
 		getCell(this: BodyTable, tr: HTMLTableRowElement | JQuery, iCol: number): JQuery;
 		getCellIndex(cell: Element | JQuery): number;
@@ -729,15 +732,232 @@ declare namespace FreeJqGrid {
 		useDataProxy?: boolean;
 		width?: number | "auto" | "100%" | string; // "auto"
 	}
+	interface FormViewingOptions extends ViewLocaleOptions {
+	}
+	interface SearchingOptions extends SearchLocaleOptions {
+	}
+	interface NavOptions extends NavLocaleOptions {
+		add?: boolean;
+		addicon?: string; // "fa fa-lg fa-fw fa-plus"
+		addfunc?: (this: BodyTable, pAdd: FormEditingOptions) => void;
+		afterRefresh?: (this: BodyTable) => void;
+		alertheight?: number | "auto" | "100%" | string; // "auto"
+		alertleft?: null | number;
+		alerttop?: null | number;
+		alertwidth?: number; // 200
+		alertzIndex?: null | number;
+		beforeRefresh?: (this: BodyTable) => void;
+		buttonicon?: string; // "fa fa-lg fa-fw fa-external-link"
+		cancelicon?: string; // "fa fa-lg fa-fw fa-ban"
+		cloneToTop?: boolean;
+		closeOnEscape?: boolean;
+		commonIconClass?: string; // "fa fa-lg fa-fw"
+		del?: boolean;
+		delicon?: string; // "fa fa-lg fa-fw fa-trash-o"
+		delfunc?: (this: BodyTable, rowid: string | string[], pDel?: FormDeletingOptions) => void;
+		edit?: boolean;
+		editicon?: string; // "fa fa-lg fa-fw fa-pencil"
+		editfunc?: (this: BodyTable, rowid: string, pEdit: FormEditingOptions) => void;
+		hideEmptyPagerParts?: boolean;
+		iconsOverText?: boolean;
+		jqModal?: boolean;
+		position?: "left" | "center" | "right";
+		refresh?: boolean;
+		refreshicon?: string; // "fa fa-lg fa-fw fa-refresh"
+		refreshstate?: "firstpage" | "current" | "currentfilter";
+		reloadGridOptions?: ReloadGridOptions;
+		removemodal?: boolean;
+		saveicon?: string; // "fa fa-lg fa-fw fa-floppy-o"
+		search?: boolean;
+		searchicon?: string; // "fa fa-lg fa-fw fa-search"
+		searchfunc?: (this: BodyTable, rowid: string, pSearch?: SearchingOptions) => void;
+		view?: boolean;
+		viewicon?: string; // "fa fa-lg fa-fw fa-file-o"
+		viewfunc?: (this: BodyTable, rowid: string, pView?: FormViewingOptions) => void;
+	}
 	interface JqGridOptions {
+		_index?: {[rowid: string]: number }; // used internally by jqGrid if local data exists
+		_inlinenav?: boolean; // used internally by jqGrid if inlineNav be called
+		_nvtd?: [number, number]; // used internally by jqGrid
+		
+		actionsNavOptions?: any;
+		additionalProperties?: any[];
+		afterInsertRow?: (rowid: string, item: { [cmOrPropName: string]: any }, srcItem: any) => void;
+		ajaxGridOptions?: JQueryAjaxSettings;
+		altclass?: string;
+		altRows?: boolean;
+		arrayReader?: any[];
+		arrayReaderInfos?: any[];
+		autoencode?: boolean;
+		beforeProcessing?: (this: BodyTable, data: any, textStatus: string, jqXhr: JQueryXHR) => false | void;
+		beforeRequest?: (this: BodyTable) => false | "stop" | void;
+		beforeSelectRow?: (this: BodyTable, rowid, eventObject: JQueryEventObject) => false | void;
+		caption?: string;
+		cb?: string;   // "#cb_list"
+		cbId?: string; // "cb_list"
+		cellEdit?: boolean;
+		cellLayout?: number; // 5
+		cellsubmit?: string; // "clientArray"
+		cmNamesInputOrder?: string[]; // used internally by jqGrid, can be generated if remapColumns is used
+		cmTemplate?: ColumnModel;
 		colModel: ColumnModel[];
 		colNames?: string[];
+		columnsToReResizing?: number[]; // used internally by jqGrid
 		data?: any[];
-		formEditing?: FormEditingOptions;
+		datatype?: string;
+		deselectAfterSort?: boolean;
+		direction?: "ltr" | "rtl";
+		disableClick?: boolean;
+		doubleClickSensitivity?: number; // 250
+		editurl?: string; // "clientArray"
+		ExpandColumn?: string;
+		footerrow?: boolean;
+		forceClientSorting?: boolean;
+		forceFit?: boolean;
 		formDeleting?: FormDeletingOptions;
+		formEditing?: FormEditingOptions;
+		formViewing?: FormViewingOptions;
+		frozenColumns?: boolean;
+		gBox?: string; // "#gbox_list"
+		gBoxId?: string; // gbox_list"
+		gridComplete?: (this: BodyTable) => void;
+		gridstate?: "visible" | "hidden";
+		gridview?: boolean;
+		grouping?: boolean;
+		groupingView?: any;
+		guiStyle?: string; // "jQueryUI"
+		gView?: string; // "#gview_list"
+		gViewId?: string; // "gview_list"
+		headertitles?: boolean;
+		height?: "auto" | "100%" | number;
+		hiddengrid?: boolean;
+		hidegrid?: boolean;
+		hoverrows?: boolean;
+		iCol?: number; // -1
+		iColByName?: {[cmName: string]: number };
+		iconSet?: string; // "fontAwesome"
+		id?: string; // "list"
+		idPrefix?: string; // ""
+		idSel?: string; // "#list"
+		ignoreCase?: boolean;
+		iPropByName?: {[additionalPropertyName: string]: number };
+		iRow?: number; // -1
+		jsonReader?: any;
+		keyName?: boolean;
+		lastpage?: number; // 2
+		lastSelectedData?: any[];
+		lastsort?: number; // 3
+		loadBeforeSend?: (this: BodyTable, jqXhr: JQueryXHR, settings: JQueryAjaxSettings) => false | void;
+		loadComplete?: (this: BodyTable, data: any) => void;
+		loadonce?: boolean;
+		loadui?: "enable" | "disable" | "block";
 		locale?: string;
+		localReader?: any;
+		maxItemsToJoin?: number; // 32768
+		maxRowNum?: number; // 10000
+		minResizingWidth?: number; // 10
+		mtype?: string; // "GET"
+		multiboxonly?: boolean;
+		multikey?: boolean;
+		multiPageSelection?: boolean;
+		multiselect?: boolean;
+		multiselectPosition?: "left" | "right" | "none";
+		multiselectWidth?: number; // 16
+		multiSort?: boolean;
+		navOptions?: NavOptions;
+		nv?: number; // 0
+		ondblClickRow?: (this: BodyTable, rowid: string, iRow: number, iCol: number, eventObject: JQueryEventObject) => void;
+		onHeaderClick?: (gridState: "visible" | "hidden", eventObject: JQueryEventObject) => void;
+		onInitGrid?: (this: BodyTable) => void;
+		onPaging?: (this: BodyTable, source: "records" | "user" | "first" | "prev" | "next" | "last", options: { newPage: number, currentPage: number, lastPage: number, currentRowNum: number, newRowNum: number }) => false | "stop" | void;
+		onRightClickRow?: (this: BodyTable, rowid: string, iRow: number, iCol: number, eventObject: JQueryEventObject) => void;
+		onSelectAll?: (rowids: string[], toCheck: boolean) => void;
 		onSelectRow?: (this: BodyTable, rowid: string, state: boolean, eventObject: JQueryEventObject) => void;
+		onSortCol?: (this: BodyTable, cmOrIndexName: string, iCol: number, sortOrder: string) => false | "stop" | void;
+		page?: number;
+		pager?: boolean | string; // "#jqg1"
+		pagerLeftWidth?: number; // 125
+		pagerpos?: "left" | "center" | "right";
+		pgbuttons?: boolean;
+		pginput?: boolean;
+		postData?: any;
+		prmNames?: {
+			addoper?: string | null; // "add"
+			deloper?: string | null; // "del"
+			editoper?: string | null; // "edit"
+			id?: string | null; // "id"
+			nd?: string | null; // "nd"
+			npage?: string | null; // null
+			oper?: string | null; // "oper"
+			order?: string | null; // "sord"
+			page?: string | null; // "page"
+			rows?: string | null; // "rows"
+			search?: string | null; // "_search"
+			sort?: string | null; // "sidx"
+			subgridid?: string | null; // "id"
+			totalrows?: string | null; // "totalrows"
+		};
+		quickEmpty?: boolean | "quickest";
+		reccount?: number; // 10
+		recordpos?: "left" | "center" | "right";
+		records?: number; // 12
 		reloadGridOptions?: ReloadGridOptions;
+		remapColumns?: number[];
+		resetsearch?: boolean;
+		reservedColumnNames?: string[]; // ["rn","cb","subgrid"]
+		resizeclass?: string; // ""
+		rowIndexes?: {[rowid: string]: number};
+		rowList?: (number | string)[]; //[5,10,20,"10000:All"]
+		rowNum?: number; // 10
+		rownumbers?: boolean;
+		rownumWidth?: number; // 25
+		rowTotal?: null | number;
+		rs?: string; // "#rs_mlist"
+		rsId?: string; // "rs_mlist"
+		savedRow?: any[];
+		scroll?: boolean;
+		scrollOffset?: number; // 0
+		scrollrows?: boolean;
+		scrollTimeout?: number; // 40
+		search?: boolean;
+		searching?: SearchingOptions;
+		selarrrow?: string[];
+		selrow?: null | string;
+		showOneSortIcon?: boolean;
+		shrinkToFit?: boolean;
+		singleSelectClickMode?: "toggle" | "selectonly";
+		sortname?: string; // "invdate"
+		sortorder?: "asc" | "desc" | string;
+		subGrid?: boolean;
+		subGridModel?: any[];
+		subGridOptions?: any;
+		subGridWidth?: number; // 16
+		tblwidth?: number; // 487
+		threeStateSort?: boolean;
+		toolbar?: [boolean, "top" | "bottom" | "both"];
+		toppager?: string; // "#list_toppager"
+		totaltime?: number; // 94
+		tree_root_level?: number; // 0
+		treeANode?: number; // -1
+		treeGrid?: boolean;
+		treeGridModel?: "adjacency" | "nested";
+		treeIcons?: {
+			commonIconClass?: string; // "fa fa-fw"
+			leaf?: string; // "fa fa-fw fa-dot-circle-o"
+			minus?: string; // "fa fa-fw fa-lg fa-sort-desc"
+			plusLtr?: string; // "fa fa-fw fa-lg fa-caret-right"
+			plusRtl?: string; // "fa fa-fw fa-lg fa-caret-left"
+		};
+		treeReader?: any;
+		url?: string; // ""
+		userData?: any;
+		userDataOnFooter?: boolean;
+		useUnformattedDataForCellAttr?: boolean;
+		viewrecords?: boolean;
+		viewsortcols?: [boolean, "vertical" | "horizontal", boolean];
+		width?: number | "auto" | "100%" | string;
+		widthOrg?: number; // used internally by jqGrid
+		xmlReader?: any;
 		[propName: string]: any; // allow to have any number of other properties
 	}
 }
@@ -760,6 +980,11 @@ interface JQuery {
 
 	editGridRow?(rowid: string, options: FreeJqGrid.FormEditingOptions): void;
 	jqGrid(methodName: "editGridRow", rowid: string, options: FreeJqGrid.FormEditingOptions): any;
+
+	navGrid?(rowid: string, pagerIdSelector: string, navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
+	navGrid?(rowid: string, navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "navGrid", pagerIdSelector: string, navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "navGrid", navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
 
 	on(eventName: "jqGridSelectRow", handler: (eventObject: JQueryEventObject, rowid: string, state: boolean, orgEventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
 
