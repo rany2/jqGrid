@@ -1,8 +1,4 @@
-One should install the latest version of the command-line TypeScript compiler as a Node.js package.
+One should compile the file `test.ts` having the package root as the current directory:
 ```
-npm install -g typescript
-```
-One can compile the test `test.ts` using
-```
-tsc --sourcemap --target ES5 test.ts
+tsc --sourcemap --target ES5 ts\tests\test.ts
 ```

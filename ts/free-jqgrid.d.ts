@@ -1,4 +1,5 @@
-/// <reference path="jquery.d.ts" />
+/// <reference types="jquery" />
+/// <reference types="jqueryui" />
 
 declare namespace FreeJqGrid {
 	interface GridInfo {
