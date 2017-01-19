@@ -839,6 +839,7 @@ declare namespace FreeJqGrid {
 		disableClick?: boolean;
 		doubleClickSensitivity?: number; // 250
 		editurl?: string; // "clientArray"
+		errorDisplayTimeout?: number; // be used inside of displayErrorMessage method
 		ExpandColumn?: string;
 		footerrow?: boolean;
 		forceClientSorting?: boolean;
@@ -870,6 +871,7 @@ declare namespace FreeJqGrid {
 		idSel?: string; // "#list"
 		ignoreCase?: boolean;
 		iPropByName?: {[additionalPropertyName: string]: number };
+		jqXhr?: JQueryXHR; // JQueryXHR of the last pending Ajax request. Be used by abortAjaxRequest method
 		iRow?: number; // -1
 		jsonReader?: JsonOrLocalReader;
 		keyName?: boolean;
@@ -992,6 +994,14 @@ declare namespace FreeJqGrid {
 		xmlReader?: XmlReader;
 		[propName: string]: any; // allow to have any number of other properties
 	}
+	interface ShowHideColOptions {
+		skipSetGroupHeaders?: boolean;
+		notSkipFrozen?: boolean;
+		skipFeedback?: boolean;
+		toReport?: Object;
+		skipSetGridWidth?: boolean;
+		newGridWidth?: number;
+	}
 }
 
 interface JQueryStatic {
@@ -1004,13 +1014,163 @@ interface JQueryStatic {
 interface JQuery {
 	jqGrid(options: FreeJqGrid.JqGridOptions): FreeJqGrid.JQueryJqGrid;
 
+	// getGridRes
+	getGridRes?(propertyPath: string): any;
+	jqGrid(methodName: "getGridRes", propertyPath: string): any;
+
+	// getGuiStyles
+	getGuiStyles?(guiStylePath?: string, additionalCssClasses?: string): string;
+	jqGrid(methodName: "getGuiStyles", guiStylePath?: string, additionalCssClasses?: string): string;
+
+	// isBootstrapGuiStyle
+	isBootstrapGuiStyle?(): boolean;
+	jqGrid(methodName: "isBootstrapGuiStyle"): boolean;
+	
+	// displayErrorMessage
+	displayErrorMessage?(htmlFragment: string): void;
+	jqGrid(methodName: "displayErrorMessage", htmlFragment: string): void;
+
+	// getIconRes
+	getIconRes?(iconResourcePath: string): string;
+	jqGrid(methodName: "getIconRes", iconResourcePath: string): string;
+
+	// isInCommonIconClass
+	isInCommonIconClass?(testClassName: string): boolean;
+	jqGrid(methodName: "isInCommonIconClass", testClassName: string): boolean;
+
 	// getGridParam
 	getGridParam?(parameterName?: string): any;
 	jqGrid(methodName: "getGridParam", parameterName?: string): any;
 
+	// setGridParam
+	setGridParam?(newParams: Object, overwrite?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setGridParam", newParams: Object, overwrite?: boolean): FreeJqGrid.JQueryJqGrid;
+
+	// abortAjaxRequest
+	abortAjaxRequest?(): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "abortAjaxRequest"): FreeJqGrid.JQueryJqGrid;	
+
+	// getGridRowById
+	getGridRowById?(rowid: string): HTMLTableRowElement | null;
+	jqGrid(methodName: "getGridRowById", rowid: string): HTMLTableRowElement | null;
+
 	// getDataIDs
 	getDataIDs?(): string[];
 	jqGrid(methodName: "getDataIDs"): string[];
+
+	// setSelection
+	setSelection?(rowid: string, callOnSelectRow?: boolean, eventObject?: JQueryEventObject): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setSelection", rowid: string, callOnSelectRow: boolean, eventObject: JQueryEventObject): FreeJqGrid.JQueryJqGrid;
+
+	// resetSelection
+	resetSelection?(rowid?: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "resetSelection", rowid?: string): FreeJqGrid.JQueryJqGrid;
+
+	// getRowData
+	getRowData?(rowid?: string, options?: { includeId: boolean, skipHidden?: boolean }): Object[] | Object;
+	jqGrid(methodName: "getRowData", rowid?: string, options?: { includeId: boolean, skipHidden?: boolean }): Object[] | Object;
+
+	// delRowData
+	delRowData?(rowid: string): boolean;
+	jqGrid(methodName: "delRowData", rowid: string): boolean;
+
+	// setRowData
+	setRowData?(rowid: string, data: any, cssp?: string | Object): boolean;
+	jqGrid(methodName: "setRowData", rowid: string, data: any, cssp?: string | Object): boolean;
+
+	// addRowData
+	addRowData?(rowid: string, rdata: Object | Object[], position?: "first" | "last" | "before" | "after" | "afterSelected" | "beforeSelected", srcRowid?: string): boolean;
+	jqGrid(methodName: "addRowData", rowid: string, rdata: Object | Object[], position?: "first" | "last" | "before" | "after" | "afterSelected" | "beforeSelected", srcRowid?: string): boolean;
+
+	// footerData
+	footerData?(action?: "get" | "set", data?: Object, format?: boolean): Object | boolean;
+	jqGrid(methodName: "footerData", action?: "get" | "set", data?: Object, format?: boolean): Object | boolean;
+
+	// showHideCol, hideCol, showCol
+	showHideCol?(cmName: string[] | string, show?: boolean | "none" | "", options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
+	hideCol?(cmName: string[] | string, options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
+	showCol?(cmName: string[] | string, options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "showHideCol", cmName: string[] | string, show?: boolean | "none" | "", options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "hideCol", cmName: string[] | string, options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "showCol", cmName: string[] | string, options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
+
+	// remapColumns
+	remapColumns?(permutationByName: number[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "remapColumns", permutationByName: number[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+
+	// remapColumnsByName
+	remapColumnsByName?(permutationByName: string[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "remapColumnsByName", permutationByName: string[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+
+	// setGridWidth
+	setGridWidth?(newWidth: number, shrink?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setGridWidth", newWidth: number, shrink?: boolean): FreeJqGrid.JQueryJqGrid;
+
+	// setGridHeight
+	setGridHeight?(newHeight: number | "auto" | "100%" | string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setGridHeight", newHeight: number | "auto" | "100%" | string): FreeJqGrid.JQueryJqGrid;
+
+	// setCaption
+	setCaption?(newCaption: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setCaption", newCaption: string): FreeJqGrid.JQueryJqGrid;
+
+	// setLabel
+	setLabel?(cmName: string, nData: string, cssp?: string | Object, attrp?: Object): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setLabel", cmName: string, nData: string, cssp?: string | Object, attrp?: Object): FreeJqGrid.JQueryJqGrid;
+
+	// setCell
+	setCell?(rowid: string, cmName: string, nData: any, cssp?: string | Object, attrp?: Object, forceUpdate?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setCell", rowid: string, cmName: string, nData: any, cssp?: string | Object, attrp?: Object, forceUpdate?: boolean): FreeJqGrid.JQueryJqGrid;
+
+	// getCell
+	getCell?(rowid: string, cmName: string): string | false;
+	getCell?(rowid: string, iCol: number): string | false;
+	jqGrid(methodName: "getCell", rowid: string, cmName: string): string | false;
+	jqGrid(methodName: "getCell", rowid: string, iCol: number): string | false;
+
+	// getCol
+	getCol?(cmName: string, asObj?: boolean, mathopr?: "sum" | "avg" | "count" | "min" | "max"): string[] | { id: string, value: string }[] | number;
+	jqGrid(methodName: "getCol", cmName: string, asObj?: boolean, mathopr?: "sum" | "avg" | "count" | "min" | "max"): string[] | { id: string, value: string }[] | number;
+
+	// clearGridData
+	clearGridData?(clearFooter: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "clearGridData", clearFooter: boolean): FreeJqGrid.JQueryJqGrid;
+
+	// getInd
+	getInd?(): HTMLTableRowElement | number | false;
+	jqGrid(methodName: "getInd"): HTMLTableRowElement | number | false;
+
+	// bindKeys
+	bindKeys?(settings: { onEnter?: (this: FreeJqGrid.BodyTable, rowid: string) => void, onSpace?: (this: FreeJqGrid.BodyTable, rowid: string) => void, onLeftKey?: (this: FreeJqGrid.BodyTable, rowid: string) => void, onRightKey?: (this: FreeJqGrid.BodyTable, rowid: string) => void, scrollingRows: boolean }): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "bindKeys", settings: { onEnter?: (this: FreeJqGrid.BodyTable, rowid: string) => void, onSpace?: (this: FreeJqGrid.BodyTable, rowid: string) => void, onLeftKey?: (this: FreeJqGrid.BodyTable, rowid: string) => void, onRightKey?: (this: FreeJqGrid.BodyTable, rowid: string) => void, scrollingRows: boolean }): FreeJqGrid.JQueryJqGrid;
+
+	// unbindKeys
+	unbindKeys?(): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "unbindKeys"): FreeJqGrid.JQueryJqGrid;
+
+	// getLocalRow
+	getLocalRow?(rowid: string): false | Object;
+	jqGrid(methodName: "getLocalRow", rowid: string): false | Object;
+
+	// progressBar
+	progressBar?(options: { htmlContent: string, method: "hide" | "show", loadtype: "disable" | "enable" | "block" }): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "progressBar", iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
+
+	// setColWidth
+	setColWidth?(iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setColWidth", iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
+
+	// getAutoResizableWidth
+	getAutoResizableWidth?(iCol: number): number;
+	jqGrid(methodName: "getAutoResizableWidth", iCol: number): number;
+
+	// autoResizeColumn
+	autoResizeColumn?(iCol: number, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "autoResizeColumn", iCol: number, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
+
+	// autoResizeAllColumns
+	autoResizeAllColumns?(): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "autoResizeAllColumns"): FreeJqGrid.JQueryJqGrid;
 
 	// editGridRow
 	editGridRow?(rowid: string, options: FreeJqGrid.FormEditingOptions): void;
