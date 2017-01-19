@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-18
+ * Date: 2017-01-19
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6691,18 +6691,30 @@
 						.children(".ui-jqgrid-hbox")
 						.children(".ui-jqgrid-ftable")[0];
 				if (ftable == null || ftable.rows == null) { return false; }
-				var cells = ftable.rows[0].cells,
+				var cells = ftable.rows[0].cells, colModel = p.colModel,
 					fcells = t.grid.fsDiv == null ? {} : t.grid.fsDiv.children(".ui-jqgrid-ftable")[0].rows[0].cells;
-				for (nm in data) {
-					iCol = p.iColByName[nm];
-					if (data.hasOwnProperty(nm) && iCol !== undefined) {
-						if (action === "get") {
-							res[nm] = $(cells[iCol]).html();
-						} else if (action === "set") {
+				if (action === "get") {
+					for (iCol = 0; iCol < colModel.length; iCol++) {
+						nm = colModel[iCol].name;
+						if ($.inArray(nm, p.reservedColumnNames) < 0) {
+							if (data !== false) {
+								vl = $(cells[iCol]).text();
+								if ($.trim(vl)) {
+									res[nm] = vl;
+								}
+							} else {
+								res[nm] = $(cells[iCol]).html();
+							}
+						}
+					}
+				} else if (action === "set") {
+					for (nm in data) {
+						iCol = p.iColByName[nm];
+						if (data.hasOwnProperty(nm) && iCol !== undefined) {
 							vl = format ? t.formatter("", data[nm], iCol, data, "edit") : data[nm];
 							$td = $(cells[iCol]).add(fcells[iCol]);
 							$td.html(vl);
-							if (p.colModel[iCol].title) {
+							if (colModel[iCol].title) {
 								$td.attr({ "title": stripHtml(vl) });
 							}
 						}
