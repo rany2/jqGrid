@@ -45,8 +45,15 @@
 	jgrid.extend({
 		setSubGrid: function () {
 			return this.each(function () {
-				var p = this.p, cm = p.subGridModel[0], i;
+				var p = this.p, $self = $(this), cm = p.subGridModel[0], i,
+					getIcon = function (path) {
+						return $self.jqGrid("getIconRes", path);
+					};
 				p.subGridOptions = $.extend({
+					commonIconClass: getIcon("subgrid.common"),
+					plusicon: getIcon("subgrid.plus"),
+					minusicon: getIcon("subgrid.minus"),
+					openicon: (p.direction === "rtl" ? getIcon("subgrid.openRtl") : getIcon("subgrid.openLtr")),
 					expandOnLoad: false,
 					delayOnLoad: 50,
 					selectOnExpand: false,
