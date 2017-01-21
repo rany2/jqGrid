@@ -15163,7 +15163,7 @@
 						afterrestorefunc: null,
 						restoreAfterError: true,
 						beforeEditRow: null,
-						mtype: "POST",
+						//mtype: "POST",
 						focusField: true
 					}, jgrid.inlineEdit, p.inlineEditing || {}, oMuligrid),
 					ind = $self.jqGrid("getInd", rowid, true),
@@ -15471,7 +15471,7 @@
 								var ret, sucret, j;
 								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [jqXHR, rowid, o]);
 								if (sucret == null || sucret === true) { sucret = [true, tmp]; }
-								if (sucret[0] && isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR); }
+								if (sucret[0] && isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR, rowid, o); }
 								if ($.isArray(sucret)) {
 									// expect array - status, data, rowid
 									ret = sucret[0];
