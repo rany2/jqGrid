@@ -79,7 +79,12 @@ declare namespace FreeJqGrid {
 		inSet(f: string, v: any, t: any): QueryObject;
 		custom(ruleOp: string, field: string, data: any): QueryObject;
 	}
-	enum ComponentName {
+	const enum InputNameType {
+		ColName = 0,
+		AdditionalProperty = 1,
+		RowId = 2
+	}
+	const enum ComponentName {
 		GridBoxDiv = 0,                   // tagName: "div". class: "ui-jqgrid". Id: "gbox_" + gridId
 		GridOverlayDiv = 1,               // tagName: "div". class: "jqgrid-overlay". Id: "lui_" + gridId
 		LoadingDiv = 2,                   // tagName: "div". class: "loading". Id: "load_" + gridId
@@ -459,6 +464,7 @@ declare namespace FreeJqGrid {
 	interface JqGridStaticOptions extends JqGridOptions {
 		fatalError?: (errorText: string) => void; // default is alert function
 	}
+	type BooleanFeedbackValues = false | "stop" | void;
 	interface JqGridStatic extends JqGridStaticLocaleOptions {
 		_multiselect?: boolean;
 		ajaxOptions?: JQueryAjaxSettings;
@@ -482,7 +488,7 @@ declare namespace FreeJqGrid {
 			glyph: IconsInfo;
 			[propName: string]: IconsInfo;
 		};
-		inlineEdit?: any;
+		inlineEdit?: InlineEditingOptions;
 		jqModal?: any; // { toTop: true }
 		locales: { [key: string]: JqGridStaticLocaleOptions; };
 		msie: boolean;
@@ -515,7 +521,7 @@ declare namespace FreeJqGrid {
 		fixScrollOffsetAndhBoxPadding(this: BodyTable): void;
 		format(format: string, ...rest: any[]): string;
 		from(source: any): QueryObject;
-		fullBoolFeedback(this: BodyTable, callback: (...rest: any[]) => false | "stop" | void, eventName: string, ...rest: any[]): boolean;
+		fullBoolFeedback(this: BodyTable, callback: (...rest: any[]) => BooleanFeedbackValues, eventName: string, ...rest: any[]): boolean;
 		getAccessor(obj: any, dotSeparatedNamesOrFunc: string | ((obj: any) => any)): any;
 		getCell(this: BodyTable, tr: HTMLTableRowElement | JQuery, iCol: number): JQuery;
 		getCellIndex(cell: Element | JQuery): number;
@@ -560,6 +566,9 @@ declare namespace FreeJqGrid {
 		isObject: (o: any) => boolean;
 		isValue: (o: any) => boolean;
 		NumberFormat: (nData: number, opts: { decimalSeparator: string, decimalPlaces: number, thousandsSeparator: string }) => string;
+	}
+	interface FormatterActionsOptions {
+		
 	}
 	interface JqGridFormatters {
 		[propName: string]: any;
@@ -646,9 +655,10 @@ declare namespace FreeJqGrid {
 		fromServer?: boolean;
 		page?: number;
 	}
+	type AddRowDataPosition = "first" | "last" | "before" | "after" | "afterSelected" | "beforeSelected";
 	interface FormEditingOptions extends EditFormLocaleOptions {
 		_savedData?: { [propName: string]: any };
-		addedrow?: "first" | "last" | "before" | "after" | "afterSelected" | "beforeSelected";
+		addedrow?: AddRowDataPosition;
 		afterclickPgButtons?: (this: BodyTable, whichButton: "next" | "prev", $form: JQuery, rowid: string) => void;
 		afterComplete?: (this: BodyTable, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery, editOrAdd: "edit" | "add") => void;
 		afterShowForm?: (this: BodyTable, $form: JQuery, editOrAdd: "edit" | "add") => void;
@@ -808,18 +818,21 @@ declare namespace FreeJqGrid {
 		_nvtd?: [number, number]; // used internally by jqGrid
 		
 		actionsNavOptions?: any;
-		additionalProperties?: any[];
+		additionalProperties?: (string | ColumnModel)[];
+		afterAddRow?: (this: BodyTable, options: { rowid: string, inputData: Object | Object[], position: AddRowDataPosition, srcRowid?: string, iRow?: number, localData?: Object, iData?: number }) => void;
+		afterDelRow?: (this: BodyTable, rowid: string) => void;
 		afterInsertRow?: (this: BodyTable, rowid: string, item: { [cmOrPropName: string]: any }, srcItem: any) => void;
 		afterResizeDblClick?: (this: BodyTable, options: { iCol: number, cm: ColumnModel, cmName: string }) => void;
+		afterSetRow?: (this: BodyTable, options: { rowid: string, inputData: Object | Object[], iRow?: number, localData?: Object, iData?: number, tr: HTMLTableRowElement, cssProp: string | Object }) => void;
 		ajaxGridOptions?: JQueryAjaxSettings;
 		altclass?: string;
 		altRows?: boolean;
 		arrayReader?: any[];
-		arrayReaderInfos?: any[];
+		arrayReaderInfos?: { [name: string]: { name?: string, index: string, order?: number, type: InputNameType } };
 		autoencode?: boolean;
 		beforeInitGrid?: (this: BodyTable) => void;
 		beforeProcessing?: (this: BodyTable, data: any, textStatus: string, jqXhr: JQueryXHR) => false | void;
-		beforeRequest?: (this: BodyTable) => false | "stop" | void;
+		beforeRequest?: (this: BodyTable) => BooleanFeedbackValues;
 		beforeSelectRow?: (this: BodyTable, rowid, eventObject: JQueryEventObject) => false | void;
 		caption?: string;
 		cb?: string;   // "#cb_list"
@@ -870,6 +883,7 @@ declare namespace FreeJqGrid {
 		idPrefix?: string; // ""
 		idSel?: string; // "#list"
 		ignoreCase?: boolean;
+		inlineEditing?: InlineEditingOptions;
 		iPropByName?: {[additionalPropertyName: string]: number };
 		jqXhr?: JQueryXHR; // JQueryXHR of the last pending Ajax request. Be used by abortAjaxRequest method
 		iRow?: number; // -1
@@ -900,18 +914,20 @@ declare namespace FreeJqGrid {
 		ondblClickRow?: (this: BodyTable, rowid: string, iRow: number, iCol: number, eventObject: JQueryEventObject) => void;
 		onHeaderClick?: (this: BodyTable, gridState: "visible" | "hidden", eventObject: JQueryEventObject) => void;
 		onInitGrid?: (this: BodyTable) => void;
-		onPaging?: (this: BodyTable, source: "records" | "user" | "first" | "prev" | "next" | "last", options: { newPage: number, currentPage: number, lastPage: number, currentRowNum: number, newRowNum: number }) => false | "stop" | void;
+		onPaging?: (this: BodyTable, source: "records" | "user" | "first" | "prev" | "next" | "last", options: { newPage: number, currentPage: number, lastPage: number, currentRowNum: number, newRowNum: number }) => BooleanFeedbackValues;
+		onRemapColumns?: (this: BodyTable, permutation: number[], updateCells?: boolean, keepHeader?: boolean) => void;
 		onRightClickRow?: (this: BodyTable, rowid: string, iRow: number, iCol: number, eventObject: JQueryEventObject) => void;
 		onSelectAll?: (this: BodyTable, rowids: string[], toCheck: boolean) => void;
 		onSelectRow?: (this: BodyTable, rowid: string, state: boolean, eventObject: JQueryEventObject) => void;
-		onSortCol?: (this: BodyTable, cmOrIndexName: string, iCol: number, sortOrder: string) => false | "stop" | void;
+		onShowHideCol?: (this: BodyTable, show: boolean | "none" | "", cmName: string, iCol: number, options: ShowHideColOptions) => void;
+		onSortCol?: (this: BodyTable, cmOrIndexName: string, iCol: number, sortOrder: string) => BooleanFeedbackValues;
 		page?: number;
 		pager?: boolean | string; // "#jqg1"
 		pagerLeftWidth?: number; // 125
 		pagerpos?: "left" | "center" | "right";
 		pgbuttons?: boolean;
 		pginput?: boolean;
-		postData?: any;
+		postData?: Object | string;
 		prmNames?: {
 			addoper?: string | null; // "add"
 			deloper?: string | null; // "del"
@@ -936,7 +952,7 @@ declare namespace FreeJqGrid {
 		remapColumns?: number[];
 		resetsearch?: boolean;
 		reservedColumnNames?: string[]; // ["rn","cb","subgrid"]
-		resizeDblClick?: (this: BodyTable, iCol: number, cm: ColumnModel, eventObject: JQueryEventObject) => false | "stop" | void;
+		resizeDblClick?: (this: BodyTable, iCol: number, cm: ColumnModel, eventObject: JQueryEventObject) => BooleanFeedbackValues;
 		resizeclass?: string; // ""
 		resizeStart?: (this: BodyTable, eventObject: JQueryEventObject, iCol: number) => void;
 		resizeStop?: (this: BodyTable, newWidth: number, iCol: number) => void;
@@ -1002,6 +1018,42 @@ declare namespace FreeJqGrid {
 		skipSetGridWidth?: boolean;
 		newGridWidth?: number;
 	}
+	
+	// inline editing options
+	interface RestoreRowOptions {
+		afterrestorefunc?: (this: BodyTable, rowid: string) => void;
+		[propName: string]: any; // allow to have any number of other properties
+	}
+	interface BaseSaveRowOptions extends RestoreRowOptions {
+		successfunc?: (this: BodyTable, jqXhr: JQueryXHR) => boolean | [boolean, any];
+		extraparam?: Object;
+		url?: string | ((this: BodyTable, rowid: string, editOrAdd: "add" | "edit", postData: any, options: SaveRowOptions) => string);
+		aftersavefunc?: (this: BodyTable, rowid: string, jqXhr: JQueryXHR, postData: any, options: SaveRowOptions) => void;
+		errorfunc?: (this: BodyTable, rowid: string, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void;
+	}
+	interface EditRowOptions extends BaseSaveRowOptions {
+		keys?: boolean;
+		beforeEditRow?: (this: BodyTable, options: EditRowOptions, rowid: string) => BooleanFeedbackValues;
+		oneditfunc?: (this: BodyTable, rowid: string, options: EditRowOptions) => void;
+		[propName: string]: any; // allow to have any number of other properties
+	}
+	interface SaveRowOptions extends BaseSaveRowOptions {
+		beforeSaveRow?: (this: BodyTable, options: EditRowOptions, rowid: string, editOrAdd: "add" | "edit") => BooleanFeedbackValues;
+		saveRowValidation?: (this: BodyTable, options: { options: SaveRowOptions, rowid: string, tr: HTMLTableRowElement, iRow: string, savedRow: any, newData: any, mode: "add" | "edit" }) => BooleanFeedbackValues;
+		[propName: string]: any; // allow to have any number of other properties
+	}
+	interface AddRowOptions {
+		rowID?: null | string;
+		initdata?: any;
+		position?: AddRowDataPosition;
+		useDefValues?: boolean;
+		useFormatter?: boolean;
+		beforeAddRow: (this: BodyTable, options: EditRowOptions) => BooleanFeedbackValues;
+		addRowParams?: EditRowOptions;
+		[propName: string]: any; // allow to have any number of other properties
+	}
+	interface InlineEditingOptions extends EditRowOptions, SaveRowOptions, RestoreRowOptions, AddRowOptions {
+	}
 }
 
 interface JQueryStatic {
@@ -1025,7 +1077,7 @@ interface JQuery {
 	// isBootstrapGuiStyle
 	isBootstrapGuiStyle?(): boolean;
 	jqGrid(methodName: "isBootstrapGuiStyle"): boolean;
-	
+
 	// displayErrorMessage
 	displayErrorMessage?(htmlFragment: string): void;
 	jqGrid(methodName: "displayErrorMessage", htmlFragment: string): void;
@@ -1073,14 +1125,17 @@ interface JQuery {
 	// delRowData
 	delRowData?(rowid: string): boolean;
 	jqGrid(methodName: "delRowData", rowid: string): boolean;
+	on(eventName: "jqGridAfterSetRow", handler: (eventObject: JQueryEventObject, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
 
 	// setRowData
 	setRowData?(rowid: string, data: any, cssp?: string | Object): boolean;
 	jqGrid(methodName: "setRowData", rowid: string, data: any, cssp?: string | Object): boolean;
+	on(eventName: "jqGridAfterSetRow", handler: (eventObject: JQueryEventObject, options: { rowid: string, inputData: Object | Object[], iRow?: number, localData?: Object, iData?: number, tr: HTMLTableRowElement, cssProp: string | Object }) => void): FreeJqGrid.JQueryJqGrid;
 
 	// addRowData
-	addRowData?(rowid: string, rdata: Object | Object[], position?: "first" | "last" | "before" | "after" | "afterSelected" | "beforeSelected", srcRowid?: string): boolean;
-	jqGrid(methodName: "addRowData", rowid: string, rdata: Object | Object[], position?: "first" | "last" | "before" | "after" | "afterSelected" | "beforeSelected", srcRowid?: string): boolean;
+	addRowData?(rowid: string, rdata: Object | Object[], position?: FreeJqGrid.AddRowDataPosition, srcRowid?: string): boolean;
+	jqGrid(methodName: "addRowData", rowid: string, rdata: Object | Object[], position?: FreeJqGrid.AddRowDataPosition, srcRowid?: string): boolean;
+	on(eventName: "jqGridAfterAddRow", handler: (eventObject: JQueryEventObject, options: { rowid: string, inputData: Object | Object[], position: FreeJqGrid.AddRowDataPosition, srcRowid?: string, iRow?: number, localData?: Object, iData?: number }) => void): FreeJqGrid.JQueryJqGrid;
 
 	// footerData
 	footerData?(action?: "get" | "set", data?: Object, format?: boolean): Object | boolean;
@@ -1093,10 +1148,12 @@ interface JQuery {
 	jqGrid(methodName: "showHideCol", cmName: string[] | string, show?: boolean | "none" | "", options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "hideCol", cmName: string[] | string, options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "showCol", cmName: string[] | string, options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridShowHideCol", handler: (eventObject: JQueryEventObject, show: boolean | "none" | "", cmName: string, iCol: number, options: FreeJqGrid.ShowHideColOptions) => void): FreeJqGrid.JQueryJqGrid;
 
 	// remapColumns
 	remapColumns?(permutationByName: number[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "remapColumns", permutationByName: number[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridRemapColumns", handler: (eventObject: JQueryEventObject, permutation: number[], updateCells?: boolean, keepHeader?: boolean) => void): FreeJqGrid.JQueryJqGrid;
 
 	// remapColumnsByName
 	remapColumnsByName?(permutationByName: string[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
@@ -1187,21 +1244,21 @@ interface JQuery {
 	on(eventName: "jqGridAfterLoadComplete", handler: (eventObject: JQueryEventObject, data: any) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAfterResizeDblClick", handler: (eventObject: JQueryEventObject, options: { iCol: number, cm: FreeJqGrid.ColumnModel, cmName: string }) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridBeforeInitGrid", handler: (eventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridBeforeProcessing", handler: (eventObject: JQueryEventObject, data: any, textStatus: string, jqXhr: JQueryXHR) => false | "stop" | void): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridBeforeRequest", handler: (eventObject: JQueryEventObject) => false | "stop" | void): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridBeforeSelectRow", handler: (eventObject: JQueryEventObject, rowid, orgEventObject: JQueryEventObject) => false | "stop" | void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridBeforeProcessing", handler: (eventObject: JQueryEventObject, data: any, textStatus: string, jqXhr: JQueryXHR) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridBeforeRequest", handler: (eventObject: JQueryEventObject) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridBeforeSelectRow", handler: (eventObject: JQueryEventObject, rowid, orgEventObject: JQueryEventObject) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridGridComplete", handler: (eventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridLoadBeforeSend", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, settings: JQueryAjaxSettings) => false | "stop" | void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridLoadBeforeSend", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, settings: JQueryAjaxSettings) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridLoadComplete", handler: (eventObject: JQueryEventObject, data: any) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridDblClickRow", handler: (eventObject: JQueryEventObject, rowid: string, iRow: number, iCol: number, orgEventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridHeaderClick", handler: (eventObject: JQueryEventObject, gridState: "visible" | "hidden", orgEventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridInitGrid", handler: (eventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridPaging", handler: (eventObject: JQueryEventObject, source: "records" | "user" | "first" | "prev" | "next" | "last", options: { newPage: number, currentPage: number, lastPage: number, currentRowNum: number, newRowNum: number }) => false | "stop" | void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridPaging", handler: (eventObject: JQueryEventObject, source: "records" | "user" | "first" | "prev" | "next" | "last", options: { newPage: number, currentPage: number, lastPage: number, currentRowNum: number, newRowNum: number }) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridRightClickRow", handler: (eventObject: JQueryEventObject, rowid: string, iRow: number, iCol: number, orgEventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridSelectAll", handler: (eventObject: JQueryEventObject, rowids: string[], toCheck: boolean) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridSelectRow", handler: (eventObject: JQueryEventObject, rowid: string, state: boolean, orgEventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridSortCol", handler: (eventObject: JQueryEventObject, cmOrIndexName: string, iCol: number, sortOrder: string) => false | "stop" | void): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridResizeDblClick", handler: (eventObject: JQueryEventObject, iCol: number, cm: FreeJqGrid.ColumnModel, orgEventObject: JQueryEventObject) => false | "stop" | void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridSortCol", handler: (eventObject: JQueryEventObject, cmOrIndexName: string, iCol: number, sortOrder: string) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridResizeDblClick", handler: (eventObject: JQueryEventObject, iCol: number, cm: FreeJqGrid.ColumnModel, orgEventObject: JQueryEventObject) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridResizeStart", handler: (eventObject: JQueryEventObject, orgEventObject: JQueryEventObject, iCol: number) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridResizeStop", handler: (eventObject: JQueryEventObject, newWidth: number, iCol: number) => void): FreeJqGrid.JQueryJqGrid;
 
