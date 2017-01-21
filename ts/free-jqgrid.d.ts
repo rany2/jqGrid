@@ -656,6 +656,7 @@ declare namespace FreeJqGrid {
 		page?: number;
 	}
 	type AddRowDataPosition = "first" | "last" | "before" | "after" | "afterSelected" | "beforeSelected";
+	type SaveUi = "disable" | "enable" | "block";
 	interface FormEditingOptions extends EditFormLocaleOptions {
 		_savedData?: { [propName: string]: any };
 		addedrow?: AddRowDataPosition;
@@ -701,8 +702,8 @@ declare namespace FreeJqGrid {
 		resize?: boolean;
 		saveicon?: [boolean, string, string]; // [true,"left","fa fa-floppy-o"]
 		savekey?: [boolean, number]; // [false,13]
-		savetext?: string;
-		saveui?: string; //"enable"
+		savetext?: string; // default from $.jgrid.locales[currentLocale].defaults.savetext or $.jgrid.defaults.savetext
+		saveui?: SaveUi;
 		serializeEditData?: (this: BodyTable, postdata: Object) => Object | string;
 		skipPostTypes?: string[]; // ["image","file"]
 		top?: number;
@@ -787,6 +788,21 @@ declare namespace FreeJqGrid {
 		view?: boolean;
 		viewicon?: string; // "fa fa-lg fa-fw fa-file-o"
 		viewfunc?: (this: BodyTable, rowid: string, pView?: FormViewingOptions) => void;
+	}
+	interface InlineNavOptions {
+		edit?: boolean;
+		editicon?: string; // "ui-icon-pencil"
+		add?: boolean;
+		addicon?: string; // "ui-icon-plus"
+		save?: boolean;
+		saveicon?: string; //"ui-icon-disk",
+		cancel?: boolean;
+		cancelicon?: string; //"ui-icon-cancel",
+		commonIconClass?: string; //"ui-icon",
+		iconsOverText?: boolean;
+		addParams?: AddRowOptions;
+		editParams?: EditRowOptions;
+		restoreAfterSelect?: boolean;
 	}
 	interface JsonOrLocalReader {
 		root?: string | ((item: any) => string); // "rows"
@@ -1011,45 +1027,54 @@ declare namespace FreeJqGrid {
 		[propName: string]: any; // allow to have any number of other properties
 	}
 	interface ShowHideColOptions {
-		skipSetGroupHeaders?: boolean;
-		notSkipFrozen?: boolean;
-		skipFeedback?: boolean;
-		toReport?: Object;
-		skipSetGridWidth?: boolean;
 		newGridWidth?: number;
+		notSkipFrozen?: boolean;
+		toReport?: Object;
+		skipFeedback?: boolean;
+		skipSetGridWidth?: boolean;
+		skipSetGroupHeaders?: boolean;
 	}
 	
 	// inline editing options
 	interface RestoreRowOptions {
 		afterrestorefunc?: (this: BodyTable, rowid: string) => void;
+		beforeCancelRow?: (this: BodyTable, options: RestoreRowOptions, rowid: string) => BooleanFeedbackValues;
 		[propName: string]: any; // allow to have any number of other properties
 	}
 	interface BaseSaveRowOptions extends RestoreRowOptions {
-		successfunc?: (this: BodyTable, jqXhr: JQueryXHR) => boolean | [boolean, any];
-		extraparam?: Object;
-		url?: string | ((this: BodyTable, rowid: string, editOrAdd: "add" | "edit", postData: any, options: SaveRowOptions) => string);
 		aftersavefunc?: (this: BodyTable, rowid: string, jqXhr: JQueryXHR, postData: any, options: SaveRowOptions) => void;
 		errorfunc?: (this: BodyTable, rowid: string, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void;
+		extraparam?: Object;
+		successfunc?: (this: BodyTable, jqXhr: JQueryXHR, rowid: string, options: FreeJqGrid.SaveRowOptions) => boolean | [boolean, any];
+		url?: string | ((this: BodyTable, rowid: string, editOrAdd: "add" | "edit", postData: any, options: SaveRowOptions) => string);
 	}
 	interface EditRowOptions extends BaseSaveRowOptions {
-		keys?: boolean;
 		beforeEditRow?: (this: BodyTable, options: EditRowOptions, rowid: string) => BooleanFeedbackValues;
+		defaultFocusField?: number | string;
+		focusField?: boolean | number | string | { target: JQueryEventObject };
+		keys?: boolean;
 		oneditfunc?: (this: BodyTable, rowid: string, options: EditRowOptions) => void;
 		[propName: string]: any; // allow to have any number of other properties
 	}
 	interface SaveRowOptions extends BaseSaveRowOptions {
-		beforeSaveRow?: (this: BodyTable, options: EditRowOptions, rowid: string, editOrAdd: "add" | "edit") => BooleanFeedbackValues;
+		ajaxSaveOptions?: JQueryAjaxSettings;
+		beforeSaveRow?: (this: BodyTable, options: SaveRowOptions, rowid: string, editOrAdd: "add" | "edit") => BooleanFeedbackValues;
+		mtype?: string | ((this: BodyTable, editOrAdd: "add" | "edit", options: SaveRowOptions, rowid: string, postData: any) => string);
 		saveRowValidation?: (this: BodyTable, options: { options: SaveRowOptions, rowid: string, tr: HTMLTableRowElement, iRow: string, savedRow: any, newData: any, mode: "add" | "edit" }) => BooleanFeedbackValues;
+		savetext?: string; // default from $.jgrid.locales[currentLocale].defaults.savetext or $.jgrid.defaults.savetext
+		saveui?: SaveUi;
+		serializeSaveData?: (this: BodyTable, postData: any) => Object | string; 
+		restoreAfterError?: boolean;
 		[propName: string]: any; // allow to have any number of other properties
 	}
 	interface AddRowOptions {
-		rowID?: null | string;
+		addRowParams?: EditRowOptions;
+		beforeAddRow: (this: BodyTable, options: AddRowOptions) => BooleanFeedbackValues;
 		initdata?: any;
 		position?: AddRowDataPosition;
+		rowID?: null | string | ((options: AddRowOptions) => string);
 		useDefValues?: boolean;
 		useFormatter?: boolean;
-		beforeAddRow: (this: BodyTable, options: EditRowOptions) => BooleanFeedbackValues;
-		addRowParams?: EditRowOptions;
 		[propName: string]: any; // allow to have any number of other properties
 	}
 	interface InlineEditingOptions extends EditRowOptions, SaveRowOptions, RestoreRowOptions, AddRowOptions {
@@ -1210,7 +1235,7 @@ interface JQuery {
 	jqGrid(methodName: "getLocalRow", rowid: string): false | Object;
 
 	// progressBar
-	progressBar?(options: { htmlContent: string, method: "hide" | "show", loadtype: "disable" | "enable" | "block" }): FreeJqGrid.JQueryJqGrid;
+	progressBar?(options: { htmlContent: string, method: "hide" | "show", loadtype: FreeJqGrid.SaveUi }): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "progressBar", iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
 
 	// setColWidth
@@ -1233,9 +1258,31 @@ interface JQuery {
 	editGridRow?(rowid: string, options: FreeJqGrid.FormEditingOptions): void;
 	jqGrid(methodName: "editGridRow", rowid: string, options: FreeJqGrid.FormEditingOptions): any;
 
+	// inline editing methods
+	addRow?(options: FreeJqGrid.AddRowOptions): FreeJqGrid.JQueryJqGrid;
+	editRow?(rowid: string, options: FreeJqGrid.EditRowOptions): FreeJqGrid.JQueryJqGrid;
+	editRow?(rowid: string, keys: boolean, oneditfunc: (this: FreeJqGrid.BodyTable, rowid: string, options: FreeJqGrid.EditRowOptions) => void, successfunc: (this: FreeJqGrid.BodyTable, jqXhr: JQueryXHR) => boolean | [boolean, any], url: string | ((this: FreeJqGrid.BodyTable, rowid: string, editOrAdd: "add" | "edit", postData: any, options: FreeJqGrid.SaveRowOptions) => string), extraparam: Object, aftersavefunc: (this: FreeJqGrid.BodyTable, rowid: string, jqXhr: JQueryXHR, postData: any, options: FreeJqGrid.SaveRowOptions) => void, errorfunc: (this: FreeJqGrid.BodyTable, rowid: string, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void, afterrestorefunc: (this: FreeJqGrid.BodyTable, rowid: string) => void, beforeEditRow: (this: FreeJqGrid.BodyTable, options: FreeJqGrid.EditRowOptions, rowid: string) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	inlineNav?(pagerIdSelector: string, options?: FreeJqGrid.InlineNavOptions): FreeJqGrid.JQueryJqGrid;
+	inlineNav?(options?: FreeJqGrid.InlineNavOptions): FreeJqGrid.JQueryJqGrid;
+	saveRow?(rowid: string, options: FreeJqGrid.SaveRowOptions): FreeJqGrid.JQueryJqGrid;
+	saveRow?(rowid: string, successfunc: (this: FreeJqGrid.BodyTable, jqXhr: JQueryXHR) => boolean | [boolean, any], url: string | ((this: FreeJqGrid.BodyTable, rowid: string, editOrAdd: "add" | "edit", postData: any, options: FreeJqGrid.SaveRowOptions) => string), extraparam: Object, aftersavefunc: (this: FreeJqGrid.BodyTable, rowid: string, jqXhr: JQueryXHR, postData: any, options: FreeJqGrid.SaveRowOptions) => void, errorfunc: (this: FreeJqGrid.BodyTable, rowid: string, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void, afterrestorefunc: (this: FreeJqGrid.BodyTable, rowid: string) => void, beforeSaveRow: (this: FreeJqGrid.BodyTable, options: FreeJqGrid.EditRowOptions, rowid: string, editOrAdd: "add" | "edit") => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	showAddEditButtons?(isEditing: boolean): FreeJqGrid.JQueryJqGrid;
+	restoreRow?(rowid: string, options: FreeJqGrid.RestoreRowOptions): FreeJqGrid.JQueryJqGrid;
+	restoreRow?(rowid: string, afterrestorefunc: (this: FreeJqGrid.BodyTable, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "addRow", options: FreeJqGrid.AddRowOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "editRow", rowid: string, options: FreeJqGrid.EditRowOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "editRow", rowid: string, keys: boolean, oneditfunc: (this: FreeJqGrid.BodyTable, rowid: string, options: FreeJqGrid.EditRowOptions) => void, successfunc: (this: FreeJqGrid.BodyTable, jqXhr: JQueryXHR) => boolean | [boolean, any], url: string | ((this: FreeJqGrid.BodyTable, rowid: string, editOrAdd: "add" | "edit", postData: any, options: FreeJqGrid.SaveRowOptions) => string), extraparam: Object, aftersavefunc: (this: FreeJqGrid.BodyTable, rowid: string, jqXhr: JQueryXHR, postData: any, options: FreeJqGrid.SaveRowOptions) => void, errorfunc: (this: FreeJqGrid.BodyTable, rowid: string, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void, afterrestorefunc: (this: FreeJqGrid.BodyTable, rowid: string) => void, beforeEditRow: (this: FreeJqGrid.BodyTable, options: FreeJqGrid.EditRowOptions, rowid: string) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "inlineNav", pagerIdSelector: string, options?: FreeJqGrid.InlineNavOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "inlineNav", options?: FreeJqGrid.InlineNavOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "saveRow", rowid: string, options: FreeJqGrid.SaveRowOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "saveRow", rowid: string, successfunc: (this: FreeJqGrid.BodyTable, jqXhr: JQueryXHR) => boolean | [boolean, any], url: string | ((this: FreeJqGrid.BodyTable, rowid: string, editOrAdd: "add" | "edit", postData: any, options: FreeJqGrid.SaveRowOptions) => string), extraparam: Object, aftersavefunc: (this: FreeJqGrid.BodyTable, rowid: string, jqXhr: JQueryXHR, postData: any, options: FreeJqGrid.SaveRowOptions) => void, errorfunc: (this: FreeJqGrid.BodyTable, rowid: string, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void, afterrestorefunc: (this: FreeJqGrid.BodyTable, rowid: string) => void, beforeSaveRow: (this: FreeJqGrid.BodyTable, options: FreeJqGrid.EditRowOptions, rowid: string, editOrAdd: "add" | "edit") => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "showAddEditButtons", isEditing?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "restoreRow", rowid: string, options: FreeJqGrid.RestoreRowOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "restoreRow", rowid: string, afterrestorefunc: (this: FreeJqGrid.BodyTable, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
+
 	// navGrid
-	navGrid?(rowid: string, pagerIdSelector: string, navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
-	navGrid?(rowid: string, navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
+	navGrid?(pagerIdSelector: string, navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
+	navGrid?(navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "navGrid", pagerIdSelector: string, navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "navGrid", navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
 
@@ -1246,7 +1293,7 @@ interface JQuery {
 	on(eventName: "jqGridBeforeInitGrid", handler: (eventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridBeforeProcessing", handler: (eventObject: JQueryEventObject, data: any, textStatus: string, jqXhr: JQueryXHR) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridBeforeRequest", handler: (eventObject: JQueryEventObject) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridBeforeSelectRow", handler: (eventObject: JQueryEventObject, rowid, orgEventObject: JQueryEventObject) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridBeforeSelectRow", handler: (eventObject: JQueryEventObject, rowid: string, orgEventObject: JQueryEventObject) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridGridComplete", handler: (eventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridLoadBeforeSend", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, settings: JQueryAjaxSettings) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridLoadComplete", handler: (eventObject: JQueryEventObject, data: any) => void): FreeJqGrid.JQueryJqGrid;
@@ -1281,4 +1328,17 @@ interface JQuery {
 	on(eventName: "jqGridAddEditAfterComplete", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridDeleteBeforeInitData", handler: (eventObject: JQueryEventObject, $form: JQuery) => boolean | "stop" | void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridDeleteBeforeShowForm", handler: (eventObject: JQueryEventObject, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
+
+	// inline editing events
+	on(eventName: "jqGridInlineBeforeAddRow", handler: (eventObject: JQueryEventObject, options: FreeJqGrid.AddRowOptions) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineBeforeCancelRow", handler: (eventObject: JQueryEventObject, options: FreeJqGrid.RestoreRowOptions, rowid: string) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineBeforeEditRow", handler: (eventObject: JQueryEventObject, options: FreeJqGrid.EditRowOptions, rowid: string) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineBeforeSaveRow", handler: (eventObject: JQueryEventObject, options: FreeJqGrid.EditRowOptions, rowid: string, editOrAdd: "add" | "edit") => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineAfterRestoreRow", handler: (eventObject: JQueryEventObject, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineEditRow", handler: (eventObject: JQueryEventObject, rowid: string, options: FreeJqGrid.EditRowOptions) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineSaveRowValidation", handler: (eventObject: JQueryEventObject, options: { options: FreeJqGrid.SaveRowOptions, rowid: string, tr: HTMLTableRowElement, iRow: string, savedRow: any, newData: any, mode: "add" | "edit" }) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineAfterSaveRow", handler: (eventObject: JQueryEventObject, rowid: string, jqXhr: JQueryXHR, postData: any, options: FreeJqGrid.SaveRowOptions) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineSerializeSaveData", handler: (eventObject: JQueryEventObject, postdata: Object) => Object | string): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineSuccessSaveRow", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, rowid: string, options: FreeJqGrid.SaveRowOptions) => boolean | [boolean, any]): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridInlineErrorSaveRow", handler: (eventObject: JQueryEventObject, rowid: string, jqXhr: JQueryXHR, textStatus: string, errorThrown: string, options: FreeJqGrid.SaveRowOptions) => void): FreeJqGrid.JQueryJqGrid;
 }
