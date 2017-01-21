@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-19
+ * Date: 2017-01-21
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6797,7 +6797,7 @@
 						this.hidden = !sw;
 						fndh = true;
 						if (!options.skipFeedback) {
-							feedback.call($t, "onShowHideCol", sw, this.name, iCol);
+							feedback.call($t, "onShowHideCol", sw, this.name, iCol, options);
 						} else {
 							options.toReport = options.toReport || {};
 							options.toReport[this.name] = sw;
