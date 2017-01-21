@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-21
+ * Date: 2017-01-22
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2871,11 +2871,6 @@
 						plusRtl: getIcon("treeGrid.plusRtl"),
 						minus: getIcon("treeGrid.minus"),
 						leaf: getIcon("treeGrid.leaf")
-					},
-					subGridOptions: {
-						commonIconClass: getIcon("subgrid.common"),
-						plusicon: getIcon("subgrid.plus"),
-						minusicon: getIcon("subgrid.minus")
 					}
 				},
 				//locales[locale].defaults,
@@ -2935,7 +2930,6 @@
 				};
 			// set dynamic options
 			p.recordpos = p.recordpos || (p.direction === "rtl" ? "left" : "right");
-			p.subGridOptions.openicon = p.direction === "rtl" ? getIcon("subgrid.openRtl") : getIcon("subgrid.openLtr");
 			p.autoResizing.widthOfVisiblePartOfSortIcon =
 				p.autoResizing.widthOfVisiblePartOfSortIcon !== undefined ?
 						p.autoResizing.widthOfVisiblePartOfSortIcon :
@@ -5099,7 +5093,7 @@
 				p.treeGrid = false;
 				p.gridview = true;
 			}
-			if (p.subGrid) {
+			if (p.subGrid && isFunction($j.setSubGrid)) {
 				try { $j.setSubGrid.call($self0); } catch (ignore1) { }
 			}
 			if (p.multiselect && (p.multiselectPosition === "left" || p.multiselectPosition === "right")) {
