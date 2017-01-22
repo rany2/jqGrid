@@ -302,32 +302,7 @@
 				if (tmp) {
 					tmp[opers.oper] = opers.editoper;
 					if (tmp[idname] === undefined || tmp[idname] === "") {
-						tmp[idname] = rowid;
-					} else if (ind.id !== p.idPrefix + tmp[idname]) {
-						// rename rowid
-						var oldid = jgrid.stripPref(p.idPrefix, rowid);
-						if (p._index[oldid] !== undefined) {
-							p._index[tmp[idname]] = p._index[oldid];
-							delete p._index[oldid];
-						}
-						rowid = p.idPrefix + tmp[idname];
-						// TODO: to test the case of frozen columns
-						$tr.attr("id", rowid);
-						if (p.selrow === oldRowId) {
-							p.selrow = rowid;
-						}
-						if ($.isArray(p.selarrrow)) {
-							var i = $.inArray(oldRowId, p.selarrrow);
-							if (i >= 0) {
-								p.selarrrow[i] = rowid;
-							}
-						}
-						if (p.multiselect) {
-							var newCboxId = "jqg_" + p.id + "_" + rowid;
-							$tr.find("input.cbox")
-								.attr("id", newCboxId)
-								.attr("name", newCboxId);
-						}
+						tmp[idname] = jgrid.stripPref(p.idPrefix, rowid);
 					}
 					tmp = $.extend({}, tmp, p.inlineData || {}, o.extraparam);
 				}
@@ -351,11 +326,14 @@
 					resp = $self.jqGrid("setRowData", rowid, tmp);
 					$tr.attr("editable", "0");
 					for (k = 0; k < p.savedRow.length; k++) {
-						if (String(p.savedRow[k].id) === String(oldRowId)) { fr = k; break; }
+						if (String(p.savedRow[k].id) === String(rowid)) { fr = k; break; }
 					}
 					if (fr >= 0) { p.savedRow.splice(fr, 1); }
 					fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, resp, tmp, o);
 					$tr.removeClass("jqgrid-new-row").off("keydown");
+					if (ind.id !== p.idPrefix + tmp[idname]) {
+						$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname], ind);
+					}
 				} else {
 					$self.jqGrid("progressBar", { method: "show", loadtype: o.saveui, htmlcontent: o.savetext });
 					postData = $.extend({}, tmp, postData);
@@ -381,9 +359,9 @@
 							// see the answer http://stackoverflow.com/a/3617710/315935 about xhr.readyState === 4 && xhr.status === 0
 							if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 								var ret, sucret, j;
-								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [jqXHR, rowid, o]);
+								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [jqXHR, rowid, o, editOrAdd, postData]);
 								if (sucret == null || sucret === true) { sucret = [true, tmp]; }
-								if (sucret[0] && isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR, rowid, o); }
+								if (sucret[0] && isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR, rowid, o, editOrAdd, postData); }
 								if ($.isArray(sucret)) {
 									// expect array - status, data, rowid
 									ret = sucret[0];
@@ -405,6 +383,11 @@
 									}
 									if (fr >= 0) { p.savedRow.splice(fr, 1); }
 									fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, jqXHR, tmp, o);
+									if (sucret[2] != null) {
+										$self.jqGrid("changeRowid", rowid, p.idPrefix + sucret[2]);
+									} else if (ind.id !== p.idPrefix + tmp[idname]) {
+										$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname], ind);
+									}
 									$tr.removeClass("jqgrid-new-row").off("keydown");
 								} else {
 									fullBoolFeedback.call($t, o.errorfunc, "jqGridInlineErrorSaveRow", rowid, jqXHR, textStatus, null, o);

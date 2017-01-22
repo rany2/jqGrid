@@ -6513,6 +6513,8 @@
 				if (tr == null || tr.id !== oldRowId) {
 					tr = $self.jqGrid("getGridRowById", oldRowId);
 				}
+				if (!tr || $self.jqGrid("getGridRowById", newRowId) != null) { return; }
+
 				var oldId = jgrid.stripPref(p.idPrefix, oldRowId),
 					newId = jgrid.stripPref(p.idPrefix, newRowId),
 					idname = p.keyName === false ? p.prmNames.id : p.keyName;
