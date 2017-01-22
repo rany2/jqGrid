@@ -6506,6 +6506,50 @@
 			});
 			return success;
 		},
+		changeRowid: function (oldRowId, newRowId, tr) {
+			return this.each(function () {
+				var ts = this, $self = $(ts), p = ts.p, localData, i, newCboxId, $tr;
+				if (!ts.grid || !p) { return; }
+				if (tr == null || tr.id !== oldRowId) {
+					tr = $self.jqGrid("getGridRowById", oldRowId);
+				}
+				if (!tr || $self.jqGrid("getGridRowById", newRowId) != null) { return; }
+
+				var oldId = jgrid.stripPref(p.idPrefix, oldRowId),
+					newId = jgrid.stripPref(p.idPrefix, newRowId),
+					idname = p.keyName === false ? p.prmNames.id : p.keyName;
+
+				if (p.iColByName[idname] >= 0) {
+					$self.jqGrid("setCell", oldRowId, idname, newId);
+				} else if (p.datatype === "local" && p._index[oldId] !== undefined) {
+					p._index[newId] = p._index[oldId];
+					localData = p.data[p._index[oldId]];
+					delete p._index[oldId];
+					if (localData.hasOwnProperty(idname)) {
+						localData[idname] = newId;
+					}
+				}
+				$tr = ts.grid.fbRows == null ?
+						$(tr) :
+						$(tr).add(ts.grid.fbRows[tr.rowIndex]);
+				$tr.attr("id", newRowId);
+				if (p.selrow === oldRowId) {
+					p.selrow = newRowId;
+				}
+				if ($.isArray(p.selarrrow)) {
+					i = $.inArray(oldRowId, p.selarrrow);
+					if (i >= 0) {
+						p.selarrrow[i] = newRowId;
+					}
+				}
+				if (p.multiselect) {
+					newCboxId = "jqg_" + p.id + "_" + newRowId;
+					$tr.find("input.cbox")
+						.attr("id", newCboxId)
+						.attr("name", newCboxId);
+				}
+			});
+		},
 		addRowData: function (rowid, rdata, pos, src) {
 			// TODO: add an additional parameter, which will inform whether the input data rdata is in formatted or unformatted form
 			if ($.inArray(pos, ["first", "last", "before", "after", "afterSelected", "beforeSelected"]) < 0) { pos = "last"; }
