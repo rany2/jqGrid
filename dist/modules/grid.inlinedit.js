@@ -292,7 +292,7 @@
 				if (isError) {
 					return;
 				}
-				var idname, oldRowId = rowid;
+				var idname;
 				opers = p.prmNames;
 				if (p.keyName === false) {
 					idname = opers.id;
@@ -332,7 +332,7 @@
 					fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, resp, tmp, o);
 					$tr.removeClass("jqgrid-new-row").off("keydown");
 					if (ind.id !== p.idPrefix + tmp[idname]) {
-						$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname], ind);
+						$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname]);
 					}
 				} else {
 					$self.jqGrid("progressBar", { method: "show", loadtype: o.saveui, htmlcontent: o.savetext });
@@ -379,14 +379,14 @@
 									$self.jqGrid("setRowData", rowid, tmp);
 									$tr.attr("editable", "0");
 									for (j = 0; j < p.savedRow.length; j++) {
-										if (String(p.savedRow[j].id) === String(oldRowId)) { fr = j; break; }
+										if (String(p.savedRow[j].id) === String(rowid)) { fr = j; break; }
 									}
 									if (fr >= 0) { p.savedRow.splice(fr, 1); }
 									fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, jqXHR, tmp, o);
 									if (sucret[2] != null) {
 										$self.jqGrid("changeRowid", rowid, p.idPrefix + sucret[2]);
 									} else if (ind.id !== p.idPrefix + tmp[idname]) {
-										$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname], ind);
+										$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname]);
 									}
 									$tr.removeClass("jqgrid-new-row").off("keydown");
 								} else {

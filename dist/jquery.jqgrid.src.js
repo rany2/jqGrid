@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-22
+ * Date: 2017-01-23
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6506,18 +6506,26 @@
 			});
 			return success;
 		},
-		changeRowid: function (oldRowId, newRowId, tr) {
+		changeRowid: function (oldRowId, newRowId) {
 			return this.each(function () {
-				var ts = this, $self = $(ts), p = ts.p, localData, i, newCboxId, $tr;
-				if (!ts.grid || !p) { return; }
-				if (tr == null || tr.id !== oldRowId) {
-					tr = $self.jqGrid("getGridRowById", oldRowId);
+				var ts = this, $self = $(ts), p = ts.p, localData, i, newCboxId, tr, $tr, cm, value;
+				if (!ts.grid || !p || oldRowId === newRowId) { return; }
+
+				tr = $self.jqGrid("getGridRowById", oldRowId);
+				if (!tr || $self.jqGrid("getGridRowById", newRowId) != null) {
+					// consider to throw an exception or displaying an error in some way
+					return;
 				}
-				if (!tr || $self.jqGrid("getGridRowById", newRowId) != null) { return; }
 
 				var oldId = jgrid.stripPref(p.idPrefix, oldRowId),
 					newId = jgrid.stripPref(p.idPrefix, newRowId),
-					idname = p.keyName === false ? p.prmNames.id : p.keyName;
+					idname = p.keyName === false ? p.prmNames.id : p.keyName,
+					fixRowid = function () {
+						var id = this.id, lengthDiff = id.length - oldId.length;
+						if (lengthDiff > 0 && id.substr(lengthDiff) === oldId) {
+							$(this).attr("id", id.substr(0, lengthDiff) + newId);
+						}
+					};
 
 				if (p.iColByName[idname] >= 0) {
 					$self.jqGrid("setCell", oldRowId, idname, newId);
@@ -6529,6 +6537,10 @@
 						localData[idname] = newId;
 					}
 				}
+				// fix rowIndexes used inside of getGridRowById
+				p.rowIndexes[newRowId] = tr.rowIndex;
+				delete p.rowIndexes[oldRowId];
+
 				$tr = ts.grid.fbRows == null ?
 						$(tr) :
 						$(tr).add(ts.grid.fbRows[tr.rowIndex]);
@@ -6548,6 +6560,25 @@
 						.attr("id", newCboxId)
 						.attr("name", newCboxId);
 				}
+				// fix ids of all column with formatters actions and probably showlink
+				for (i = 0; i < p.colModel.length; i++) {
+					cm = p.colModel[i];
+					if (cm.formatter === "actions") {
+						$tr.find(".ui-jqgrid-actions .ui-pg-div")
+							.each(fixRowid);
+					} else if (cm.formatter === "showlink" || (cm.unformat != null && cm.formatter != null)) {
+						// resetting the same value in the cell will reformat the cell
+						// with new rowid getCell uses unformat and setCell uses unformat
+						value = $self.jqGrid("getCell", newRowId, i);
+						$self.jqGrid("setCell", newRowId, i, value, false, false, true);
+					}
+				}
+				feedback.call(ts, "afterChangeRowid", {
+					rowid: newRowId,
+					oldRowid: oldRowId,
+					iRow: tr.rowIndex,
+					tr: tr
+				});
 			});
 		},
 		addRowData: function (rowid, rdata, pos, src) {
@@ -15418,7 +15449,7 @@
 				if (isError) {
 					return;
 				}
-				var idname, oldRowId = rowid;
+				var idname;
 				opers = p.prmNames;
 				if (p.keyName === false) {
 					idname = opers.id;
@@ -15458,7 +15489,7 @@
 					fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, resp, tmp, o);
 					$tr.removeClass("jqgrid-new-row").off("keydown");
 					if (ind.id !== p.idPrefix + tmp[idname]) {
-						$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname], ind);
+						$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname]);
 					}
 				} else {
 					$self.jqGrid("progressBar", { method: "show", loadtype: o.saveui, htmlcontent: o.savetext });
@@ -15505,14 +15536,14 @@
 									$self.jqGrid("setRowData", rowid, tmp);
 									$tr.attr("editable", "0");
 									for (j = 0; j < p.savedRow.length; j++) {
-										if (String(p.savedRow[j].id) === String(oldRowId)) { fr = j; break; }
+										if (String(p.savedRow[j].id) === String(rowid)) { fr = j; break; }
 									}
 									if (fr >= 0) { p.savedRow.splice(fr, 1); }
 									fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, jqXHR, tmp, o);
 									if (sucret[2] != null) {
 										$self.jqGrid("changeRowid", rowid, p.idPrefix + sucret[2]);
 									} else if (ind.id !== p.idPrefix + tmp[idname]) {
-										$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname], ind);
+										$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname]);
 									}
 									$tr.removeClass("jqgrid-new-row").off("keydown");
 								} else {
