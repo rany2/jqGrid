@@ -292,7 +292,7 @@
 				if (isError) {
 					return;
 				}
-				var idname, oldRowId = rowid;
+				var idname;
 				opers = p.prmNames;
 				if (p.keyName === false) {
 					idname = opers.id;
@@ -332,7 +332,7 @@
 					fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, resp, tmp, o);
 					$tr.removeClass("jqgrid-new-row").off("keydown");
 					if (ind.id !== p.idPrefix + tmp[idname]) {
-						$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname], ind);
+						$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname]);
 					}
 				} else {
 					$self.jqGrid("progressBar", { method: "show", loadtype: o.saveui, htmlcontent: o.savetext });
@@ -386,7 +386,7 @@
 									if (sucret[2] != null) {
 										$self.jqGrid("changeRowid", rowid, p.idPrefix + sucret[2]);
 									} else if (ind.id !== p.idPrefix + tmp[idname]) {
-										$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname], ind);
+										$self.jqGrid("changeRowid", ind.id, p.idPrefix + tmp[idname]);
 									}
 									$tr.removeClass("jqgrid-new-row").off("keydown");
 								} else {
