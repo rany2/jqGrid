@@ -906,6 +906,7 @@ declare namespace FreeJqGrid {
 		actionsNavOptions?: FormatterActionsOptions;
 		additionalProperties?: (string | ColumnModel)[];
 		afterAddRow?: (this: BodyTable, options: { rowid: string, inputData: Object | Object[], position: AddRowDataPosition, srcRowid?: string, iRow?: number, localData?: Object, iData?: number }) => void;
+		afterChangeRowid?: (this: BodyTable, options: { rowid: string, oldRowid: string, iRow: number, tr: HTMLTableRowElement }) => void;
 		afterDelRow?: (this: BodyTable, rowid: string) => void;
 		afterInsertRow?: (this: BodyTable, rowid: string, item: { [cmOrPropName: string]: any }, srcItem: any) => void;
 		afterResizeDblClick?: (this: BodyTable, options: { iCol: number, cm: ColumnModel, cmName: string }) => void;
@@ -1216,12 +1217,17 @@ interface JQuery {
 	// delRowData
 	delRowData?(rowid: string): boolean;
 	jqGrid(methodName: "delRowData", rowid: string): boolean;
-	on(eventName: "jqGridAfterSetRow", handler: (eventObject: JQueryEventObject, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridAfterDelRow", handler: (eventObject: JQueryEventObject, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
 
 	// setRowData
 	setRowData?(rowid: string, data: any, cssp?: string | Object): boolean;
 	jqGrid(methodName: "setRowData", rowid: string, data: any, cssp?: string | Object): boolean;
 	on(eventName: "jqGridAfterSetRow", handler: (eventObject: JQueryEventObject, options: { rowid: string, inputData: Object | Object[], iRow?: number, localData?: Object, iData?: number, tr: HTMLTableRowElement, cssProp: string | Object }) => void): FreeJqGrid.JQueryJqGrid;
+
+	// changeRowid
+	changeRowid?(oldRowId: string, newRowId: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "changeRowid", oldRowId: string, newRowId: string): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridAfterChangeRowid", handler: (ventObject: JQueryEventObject, options: { rowid: string, oldRowid: string, iRow: number, tr: HTMLTableRowElement }) => void): FreeJqGrid.JQueryJqGrid;
 
 	// addRowData
 	addRowData?(rowid: string, rdata: Object | Object[], position?: FreeJqGrid.AddRowDataPosition, srcRowid?: string): boolean;
