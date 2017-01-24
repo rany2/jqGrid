@@ -688,7 +688,7 @@ declare namespace FreeJqGrid {
 		searchoptions?: SearchOptions;
 		sortable?: boolean;
 		sortfunc?: (a: any, b: any, direction: 1 | -1, aItem: any, bItem: any) => any;
-		sortIconName?: string | ((this: BodyTable, order: "asc" | "desc", iCol: number, cm: ColumnModel) => string); //
+		sortIconName?: (this: BodyTable, options: { order: "asc" | "desc", iCol: number, cm: ColumnModel }) => string; // return CSS classes
 		stype?: "select" | "checkbox" | "custom" | "text"; // default value "text"
 		template?: "actions" | "integer" | "integerStr" | "number" | "numberStr" | "booleanCheckbox" | "booleanCheckboxFa" | string | ColumnModel;
 		title?: boolean;
@@ -898,7 +898,38 @@ declare namespace FreeJqGrid {
 		subgridtype?: string | ((this: BodyTable, postData: Object | string, loadId: string, rcnt: number, npage: number, adjust: number) => void);
 		subGridWidth?: number; // 16
 	}
-	interface JqGridOptions extends JqGridSubGridOptions {
+	interface jqGridSelectionOptions {
+		beforeSelectRow?: (this: BodyTable, rowid, eventObject: JQueryEventObject) => false | void;
+		readonly cb?: string;   // "#cb_list"
+		readonly cbId?: string; // "cb_list"
+		deselectAfterSort?: boolean;
+		multiboxonly?: boolean;
+		multikey?: boolean;
+		multiPageSelection?: boolean;
+		multiselect?: boolean;
+		multiselectPosition?: "left" | "right" | "none";
+		multiselectWidth?: number; // 16
+		onSelectAll?: (this: BodyTable, rowids: string[], toCheck: boolean) => void;
+		onSelectRow?: (this: BodyTable, rowid: string, state: boolean, eventObject: JQueryEventObject) => void;
+		selrow?: null | string; // null
+		selarrrow?: string[]; // []
+		singleSelectClickMode?: "toggle" | "selectonly"; // "toggle"
+	}
+	interface jqGridSortingOptions {
+		builderSortIcons?: (this: BodyTable, iCol: number) => string;
+		ignoreCase?: boolean; // true
+		readonly lastsort?: number; // 0
+		multiSort?: boolean; // false
+		onSortCol?: (this: BodyTable, cmOrIndexName: string, iCol: number, sortOrder: string) => BooleanFeedbackValues;
+		sortname?: string; // ""
+		sortIconsBeforeText?: boolean; // false
+		sortIconName?: (this: BodyTable, options: { order: "asc" | "desc", iCol: number, cm: ColumnModel }) => string; // return CSS classes
+		showOneSortIcon?: boolean; // false
+		sortorder?: "asc" | "desc" | string; // "asc"
+		threeStateSort?: boolean; // false
+		viewsortcols?: [boolean, "vertical" | "horizontal", boolean]; // [false, "vertical", true]
+	}
+	interface JqGridOptions extends JqGridSubGridOptions, jqGridSelectionOptions, jqGridSortingOptions {
 		_index?: {[rowid: string]: number }; // used internally by jqGrid if local data exists
 		_inlinenav?: boolean; // used internally by jqGrid if inlineNav be called
 		_nvtd?: [number, number]; // used internally by jqGrid
@@ -920,10 +951,7 @@ declare namespace FreeJqGrid {
 		beforeInitGrid?: (this: BodyTable) => void;
 		beforeProcessing?: (this: BodyTable, data: any, textStatus: string, jqXhr: JQueryXHR) => false | void;
 		beforeRequest?: (this: BodyTable) => BooleanFeedbackValues;
-		beforeSelectRow?: (this: BodyTable, rowid, eventObject: JQueryEventObject) => false | void;
 		caption?: string;
-		cb?: string;   // "#cb_list"
-		cbId?: string; // "cb_list"
 		cellEdit?: boolean;
 		cellLayout?: number; // 5
 		cellsubmit?: string; // "clientArray"
@@ -934,7 +962,6 @@ declare namespace FreeJqGrid {
 		columnsToReResizing?: number[]; // used internally by jqGrid
 		data?: any[];
 		datatype?: string | ((this: BodyTable, postData: Object | string, loadId: string, rcnt: number, npage: number, adjust: number) => void);
-		deselectAfterSort?: boolean;
 		direction?: "ltr" | "rtl";
 		disableClick?: boolean;
 		doubleClickSensitivity?: number; // 250
@@ -948,16 +975,16 @@ declare namespace FreeJqGrid {
 		formEditing?: FormEditingOptions;
 		formViewing?: FormViewingOptions;
 		frozenColumns?: boolean;
-		gBox?: string; // "#gbox_list"
-		gBoxId?: string; // gbox_list"
+		readonly gBox?: string; // "#gbox_list"
+		readonly gBoxId?: string; // gbox_list"
 		gridComplete?: (this: BodyTable) => void;
 		gridstate?: "visible" | "hidden";
 		gridview?: boolean;
 		grouping?: boolean;
 		groupingView?: any;
 		guiStyle?: string; // "jQueryUI"
-		gView?: string; // "#gview_list"
-		gViewId?: string; // "gview_list"
+		readonly gView?: string; // "#gview_list"
+		readonly gViewId?: string; // "gview_list"
 		headertitles?: boolean;
 		height?: "auto" | "100%" | number;
 		hiddengrid?: boolean;
@@ -966,10 +993,9 @@ declare namespace FreeJqGrid {
 		iCol?: number; // -1
 		iColByName?: {[cmName: string]: number };
 		iconSet?: string; // "fontAwesome"
-		id?: string; // "list"
-		idPrefix?: string; // ""
-		idSel?: string; // "#list"
-		ignoreCase?: boolean;
+		readonly id?: string; // "list"
+		readonly idPrefix?: string; // ""
+		readonly idSel?: string; // "#list"
 		inlineEditing?: InlineEditingOptions;
 		iPropByName?: {[additionalPropertyName: string]: number };
 		jqXhr?: JQueryXHR; // JQueryXHR of the last pending Ajax request. Be used by abortAjaxRequest method
@@ -978,7 +1004,6 @@ declare namespace FreeJqGrid {
 		keyName?: boolean;
 		lastpage?: number; // 2
 		lastSelectedData?: any[];
-		lastsort?: number; // 3
 		loadBeforeSend?: (this: BodyTable, jqXhr: JQueryXHR, settings: JQueryAjaxSettings) => false | void;
 		loadComplete?: (this: BodyTable, data: any) => void;
 		loadonce?: boolean;
@@ -989,13 +1014,6 @@ declare namespace FreeJqGrid {
 		maxRowNum?: number; // 10000
 		minResizingWidth?: number; // 10
 		mtype?: string; // "GET"
-		multiboxonly?: boolean;
-		multikey?: boolean;
-		multiPageSelection?: boolean;
-		multiselect?: boolean;
-		multiselectPosition?: "left" | "right" | "none";
-		multiselectWidth?: number; // 16
-		multiSort?: boolean;
 		navOptions?: NavOptions;
 		nv?: number; // 0
 		ondblClickRow?: (this: BodyTable, rowid: string, iRow: number, iCol: number, eventObject: JQueryEventObject) => void;
@@ -1004,10 +1022,7 @@ declare namespace FreeJqGrid {
 		onPaging?: (this: BodyTable, source: "records" | "user" | "first" | "prev" | "next" | "last", options: { newPage: number, currentPage: number, lastPage: number, currentRowNum: number, newRowNum: number }) => BooleanFeedbackValues;
 		onRemapColumns?: (this: BodyTable, permutation: number[], updateCells?: boolean, keepHeader?: boolean) => void;
 		onRightClickRow?: (this: BodyTable, rowid: string, iRow: number, iCol: number, eventObject: JQueryEventObject) => void;
-		onSelectAll?: (this: BodyTable, rowids: string[], toCheck: boolean) => void;
-		onSelectRow?: (this: BodyTable, rowid: string, state: boolean, eventObject: JQueryEventObject) => void;
 		onShowHideCol?: (this: BodyTable, show: boolean | "none" | "", cmName: string, iCol: number, options: ShowHideColOptions) => void;
-		onSortCol?: (this: BodyTable, cmOrIndexName: string, iCol: number, sortOrder: string) => BooleanFeedbackValues;
 		page?: number;
 		pager?: boolean | string; // "#jqg1"
 		pagerLeftWidth?: number; // 125
@@ -1049,8 +1064,8 @@ declare namespace FreeJqGrid {
 		rownumbers?: boolean;
 		rownumWidth?: number; // 25
 		rowTotal?: null | number;
-		rs?: string; // "#rs_mlist"
-		rsId?: string; // "rs_mlist"
+		readonly rs?: string; // "#rs_mlist"
+		readonly rsId?: string; // "rs_mlist"
 		savedRow?: any[];
 		scroll?: boolean;
 		scrollOffset?: number; // 0
@@ -1058,15 +1073,8 @@ declare namespace FreeJqGrid {
 		scrollTimeout?: number; // 40
 		search?: boolean;
 		searching?: SearchingOptions;
-		selarrrow?: string[];
-		selrow?: null | string;
-		showOneSortIcon?: boolean;
 		shrinkToFit?: boolean;
-		singleSelectClickMode?: "toggle" | "selectonly";
-		sortname?: string; // "invdate"
-		sortorder?: "asc" | "desc" | string;
 		tblwidth?: number; // 487
-		threeStateSort?: boolean;
 		toolbar?: [boolean, "top" | "bottom" | "both"];
 		toppager?: string; // "#list_toppager"
 		totaltime?: number; // 94
@@ -1087,7 +1095,6 @@ declare namespace FreeJqGrid {
 		userDataOnFooter?: boolean;
 		useUnformattedDataForCellAttr?: boolean;
 		viewrecords?: boolean;
-		viewsortcols?: [boolean, "vertical" | "horizontal", boolean];
 		width?: number | "auto" | "100%" | string;
 		widthOrg?: number; // used internally by jqGrid
 		xmlReader?: XmlReader;

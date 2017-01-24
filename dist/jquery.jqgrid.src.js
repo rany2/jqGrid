@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-23
+ * Date: 2017-01-24
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2857,7 +2857,26 @@
 					iPropByName: {},
 					reservedColumnNames: ["rn", "cb", "subgrid"],
 					grouping: false,
-					groupingView: { groupField: [], groupOrder: [], groupText: [], groupColumnShow: [], groupSummary: [], showSummaryOnHide: false, sortitems: [], sortnames: [], summary: [], summaryval: [], displayField: [], groupSummaryPos: [], formatDisplayField: [], _locgr: false, commonIconClass: getIcon("grouping.common"), plusicon: getIcon("grouping.plus"), minusicon: getIcon("grouping.minus") },
+					groupingView: {
+						groupField: [],
+						groupOrder: [],
+						groupText: [],
+						groupColumnShow: [],
+						groupSummary: [],
+						showSummaryOnHide: false,
+						useDefaultValuesOnGrouping: true,
+						sortitems: [],
+						sortnames: [],
+						summary: [],
+						summaryval: [],
+						displayField: [],
+						groupSummaryPos: [],
+						formatDisplayField: [],
+						_locgr: false,
+						commonIconClass: getIcon("grouping.common"),
+						plusicon: getIcon("grouping.plus"),
+						minusicon: getIcon("grouping.minus")
+					},
 					ignoreCase: true,
 					cmTemplate: {},
 					idPrefix: "",
@@ -14372,10 +14391,10 @@
 		},
 		groupingPrepare: function (record, irow) {
 			this.each(function () {
-				var $t = this, grp = $t.p.groupingView, groups = grp.groups, counters = grp.counters,
+				var $t = this, p = $t.p, grp = p.groupingView, groups = grp.groups, counters = grp.counters,
 					lastvalues = grp.lastvalues, isInTheSameGroup = grp.isInTheSameGroup, groupLength = grp.groupField.length,
 					i, j, keys, newGroup, counter, fieldName, v, displayName, displayValue, changed = false,
-					groupingCalculationsHandler = base.groupingCalculations.handler,
+					groupingCalculationsHandler = base.groupingCalculations.handler, key,
 					buildSummary = function () {
 						var iSummary, summary, st;
 						for (iSummary = 0; iSummary < counter.summary.length; iSummary++) {
@@ -14391,13 +14410,36 @@
 							}
 						}
 						return counter.summary;
+					},
+					normilizeValue = function (value, cmOrPropName) {
+						if (value == null && grp.useDefaultValuesOnGrouping) {
+							var cm = p.iColByName[cmOrPropName] !== undefined ?
+									p.colModel[p.iColByName[cmOrPropName]] :
+									p.additionalProperties[p.iPropByName[cmOrPropName]],
+									defaultValue;
+
+							if (cm != null && cm.formatter != null) {
+								if (cm.formatoptions != null && cm.formatoptions.defaultValue !== undefined) {
+									value = cm.formatoptions.defaultValue;
+								} else if (typeof cm.formatter === "string") {
+									defaultValue = $($t).jqGrid("getGridRes", "formatter." + cm.formatter + ".defaultValue");
+									if (defaultValue !== undefined) {
+										value = defaultValue;
+									}
+								}
+							}
+						}
+						return value;
 					};
 
 				for (i = 0; i < groupLength; i++) {
 					fieldName = grp.groupField[i];
+					v = normilizeValue(record[fieldName], fieldName);
+					key = v;
 					displayName = grp.displayField[i];
-					v = record[fieldName];
-					displayValue = displayName == null ? null : record[displayName];
+					displayValue = displayName == null ?
+						null :
+						normilizeValue(record[displayName], displayName);
 
 					if (displayValue == null) {
 						displayValue = v;
@@ -19194,7 +19236,7 @@
 			baseLinkUrl: "",
 			showAction: "",
 			target: "",
-			checkbox: { disabled: true },
+			checkbox: { disabled: true, defaultValue: false },
 			idName: "id"
 		},
 		cmTemplate: {
