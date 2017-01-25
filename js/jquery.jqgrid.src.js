@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-24
+ * Date: 2017-01-25
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -5484,7 +5484,7 @@
 					}
 					return false;
 				});
-			if (p.sortable && $.fn.sortable) {
+			if (p.sortable && isFunction($j.sortableColumns)) {
 				try {
 					$j.sortableColumns.call($self0, $(hTable[0].tHead.rows[0]));
 				} catch (ignore1) { }
@@ -8382,10 +8382,12 @@
 		},
 		//Helper functions
 		createModal: function (aIDs, content, o, insertSelector, posSelector, appendsel, css) {
-			var jqID = jgrid.jqID, p = this.p, gridjqModal = p != null ? p.jqModal || {} : {};
+			var jqID = jgrid.jqID, p = this.p;
 			o = $.extend(true, {
 				resizingRightBottomIcon: base.getIconRes.call(this, "form.resizableLtr")
-			}, jgrid.jqModal || {}, gridjqModal, o);
+			}, jgrid.jqModal || {},
+			p != null ? p.jqModal || {} : {},
+			o);
 			// create main window "div.ui-jqdialog", which will contains other components of the modal window:
 			// "div.ui-jqdialog-titlebar", "div.ui-jqdialog-content" and optionally resizer like "div.jqResize"
 			var mw = document.createElement("div"), themodalSelector = "#" + jqID(aIDs.themodal),
@@ -8544,7 +8546,7 @@
 			}
 		},
 		info_dialog: function (caption, content, closeButtonText, modalopt) {
-			var $t = this, p = $t.p, gridjqModal = p != null ? p.jqModal || {} : {},
+			var $t = this, p = $t.p,
 				mopt = $.extend(true,
 					{
 						width: 290,
@@ -8565,7 +8567,7 @@
 						// if the id is not provided we set it like info_button_+ the index in the array - i.e info_button_0,info_button_1...
 					},
 					jgrid.jqModal || {},
-					gridjqModal,
+					p != null ? p.jqModal || {} : {},
 					{ caption: "<b>" + caption + "</b>" },
 					modalopt || {}),
 				jm = mopt.jqModal;
@@ -16198,6 +16200,7 @@
 		sortableColumns: function (tblrow) {
 			return this.each(function () {
 				var ts = this, p = ts.p, tid = jqID(p.id);
+				if (!p || !p.sortable || !$.isFunction($.fn.sortable)) { return; }
 				function start() { p.disableClick = true; }
 				var sortableOpts = {
 					tolerance: "pointer",
