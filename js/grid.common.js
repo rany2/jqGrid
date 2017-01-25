@@ -80,10 +80,12 @@
 		},
 		//Helper functions
 		createModal: function (aIDs, content, o, insertSelector, posSelector, appendsel, css) {
-			var jqID = jgrid.jqID, p = this.p, gridjqModal = p != null ? p.jqModal || {} : {};
+			var jqID = jgrid.jqID, p = this.p;
 			o = $.extend(true, {
 				resizingRightBottomIcon: base.getIconRes.call(this, "form.resizableLtr")
-			}, jgrid.jqModal || {}, gridjqModal, o);
+			}, jgrid.jqModal || {},
+			p != null ? p.jqModal || {} : {},
+			o);
 			// create main window "div.ui-jqdialog", which will contains other components of the modal window:
 			// "div.ui-jqdialog-titlebar", "div.ui-jqdialog-content" and optionally resizer like "div.jqResize"
 			var mw = document.createElement("div"), themodalSelector = "#" + jqID(aIDs.themodal),
@@ -242,7 +244,7 @@
 			}
 		},
 		info_dialog: function (caption, content, closeButtonText, modalopt) {
-			var $t = this, p = $t.p, gridjqModal = p != null ? p.jqModal || {} : {},
+			var $t = this, p = $t.p,
 				mopt = $.extend(true,
 					{
 						width: 290,
@@ -263,7 +265,7 @@
 						// if the id is not provided we set it like info_button_+ the index in the array - i.e info_button_0,info_button_1...
 					},
 					jgrid.jqModal || {},
-					gridjqModal,
+					p != null ? p.jqModal || {} : {},
 					{ caption: "<b>" + caption + "</b>" },
 					modalopt || {}),
 				jm = mopt.jqModal;
