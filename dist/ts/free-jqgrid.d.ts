@@ -34,7 +34,7 @@ declare namespace FreeJqGrid {
 		width: number;
 	}
 	interface BodyTable extends HTMLTableElement {
-		p: any;
+		p: JqGridOptions;
 		grid: GridInfo;
 		ftoolbar?: boolean;
 		nav?: boolean;
@@ -318,7 +318,7 @@ declare namespace FreeJqGrid {
 		iCol: number;
 		iRow: number;
 		cmName: string;
-		cm: any;
+		cm: ColumnModel;
 		mode: "add" | "edit";
 		td: HTMLTableDataCellElement;
 		tr: HTMLTableRowElement;
@@ -532,7 +532,7 @@ declare namespace FreeJqGrid {
 		uidPref: string;
 		version: string; // like "4.13.7" for example
 		view?: FormViewingOptions;
-		bindEv(element: Element | JQuery, options: any): any;
+		bindEv(element: Element | JQuery, options: EditOptions | SearchOptions): any;
 		builderFmButon(this: BodyTable, id: string, text?: string, icon?: string, iconOnLeftOrRight?: "right" | "left" | undefined, conner?: "right" | "left" | undefined): any;
 		builderSortIcons(this: BodyTable, iCol: number): string;
 		cellWidth(): boolean;
@@ -651,8 +651,27 @@ declare namespace FreeJqGrid {
 		value?: string | { [propName: string]: string };
 		[propName: string]: any; // attribute for the editable element
 	}
-	interface SearchOptions {
+	interface SearchOptions extends EditOptions {
+		attr?: Object;
+		clearSearch?: boolean;
+		defaultValue?: boolean;
+		searchhidden?: boolean;
+		sopt?: string[];
 		[propName: string]: any;
+	}
+	interface EditOrSearchRules {
+		custom?: boolean | ((this: BodyTable, options: { oldValue: string, newValue: string, oldRowData?: any, rowid: string, iCol: number, iRow: number, mode: "cell" | "addForm" | "editForm" | "add" | "edit", cmName: string, cm: ColumnModel, td?: HTMLTableDataCellElement, tr?: HTMLTableRowElement }) => any[]);
+		custom_func?: (this: BodyTable, value: string, name: string, iCol: number) => any[];
+		date?: boolean;
+		edithidden?: boolean;
+		email?: boolean;
+		integer?: boolean;
+		maxValue?: number;
+		minValue?: number;
+		number?: boolean;
+		required?: boolean;
+		time?: boolean;
+		url?: boolean;
 	}
 	interface ColumnModel {
 		align?: "left" | "center" | "right";
@@ -665,20 +684,7 @@ declare namespace FreeJqGrid {
 		datefmt?: string;
 		editable?: boolean | "hidden" | "disabled" | "readonly" | ((options: { rowid: string, iCol: number, iRow: number, mode: "cell" | "addForm" | "editForm" | "add" | "edit", cmName: string, cm: ColumnModel, td?: HTMLTableDataCellElement, tr?: HTMLTableRowElement, trFrozen?: HTMLTableRowElement, dataElement?: Element, dataWidth?: number }) => boolean | "hidden" | "disabled" | "readonly"); // default value false
 		editoptions?: EditOptions;
-		editrules?: {
-			edithidden?: boolean;
-			required?: boolean;
-			number?: boolean;
-			integer?: boolean;
-			minValue?: number;
-			maxValue?: number;
-			email?: boolean;
-			url?: boolean;
-			date?: boolean;
-			time?: boolean;
-			custom?: boolean | ((this: BodyTable, options: { oldValue: string, newValue: string, oldRowData?: any, rowid: string, iCol: number, iRow: number, mode: "cell" | "addForm" | "editForm" | "add" | "edit", cmName: string, cm: ColumnModel, td?: HTMLTableDataCellElement, tr?: HTMLTableRowElement }) => any[]);
-			custom_func?: (this: BodyTable, value: string, name: string, iCol: number) => any[];
-		};
+		editrules?: EditOrSearchRules;
 		edittype?: "text" | "textarea" | "checkbox" | "select" | "password" | "button" | "image" | "file" | "custom";
 		firstsortorder?: "asc" | "desc"; // default value "asc"
 		fixed?: boolean; // default value false
@@ -707,6 +713,7 @@ declare namespace FreeJqGrid {
 		saveLocally?: (this: BodyTable, options: { newValue: any, newItem: Object, oldItem: Object, id: string, cm: ColumnModel, cmName: string, iCol: number }) => void;
 		search?: boolean;
 		searchoptions?: SearchOptions;
+		searchrules?: EditOrSearchRules;
 		sortable?: boolean;
 		sortfunc?: (a: any, b: any, direction: 1 | -1, aItem: any, bItem: any) => any;
 		sortIconName?: (this: BodyTable, options: { order: "asc" | "desc", iCol: number, cm: ColumnModel }) => string; // return CSS classes
@@ -930,10 +937,16 @@ declare namespace FreeJqGrid {
 	}
 	interface JqGridSubGridOptions {
 		ajaxSubgridOptions?: JQueryAjaxSettings;
+		beforeCollapse?: (this: BodyTable, subgridDivId: string, rowid: string) => void;
+		beforeExpand?: (this: BodyTable, subgridDivId: string, rowid: string) => void;
+		loadSubgridError?: (this: BodyTable, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void;
+		serializeSubGridData?: (this: BodyTable, postData: any) => Object | string;
 		subGrid?: boolean;
 		subGridModel?: { align?: ("left" | "center" | "right")[], name: string[], mapping?: string[], params?: string[], width: number[] }[];
 		subGridOptions?: SubGridOptions;
-		subgridtype?: string | ((this: BodyTable, postData: Object | string, loadId: string, rcnt: number, npage: number, adjust: number) => void);
+		subGridRowExpanded?: (this: BodyTable, subgridDivId: string, rowid: string) => void;
+		subGridUrl?: string | ((this: BodyTable, postData: Object | string) => string);
+		subgridtype?: string | ((this: BodyTable, postData: Object | string) => void);
 		subGridWidth?: number; // 16
 	}
 	interface jqGridSelectionOptions {
@@ -1090,6 +1103,7 @@ declare namespace FreeJqGrid {
 		lastSelectedData?: any[];
 		loadBeforeSend?: (this: BodyTable, jqXhr: JQueryXHR, settings: JQueryAjaxSettings) => false | void;
 		loadComplete?: (this: BodyTable, data: any) => void;
+		loadError?: (this: BodyTable, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void;
 		loadonce?: boolean;
 		loadui?: "enable" | "disable" | "block";
 		locale?: string; // default is "en-US". It will be overwrite if by the last included i18n\grid.locale-XX.min.js
@@ -1419,6 +1433,60 @@ interface JQuery {
 	jqGrid(methodName: "navGrid", pagerIdSelector: string, navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "navGrid", navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
 
+	// subgrid
+	addSubGrid?(iCol: number, iRow?: number): FreeJqGrid.JQueryJqGrid;
+	addSubGridCell?(iCol: number, iRow: number, rowid: string, item: Object): string;
+	collapseSubGridRow?(rowid: string): FreeJqGrid.JQueryJqGrid;
+	expandSubGridRow?(rowid: string): FreeJqGrid.JQueryJqGrid;
+	setSubGrid?(): FreeJqGrid.JQueryJqGrid;
+	toggleSubGridRow?(rowid: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "addSubGrid", iCol: number, iRow?: number): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "addSubGridCell", iCol: number, iRow: number, rowid: string, item: Object): string;
+	jqGrid(methodName: "collapseSubGridRow", rowid: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "expandSubGridRow", rowid: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setSubGrid"): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "toggleSubGridRow", rowid: string): FreeJqGrid.JQueryJqGrid;
+
+	// TreeGrid
+	setTreeNode?(): FreeJqGrid.JQueryJqGrid;
+	setTreeGrid?(): FreeJqGrid.JQueryJqGrid;
+	expandRow?(item: Object): FreeJqGrid.JQueryJqGrid;
+	collapseRow?(item: Object): FreeJqGrid.JQueryJqGrid;
+	getRootNodes?(): Object[];
+	getNodeDepth?(item: Object): number;
+	getNodeParent?(item: Object): Object;
+	getNodeChildren?(item: Object): Object[];
+	getFullTreeNode?(item: Object): Object[];
+	getNodeAncestors?(item: Object): Object[];
+	isVisibleNode?(item: Object): boolean;
+	isNodeLoaded?(item: Object): boolean;
+	expandNode?(item: Object): FreeJqGrid.JQueryJqGrid;
+	collapseNode?(item: Object): FreeJqGrid.JQueryJqGrid;
+	SortTree?(sortname: string, newDir: "a" | "asc" | "ascending" | "d" | "desc" | "descending", st: "text" | "int" | "integer" | "float" | "number" | "currency" | "numeric" | "date" | "datetime" | ((value: string) => string), datefmt: string): FreeJqGrid.JQueryJqGrid;
+	collectChildrenSortTree?(items: Object[], item: Object, sortname: string, newDir: "a" | "asc" | "ascending" | "d" | "desc" | "descending", st: "text" | "int" | "integer" | "float" | "number" | "currency" | "numeric" | "date" | "datetime" | ((value: string) => string), datefmt: string): FreeJqGrid.JQueryJqGrid;
+	setTreeRow?(rowid: string, item: Object): boolean;
+	delTreeNode?(rowid: string, skipSelf?: boolean): FreeJqGrid.JQueryJqGrid;
+	addChildNode?(nodeid: string, parentid: string, item: Object, expandData?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setTreeNode"): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setTreeGrid"): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "expandRow", item: Object): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "collapseRow", item: Object): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "getRootNodes"): Object[];
+	jqGrid(methodName: "getNodeDepth", item: Object): number;
+	jqGrid(methodName: "getNodeParent", item: Object): Object;
+	jqGrid(methodName: "getNodeChildren", item: Object): Object[];
+	jqGrid(methodName: "getFullTreeNode", item: Object): Object[];
+	jqGrid(methodName: "getNodeAncestors", item: Object): Object[];
+	jqGrid(methodName: "isVisibleNode", item: Object): boolean;
+	jqGrid(methodName: "isNodeLoaded", item: Object): boolean;
+	jqGrid(methodName: "expandNode", item: Object): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "collapseNode", item: Object): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "SortTree", sortname: string, newDir: "a" | "asc" | "ascending" | "d" | "desc" | "descending", st: "text" | "int" | "integer" | "float" | "number" | "currency" | "numeric" | "date" | "datetime" | ((value: string) => string), datefmt: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "collectChildrenSortTree", items: Object[], item: Object, sortname: string, newDir: "a" | "asc" | "ascending" | "d" | "desc" | "descending", st: "text" | "int" | "integer" | "float" | "number" | "currency" | "numeric" | "date" | "datetime" | ((value: string) => string), datefmt: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setTreeRow", rowid: string, item: Object): boolean;
+	jqGrid(methodName: "delTreeNode", rowid: string, skipSelf?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "addChildNode", nodeid: string, parentid: string, item: Object, expandData?: boolean): FreeJqGrid.JQueryJqGrid;
+
 	// jqModal
 	jqm(options: FreeJqGrid.JqModalOptions): JQuery;
 	jqmAddClose(trigger: Element | string | JQuery): JQuery;
@@ -1481,4 +1549,20 @@ interface JQuery {
 	on(eventName: "jqGridInlineSerializeSaveData", handler: (eventObject: JQueryEventObject, postdata: Object) => Object | string): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridInlineSuccessSaveRow", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, rowid: string, options: FreeJqGrid.SaveRowOptions) => boolean | [boolean, any]): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridInlineErrorSaveRow", handler: (eventObject: JQueryEventObject, rowid: string, jqXhr: JQueryXHR, textStatus: string, errorThrown: string, options: FreeJqGrid.SaveRowOptions) => void): FreeJqGrid.JQueryJqGrid;
+
+	// subgrid events
+	on(eventName: "jqGridSerializeSubGridData", handler: (eventObject: JQueryEventObject, postdata: Object) => Object | string): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridSubGridBeforeCollapse", handler: (eventObject: JQueryEventObject, subgridDivId: string, rowid: string) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridSubGridBeforeExpand", handler: (eventObject: JQueryEventObject, subgridDivId: string, rowid: string) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridSubGridRowExpanded", handler: (eventObject: JQueryEventObject, subgridDivId: string, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
+
+	// TreeGrid events
+	on(eventName: "jqGridTreeGridAfterCollapseNode", handler: (eventObject: JQueryEventObject, options: { rowid: string, item: Object }) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridTreeGridAfterCollapseRow", handler: (eventObject: JQueryEventObject, options: { rowid: string, item: Object }) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridTreeGridAfterExpandNode", handler: (eventObject: JQueryEventObject, options: { rowid: string, item: Object }) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridTreeGridAfterExpandRow", handler: (eventObject: JQueryEventObject, options: { rowid: string, item: Object }) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridTreeGridBeforeCollapseNode", handler: (eventObject: JQueryEventObject, options: { rowid: string, item: Object }) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridTreeGridBeforeCollapseRow", handler: (eventObject: JQueryEventObject, options: { rowid: string, item: Object }) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridTreeGridBeforeExpandNode", handler: (eventObject: JQueryEventObject, options: { rowid: string, item: Object }) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridTreeGridBeforeExpandRow", handler: (eventObject: JQueryEventObject, options: { rowid: string, item: Object }) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 }
