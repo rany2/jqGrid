@@ -1776,7 +1776,7 @@
 						if (_trim) {
 							phrase.push("jQuery.trim(");
 						}
-						phrase.push("String(" + s + ")");
+						phrase.push("String(" + s + " || '')");
 						if (_trim) {
 							phrase.push(")");
 						}
