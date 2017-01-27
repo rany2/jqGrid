@@ -1750,14 +1750,11 @@
 						_negate = false,
 						_queuedOperator = "",
 						_sorting = [],
-						toString = Object.prototype.toString,
-						_useProperties = true;
+						toString = Object.prototype.toString;
 					if (typeof d === "object" && d.push) {
 						if (d.length > 0) {
 							if (typeof d[0] !== "object") {
-								_useProperties = false;
-							} else {
-								_useProperties = true;
+								throw "data items are not objects";
 							}
 						}
 					} else {
@@ -1852,9 +1849,6 @@
 							return _lastCommand(f, v);
 						}
 						if (_lastField === null) {
-							return _lastCommand(f);
-						}
-						if (!_useProperties) {
 							return _lastCommand(f);
 						}
 						return _lastCommand(_lastField, f);
@@ -2088,12 +2082,8 @@
 					};
 					/** @private */
 					this._compareValues = function (func, f, v, how, t) {
-						var fld;
-						if (_useProperties) {
-							fld = f;
-						} else {
-							fld = "this";
-						}
+						var fld = f;
+
 						if (v === undefined) { v = null; }
 						//var val=v===null?f:v,
 						var val = v, swst = t.stype === undefined ? "text" : t.stype;
@@ -2160,12 +2150,8 @@
 					this.startsWith = function (f, v) {
 						var val = (v == null) ? f : v,
 							length = _trim ? $.trim(val.toString()).length : val.toString().length;
-						if (_useProperties) {
-							self._append(self._getStr(f) + ".substr(0," + length + ") == " + self._getStr("\"" + self._toStr(v) + "\""));
-						} else {
-							if (v != null) { length = _trim ? $.trim(v.toString()).length : v.toString().length; }
-							self._append(self._getStr("this") + ".substr(0," + length + ") == " + self._getStr("\"" + self._toStr(f) + "\""));
-						}
+
+						self._append(self._getStr(f) + ".substr(0," + length + ") == " + self._getStr("\"" + self._toStr(v) + "\""));
 						self._setCommand(self.startsWith, f);
 						self._resetNegate();
 						return self;
@@ -2173,21 +2159,13 @@
 					this.endsWith = function (f, v) {
 						var val = (v == null) ? f : v,
 							length = _trim ? $.trim(val.toString()).length : val.toString().length;
-						if (_useProperties) {
-							self._append(self._getStr(f) + ".substr(" + self._getStr(f) + ".length-" + length + "," + length + ") == \"" + self._toStr(v) + "\"");
-						} else {
-							self._append(self._getStr("this") + ".substr(" + self._getStr("this") + ".length-\"" + self._toStr(f) + "\".length,\"" + self._toStr(f) + "\".length) == \"" + self._toStr(f) + "\"");
-						}
+						self._append(self._getStr(f) + ".substr(" + self._getStr(f) + ".length-" + length + "," + length + ") == \"" + self._toStr(v) + "\"");
 						self._setCommand(self.endsWith, f);
 						self._resetNegate();
 						return self;
 					};
 					this.contains = function (f, v) {
-						if (_useProperties) {
-							self._append(self._getStr(f) + ".indexOf(\"" + self._toStr(v) + "\",0) > -1");
-						} else {
-							self._append(self._getStr("this") + ".indexOf(\"" + self._toStr(f) + "\",0) > -1");
-						}
+						self._append(self._getStr(f) + ".indexOf(\"" + self._toStr(v) + "\",0) > -1");
 						self._setCommand(self.contains, f);
 						self._resetNegate();
 						return self;
@@ -2232,7 +2210,7 @@
 					return self;
 				};
 
-			return new QueryObject(typeof source === "string" ? $.data(source) : source, null);
+			return new QueryObject(source, null);
 		},
 		serializeFeedback: function (callback, eventName, postData) {
 			var self = this, eventResult;
