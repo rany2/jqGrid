@@ -99,7 +99,24 @@
 						tmplLabel: " Template: ",
 						showOnLoad: false,
 						layer: null,
-						operands: { "eq": "=", "ne": "<>", "lt": "<", "le": "<=", "gt": ">", "ge": ">=", "bw": "LIKE", "bn": "NOT LIKE", "in": "IN", "ni": "NOT IN", "ew": "LIKE", "en": "NOT LIKE", "cn": "LIKE", "nc": "NOT LIKE", "nu": "IS NULL", "nn": "IS NOT NULL" }
+						operands: {
+							eq: "=",
+							ne: "<>",
+							lt: "<",
+							le: "<=",
+							gt: ">",
+							ge: ">=",
+							bw: "LIKE",
+							bn: "NOT LIKE",
+							"in": "IN",
+							ni: "NOT IN",
+							ew: "LIKE",
+							en: "NOT LIKE",
+							cn: "LIKE",
+							nc: "NOT LIKE",
+							nu: "IS NULL",
+							nn: "IS NOT NULL"
+						}
 					},
 					base.getGridRes.call($self, "search"),
 					jgrid.search || {},
@@ -239,11 +256,11 @@
 						operands: o.operands,
 						ajaxSelectOptions: p.ajaxSelectOptions,
 						groupOps: o.groupOps,
-						onChange: function (filterOptions, fOpt, filterDiv) {
+						onChange: function (filterOptions, filterDiv) {
 							if (filterOptions.showQuery) {
-								$(".query", filterDiv).text(fOpt.toUserFriendlyString());
+								$(".query", filterDiv).text(filterDiv.toUserFriendlyString());
 							}
-							fullBoolFeedback.call($t, o.afterChange, "jqGridFilterAfterChange", $(fid), o, filterOptions, fOpt);
+							fullBoolFeedback.call($t, o.afterChange, "jqGridFilterAfterChange", $(fid), o, filterOptions, filterDiv);
 						},
 						direction: p.direction,
 						id: p.id
@@ -331,9 +348,9 @@
 								sdata[o.sFilter] = "";
 							}
 						}
-						p.search = true;
 						$.extend(p.postData, sdata);
 						if (fullBoolFeedback.call($t, o.onSearch, "jqGridFilterSearch", p.filters)) {
+							p.search = true;
 							$self.trigger("reloadGrid", [$.extend({ page: 1 }, o.reloadGridSearchOptions || {})]);
 						}
 						if (o.closeAfterSearch) {
@@ -2264,7 +2281,6 @@
 							title: "",
 							onClickButton: null,
 							position: "last",
-							cursor: "pointer",
 							iconsOverText: false
 						},
 						base.getGridRes.call($($t), "nav"),
