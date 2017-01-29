@@ -58,7 +58,7 @@
     "@types/jquery": "^2.0.39",
     "@types/jqueryui": "^1.11.32",
     "@types/qunit": "^2.0.31",
-    "google-closure-compiler": "^20161201.0.0",
+    "google-closure-compiler": "^20170124.0.0",
     "grunt": "^1.0.1",
     "grunt-closure-tools": "^0.9.9",
     "grunt-contrib-clean": "^1.0.0",
@@ -74,7 +74,7 @@
     "grunt-replace": "^1.0.1",
     "grunt-ts": "^6.0.0-beta.11",
     "grunt-tslint": "^4.0.0",
-    "tslint": "^4.3.1",
+    "tslint": "^4.4.2",
     "tslint-eslint-rules": "^3.2.3",
     "typescript": "^2.1.5",
     "vrsource-tslint-rules": "^4.0.1"
