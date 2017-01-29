@@ -159,20 +159,40 @@ declare namespace FreeJqGrid {
 		a: boolean; // It's false initially. It will be set to true during opening and will set to false on closing.
 	}
 	interface JqModalOptions {
-		overlay?: number; // 50
-		closeoverlay?: boolean; // false
-		overlayClass?: string; // "jqmOverlay"
-		closeClass?: string; // "jqmClose"
-		trigger?: string; // ".jqModal"
 		ajax?: string | false; // false
 		ajaxText?: string; // ""
-		target?: string | JQuery | false; // false
+		closeClass?: string; // "jqmClose"
+		closeoverlay?: boolean; // false
 		modal?: boolean; // false
-		toTop?: boolean; // false
-		onShow?: false | ((h: ModalHash) => void);
 		onHide?: false | ((h: ModalHash) => void);
 		onLoad?: false | ((h: ModalHash) => void);
+		onShow?: false | ((h: ModalHash) => void);
+		overlay?: number; // 50
+		overlayClass?: string; // "jqmOverlay"
+		target?: string | JQuery | false; // false
+		toTop?: boolean; // false
+		trigger?: string; // ".jqModal"
 	}
+	interface CreateModalOptions {
+		caption?: string;
+		closeOnEscape?: boolean;
+		drag?: boolean;
+		gbox?: string;
+		form?: string;
+		jqModal?: boolean;
+		height: number | "auto" | "100%" | string;
+		left?: number;
+		onClose?: (this: BodyTable, selector: string | Element | JQuery) => boolean;
+		overlay?: number;
+		recreateForm?: boolean;
+		removemodal?: boolean;
+		resize?: boolean;
+		resizingRightBottomIcon: string;
+		toTop?: boolean;
+		top?: number;
+		width: number | "auto" | "100%" | string;
+		zIndex?: number;
+    }
 	interface JqmOptions {
 		hash?: ModalHash[];
 		open?: (s: number, trigger: Element | string | JQuery) => boolean | void;
@@ -507,6 +527,7 @@ declare namespace FreeJqGrid {
 		defaults: JqGridStaticOptions;
 		del?: FormDeletingOptions;
 		edit?: FormEditingOptions;
+		filter?: JqFilterOptions;
 		guid: number;
 		guiStyles: {
 			jQueryUI: GuiStyleInfo;
@@ -543,7 +564,7 @@ declare namespace FreeJqGrid {
 		closeModal(h: ModalHash): void;
 		convertOnSaveLocally(this: BodyTable, nData: any, cm: any, oData: any, rowid: string, item: any, iCol: number): any;
 		createEl(elementType: string, options: any, value: string, autoWidth?: boolean, ajaxso?: any): Element;
-		createModal(aIDs: any, content: Element | JQuery, o: any, insertSelector: string | Element | JQuery, posSelector: string | Element | JQuery, appendsel?: boolean | string | Element | JQuery, css?: any): void;
+		createModal(aIDs: any, content: Element | JQuery, o: CreateModalOptions, insertSelector: string | Element | JQuery, posSelector: string | Element | JQuery, appendsel?: boolean | string | Element | JQuery, css?: any): void;
 		//detectRowEditing(rowid: string): RowEditingInfo;
 		detectRowEditing(this: BodyTable, rowid: string): { mode: "inlineEditing" | "cellEditing"; savedRow: any[]; };
 		enumEditableCells(this: BodyTable, tr: HTMLTableRowElement, mode: "add" | "edit", callback: (options: EditableCellInfo) => boolean): void;
@@ -827,6 +848,62 @@ declare namespace FreeJqGrid {
 	}
 	interface SearchingOptions extends SearchLocaleOptions {
 	}
+	interface SearchingDialogOptions extends SearchLocaleOptions, CreateModalOptions {
+		afterChange?: (this: BodyTable, $filter: JQuery, options: SearchingDialogOptions, filterOptions: JqFilterOptions, searchFilterDiv: JqFilterDiv) => void;
+		afterShowSearch?: (this: BodyTable, $filter: JQuery) => void;
+		afterRedraw?: (this: BodyTable, options: JqFilterOptions, searchFilterDiv: JqFilterDiv) => void;
+		beforeShowSearch?: (this: BodyTable, $filter: JQuery) => BooleanFeedbackValues;
+		closeAfterSearch?: boolean; // default false
+		closeAfterReset?: boolean; // default false
+		columns?: ColumnModel[];
+		commonIconClass?: string;
+		dataheight?: number | "auto" | "100%" | string; // "auto"
+		errorcheck?: boolean; // default true,
+		groupOps?: { op: string, text: string }[];
+		layer?: null | string; // can be id. be used in createModal as appendsel
+		loadDefaults?: boolean;
+		multipleSearch?: boolean; // default false
+		multipleGroup?: boolean; // default false
+		sField?: string; // default "searchField"
+		sValue?: string; // default "searchString"
+		sOper?: string; // default "searchOper"
+		sFilter?: string; // default "filters"
+		searchForAdditionalProperties?: boolean;
+		searchOnEnter?: boolean; // default false
+		showOnLoad: boolean; // default false
+		showQuery?: boolean; // default false,
+		sopt?: null; // used only if .searchoptions.sopt is undefined
+		stringResult?: boolean;
+		onInitializeSearch?: (this: BodyTable, $filter: JQuery) => void;
+		onSearch?: (this: BodyTable, filters: Filter) => void;
+		onReset?: (this: BodyTable) => BooleanFeedbackValues;
+		operands?: {
+			eq: string; // default "="
+			ne: string; // default "<>"
+			lt: string; // default "<"
+			le: string; // default "<="
+			gt: string; // default ">"
+			ge: string; // default ">="
+			bw: string; // default "LIKE"
+			bn: string; // default "NOT LIKE"
+			"in": string; // default "IN"
+			ni: string; // default "NOT IN"
+			ew: string; // default "LIKE"
+			en: string; // default "NOT LIKE"
+			cn: string; // default "LIKE"
+			nc: string; // default "NOT LIKE"
+			nu: string; // default "IS NULL"
+			nn: string; // default "IS NOT NULL"
+			[searchOperation: string]: string;
+		};
+		overlay?: number;
+		overlayClass?: string;
+		reloadGridSearchOptions?: ReloadGridOptions;
+		reloadGridResetOptions?: ReloadGridOptions;
+		tmplNames?: string[];
+		tmplFilters?: Filter[] | null;
+		tmplLabel?: string; // default " Template: "
+	}
 	interface NavOptions extends NavLocaleOptions {
 		add?: boolean;
 		addicon?: string; // "fa fa-lg fa-fw fa-plus"
@@ -865,6 +942,16 @@ declare namespace FreeJqGrid {
 		view?: boolean;
 		viewicon?: string; // "fa fa-lg fa-fw fa-file-o"
 		viewfunc?: (this: BodyTable, rowid: string, pView?: FormViewingOptions) => void;
+	}
+	interface navButtonAddOptions {
+		buttonicon?: string;
+		caption?: string;
+		commonIconClass?: string;
+		iconsOverText?: boolean;
+		id?: string;
+		onClickButton?: (this: BodyTable, options: navButtonAddOptions, eventObject: JQueryEventObject) => void;
+		position?: "first" | "last";
+		title?: string;
 	}
 	interface InlineNavOptions {
 		edit?: boolean;
@@ -1063,6 +1150,10 @@ declare namespace FreeJqGrid {
 		cmTemplate?: ColumnModel;
 		colModel: ColumnModel[];
 		colNames?: string[];
+		customSortOperations?: {
+			[customOperation: string]: CustomFilterOperation;
+		};
+		customUnaryOperations: string[]; // the list of customOperation from customSortOperations, which should be interpreted as unary, like standard operations "nu" and "nn". Unary operations has no data and be triggerd in searching toolbar on selection (without pressing Enter). See http://stackoverflow.com/a/41445578/315935 for detailes
 		data?: any[];
 		datatype?: string | ((this: BodyTable, postData: Object | string, loadId: string, rcnt: number, npage: number, adjust: number) => void);
 		direction?: "ltr" | "rtl";
@@ -1220,12 +1311,110 @@ declare namespace FreeJqGrid {
 	}
 	interface InlineEditingOptions extends EditRowOptions, SaveRowOptions, RestoreRowOptions, AddRowOptions {
 	}
+	type FilterOperation = "eq" | "ne" | "bw" | "bn" | "ew" | "en" | "cn" | "nc" | "nu" | "nn" | "in" | "ni" | string;
+	interface Rule {
+		field: string;
+		op: FilterOperation;
+		data?: any;
+	} 
+	interface Filter {
+		groupOp: "OR" | "AND";
+		rules: Rule[];
+		groups: Filter[];
+	}
+	interface CustomFilterOperation {
+		operand: string;
+		text: string;
+		filter: (options: { item: Object, cmName: string, searchValue: string }) => number;
+		buildQueryValue?: (options: any) => string;
+	}
+	interface JqFilterDiv extends HTMLDivElement {
+		p: JqFilterOptions;
+		filter: boolean;
+		onchange(): boolean;
+		reDraw(): void;
+		createTableForGroup(group: Filter, parentgroup: Filter): JQuery; // return jQuery wrapper on HTMLTableElement
+		createTableRowForRule(rule: Rule, group: Filter): JQuery; // return jQuery wrapper on HTMLTableRowElement
+		getStringForGroup(group: Filter): string;
+		getStringForRule(rule: Rule): string;
+		resetFilter(): void; // copy p.filter from p.initFilter and call reDraw() and onchange()
+		hideError(): void;
+		showError(): void;
+		toUserFriendlyString(): string; // convert p.filter to string with respect of getStringForGroup
+		toString(): string;
+	}
+	interface JqFilterOptions {
+		afterRedraw?: (this: BodyTable, options: JqFilterOptions, searchFilterDiv: JqFilterDiv) => void;
+		ajaxSelectOptions?: JQueryAjaxSettings;
+		columns?: ColumnModel[];
+		cops: {
+			[operationName: string]: CustomFilterOperation;
+		}; // p.customSortOperations
+		direction?: "ltr" | "rtl"; // default "ltr"
+		errmsg?: string; // default "" - HTML fragment
+		error?: boolean; // default false
+		errorcheck?: boolean; // default true
+		filter?: null | Filter;
+		groupButton?: boolean; // default true
+		groupOps?: { op: "AND" | "OR", text: string }[]; // default [{ op: "AND", text: "AND" }, { op: "OR", text: "OR" }]
+		id: string; // id of the grid, which created jqFilter
+		initFilter?: null | Filter; // used internally
+		numopts?: FilterOperation[]; // default ["eq", "ne", "lt", "le", "gt", "ge", "nu", "nn", "in", "ni"]
+		onChange?: (this: BodyTable, options: JqFilterOptions, searchFilterDiv: JqFilterDiv) => void;
+		operands?: {
+			[searchOperation: string]: string // maps search operation name (FilterOperation) to the text
+		};
+		ops?: { oper: FilterOperation; text: string }[];
+		ruleButtons?: boolean; // default true
+		showQuery?: boolean; // default true
+		sopt?: null | string[]; // default null. It's used only if cm.searchoptions.sopt is undefined. If null then be used stropts or numopts depend on whether cm.sorttype is in strarr array
+		strarr?: ["text", "string", "blob"];
+		stropts?: FilterOperation[]; // default ["eq", "ne", "bw", "bn", "ew", "en", "cn", "nc", "nu", "nn", "in", "ni"]
+	}
+	interface XmlJsonClass {
+		xml2json(this: XmlJsonClass, xml: Node, tab: string): string;
+		json2xml(this: XmlJsonClass, o: Object, tab: string): string;
+		toObj(this: XmlJsonClass, xml: Node): Object | null;
+		toJson(this: XmlJsonClass, o: Object, name: string | false, indent: string, wellform: boolean): string;
+		innerXml(this: XmlJsonClass, node: Node): string;
+		escape(txt: string): string;
+		removeWhite(node: Node): Node;
+	}
+	interface JqGridImportOptions {
+		imptype?: "xml" | "json" | "xmlstring" | "jsonstring"; // default "xml"
+		impstring?: string; // default ""
+		impurl?: string; // default ""
+		mtype?: string; // default "GET"
+		impData?: Object; // default {}
+		xmlGrid?: {
+			config?: string; // default "roots>grid",
+			data?: string; // default "roots>rows"
+		};
+		jsonGrid?: {
+			config?: string; // default "grid"
+			data?: string; // default "data"
+		};
+		ajaxOptions?: Object; // default {}
+	}
+}
+
+// global function
+interface Window {
+	// grid.tbltogrid module
+	tableToGrid(selector: Element | string | JQuery, options: FreeJqGrid.JqGridOptions): void;
+
+	// jsonxml module
+	xmlJsonClass: FreeJqGrid.XmlJsonClass;
 }
 
 interface JQueryStatic {
 	jgrid: FreeJqGrid.JqGridStatic;
 	fmatter: FreeJqGrid.JqGridFmatter;
 	jqm: FreeJqGrid.JqmOptions;
+	jqDnR: {
+		drag(eventObject: JQueryEventObject); // ("mousemove" handler)
+		stop(); // ("mouseup" handler)
+	};
 	unformat: (element: Element | JQuery, options: { rowId: string, colModel: FreeJqGrid.ColumnModel }, iCol: number, content: boolean) => string;
 	[propName: string]: any; // allow to have any number of other properties
 }
@@ -1405,6 +1594,10 @@ interface JQuery {
 	editGridRow?(rowid: string, options: FreeJqGrid.FormEditingOptions): void;
 	jqGrid(methodName: "editGridRow", rowid: string, options: FreeJqGrid.FormEditingOptions): any;
 
+	// searchGrid
+	searchGrid?(options: FreeJqGrid.SearchingDialogOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "searchGrid", options: FreeJqGrid.SearchingDialogOptions): FreeJqGrid.JQueryJqGrid;
+
 	// inline editing methods
 	addRow?(options: FreeJqGrid.AddRowOptions): FreeJqGrid.JQueryJqGrid;
 	editRow?(rowid: string, options: FreeJqGrid.EditRowOptions): FreeJqGrid.JQueryJqGrid;
@@ -1432,6 +1625,20 @@ interface JQuery {
 	navGrid?(navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "navGrid", pagerIdSelector: string, navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "navGrid", navOptions?: FreeJqGrid.NavOptions, pEdit?: FreeJqGrid.FormEditingOptions, pAdd?: FreeJqGrid.FormEditingOptions, pDel?: FreeJqGrid.FormDeletingOptions, pSearch?: FreeJqGrid.SearchingOptions, pView?: FreeJqGrid.FormViewingOptions): FreeJqGrid.JQueryJqGrid;
+
+	navButtonAdd?(pagerIdSelector: string, options: FreeJqGrid.navButtonAddOptions): FreeJqGrid.JQueryJqGrid;
+	navButtonAdd?(options: FreeJqGrid.navButtonAddOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "navButtonAdd", pagerIdSelector: string, options: FreeJqGrid.navButtonAddOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "navButtonAdd", options: FreeJqGrid.navButtonAddOptions): FreeJqGrid.JQueryJqGrid;
+	navSeparatorAdd?(pagerIdSelector: string, options?: { sepclass?: string, sepcontent: string, position: "first" | "last" }): FreeJqGrid.JQueryJqGrid;
+	navSeparatorAdd?(options?: { sepclass?: string, sepcontent?: string, position?: "first" | "last" }): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "navSeparatorAdd", pagerIdSelector: string, options?: { sepclass?: string, sepcontent?: string, position?: "first" | "last" }): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "navSeparatorAdd", options?: { sepclass?: string, sepcontent?: string, position?: "first" | "last" }): FreeJqGrid.JQueryJqGrid;
+
+	GridToForm?(rowid: string, formid: string | Element | JQuery): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "GridToForm", rowid: string, formid: string | Element | JQuery): FreeJqGrid.JQueryJqGrid;
+	FormToGrid?(rowid: string, formid: string | Element | JQuery, mode?: "add" | "set", position?: "first" | "last"): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "FormToGrid", rowid: string, formid: string | Element | JQuery, mode?: "add" | "set", position?: "first" | "last"): FreeJqGrid.JQueryJqGrid;
 
 	// subgrid
 	addSubGrid?(iCol: number, iRow?: number): FreeJqGrid.JQueryJqGrid;
@@ -1487,12 +1694,34 @@ interface JQuery {
 	jqGrid(methodName: "delTreeNode", rowid: string, skipSelf?: boolean): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "addChildNode", nodeid: string, parentid: string, item: Object, expandData?: boolean): FreeJqGrid.JQueryJqGrid;
 
-	// jqModal
+	// grid.import module
+	jqGridImport?(options: FreeJqGrid.JqGridImportOptions): FreeJqGrid.JQueryJqGrid;
+	jqGridExport?(options?: { exptype?: "xmlstring" | "jsonstring", root?: "grid" | string, ident?: "\t" | string }): string;
+	excelExport?(options?: { exptype?: "remote" | string, url?: null | string, oper?: "oper" | string, tag?: "excel" | string, exportOptions?: Object }): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "jqGridImport", options: FreeJqGrid.JqGridImportOptions): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "jqGridExport", options?: { exptype?: "xmlstring" | "jsonstring", root?: "grid" | string, ident?: "\t" | string }): string;
+	jqGrid(methodName: "excelExport", options?: { exptype?: "remote" | string, url?: null | string, oper?: "oper" | string, tag?: "excel" | string, exportOptions?: Object }): FreeJqGrid.JQueryJqGrid;
+
+	// jqFilter
+	// { groupOp: p.groupOps[0].op, rules: [], groups: [] }
+	jqFilter(options: FreeJqGrid.JqFilterOptions): JQuery;
+	jqFilter(methodName: "toSQLString"): string;
+	jqFilter(methodName: "filterData"): string;
+	jqFilter(methodName: "getParameter", name: string): any;
+	jqFilter(methodName: "toSQLString"): string;
+	jqFilter(methodName: "resetFilter"): JQuery;
+	jqFilter(methodName: "addFilter", filter: string | FreeJqGrid.Filter): void;
+
+	// jqmodal module: jqModal
 	jqm(options: FreeJqGrid.JqModalOptions): JQuery;
 	jqmAddClose(trigger: Element | string | JQuery): JQuery;
 	jqmAddTrigger(trigger: Element | string | JQuery): JQuery;
 	jqmShow(trigger: Element | string | JQuery): JQuery;
 	jqmHide(trigger: Element | string | JQuery): JQuery;
+
+	// jqdnr module: jqDnR - Minimalistic Drag'n'Resize for jQuery
+	jqDrag(handle: Element | string | JQuery): JQuery;
+	jqResize(handle: Element | string | JQuery, alsoResize: Element | string | JQuery): JQuery;
 
 	// jqGrid events
 	on(eventName: "jqGridAfterInsertRow", handler: (eventObject: JQueryEventObject, rowid: string, item: { [cmOrPropName: string]: any }, srcItem: any) => void): FreeJqGrid.JQueryJqGrid;
@@ -1536,6 +1765,12 @@ interface JQuery {
 	on(eventName: "jqGridAddEditAfterComplete", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridDeleteBeforeInitData", handler: (eventObject: JQueryEventObject, $form: JQuery) => boolean | "stop" | void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridDeleteBeforeShowForm", handler: (eventObject: JQueryEventObject, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
+
+	// searching form
+	on(eventName: "jqGridFilterAfterChange", handler: (eventObject: JQueryEventObject, $form: JQuery, options: FreeJqGrid.SearchingDialogOptions, filterOptions: FreeJqGrid.JqFilterOptions, searchFilterDiv: FreeJqGrid.JqFilterDiv) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridFilterAfterShow", handler: (eventObject: JQueryEventObject, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridFilterInitialize", handler: (eventObject: JQueryEventObject, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridFilterBeforeShow", handler: (eventObject: JQueryEventObject, $form: JQuery) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 
 	// inline editing events
 	on(eventName: "jqGridInlineBeforeAddRow", handler: (eventObject: JQueryEventObject, options: FreeJqGrid.AddRowOptions) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;

@@ -1,7 +1,7 @@
 /**
  * jqGrid extension - Tree Grid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
- * Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
@@ -506,24 +506,18 @@
 			});
 		},
 		addChildNode: function (nodeid, parentid, data, expandData) {
-			//return this.each(function(){
-			var $self = $(this), $t = $self[0], p = $t.p, getInd = base.getInd;
-			if (data) {
-				// we suppose tha the id is autoincremet and
-				var method, parentindex, parentdata, parentlevel, i, len, max = 0, rowind = parentid, leaf, maxright,
+			return this.each(function () {
+				if (!data) { return; }
+				var $t = this, p = $t.p, $self = $($t), getInd = base.getInd,
+					method, parentindex, parentdata, parentlevel, iRow, rowind = parentid, leaf, maxright,
 					expanded = p.treeReader.expanded_field, isLeaf = p.treeReader.leaf_field, level = p.treeReader.level_field,
-					//icon = p.treeReader.icon_field,
 					parent = p.treeReader.parent_id_field,
 					left = p.treeReader.left_field,
 					right = p.treeReader.right_field,
 					loaded = p.treeReader.loaded;
 				if (expandData === undefined) { expandData = false; }
 				if (nodeid == null) {
-					i = p.data.length - 1;
-					if (i >= 0) {
-						while (i >= 0) { max = Math.max(max, parseInt(p.data[i][p.localReader.id], 10)); i--; }
-					}
-					nodeid = max + 1;
+					nodeid = jgrid.randId();
 				}
 				var prow = getInd.call($self, parentid);
 				leaf = false;
@@ -533,13 +527,12 @@
 					rowind = null;
 					method = "last";
 					parentlevel = p.tree_root_level;
-					i = p.data.length + 1;
 				} else {
 					method = "after";
 					parentindex = p._index[parentid];
 					parentdata = p.data[parentindex];
 					parentid = parentdata[p.localReader.id];
-					i = getInd.call($self, parentid);
+					iRow = getInd.call($self, parentid);
 					parentlevel = parseInt(parentdata[level], 10) + 1;
 					var childs = base.getFullTreeNode.call($self, parentdata);
 					// if there are child nodes get the last index of it
@@ -549,13 +542,12 @@
 						for (iChild = 0; iChild < childs.length; iChild++) {
 							childId = childs[iChild][p.localReader.id];
 							iChildRow = getInd.call($self, childId);
-							if (iChildRow > i) {
-								i = iChildRow;
+							if (iChildRow > iRow) {
+								iRow = iChildRow;
 								rowind = childId;
 							}
 						}
 					}
-					i++; // the next row after the parent or the last child
 					// if the node is leaf
 					if (parentdata[isLeaf]) {
 						leaf = true;
@@ -569,7 +561,6 @@
 						parentdata[loaded] = true;
 					}
 				}
-				len = i + 1;
 
 				if (data[expanded] === undefined) { data[expanded] = false; }
 				if (data[loaded] === undefined) { data[loaded] = false; }
@@ -626,15 +617,13 @@
 				}
 				if (parentid === null || base.isNodeLoaded.call($self, parentdata) || leaf) {
 					base.addRowData.call($self, nodeid, data, method, rowind);
-					base.setTreeNode.call($self, i, len);
 				}
 				if (parentdata && !parentdata[expanded] && expandData) {
 					$($t.rows[prow])
 						.find("div.treeclick")
 						.click();
 				}
-			}
-			//});
+			});
 		}
 	});
 	// end module grid.treegrid

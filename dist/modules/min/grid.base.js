@@ -1,11 +1,11 @@
 /*
  jqGrid 4.13.7-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
- Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  Dual licensed under the MIT and GPL licenses
  http://www.opensource.org/licenses/mit-license.php
  http://www.gnu.org/licenses/gpl-2.0.html
- Date: 2017-01-27
+ Date: 2017-01-29
 */
 var $jscomp={scope:{},findInternal:function(b,I,q){b instanceof String&&(b=String(b));for(var J=b.length,M=0;M<J;M++){var G=b[M];if(I.call(q,G,M,b))return{i:M,v:G}}return{i:-1,v:void 0}}};$jscomp.defineProperty="function"==typeof Object.defineProperties?Object.defineProperty:function(b,I,q){if(q.get||q.set)throw new TypeError("ES3 does not support getters and setters.");b!=Array.prototype&&b!=Object.prototype&&(b[I]=q.value)};
 $jscomp.getGlobal=function(b){return"undefined"!=typeof window&&window===b?b:"undefined"!=typeof global&&null!=global?global:b};$jscomp.global=$jscomp.getGlobal(this);$jscomp.polyfill=function(b,I,q,J){if(I){q=$jscomp.global;b=b.split(".");for(J=0;J<b.length-1;J++){var M=b[J];M in q||(q[M]={});q=q[M]}b=b[b.length-1];J=q[b];I=I(J);I!=J&&null!=I&&$jscomp.defineProperty(q,b,{configurable:!0,writable:!0,value:I})}};
