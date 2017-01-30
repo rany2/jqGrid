@@ -1216,6 +1216,7 @@ declare namespace FreeJqGrid {
 			deloper?: string | null; // "del"
 			editoper?: string | null; // "edit"
 			id?: string | null; // "id"
+			idold?: string | null; // "idOld"
 			nd?: string | null; // "nd"
 			npage?: string | null; // null
 			oper?: string | null; // "oper"

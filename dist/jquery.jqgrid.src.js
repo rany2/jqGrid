@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-29
+ * Date: 2017-01-30
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2785,7 +2785,23 @@
 					treeANode: -1,
 					ExpandColumn: null,
 					tree_root_level: 0,
-					prmNames: { page: "page", rows: "rows", sort: "sidx", order: "sord", search: "_search", nd: "nd", id: "id", oper: "oper", editoper: "edit", addoper: "add", deloper: "del", subgridid: "id", npage: null, totalrows: "totalrows" },
+					prmNames: {
+						page: "page",
+						rows: "rows",
+						sort: "sidx",
+						order: "sord",
+						search: "_search",
+						nd: "nd",
+						id: "id",
+						idold: "idOld",
+						oper: "oper",
+						editoper: "edit",
+						addoper: "add",
+						deloper: "del",
+						subgridid: "id",
+						npage: null,
+						totalrows: "totalrows"
+					},
 					forceFit: false,
 					gridstate: "visible",
 					cellEdit: false,
@@ -15539,6 +15555,10 @@
 								postData[n] = jgrid.oldEncodePostedData(v);
 							}
 						});
+					}
+					if (ind.id !== p.idPrefix + postData[idname] && opers.idold != null &&
+							!postData.hasOwnProperty(opers.idold)) {
+						postData[opers.idold] = jgrid.stripPref(p.idPrefix, ind.id);
 					}
 
 					$.ajax($.extend({
