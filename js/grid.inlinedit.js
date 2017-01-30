@@ -345,6 +345,10 @@
 							}
 						});
 					}
+					if (ind.id !== p.idPrefix + postData[idname] && opers.idold != null &&
+							!postData.hasOwnProperty(opers.idold)) {
+						postData[opers.idold] = jgrid.stripPref(p.idPrefix, ind.id);
+					}
 
 					$.ajax($.extend({
 						url: isFunction(o.url) ? o.url.call($t, postData[idname], editOrAdd, postData, o) : o.url,
