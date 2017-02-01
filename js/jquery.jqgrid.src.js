@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-30
+ * Date: 2017-02-01
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -9661,7 +9661,7 @@
 						}
 						if (saveurl) { $self.jqGrid("setGridParam", { url: saveurl }); }
 						$self.triggerHandler("jqGridToolbarAfterClear");
-						if ($.isFunction(o.afterClear)) { o.afterClear(); }
+						if ($.isFunction(o.afterClear)) { o.afterClear.call($t); }
 					},
 					toggleToolbar = function () {
 						var trow = $("tr.ui-search-toolbar", grid.hDiv),
@@ -17624,7 +17624,7 @@
 						footerrow = assocArraySize(pivotGrid.summary) > 0 ? true : false,
 						groupingView = pivotGrid.groupOptions.groupingView,
 						query = jgrid.from.call($t, pivotGrid.rows), i;
-					if (pivotOpt.skipSortByX) {
+					if (!pivotOpt.skipSortByX) {
 						for (i = 0; i < groupingView.groupField.length; i++) {
 							query.orderBy(groupingView.groupField[i],
 								gridOpt != null && gridOpt.groupingView && gridOpt.groupingView.groupOrder != null && gridOpt.groupingView.groupOrder[i] === "desc" ? "d" : "a",

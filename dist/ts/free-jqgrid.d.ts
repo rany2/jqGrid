@@ -549,7 +549,7 @@ declare namespace FreeJqGrid {
 		nav?: NavOptions;
 		no_legacy_api?: boolean;
 		productName: "free jqGrid";
-		search?: SearchingOptions;
+		search?: SearchLocaleOptions;
 		uidPref: string;
 		version: string; // like "4.13.7" for example
 		view?: FormViewingOptions;
@@ -846,8 +846,6 @@ declare namespace FreeJqGrid {
 	}
 	interface FormViewingOptions extends ViewLocaleOptions {
 	}
-	interface SearchingOptions extends SearchLocaleOptions {
-	}
 	interface SearchingDialogOptions extends SearchLocaleOptions, CreateModalOptions {
 		afterChange?: (this: BodyTable, $filter: JQuery, options: SearchingDialogOptions, filterOptions: JqFilterOptions, searchFilterDiv: JqFilterDiv) => void;
 		afterShowSearch?: (this: BodyTable, $filter: JQuery) => void;
@@ -898,11 +896,51 @@ declare namespace FreeJqGrid {
 		};
 		overlay?: number;
 		overlayClass?: string;
-		reloadGridSearchOptions?: ReloadGridOptions;
-		reloadGridResetOptions?: ReloadGridOptions;
 		tmplNames?: string[];
 		tmplFilters?: Filter[] | null;
 		tmplLabel?: string; // default " Template: "
+	}
+	interface FilterFoolbarOptions extends SearchLocaleOptions {
+		afterClear?: (this: BodyTable) => void;
+		afterSearch?: (this: BodyTable) => void;
+		applyLabelClasses?: boolean; //true
+		autosearch?: boolean; //true
+		autosearchDelay?: number; // 500
+		beforeClear?: (this: BodyTable) => boolean;
+		beforeSearch?: (this: BodyTable) => boolean;
+		defaultSearch?: string; // "bw"
+		groupOp?: string; // "AND"
+		idMode?: "new" | "old" | "compatibility"; // "new"
+		loadFilterDefaults?: boolean; //true
+		operands?: {
+			eq: string; // "=="
+			ne: string; // "!"
+			lt: string; // "<"
+			le: string; // "<="
+			gt: string; // ">"
+			ge: string; // ">="
+			bw: string; // "^"
+			bn: string; // "!^"
+			"in": string; // "="
+			ni: string; // "!="
+			ew: string; // "|"
+			en: string; // "!@"
+			cn: string; // "~"
+			nc: string; // "!~"
+			nu: string; // "#"
+			nn: string; // "!#"
+			[searchOperation: string]: string;
+		};
+		reloadGridResetOptions?: ReloadGridOptions;
+		reloadGridSearchOptions?: ReloadGridOptions;
+		resetTitle?: string; // | ((options: { options: FilterFoolbarOptions, cm: ColumnModel, cmName: string, iCol: number }) => string);
+		searchOnEnter?: boolean; //true
+		searchOperators?: boolean; //false
+		searchurl?: string; // ""
+		stringResult?: boolean; //false
+		resetIcon?: string; // "&times;"
+	}
+	interface SearchingOptions extends FilterFoolbarOptions, SearchingDialogOptions {
 	}
 	interface NavOptions extends NavLocaleOptions {
 		add?: boolean;
@@ -1598,6 +1636,25 @@ interface JQuery {
 	// searchGrid
 	searchGrid?(options: FreeJqGrid.SearchingDialogOptions): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "searchGrid", options: FreeJqGrid.SearchingDialogOptions): FreeJqGrid.JQueryJqGrid;
+
+	// grid.custom module
+	getColProp?(cmName: string): FreeJqGrid.ColumnModel | {};
+	jqGrid(methodName: "getColProp", cmName: string): FreeJqGrid.ColumnModel | {};
+	setColProp?(cmName: string, cm: FreeJqGrid.ColumnModel): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "setColProp", cmName: string, cm: FreeJqGrid.ColumnModel): FreeJqGrid.JQueryJqGrid;
+	sortGrid?(cmName: string, reload: boolean, sor: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "sortGrid", cmName: string, reload: boolean, sor: string): FreeJqGrid.JQueryJqGrid;
+	clearBeforeUnload?(): FreeJqGrid.JQueryJqGrid;
+	GridDestroy?(): FreeJqGrid.JQueryJqGrid;
+	GridUnload?(): FreeJqGrid.JQueryJqGrid;
+	setGridState?(state: "hidden" | "visible"): FreeJqGrid.JQueryJqGrid;
+	filterToolbar?(options: FreeJqGrid.FilterFoolbarOptions): FreeJqGrid.JQueryJqGrid;
+	destroyFilterToolbar?(): FreeJqGrid.JQueryJqGrid;
+	destroyGroupHeader?(nullHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+	setGroupHeaders?(options: { useColSpanStyle?: boolean, applyLabelClasses?: boolean, groupHeaders: { startColumnName: string, numberOfColumns: number, titleText: string }[]}): FreeJqGrid.JQueryJqGrid;
+	getNumberOfFrozenColumns?(): number;
+	destroyFrozenColumns?(): FreeJqGrid.JQueryJqGrid;
+	setFrozenColumns?(options: { mouseWheel: (this: FreeJqGrid.BodyTable, eventObject: JQueryEventObject) => number }): FreeJqGrid.JQueryJqGrid;
 
 	// inline editing methods
 	addRow?(options: FreeJqGrid.AddRowOptions): FreeJqGrid.JQueryJqGrid;

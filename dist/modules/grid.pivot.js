@@ -785,7 +785,7 @@
 						footerrow = assocArraySize(pivotGrid.summary) > 0 ? true : false,
 						groupingView = pivotGrid.groupOptions.groupingView,
 						query = jgrid.from.call($t, pivotGrid.rows), i;
-					if (pivotOpt.skipSortByX) {
+					if (!pivotOpt.skipSortByX) {
 						for (i = 0; i < groupingView.groupField.length; i++) {
 							query.orderBy(groupingView.groupField[i],
 								gridOpt != null && gridOpt.groupingView && gridOpt.groupingView.groupOrder != null && gridOpt.groupingView.groupOrder[i] === "desc" ? "d" : "a",
