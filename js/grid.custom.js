@@ -874,6 +874,25 @@
 										sep = editoptions.separator === undefined ? ":" : editoptions.separator;
 										delim = editoptions.delimiter === undefined ? ";" : editoptions.delimiter;
 									}
+									var uniqueValues = p.indexByColumnData[cm.name];
+									if (searchoptions.generateValue && uniqueValues != null) {
+										var v, id;
+										oSv = "";
+										for (v in uniqueValues) {
+											if (uniqueValues.hasOwnProperty(v)) {
+												for (id in uniqueValues[v]) {
+													if (uniqueValues[v].hasOwnProperty(id)) {
+														v = uniqueValues[v][id]; // get value in the correct case
+														break;
+													}
+												}
+												if (oSv !== "") {
+													oSv += delim || ";";
+												}
+												oSv += v + sep + v;
+											}
+										}
+									}
 									if (oSv) {
 										elem = document.createElement("select");
 										elem.style.width = "100%";

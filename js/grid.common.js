@@ -462,6 +462,25 @@
 					if (p && p.idPrefix) {
 						rowid = jgrid.stripPref(p.idPrefix, rowid);
 					}
+					var uniqueValues = p.indexByColumnData[options.cm.name];
+					if (options.dataUrl === undefined && options.generateValue && uniqueValues != null) {
+						var v, id;
+						options.value = "";
+						for (v in uniqueValues) {
+							if (uniqueValues.hasOwnProperty(v)) {
+								for (id in uniqueValues[v]) {
+									if (uniqueValues[v].hasOwnProperty(id)) {
+										v = uniqueValues[v][id]; // get value in the correct case
+										break;
+									}
+								}
+								if (options.value !== "") {
+									options.value += options.delimiter || ";";
+								}
+								options.value += v + (options.separator || ":") + v;
+							}
+						}
+					}
 					if (options.dataUrl !== undefined) {
 						var postData = options.postData || ajaxso.postData,
 							ajaxContext = {
