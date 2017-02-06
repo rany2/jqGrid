@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-02-01
+ * Date: 2017-02-07
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2847,6 +2847,8 @@
 					quickEmpty: "quickest", // false, true or "quickest"
 					/** @dict */
 					_index: {},
+					indexByColumnData: {},
+					dataIndexById: {},
 					iColByName: {},
 					iPropByName: {},
 					reservedColumnNames: ["rn", "cb", "subgrid"],
@@ -2997,6 +2999,19 @@
 					var m = {}, i, n = colModel.length;
 					for (i = 0; i < n; i++) {
 						m[colModel[i].name] = i;
+					}
+					return m;
+				},
+				buildEmptyIndexedColumnMap = function () {
+					var m = {}, i, colModel = p.colModel, n = colModel.length, cm;
+					for (i = 0; i < n; i++) {
+						cm = colModel[i];
+						if (cm.createColumnIndex ||
+								(p.createColumnIndex && cm.createColumnIndex !== false) ||
+								(cm.stype === "select" && (cm.searchoptions || {}).generateValue) ||
+								(cm.edittype === "select" && (cm.editoptions || {}).generateValue)) {
+							m[colModel[i].name] = {};
+						}
 					}
 					return m;
 				},
@@ -3317,6 +3332,7 @@
 			feedback.call(ts, "beforeInitGrid");
 			p.iColByName = buildColNameMap(p.colModel);
 			p.iPropByName = buildAddPropMap(p.additionalProperties);
+			p.indexByColumnData = buildEmptyIndexedColumnMap();
 
 			// TODO: replace altclass : "ui-priority-secondary",
 			// set default buttonicon : "ui-icon-newwin" of navButtonAdd: fa-external-link, fa-desktop or other
@@ -3559,11 +3575,59 @@
 						clearArray(p.data); //p.data = [];
 						clearArray(p.lastSelectedData); //p.lastSelectedData = [];
 						p._index = {};
+						p.dataIndexById = {};
+						p.indexByColumnData = {};
 					}
 					p.rowIndexes = {};
 					p.iRow = -1;
 					p.iCol = -1;
 					//$(self.grid.headers).each(function () { $(this.el).removeData("autoResized"); });
+				},
+				addItemDataToColumnIndex = function (rd, id) {
+					var cmName, v;
+					for (cmName in p.indexByColumnData) {
+						if (p.indexByColumnData.hasOwnProperty(cmName)) {
+							v = rd[cmName];
+							if (rd.hasOwnProperty(cmName) && v !== undefined) {
+								// rd[cmName] is the value, which need be saved in p.indexByColumnData[cmName]
+								if (p.ignoreCase) {
+									v = String(v).toLowerCase();
+								}
+								if (p.indexByColumnData[cmName][v] === undefined) {
+									p.indexByColumnData[cmName][v] = {};
+								}
+								p.indexByColumnData[cmName][v][id] = rd[cmName];
+
+								if (p.dataIndexById[id] === undefined) {
+									p.dataIndexById[id] = {};
+								}
+								if (p.dataIndexById[id][cmName] === undefined) {
+									p.dataIndexById[id][cmName] = {};
+								}
+								p.dataIndexById[id][cmName][v] = p.indexByColumnData[cmName][v];
+							}
+						}
+					}
+				},
+				removeItemDataFromColumnIndex = function (id) {
+					var cmName, columnIndex, v, index = p.dataIndexById[id];
+					if (index == null) {
+						return;
+					}
+					for (cmName in index) {
+						if (index.hasOwnProperty(cmName)) {
+							columnIndex = index[cmName];
+							for (v in columnIndex) {
+								if (columnIndex.hasOwnProperty(v)) {
+									delete p.indexByColumnData[cmName][v][id];
+									if ($.isEmptyObject(p.indexByColumnData[cmName][v])) {
+										delete p.indexByColumnData[cmName][v];
+									}
+								}
+							}
+						}
+					}
+					delete p.dataIndexById[id];
 				},
 				normalizeData = function () {
 					var data = p.data, dataLength = data.length, i, cur, cells, idName, idIndex, v, rd, id,
@@ -3660,6 +3724,9 @@
 						idname = p.keyName;
 					}
 					p._index = {};
+					p.dataIndexById = {};
+					p.indexByColumnData = {};
+					p.indexByColumnData = buildEmptyIndexedColumnMap();
 					for (i = 0; i < datalen; i++) {
 						item = p.data[i];
 						val = getAccessor(item, idname);
@@ -3670,6 +3737,7 @@
 							}
 						}
 						p._index[val] = i;
+						addItemDataToColumnIndex.call(this, item, val);
 					}
 				},
 				constructTr = function (id, hide, altClass, rd, cur, selected) {
@@ -4031,6 +4099,7 @@
 						if (readAllInputData || p.treeGrid === true) {
 							rd[locid] = id; //stripGridPrefix(idr);
 							p.data.push(rd);
+							addItemDataToColumnIndex(rd, id);
 							p._index[rd[locid]] = p.data.length - 1;
 						}
 					}
@@ -5169,7 +5238,7 @@
 
 			if (p.data.length) {
 				normalizeData.call(ts);
-				refreshIndex();
+				refreshIndex.call(ts);
 			}
 			if (p.shrinkToFit === true && p.forceFit === true) {
 				for (iCol = p.colModel.length - 1; iCol >= 0; iCol--) {
@@ -5670,7 +5739,10 @@
 						if (!p.multiPageSelection) {
 							$j.resetSelection.call($self);
 						}
-						if (p.data.length) { normalizeData.call(self); refreshIndex(); }
+						if (p.data.length) {
+							normalizeData.call(self);
+							refreshIndex.call(self);
+						}
 					} else if (!p.treeGrid && !p.multiPageSelection) {
 						p.selrow = null;
 						if (p.multiselect) {
@@ -5887,6 +5959,8 @@
 			ts.sortData = sortData;
 			ts.updatepager = updatepager;
 			ts.refreshIndex = refreshIndex;
+			ts.addItemDataToColumnIndex = addItemDataToColumnIndex;
+			ts.removeItemDataFromColumnIndex = removeItemDataFromColumnIndex;
 			ts.setHeadCheckBox = setHeadCheckBox;
 			ts.fixScrollOffsetAndhBoxPadding = fixScrollOffsetAndhBoxPadding;
 			ts.constructTr = constructTr;
@@ -6419,8 +6493,9 @@
 					var id = stripPref(p.idPrefix, rowid),
 						pos = p._index[id];
 					if (pos !== undefined) {
+						$t.removeItemDataFromColumnIndex(id);
 						p.data.splice(pos, 1);
-						$t.refreshIndex();
+						$t.refreshIndex(); // ??? it could be less expansive
 					}
 				}
 				$t.rebuildRowIndexes();
@@ -6496,6 +6571,7 @@
 								}
 							}
 							if (oData !== undefined) {
+								// !!!!
 								p.data[pos] = $.extend(true, oData, lcdata);
 							}
 						}
@@ -6666,6 +6742,7 @@
 							lcdata[p.localReader.id] = id;
 							p._index[id] = p.data.length;
 							p.data.push(lcdata);
+							t.addItemDataToColumnIndex(lcdata, id);
 						}
 						row = jgrid.parseDataToHtml.call(t, 1, [rowid], [data]);
 						row = row.join("");
@@ -7329,6 +7406,7 @@
 									cm.saveLocally.call($t, { newValue: v, newItem: item, oldItem: item, id: id, cm: cm, cmName: cm.name, iCol: iCol });
 								} else {
 									item[cm.name] = v;
+									// !!!!
 								}
 							}
 						}
@@ -7443,6 +7521,8 @@
 				clearArray(p.lastSelectedData); //p.lastSelectedData = [];
 				p._index = {};
 				p.rowIndexes = {};
+				p.dataIndexById = {};
+				p.indexByColumnData = {};
 				p.records = 0;
 				p.page = 1;
 				p.lastpage = 0;
@@ -8758,6 +8838,25 @@
 					if (p && p.idPrefix) {
 						rowid = jgrid.stripPref(p.idPrefix, rowid);
 					}
+					var uniqueValues = p.indexByColumnData[options.cm.name];
+					if (options.dataUrl === undefined && options.generateValue && uniqueValues != null) {
+						var v, id;
+						options.value = "";
+						for (v in uniqueValues) {
+							if (uniqueValues.hasOwnProperty(v)) {
+								for (id in uniqueValues[v]) {
+									if (uniqueValues[v].hasOwnProperty(id)) {
+										v = uniqueValues[v][id]; // get value in the correct case
+										break;
+									}
+								}
+								if (options.value !== "") {
+									options.value += options.delimiter || ";";
+								}
+								options.value += v + (options.separator || ":") + v;
+							}
+						}
+					}
 					if (options.dataUrl !== undefined) {
 						var postData = options.postData || ajaxso.postData,
 							ajaxContext = {
@@ -9937,6 +10036,25 @@
 										oSv = editoptions.value === undefined ? "" : editoptions.value;
 										sep = editoptions.separator === undefined ? ":" : editoptions.separator;
 										delim = editoptions.delimiter === undefined ? ";" : editoptions.delimiter;
+									}
+									var uniqueValues = p.indexByColumnData[cm.name];
+									if (searchoptions.generateValue && uniqueValues != null) {
+										var v, id;
+										oSv = "";
+										for (v in uniqueValues) {
+											if (uniqueValues.hasOwnProperty(v)) {
+												for (id in uniqueValues[v]) {
+													if (uniqueValues[v].hasOwnProperty(id)) {
+														v = uniqueValues[v][id]; // get value in the correct case
+														break;
+													}
+												}
+												if (oSv !== "") {
+													oSv += delim || ";";
+												}
+												oSv += v + sep + v;
+											}
+										}
 									}
 									if (oSv) {
 										elem = document.createElement("select");
@@ -13707,9 +13825,7 @@
 											$("#DelError>td", dtbl).html(ret[1]);
 											$("#DelError", dtbl).show();
 										} else {
-											if (o.reloadAfterSubmit) {
-												$self.trigger("reloadGrid", [$.extend({}, o.reloadGridOptions || {})]);
-											} else {
+											if (p.datatype === "local" || p.treeGrid === true || !o.reloadAfterSubmit) {
 												if (p.treeGrid === true) {
 													try { base.delTreeNode.call($self, formRowIds[0]); } catch (ignore) { }
 												} else {
@@ -13718,6 +13834,9 @@
 														base.delRowData.call($self, formRowIds[i]);
 													}
 												}
+											}
+											if (o.reloadAfterSubmit) {
+												$self.trigger("reloadGrid", [$.extend({}, o.reloadGridOptions || {})]);
 											}
 											setTimeout(function () {
 												deleteFeedback("afterComplete", jqXHR, postdata, $(dtbl));

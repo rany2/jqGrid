@@ -1827,9 +1827,7 @@
 											$("#DelError>td", dtbl).html(ret[1]);
 											$("#DelError", dtbl).show();
 										} else {
-											if (o.reloadAfterSubmit) {
-												$self.trigger("reloadGrid", [$.extend({}, o.reloadGridOptions || {})]);
-											} else {
+											if (p.datatype === "local" || p.treeGrid === true || !o.reloadAfterSubmit) {
 												if (p.treeGrid === true) {
 													try { base.delTreeNode.call($self, formRowIds[0]); } catch (ignore) { }
 												} else {
@@ -1838,6 +1836,9 @@
 														base.delRowData.call($self, formRowIds[i]);
 													}
 												}
+											}
+											if (o.reloadAfterSubmit) {
+												$self.trigger("reloadGrid", [$.extend({}, o.reloadGridOptions || {})]);
 											}
 											setTimeout(function () {
 												deleteFeedback("afterComplete", jqXHR, postdata, $(dtbl));
