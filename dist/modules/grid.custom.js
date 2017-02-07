@@ -398,7 +398,16 @@
 							if (cm.stype === "custom" && $.isFunction(searchoptions.custom_value) && $elem.length > 0 && $elem[0].nodeName.toUpperCase() === "SPAN") {
 								v = searchoptions.custom_value.call($t, $elem.children(".customelement").first(), "get");
 							} else if (cm.stype === "select") {
-								v = $elem.val();
+								if ($elem.prop("multiple")) {
+									v = $elem.val();
+									if (v == null || v.length === 0) {
+										v = "";
+									} else {
+										v = v.join(p.inFilterSeparator || ",");
+									}
+								} else {
+									v = $elem.val();
+								}
 							} else if (cm.stype === "checkbox") {
 								var onOffValue = getOnOffValue(searchoptions);
 
@@ -1108,7 +1117,7 @@
 								$input = $(getIdSel(cmName));
 								if ($input.length > 0) {
 									if ($input[0].tagName.toUpperCase() === "SELECT" && $input[0].multiple) {
-										$input.val(filter.data.split(","));
+										$input.val(filter.data.split(p.inFilterSeparator || ","));
 									} else if ($input.is("input[type=checkbox]")) {
 										var $th = $input.closest("th.ui-th-column");
 										if ($th.length > 0) {

@@ -2196,7 +2196,8 @@
 							return self._compareValues(self.equals, f, v, "==", t);
 						}
 
-						self._append("jQuery.inArray(" + self._getStr(f) + "," + val + ".split(',')) >= 0");
+						self._append("jQuery.inArray(" + self._getStr(f) + "," + val + ".split('" +
+							(context.p.inFilterSeparator || ",") + "')) >= 0");
 						self._setCommand(self.inSet, f);
 						self._resetNegate();
 						return self;
@@ -3332,7 +3333,6 @@
 			feedback.call(ts, "beforeInitGrid");
 			p.iColByName = buildColNameMap(p.colModel);
 			p.iPropByName = buildAddPropMap(p.additionalProperties);
-			p.indexByColumnData = buildEmptyIndexedColumnMap();
 
 			// TODO: replace altclass : "ui-priority-secondary",
 			// set default buttonicon : "ui-icon-newwin" of navButtonAdd: fa-external-link, fa-desktop or other
@@ -5153,6 +5153,7 @@
 				}
 				p.colModel[iCol] = cmi;
 			}
+			p.indexByColumnData = buildEmptyIndexedColumnMap();
 			for (iCol = 0; iCol < p.additionalProperties.length; iCol++) {
 				cmi = p.additionalProperties[iCol];
 				if (p.keyName === false && cmi.key === true) {
@@ -7754,7 +7755,8 @@
 			return this.each(function () {
 				var self = this, $self = $(this), p = self.p, cm = p.colModel[iCol], widthOrg,
 					$th = $(self.grid.headers[iCol].el),
-					newWidth = base.getAutoResizableWidth.call($self, iCol);
+					newWidth = base.getAutoResizableWidth.call($self, iCol),
+					resetWidthOrg = (cm.autoResizing || {}).resetWidthOrg;
 
 				if (cm == null || newWidth < 0 || newWidth === cm.width) {
 					return;
@@ -7767,6 +7769,9 @@
 					base.setGridWidth.call($self, p.width, true);
 					cm.widthOrg = widthOrg;
 					cm.fixed = false;
+				}
+				if (resetWidthOrg || (resetWidthOrg === undefined && p.autoResizing.resetWidthOrg)) {
+					cm.widthOrg = cm.width;
 				}
 				$th.data("autoResized", "true");
 			});
