@@ -3333,7 +3333,6 @@
 			feedback.call(ts, "beforeInitGrid");
 			p.iColByName = buildColNameMap(p.colModel);
 			p.iPropByName = buildAddPropMap(p.additionalProperties);
-			p.indexByColumnData = buildEmptyIndexedColumnMap();
 
 			// TODO: replace altclass : "ui-priority-secondary",
 			// set default buttonicon : "ui-icon-newwin" of navButtonAdd: fa-external-link, fa-desktop or other
@@ -5154,6 +5153,7 @@
 				}
 				p.colModel[iCol] = cmi;
 			}
+			p.indexByColumnData = buildEmptyIndexedColumnMap();
 			for (iCol = 0; iCol < p.additionalProperties.length; iCol++) {
 				cmi = p.additionalProperties[iCol];
 				if (p.keyName === false && cmi.key === true) {
