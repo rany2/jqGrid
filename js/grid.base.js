@@ -7755,7 +7755,8 @@
 			return this.each(function () {
 				var self = this, $self = $(this), p = self.p, cm = p.colModel[iCol], widthOrg,
 					$th = $(self.grid.headers[iCol].el),
-					newWidth = base.getAutoResizableWidth.call($self, iCol);
+					newWidth = base.getAutoResizableWidth.call($self, iCol),
+					resetWidthOrg = (cm.autoResizing || {}).resetWidthOrg;
 
 				if (cm == null || newWidth < 0 || newWidth === cm.width) {
 					return;
@@ -7768,6 +7769,9 @@
 					base.setGridWidth.call($self, p.width, true);
 					cm.widthOrg = widthOrg;
 					cm.fixed = false;
+				}
+				if (resetWidthOrg || (resetWidthOrg === undefined && p.autoResizing.resetWidthOrg)) {
+					cm.widthOrg = cm.width;
 				}
 				$th.data("autoResized", "true");
 			});
