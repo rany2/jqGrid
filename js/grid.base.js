@@ -2196,7 +2196,8 @@
 							return self._compareValues(self.equals, f, v, "==", t);
 						}
 
-						self._append("jQuery.inArray(" + self._getStr(f) + "," + val + ".split(',')) >= 0");
+						self._append("jQuery.inArray(" + self._getStr(f) + "," + val + ".split('" +
+							(context.p.inFilterSeparator || ",") + "')) >= 0");
 						self._setCommand(self.inSet, f);
 						self._resetNegate();
 						return self;
