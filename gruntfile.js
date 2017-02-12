@@ -195,8 +195,8 @@ module.exports = function (grunt) {
 			}
 		},
 		ts: {
-			default: {
-				src: ["**/*.ts", "!node_modules/**/*.ts"]
+			all: {
+				src: ["**/*.ts", "!node_modules/**/*.ts", "!dist/**/*.ts"]
 			}
 		},
 		cssmin: {
@@ -324,31 +324,7 @@ module.exports = function (grunt) {
 					}
 				]
 			}
-		}//,
-		//uglify: {
-		//	all: {
-		//		src: "js/jquery.jqgrid.src.js",
-		//		dest: "js/jquery.jqgrid.min.js",
-		//		options: {
-		//			preserveComments: false,
-		//			sourceMap: true,
-		//			sourceMapName: "js/jquery.jqgrid.min.map",
-		//			report: "min",
-		//			banner: "/*\n" +
-		//				" jqGrid <%= pkgFreejqGrid.version %> - free jqGrid: https://github.com/free-jqgrid/jqGrid\n" +
-		//				" Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com\n" +
-		//				" Copyright (c) 2014-2016, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com\n" +
-		//				" Dual licensed under the MIT and GPL licenses\n" +
-		//				" http://www.opensource.org/licenses/mit-license.php\n" +
-		//				" http://www.gnu.org/licenses/gpl-2.0.html\n" +
-		//				" Date: <%= grunt.template.today('isoDate') %>\n" +
-		//				"*/",
-		//			compress: {
-		//				"hoist_funs": false
-		//			}
-		//		}
-		//	}
-		//}
+		}
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-clean");
@@ -357,7 +333,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-tslint");
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-closure-tools");
-	//grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-cssmin");
 	grunt.loadNpmTasks("grunt-replace");
 	grunt.loadNpmTasks("grunt-file-append");
@@ -515,8 +490,9 @@ module.exports = function (grunt) {
 
 	grunt.registerTask("closureCompilerAll", closureCompilerTasks);
 
-	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:tslint", "newer:ts", "newer:jscs:all", "closureCompilerAll",
+	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:tslint", "ts:all", "newer:jscs:all", "closureCompilerAll",
 		"newer:cssmin:target", "newer:replace:cssmin_jqgrid", "newer:replace:cssmin_multiselect",
 		"copy"]);
+
 	grunt.registerTask("all", ["clean", "default"]);
 };
