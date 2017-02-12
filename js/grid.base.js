@@ -3597,7 +3597,7 @@
 					for (cmName in p.indexByColumnData) {
 						if (p.indexByColumnData.hasOwnProperty(cmName)) {
 							v = rd[cmName];
-							if (rd.hasOwnProperty(cmName) && v !== undefined) {
+							if (rd.hasOwnProperty(cmName) && v !== undefined && v !== "") {
 								// rd[cmName] is the value, which need be saved in p.indexByColumnData[cmName]
 								if (p.ignoreCase) {
 									v = String(v).toLowerCase();
