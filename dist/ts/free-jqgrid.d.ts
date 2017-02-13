@@ -728,6 +728,8 @@ declare namespace FreeJqGrid {
 			elmprefix?: string;
 			elmsuffix?: string;
 			label?: string;
+			rowabove?: boolean; // false
+			rowcontent?: string; // ""
 			rowpos?: number;
 			colpos?: number;
 		};

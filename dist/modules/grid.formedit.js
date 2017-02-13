@@ -9,15 +9,33 @@
 
 /*jshint eqeqeq:false, eqnull:true, devel:true */
 /*jslint browser: true, eqeq: true, plusplus: true, unparam: true, vars: true, nomen: true, continue: true, white: true, todo: true */
-/*global jQuery, define, xmlJsonClass, exports, require */
+/*global jQuery, define, xmlJsonClass, exports, module, require */
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["jquery", "./grid.base", "./jquery.fmatter", "./grid.common", "./jsonxml"], factory);
-	} else if (typeof exports === "object") {
+		define([
+			"jquery",
+			"./grid.base",
+			"./jquery.fmatter",
+			"./grid.common",
+			"./jsonxml"
+		], factory);
+	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
-		factory(require("jquery"));
+		module.exports = function (root, $) {
+			if ($ === undefined) {
+				// require("jquery") returns a factory that requires window to
+				// build a jQuery instance, we normalize how we use modules
+				// that require this pattern but the window provided is a noop
+				// if it's defined (how jquery works)
+				$ = typeof window !== "undefined" ?
+						require("jquery") :
+						require("jquery")(root || window);
+			}
+			factory($);
+			return $;
+		};
 	} else {
 		// Browser globals
 		factory(jQuery);
@@ -42,6 +60,19 @@
 		},
 		getGuiStateStyles = function (path) {
 			return getGuiStyles.call(this, "states." + path);
+		},
+		hideRowsWithoutVissibleCells = function ($tb) {
+			$tb.find("tr[data-rowpos]").each(function () {
+				var vissible = 0;
+				$(this).children("td").each(function () {
+					if ($(this).css("visibility") !== "hidden") {
+						vissible++;
+					}
+				});
+				if (!vissible) {
+					$(this).hide();
+				}
+			});
 		},
 		isEmptyString = function (htmlStr) {
 			return htmlStr === "&nbsp;" || htmlStr === "&#160;" || (htmlStr.length === 1 && htmlStr.charCodeAt(0) === 160);
@@ -558,7 +589,7 @@
 					return true;
 				}
 				function createData(rowid1, tb, maxcols) {
-					var cnt = 0, retpos = [], ind = false,
+					var cnt = 0, retpos = [], ind = false, $tb = $(tb),
 						tdtmpl = "<td class='CaptionTD'>&#160;</td><td class='DataTD'>&#160;</td>", tmpl = "", i; //*2
 					for (i = 1; i <= maxcols; i++) {
 						tmpl += tdtmpl;
@@ -567,7 +598,7 @@
 						ind = base.getInd.call($self, rowid1);
 					}
 					$(colModel).each(function (iCol) {
-						var cm = this, nm = cm.name, $td, hc, trdata, tmp, dc, elc, editable = cm.editable, disabled = false, readonly = false,
+						var cm = this, nm = cm.name, $td, hc, trdata, tmp, elc, editable = cm.editable, disabled = false, readonly = false,
 							mode = rowid1 === "_empty" ? "addForm" : "editForm";
 						if ($.isFunction(editable)) {
 							editable = editable.call($t, {
@@ -585,7 +616,6 @@
 						} else {
 							hc = cm.hidden === true || editable === "hidden" ? true : false;
 						}
-						dc = hc ? "style='display:none'" : "";
 						switch (String(editable).toLowerCase()) {
 							case "hidden":
 								editable = true;
@@ -629,16 +659,16 @@
 							if ($.inArray(cm.edittype, ["text", "textarea", "checkbox", "password", "select"]) > -1) {
 								$(elc).addClass(getGuiStyles.call($t, "dialog.dataField"));
 							}
-							trdata = $(tb).find("tr[data-rowpos=" + rp + "]");
+							trdata = $tb.find("tr[data-rowpos=" + rp + "]");
 							if (frmopt.rowabove) {
 								var newdata = $("<tr><td class='contentinfo' colspan='" + (maxcols * 2) + "'>" + frmopt.rowcontent + "</td></tr>");
-								$(tb).append(newdata);
+								$tb.append(newdata);
 								newdata[0].rp = rp;
 							}
 							if (trdata.length === 0) {
-								trdata = $("<tr " + dc + " data-rowpos='" + rp + "'></tr>").addClass("FormData").attr("id", "tr_" + nm);
+								trdata = $("<tr data-rowpos='" + rp + "'></tr>").addClass("FormData").attr("id", "tr_" + nm);
 								$(trdata).append(tmpl);
-								$(tb).append(trdata);
+								$tb.append(trdata);
 								trdata[0].rp = rp;
 							}
 							var $label = $("td:eq(" + (cp - 2) + ")", trdata[0]),
@@ -657,14 +687,18 @@
 								opt.custom_value.call($t, $("#" + jqID(nm), frmgr), "set", tmp);
 							}
 							jgrid.bindEv.call($t, elc, opt);
+							if (hc) {
+								$label.add($data).css("visibility", "hidden");
+							}
 							retpos[cnt] = iCol;
 							cnt++;
 						}
 					});
+					hideRowsWithoutVissibleCells($tb);
 					if (cnt > 0) {
 						var idrow = $("<tr class='FormData' style='display:none'><td class='CaptionTD'>&#160;</td><td colspan='" + (maxcols * 2 - 1) + "' class='DataTD'><input class='FormElement' id='id_g' type='text' name='" + gridId + "_id' value='" + rowid1 + "'/></td></tr>");
 						idrow[0].rp = cnt + 999;
-						$(tb).append(idrow);
+						$tb.append(idrow);
 						if (o.checkOnSubmit || o.checkOnUpdate) { o._savedData[gridId + "_id"] = rowid1; }
 					}
 					return retpos;
@@ -1415,8 +1449,8 @@
 					}
 				}
 				function createData(rowid1, tb, maxcols) {
-					var nm, hc, $trdata, cnt = 0, tmp, dc, retpos = [], ind = base.getInd.call($self, rowid1), i,
-						viewDataClasses = getGuiStyles.call($t, "dialog.viewData"),
+					var nm, hc, $trdata, cnt = 0, tmp, retpos = [], ind = base.getInd.call($self, rowid1), i,
+						viewDataClasses = getGuiStyles.call($t, "dialog.viewData"), $tb = $(tb),
 						viewLabelClasses = getGuiStyles.call($t, "dialog.viewLabel"),
 						labelsWidth = String(o.labelswidth) + (!o.labelswidth || isNaN(o.labelswidth) ? "" : "px"),
 						tdtmpl = "<td class='" +
@@ -1429,7 +1463,7 @@
 					for (i = 0; i < maxcols; i++) {
 						tmpl += tdtmpl;
 					}
-					// find max number align rigth with property formatter
+					// find max number align right with property formatter
 					$(colModel).each(function () {
 						var cm = this;
 						if (cm.editrules && cm.editrules.edithidden === true) {
@@ -1456,7 +1490,6 @@
 						} else {
 							hc = cm.hidden === true ? true : false;
 						}
-						dc = hc ? "style='display:none'" : "";
 						viewfld = (typeof cm.viewable !== "boolean") ? true : cm.viewable;
 						if (nm !== "cb" && nm !== "subgrid" && nm !== "rn" && viewfld) {
 							tmp = ind === false ? "" : jgrid.getDataFieldOfCell.call($t, $t.rows[ind], iCol).html();
@@ -1466,21 +1499,22 @@
 								cp = parseInt((parseInt(frmopt.colpos, 10) || 1) * 2, 10);
 							if (frmopt.rowabove) {
 								var newdata = $("<tr><td class='contentinfo' colspan='" + (maxcols * 2) + "'>" + frmopt.rowcontent + "</td></tr>");
-								$(tb).append(newdata);
+								$tb.append(newdata);
 								newdata[0].rp = rp;
 							}
-							$trdata = $(tb).find("tr[data-rowpos=" + rp + "]");
+							$trdata = $tb.find("tr[data-rowpos=" + rp + "]");
 							if ($trdata.length === 0) {
-								$trdata = $("<tr " + dc + " data-rowpos='" + rp + "'></tr>")
+								$trdata = $("<tr data-rowpos='" + rp + "'></tr>")
 										.addClass("FormData")
 										.attr("id", "trv_" + nm);
 								$trdata.append(tmpl);
-								$(tb).append($trdata);
+								$tb.append($trdata);
 								$trdata[0].rp = rp;
 							}
 							var labelText = (frmopt.label === undefined ? p.colNames[iCol] : frmopt.label),
-								$data = $("td:eq(" + (cp - 1) + ")", $trdata[0]);
-							$("td:eq(" + (cp - 2) + ")", $trdata[0]).html("<label for='" + nm + "'" +
+								$data = $("td:eq(" + (cp - 1) + ")", $trdata[0]),
+								$label = $("td:eq(" + (cp - 2) + ")", $trdata[0]);
+							$label.html("<label for='" + nm + "'" +
 								(viewLabelClasses ? " class='" + viewLabelClasses + "'>" : ">") +
 								(labelText || "&nbsp;") + "</label>");
 							$data[isEmptyString($data.html()) ? "html" : "append"]("<span id='" + nm + "'" +
@@ -1489,36 +1523,34 @@
 							if (setme) {
 								$("td:eq(" + (cp - 1) + ") span", $trdata[0]).css({ "text-align": "right", width: maxw + "px" });
 							}
+							if (hc) {
+								$label.add($data).css("visibility", "hidden");
+							}
 							retpos[cnt] = iCol;
 							cnt++;
 						}
 					});
+					hideRowsWithoutVissibleCells($tb);
 					if (cnt > 0) {
 						var idrow = $("<tr class='FormData' style='display:none'><td class='CaptionTD'>&#160;</td><td colspan='" + (maxcols * 2 - 1) + "' class='DataTD'><input class='FormElement' id='id_g' type='text' name='id' value='" + rowid1 + "'/></td></tr>");
 						idrow[0].rp = cnt + 99;
-						$(tb).append(idrow);
+						$tb.append(idrow);
 					}
 					return retpos;
 				}
 				function fillData(rowid1) {
-					var nm, hc, cnt = 0, trv = base.getInd.call($self, rowid1, true), cm;
+					var nm, cnt = 0, trv = base.getInd.call($self, rowid1, true), cm;
 					if (!trv) { return; }
 					$("td", trv).each(function (i) {
 						cm = colModel[i];
 						nm = cm.name;
-						// hidden fields are included in the form
-						if (cm.editrules && cm.editrules.edithidden === true) {
-							hc = false;
-						} else {
-							hc = cm.hidden === true ? true : false;
-						}
 						if (nm !== "cb" && nm !== "subgrid" && nm !== "rn") {
 							nm = jqID("v_" + nm);
 							$("#" + nm + " span", frmtb).html(jgrid.getDataFieldOfCell.call($t, trv, i).html());
-							if (hc) { $("#" + nm, frmtb).parents("tr:first").hide(); }
 							cnt++;
 						}
 					});
+					//hideRowsWithoutVissibleCells($(frmtb));
 					if (cnt > 0) { $("#id_g", frmtb).val(rowid1); }
 				}
 				function updateNav(cr, posarr) {

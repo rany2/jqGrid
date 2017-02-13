@@ -2,27 +2,32 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.13.7-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.14.0-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-02-07
+ * Date: 2017-02-12
  */
 //jsHint options
 /*jshint eqnull:true */
 /*jslint browser: true, evil: true, devel: true, white: true */
 /*global jQuery, define, HTMLElement, HTMLTableRowElement, module, require */
 
-(function (factory) {
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["jquery"], factory);
+		define(["jquery"], function ($) {
+			return factory($, global, global.document);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
+			if (!root) {
+				root = window;
+			}
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -30,16 +35,16 @@
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
 						require("jquery") :
-						require("jquery")(root || window);
+						require("jquery")(root);
 			}
-			factory($);
+			factory($, root, root.document);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		factory(jQuery, global, global.document);
 	}
-}(function ($) {
+}(typeof window !== "undefined" ? window : this, function ($, window, document) {
 	"use strict";
 	// begin module grid.base
 	/** @const */
@@ -365,7 +370,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.13.7-pre",
+		version: "4.14.0-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -1522,7 +1527,7 @@
 			if (grid == null || rows == null || p == null || tr == null || tr.rowIndex == null || !tr.id || !$.isFunction(callback)) {
 				return null; // this is not a grid or tr is not tr
 			}
-			var iCol, colModel = p.colModel, nCol = colModel.length, cm, nm, options,
+			var iCol, colModel = p.colModel, nCol = colModel.length, cm, nm, options, id, pos, item,
 				isEditable, iRow = tr.rowIndex, td, $dataElement, dataWidth,
 				frozenRows = grid.fbRows, frozen = frozenRows != null,
 				trFrozen = frozen ? frozenRows[iRow] : null;
@@ -1553,8 +1558,10 @@
 							dataWidth = 0; // we can test it in the callback and use width:auto in the case
 						}
 
+						id = stripPref(p.idPrefix, tr.id);
 						options = {
 							rowid: tr.id,
+							id: id,
 							iCol: iCol,
 							iRow: iRow,
 							cmName: nm,
@@ -1566,6 +1573,13 @@
 							dataElement: $dataElement[0],
 							dataWidth: dataWidth
 						};
+						if (p.datatype === "local") {
+							pos = p._index[id];
+							item = pos != null ? p.data[pos] : undefined;
+							if (item) {
+								options.item = item;
+							}
+						}
 						if (!cm.edittype) { cm.edittype = "text"; }
 						isEditable = cm.editable;
 						isEditable = $.isFunction(isEditable) ?
@@ -2319,13 +2333,13 @@
 				(text ? "<span class='fm-button-text'>" + text + "</span>" : "") +
 				"</a>";
 		},
-		convertOnSaveLocally: function (nData, cm, oData, rowid, item, iCol) {
+		convertOnSaveLocally: function (nData, cm, oData, id, item, iCol) {
 			var self = this, p = self.p;
 			if (p == null) {
 				return nData;
 			}
 			if ($.isFunction(cm.convertOnSave)) {
-				return cm.convertOnSave.call(this, { newValue: nData, cm: cm, oldValue: oData, id: rowid, item: item, iCol: iCol });
+				return cm.convertOnSave.call(this, { newValue: nData, cm: cm, oldValue: oData, id: id, item: item, iCol: iCol });
 			}
 			if (typeof oData !== "boolean" && typeof oData !== "number") {
 				// we support first of all editing of boolean and numeric data
@@ -3588,7 +3602,7 @@
 					for (cmName in p.indexByColumnData) {
 						if (p.indexByColumnData.hasOwnProperty(cmName)) {
 							v = rd[cmName];
-							if (rd.hasOwnProperty(cmName) && v !== undefined) {
+							if (rd.hasOwnProperty(cmName) && v !== undefined && v !== "") {
 								// rd[cmName] is the value, which need be saved in p.indexByColumnData[cmName]
 								if (p.ignoreCase) {
 									v = String(v).toLowerCase();
@@ -3725,7 +3739,6 @@
 					}
 					p._index = {};
 					p.dataIndexById = {};
-					p.indexByColumnData = {};
 					p.indexByColumnData = buildEmptyIndexedColumnMap();
 					for (i = 0; i < datalen; i++) {
 						item = p.data[i];
@@ -6310,7 +6323,7 @@
 						}
 						p.selrow = pt.id;
 						if (onsr) {
-							feedback.call($t, "onSelectRow", pt.id, stat, e);
+							feedback.call($t, "onSelectRow", pt.id, stat, e || {});
 						}
 					}
 				} else {
@@ -6335,7 +6348,7 @@
 						selectUnselectRow(pt, stat);
 					}
 					if (onsr) {
-						feedback.call($t, "onSelectRow", pt.id, stat, e);
+						feedback.call($t, "onSelectRow", pt.id, stat, e || {});
 					}
 				}
 			});
