@@ -9,23 +9,46 @@
 **/
 
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
-/*global jQuery, define, exports, require */
+/*global jQuery, define, exports, module, require */
 /*jslint browser: true, devel: true, eqeq: true, nomen: true, plusplus: true, unparam: true, vars: true, white: true */
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["jquery",
+		define([
+			"jquery",
 			"./grid.base",
 			//"../plugins/ui.multiselect",
+			"free-jqgrid-plugins/ui.multiselect",
 			"jquery-ui/dialog",
 			"jquery-ui/draggable",
 			"jquery-ui/droppable",
 			"jquery-ui/resizable",
-			"jquery-ui/sortable"], factory);
-	} else if (typeof exports === "object") {
+			"jquery-ui/sortable"
+		], factory);
+	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
-		factory(require("jquery"));
+		module.exports = function (root, $) {
+			if ($ === undefined) {
+				// require("jquery") returns a factory that requires window to
+				// build a jQuery instance, we normalize how we use modules
+				// that require this pattern but the window provided is a noop
+				// if it's defined (how jquery works)
+				$ = typeof window !== "undefined" ?
+						require("jquery") :
+						require("jquery")(root || window);
+			}
+			require("./grid.base");
+			//require("../plugins/ui.multiselect");
+			require("free-jqgrid-plugins/ui.multiselect");
+			require("jquery-ui/dialog");
+			require("jquery-ui/draggable");
+			require("jquery-ui/droppable");
+			require("jquery-ui/resizable");
+			require("jquery-ui/sortable");
+			factory($);
+			return $;
+		};
 	} else {
 		// Browser globals
 		factory(jQuery);

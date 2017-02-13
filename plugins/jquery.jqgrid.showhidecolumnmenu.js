@@ -6,7 +6,7 @@
  * Date: 2014-11-13, 2015-04-06
  * see https://github.com/tonytomov/jqGrid/issues/650 for more details
  */
-/*global jQuery, define */
+/*global jQuery, define, module, require */
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
@@ -19,9 +19,21 @@
 		// It's better, probably, to make the COPY of the patched file
 		// (with the reference to "..../min/grid.base") in the separate min folder.
 		define(["jquery", , "./jquery.contextmenu-ui", "free-jqgrid/grid.base"], factory);
-	} else if (typeof exports === "object") {
+	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
-		factory(require("jquery"));
+		module.exports = function (root, $) {
+			if ($ === undefined) {
+				// require("jquery") returns a factory that requires window to
+				// build a jQuery instance, we normalize how we use modules
+				// that require this pattern but the window provided is a noop
+				// if it's defined (how jquery works)
+				$ = typeof window !== "undefined" ?
+						require("jquery") :
+						require("jquery")(root || window);
+			}
+			factory($);
+			return $;
+		};
 	} else {
 		// Browser globals
 		factory(jQuery);
