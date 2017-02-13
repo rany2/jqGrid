@@ -15,14 +15,19 @@
 /*jslint browser: true, evil: true, devel: true, white: true */
 /*global jQuery, define, HTMLElement, HTMLTableRowElement, module, require */
 
-(function (factory) {
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["jquery"], factory);
+		define(["jquery"], function ($) {
+			return factory($, global, global.document);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
+			if (!root) {
+				root = window;
+			}
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -30,16 +35,16 @@
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
 						require("jquery") :
-						require("jquery")(root || window);
+						require("jquery")(root);
 			}
-			factory($);
+			factory($, root, root.document);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		factory(jQuery, global, global.document);
 	}
-}(function ($) {
+}(typeof window !== "undefined" ? window : this, function ($, window, document) {
 	"use strict";
 	// begin module grid.base
 	/** @const */
@@ -6318,7 +6323,7 @@
 						}
 						p.selrow = pt.id;
 						if (onsr) {
-							feedback.call($t, "onSelectRow", pt.id, stat, e);
+							feedback.call($t, "onSelectRow", pt.id, stat, e || {});
 						}
 					}
 				} else {
@@ -6343,7 +6348,7 @@
 						selectUnselectRow(pt, stat);
 					}
 					if (onsr) {
-						feedback.call($t, "onSelectRow", pt.id, stat, e);
+						feedback.call($t, "onSelectRow", pt.id, stat, e || {});
 					}
 				}
 			});
