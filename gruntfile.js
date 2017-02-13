@@ -13,8 +13,8 @@ module.exports = function (grunt) {
 			"plugins/min/",
 			"dist/",
 			"plugins/*.min.js",
-			"plugins/*.min.css",
-			"plugins/*.min.css.map",
+			"plugins/css/*.min.css",
+			"plugins/css/*.min.css.map",
 			"plugins/*.min.map",
 			"ts/tests/*.js",
 			"ts/tests/*.map",
@@ -213,8 +213,8 @@ module.exports = function (grunt) {
 						// one have to fix it to "sources":["ui.jqgrid.css"]
 					},
 					{
-						src: "plugins/ui.multiselect.css",
-						dest: "plugins/ui.multiselect.min.css"
+						src: "plugins/css/ui.multiselect.css",
+						dest: "plugins/css/ui.multiselect.min.css"
 						// "sources":["plugins/ui.multiselect.css"] in ui.multiselect.min.css.map is wrong!!!
 						// one have to fix it to "sources":["ui.multiselect.css"]
 					}
@@ -273,11 +273,11 @@ module.exports = function (grunt) {
 				}
 			},
 			cssmin_multiselect: {
-				src: "plugins/ui.multiselect.min.css.map",
+				src: "plugins/css/ui.multiselect.min.css.map",
 				dest: "./",
 				options: {
 					patterns: [{
-						match: /\"sources\":\[\"plugins\/ui\.multiselect\.css\"\],/,
+						match: /\"sources\":\[\"plugins\/css\/ui\.multiselect\.css\"\],/,
 						replacement: "\"sources\":[\"ui.multiselect.css\"],"
 					}]
 				}
@@ -372,7 +372,7 @@ module.exports = function (grunt) {
 
 			// build two regex required for running "replace" task
 			// see http://stackoverflow.com/a/6969486/315935 about which characters need be escaped
-			regExp0 = new RegExp("\\\"sources\\\":\\[\\\"" +
+			regExp0 = new RegExp("\\\"sources\\\":\\[\\\"." +
 					//filePath.split("\/").join("\\\/") +    // for example "plugins\\\/grid.odata.js" +
 					escapeForMatch(filePath) +
 					"\\\"\\],");
@@ -471,8 +471,6 @@ module.exports = function (grunt) {
 	regClosureCompilerTask("js/jquery.jqgrid.src.js");
 
 	grunt.file.expand({ matchBase: true }, [
-		"plugins/*.js",
-		"!plugins/*.min.js",
 		"js/i18n/grid.locale-*.js",
 		"!js/i18n/grid.locale-*.min.js"
 	]).forEach(function (path) {
@@ -481,6 +479,8 @@ module.exports = function (grunt) {
 
 	grunt.file.expand({ matchBase: true }, [
 		"js/*.js",
+		"plugins/*.js",
+		"!plugins/min/*.min.js",
 		"!js/*.min.js",
 		"!js/min/*.js",
 		"!js/jquery.jqgrid.*.js"

@@ -21,7 +21,11 @@
 		// map file, created during minimizing.
 		// It's better, probably, to make the COPY of the patched file
 		// (with the reference to "..../min/grid.base") in the separate min folder.
-		define(["jquery", "./jquery.contextmenu-ui", "free-jqgrid/grid.base"], factory);
+		define([
+			"jquery",
+			"./jquery.contextmenu-ui",
+			"free-jqgrid/grid.base"
+		], factory);
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
