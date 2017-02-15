@@ -37,6 +37,8 @@
 						require("jquery") :
 						require("jquery")(root);
 			}
+			//global.jQuery = $;
+			//root.jQuery = $;
 			factory($, root, root.document);
 			return $;
 		};
