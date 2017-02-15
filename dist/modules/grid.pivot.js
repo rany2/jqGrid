@@ -18,11 +18,15 @@
 		// AMD. Register as an anonymous module.
 		define([
 			"jquery",
+			"./jquery.fmatter",
 			"./grid.grouping"
 		], factory);
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
+			if (!root) {
+				root = window;
+			}
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -30,8 +34,9 @@
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
 						require("jquery") :
-						require("jquery")(root || window);
+						require("jquery")(root);
 			}
+			require("./grid.grouping");
 			factory($);
 			return $;
 		};

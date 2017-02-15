@@ -23,6 +23,9 @@
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
+			if (!root) {
+				root = window;
+			}
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -32,6 +35,9 @@
 						require("jquery") :
 						require("jquery")(root || window);
 			}
+			require("./grid.base");
+			require("./jqdnr");
+			require("./jqmodal");
 			factory($);
 			return $;
 		};

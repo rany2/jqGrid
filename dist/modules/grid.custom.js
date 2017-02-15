@@ -12,7 +12,7 @@
 /*jshint eqeqeq:false */
 /*jslint browser: true, devel: true, eqeq: true, nomen: true, plusplus: true, vars: true, unparam: true, white: true, todo: true */
 /*global jQuery, define, exports, module, require */
-(function (factory) {
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
@@ -21,10 +21,15 @@
 			"./grid.base",
 			"./jquery.fmatter",
 			"./grid.common"
-		], factory);
+		], function ($) {
+			return factory($, global, global.document);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
+			if (!root) {
+				root = window;
+			}
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -32,25 +37,19 @@
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
 						require("jquery") :
-						require("jquery")(root || window);
+						require("jquery")(root);
 			}
-			if (typeof window !== "undefined") {
-				require("./grid.base");
-				require("./jquery.fmatter");
-				require("./grid.common");
-			} else {
-				require("./grid.base");
-				require("./jquery.fmatter");
-				require("./grid.common");
-				factory($);
-			}
+			require("./grid.base");
+			require("./jquery.fmatter");
+			require("./grid.common");
+			factory($);
 			return $;
 		};
 	} else {
 		// Browser globals
 		factory(jQuery);
 	}
-}(function ($) {
+}(typeof window !== "undefined" ? window : this, function ($, window, document) {
 	"use strict";
 	var jgrid = $.jgrid, jqID = jgrid.jqID, base = $.fn.jqGrid,
 		getGuiStyles = base.getGuiStyles, getGridRes = base.getGridRes;

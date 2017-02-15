@@ -19,11 +19,15 @@
 			"./grid.base",
 			"./jquery.fmatter",
 			"./grid.common",
+			"./grid.filter",
 			"./jsonxml"
 		], factory);
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
+			if (!root) {
+				root = window;
+			}
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -31,8 +35,12 @@
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
 						require("jquery") :
-						require("jquery")(root || window);
+						require("jquery")(root);
 			}
+			require("./grid.base");
+			require("./jquery.fmatter");
+			require("./grid.common");
+			require("./jsonxml");
 			factory($);
 			return $;
 		};
@@ -1029,7 +1037,7 @@
 										}
 									}
 									o.processing = false;
-									try { $(":input:visible", frmgr)[0].focus(); } catch (ignore) { }
+									try { $(":input:visible", frmgr).focus(); } catch (ignore) { }
 								}
 							}, jgrid.ajaxOptions, o.ajaxEditOptions);
 
@@ -1278,7 +1286,7 @@
 					$("#nNew", themodalSelector).click(function () {
 						$(".confirm", themodalSelector).hide();
 						$(frmgr).data("disabled", false);
-						setTimeout(function () { $(":input:visible", frmgr)[0].focus(); }, 0);
+						setTimeout(function () { $(":input:visible", frmgr).focus(); }, 0);
 						return false;
 					});
 					$("#cNew", themodalSelector).click(function () {
