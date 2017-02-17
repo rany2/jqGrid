@@ -752,6 +752,9 @@ declare namespace FreeJqGrid {
 		sortable?: boolean;
 		sortfunc?: (a: any, b: any, direction: 1 | -1, aItem: any, bItem: any) => any;
 		sortIconName?: (this: BodyTable, options: { order: "asc" | "desc", iCol: number, cm: ColumnModel }) => string; // return CSS classes
+		summaryRound?: number; // exponent used in Math.pow during rounding of summary values during data grouping
+		summaryRoundType?: "fixed" | "round"; // can be used during calculation of summary values during data grouping
+		summaryType?: "sum" | "min" | "max" | "count" | "avg"; // can be used in data grouping
 		stype?: "select" | "checkbox" | "custom" | "text"; // default value "text"
 		template?: "actions" | "integer" | "integerStr" | "number" | "numberStr" | "booleanCheckbox" | "booleanCheckboxFa" | string | ColumnModel;
 		title?: boolean;
@@ -1108,7 +1111,7 @@ declare namespace FreeJqGrid {
 		subgridtype?: string | ((this: BodyTable, postData: Object | string) => void);
 		subGridWidth?: number; // 16
 	}
-	interface jqGridSelectionOptions {
+	interface JqGridSelectionOptions {
 		beforeSelectRow?: (this: BodyTable, rowid, eventObject: JQueryEventObject) => false | void;
 		readonly cb?: string;   // "#cb_list"
 		readonly cbId?: string; // "cb_list"
@@ -1125,7 +1128,7 @@ declare namespace FreeJqGrid {
 		selarrrow?: string[]; // []
 		singleSelectClickMode?: "toggle" | "selectonly"; // "toggle"
 	}
-	interface jqGridSortingOptions {
+	interface JqGridSortingOptions {
 		builderSortIcons?: (this: BodyTable, iCol: number) => string;
 		forceClientSorting?: boolean;
 		ignoreCase?: boolean; // true
@@ -1140,7 +1143,7 @@ declare namespace FreeJqGrid {
 		threeStateSort?: boolean; // false
 		viewsortcols?: [boolean, "vertical" | "horizontal", boolean]; // [false, "vertical", true]
 	}
-	interface jqGridTreeGridOptions {
+	interface JqGridTreeGridOptions {
 		ExpandColClick?: boolean;
 		ExpandColumn?: string;
 		tree_root_level?: number; // 0
@@ -1158,7 +1161,7 @@ declare namespace FreeJqGrid {
 		treeReader?: TreeGridReader;
 		unloadNodeOnCollapse?: boolean | ((this: BodyTable, treeItem: any) => boolean);
 	}
-	interface jqGridResizingOptions {
+	interface JqGridResizingOptions {
 		afterResizeDblClick?: (this: BodyTable, options: { iCol: number, cm: ColumnModel, cmName: string }) => void;
 		columnsToReResizing?: number[]; // used internally by jqGrid
 		doubleClickSensitivity?: number; // 250
@@ -1188,16 +1191,71 @@ declare namespace FreeJqGrid {
 		toppager?: string; // Default false. Be changed by jqGrid to string in the form "#list_toppager"
 		viewrecords?: boolean; // false
 	}
+	interface GroupSummaryInformation {
+		groupCount?: number;
+		groupIndex?: string; // cmName
+		groupValue?: any;
+		nm: string; // cmName
+		sr?: number; // cm.summaryRound
+		srt?: "fixed" | "round"; // cm.summaryRoundType
+		st?: ("sum" | "min" | "max" | "count" | "avg") | ("sum" | "min" | "max" | "count" | "avg")[]; //cm.summaryType
+		v: any;
+	}
+	interface GroupInformation {
+		cnt?: number;
+		collapsed?: boolean;
+		dataIndex: string; // cmName
+		displayValue: string; //displayValue,
+		idx: number; // index in grp.groupField array
+		keys?: any[];
+		parentGroup?: GroupInformation;
+		parentGroupIndex?: number;
+		startRow?: number; // iRow
+		summary: GroupSummaryInformation[];
+		value?: any;
+	}
+	interface CounterInformation {
+		cnt: number;
+		pos: number;
+		summary: GroupSummaryInformation[];
+	}
+	interface GroupingView {
+		_locgr?: boolean;
+		commonIconClass?: string;
+		counters?: CounterInformation[];
+		displayField?: string[];
+		formatDisplayField?: ((this: BodyTable, displayValue: string, value: any, cm: ColumnModel, idx: number, grp: GroupInformation) => string)[];
+		groupCollapse?: (options: { group: number, rowid: string }) => boolean;
+		groupColumnShow?: boolean[];
+		groupField: string[];
+		groupOrder?: ("asc" | "desc")[];
+		groups?: GroupInformation[];
+		groupSummary?: boolean[];
+		groupSummaryPos?: ("footer" | "header")[];
+		groupText?: string[];
+		hideFirstGroupCol?: boolean;
+		iconColumnName?: string; // cmName
+		isInTheSameGroup?: boolean[];
+		lastvalues?: Object[];
+		minusicon?: string; // "fa fa-fw fa-minus-square-o"
+		plusicon?: string; // "fa fa-fw fa-plus-square-o"
+		showSummaryOnHide?: boolean;
+		summary?: GroupSummaryInformation[];
+		useDefaultValuesOnGrouping?: boolean;
+		visibiltyOnNextGrouping?: boolean[];
+		[propName: string]: any; // allow to have any number of other properties
+	}
 	interface JqGridGroupingOptions {
 		grouping?: boolean;
-		groupingView?: any;
+		groupingView?: GroupingView;
+		onClickGroup?: (this: BodyTable, hid: string, collapsed: boolean) => void;
 	}
 	interface JqGridOptions extends JqGridSubGridOptions,
-									jqGridSelectionOptions,
-									jqGridSortingOptions,
+									JqGridSelectionOptions,
+									JqGridSortingOptions,
 									JqGridGroupingOptions,
-									jqGridTreeGridOptions,
-									jqGridResizingOptions,
+									JqGridTreeGridOptions,
+									JqGridResizingOptions,
 									JqGridPagingOptions {
 		_index?: {[rowid: string]: number }; // used internally by jqGrid if local data exists
 		_inlinenav?: boolean; // used internally by jqGrid if inlineNav be called
@@ -1718,10 +1776,18 @@ interface JQuery {
 	getCell?(rowid: string, iCol: number): string | false;
 	jqGrid(methodName: "getCell", rowid: string, cmName: string): string | false;
 	jqGrid(methodName: "getCell", rowid: string, iCol: number): string | false;
+	
+	// isCellEditing
+	isCellEditing?(rowid: string, cmName: string, tr?: HTMLTableRowElement): boolean;
+	isCellEditing?(rowid: string, iCol: number, tr?: HTMLTableRowElement): boolean;
+	jqGrid(methodName: "isCellEditing", rowid: string, cmName: string, tr?: HTMLTableRowElement): boolean;
+	jqGrid(methodName: "isCellEditing", rowid: string, iCol: number, tr?: HTMLTableRowElement): boolean;
 
 	// getCol
 	getCol?(cmName: string, asObj?: boolean, mathopr?: "sum" | "avg" | "count" | "min" | "max"): string[] | { id: string, value: string }[] | number;
+	getCol?(iCol: number, asObj?: boolean, mathopr?: "sum" | "avg" | "count" | "min" | "max"): string[] | { id: string, value: string }[] | number;
 	jqGrid(methodName: "getCol", cmName: string, asObj?: boolean, mathopr?: "sum" | "avg" | "count" | "min" | "max"): string[] | { id: string, value: string }[] | number;
+	jqGrid(methodName: "getCol", iCol: number, asObj?: boolean, mathopr?: "sum" | "avg" | "count" | "min" | "max"): string[] | { id: string, value: string }[] | number;
 
 	// clearGridData
 	clearGridData?(clearFooter: boolean): FreeJqGrid.JQueryJqGrid;
@@ -1762,6 +1828,22 @@ interface JQuery {
 	// autoResizeAllColumns
 	autoResizeAllColumns?(): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "autoResizeAllColumns"): FreeJqGrid.JQueryJqGrid;
+
+	// grid.grouping module
+	getGroupHeaderIndex?(hid: string, clickedElem?: Element | JQuery): number;
+	groupingGroupBy?(name: string | string[], options: FreeJqGrid.GroupingView): FreeJqGrid.JQueryJqGrid;
+	groupingPrepare?(record: object, iRow: number): FreeJqGrid.JQueryJqGrid;
+	groupingRemove?(current?: boolean): FreeJqGrid.JQueryJqGrid;
+	groupingRender?(grdata: string[], rn: number): string;
+	groupingSetup?(): FreeJqGrid.JQueryJqGrid;
+	groupingToggle?(hid: string, clickedElem?: Element | JQuery): false;
+	jqGrid(methodName: "getGroupHeaderIndex", hid: string, clickedElem?: Element | JQuery): number;
+	jqGrid(methodName: "groupingGroupBy", name: string | string[], options: FreeJqGrid.GroupingView): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "groupingPrepare", record: object, iRow: number): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "groupingRemove", current?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "groupingRender", grdata: string[], rn: number): string;
+	jqGrid(methodName: "groupingSetup"): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "groupingToggle", hid: string, clickedElem?: Element | JQuery): false;
 
 	// grid.pivot module
 	pivotSetup?(data: any[] | string, pivotOpt: FreeJqGrid.PivotOptions): FreeJqGrid.PivotSetupResult;
@@ -1941,6 +2023,9 @@ interface JQuery {
 	on(eventName: "jqGridResizeStart", handler: (eventObject: JQueryEventObject, orgEventObject: JQueryEventObject, iCol: number) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridResizeStop", handler: (eventObject: JQueryEventObject, newWidth: number, iCol: number) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridResetFrozenHeights", handler: (eventObject: JQueryEventObject, options: FreeJqGrid.ResetFrozenHeightsOptions) => void): FreeJqGrid.JQueryJqGrid;
+
+	// grouping event
+	on(eventName: "jqGridGroupingClickGroup", handler: (eventObject: JQueryEventObject, hid: string, collapsed: boolean) => void): FreeJqGrid.JQueryJqGrid;
 
 	// form editing events
 	on(eventName: "jqGridAddEditAfterClickPgButtons", handler: (eventObject: JQueryEventObject, whichButton: "next" | "prev", $form: JQuery, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
