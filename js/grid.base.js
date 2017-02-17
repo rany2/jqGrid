@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-02-17
+ * Date: 2017-02-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1516,13 +1516,19 @@
 					$td;
 		},
 		getDataFieldOfCell: function (tr, iCol) {
-			var p = this.p, $td = jgrid.getCell.call(this, tr, iCol);
+			var p = this.p, $td = jgrid.getCell.call(this, tr, iCol), $dataElement;
 			if (p.treeGrid && $td.children("div.tree-wrap").length > 0) {
 				$td = $td.children("span.cell-wrapperleaf,span.cell-wrapper");
 			}
-			return p.colModel[iCol].autoResizable ?
-					$td.children("span." + p.autoResizing.wrapperClassName) :
-					$td;
+			if (p.colModel[iCol].autoResizable) {
+				$dataElement = $td.children("span." + p.autoResizing.wrapperClassName);
+				if ($dataElement.length === 0) { // for example, td is in editing mode
+					$dataElement = $td;
+				}
+			} else {
+				$dataElement = $td;
+			}
+			return $dataElement;
 		},
 		enumEditableCells: function (tr, mode, callback) {
 			var self = this, grid = self.grid, rows = self.rows, p = self.p;
@@ -6430,6 +6436,39 @@
 				clearArray(p.savedRow); // p.savedRow = [];
 			});
 		},
+		isCellEditing: function (rowid, iCol, trDom) {
+			var $t = this[0], editingInfo = jgrid.detectRowEditing.call($t, rowid);
+
+			if (editingInfo != null &&
+					((editingInfo.mode === "inlineEditing") ||
+					(editingInfo.mode === "cellEditing" && editingInfo.savedRow.ic === iCol))) {
+				iCol = isNaN(iCol) ? $t.p.iColByName[iCol] : parseInt(iCol, 10);
+				var tr = trDom != null && trDom.id === rowid ?
+						trDom :
+						base.getGridRowById.call($($t), rowid),
+					cm = $t.p.colModel[iCol],
+					isEditable = cm.editable;
+
+				if ($.isFunction(isEditable)) {
+					isEditable = isEditable.call($t, {
+						rowid: rowid,
+						id: stripPref($t.p.idPrefix, rowid),
+						iCol: iCol,
+						iRow: tr.rowIndex,
+						cmName: cm.name,
+						cm: cm,
+						mode: editingInfo.mode,
+						td: tr.cells[iCol],
+						tr: tr,
+						dataElement: jgrid.getDataFieldOfCell.call($t, tr, iCol)[0]
+					});
+				}
+				if (isEditable === true) {
+					return true;
+				}
+			}
+			return false;
+		},
 		getRowData: function (rowid, options) {
 			// TODO: add additional parameter, which will inform whether the output data need be in formatted or unformatted form
 			var res = {}, resall;
@@ -6439,7 +6478,7 @@
 			}
 			options = options || {};
 			this.each(function () {
-				var $t = this, p = $t.p, getall = false, tr, len = 1, j, rows = $t.rows, i, $td, cm, nm, td;
+				var $t = this, p = $t.p, getall = false, tr, len = 1, j, rows = $t.rows, i, $td, cm, nm, td, editingInfo;
 				if (rowid === undefined) {
 					getall = true;
 					resall = [];
@@ -6451,17 +6490,20 @@
 				for (j = 0; j < len; j++) {
 					if (getall) { tr = rows[j]; }
 					if ($(tr).hasClass("jqgrow")) {
+						editingInfo = jgrid.detectRowEditing.call($t, rowid);
 						$td = $(tr).find("td[role=gridcell]");
 						for (i = 0; i < $td.length; i++) {
 							cm = p.colModel[i];
 							nm = cm.name;
 							if ($.inArray(nm, p.reservedColumnNames) < 0 && cm.formatter !== "actions" && (!options.skipHidden || !cm.hidden)) {
 								td = $td[i];
-								if (p.treeGrid === true && nm === p.ExpandColumn) {
+								if (base.isCellEditing.call($($t), rowid, i, tr)) {
+									res[nm] = jgrid.getEditedValue.call($t, jgrid.getDataFieldOfCell.call($t, tr, i), cm, {}, cm.editable);
+								} else if (p.treeGrid === true && nm === p.ExpandColumn) {
 									res[nm] = htmlDecode($("span", td).first().html());
 								} else {
 									try {
-										res[nm] = $.unformat.call($t, td, { rowId: tr.id, colModel: cm }, i);
+										res[nm] = $.unformat.call($t, td, { rowId: rowid, colModel: cm }, i);
 									} catch (exception) {
 										res[nm] = htmlDecode($(td).html());
 									}
@@ -7444,15 +7486,20 @@
 			// TODO: add an additional parameter, which will inform whether the output data should be in formatted or unformatted form
 			var ret = false;
 			this.each(function () {
-				var $t = this, iCol, p = $t.p, tr, $td;
+				var $t = this, iCol, p = $t.p, tr, $td, cm;
 				if (!$t.grid) { return; }
 				iCol = isNaN(colName) ? p.iColByName[colName] : parseInt(colName, 10);
 				if (iCol >= 0) { //isNaN(iCol)>=0 is false and undefined >= 0 is false
 					tr = base.getGridRowById.call($($t), rowid);
 					if (tr) {
 						$td = jgrid.getDataFieldOfCell.call($t, tr, iCol).first();
+						cm = p.colModel[iCol];
 						try {
-							ret = $.unformat.call($t, $td, { rowId: tr.id, colModel: p.colModel[iCol] }, iCol);
+							if (base.isCellEditing.call($($t), rowid, iCol, tr)) {
+								ret = jgrid.getEditedValue.call($t, $td, cm, {}, cm.editable);
+							} else {
+								ret = $.unformat.call($t, $td, { rowId: tr.id, colModel: cm }, iCol);
+							}
 						} catch (exception) {
 							ret = htmlDecode($td.html());
 						}
@@ -7471,14 +7518,19 @@
 				if (!$t.grid) { return; }
 				iCol = isNaN(colName) ? p.iColByName[colName] : parseInt(colName, 10);
 				if (iCol >= 0) { //isNaN(iCol)>=0 is false and undefined >= 0 is false
-					var rows = $t.rows, ln = rows.length, i = 0, dlen = 0, tr;
+					var rows = $t.rows, ln = rows.length, i = 0, dlen = 0, tr, cm = p.colModel[iCol], rowid;
 					if (ln && ln > 0) {
 						while (i < ln) {
 							tr = rows[i];
 							if ($(tr).hasClass("jqgrow")) {
 								$td = jgrid.getDataFieldOfCell.call($t, tr, iCol).first(); //$(tr.cells[iCol]);
+								rowid = tr.id;
 								try {
-									val = $.unformat.call($t, $td, { rowId: tr.id, colModel: p.colModel[iCol] }, iCol);
+									if (base.isCellEditing.call($($t), rowid, iCol, tr)) {
+										val = jgrid.getEditedValue.call($t, $td, cm, {}, cm.editable);
+									} else {
+										val = $.unformat.call($t, $td, { rowId: rowid, colModel: cm }, iCol);
+									}
 								} catch (exception) {
 									val = htmlDecode($td.html());
 								}
@@ -7492,7 +7544,7 @@
 										dlen++;
 									}
 								} else if (obj) {
-									ret.push({ id: tr.id, value: val });
+									ret.push({ id: rowid, value: val });
 								} else {
 									ret.push(val);
 								}
