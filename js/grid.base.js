@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-02-12
+ * Date: 2017-02-17
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2878,10 +2878,7 @@
 						groupSummary: [],
 						showSummaryOnHide: false,
 						useDefaultValuesOnGrouping: true,
-						sortitems: [],
-						sortnames: [],
 						summary: [],
-						summaryval: [],
 						displayField: [],
 						groupSummaryPos: [],
 						formatDisplayField: [],
