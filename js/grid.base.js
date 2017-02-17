@@ -4115,9 +4115,13 @@
 							p._index[rd[locid]] = p.data.length - 1;
 						}
 					}
-					if (readAllInputData && p.forceClientSorting && p.treeGrid !== true) {
-						// don't display the data, just read it.
-						return;
+					if (readAllInputData && p.treeGrid !== true) {
+						if (p.forceClientSorting) {
+							// don't display the data, just read it.
+							return;
+						}
+						// initialize lastSelectedData to simplify the usage of lastSelectedData
+						p.lastSelectedData = p.data.slice();
 					}
 
 					// of rd items plus array cells items (almost the same as drows).
