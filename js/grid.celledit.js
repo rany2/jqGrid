@@ -215,7 +215,6 @@
 						e.stopPropagation();
 					});
 					feedback.call($t, "afterEditCell", rowid, nm, tmp, iRow, iCol);
-					$self.triggerHandler("jqGridAfterEditCell", [rowid, nm, tmp, iRow, iCol]);
 				} else {
 					if (iColOld >= 0 && iRowOld >= 0) {
 						getTdByColumnIndex.call($t, $trOld[0], iColOld).removeClass(highlightClasses);
