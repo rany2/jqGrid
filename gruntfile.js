@@ -7,6 +7,7 @@ module.exports = function (grunt) {
 			"css/*.min.css.map",
 			"js/jquery.jqgrid.min.js",
 			"js/jquery.jqgrid.min.map",
+			"js/jquery.jqgrid.min.js.map",
 			"js/jquery.jqgrid.src.js",
 			"js/i18n/min/",
 			"js/min/",
@@ -19,14 +20,24 @@ module.exports = function (grunt) {
 			"ts/tests/*.js",
 			"ts/tests/*.map",
 			"js/i18n/grid.locale-*.min.js",
+			"js/i18n/grid.locale-*.min.map",
+			"js/i18n/grid.locale-*.min.js",
 			"js/i18n/grid.locale-*.min.map"
 		],
 		copy: {
 			main: {
 				files: [
 					{
-						src: ["js/i18n/grid.locale-*.*"],
-						dest: "dist/i18n/",
+						src: ["js/i18n/*"],
+						dest: "dist/js/i18n/",
+						//timestamp: true,
+						expand: true,
+						filter: "isFile",
+						flatten: true
+					},
+					{
+						src: ["js/i18n/min/*"],
+						dest: "dist/js/i18n/min/",
 						//timestamp: true,
 						expand: true,
 						filter: "isFile",
@@ -35,6 +46,22 @@ module.exports = function (grunt) {
 					{
 						src: ["plugins/*"],
 						dest: "dist/plugins/",
+						//timestamp: true,
+						expand: true,
+						filter: "isFile",
+						flatten: true
+					},
+					{
+						src: ["plugins/min/*"],
+						dest: "dist/plugins/min/",
+						//timestamp: true,
+						expand: true,
+						filter: "isFile",
+						flatten: true
+					},
+					{
+						src: ["plugins/css/*"],
+						dest: "dist/plugins/css/",
 						//timestamp: true,
 						expand: true,
 						filter: "isFile",
@@ -57,7 +84,7 @@ module.exports = function (grunt) {
 						flatten: true
 					},
 					{
-						src: ["js/jquery.jqgrid.src.js", "js/jquery.jqgrid.min.js", "js/jquery.jqgrid.min.map"],
+						src: ["js/jquery.jqgrid.src.js", "js/jquery.jqgrid.min.js", "js/jquery.jqgrid.min*.map"],
 						dest: "dist/",
 						expand: true,
 						flatten: true
@@ -65,8 +92,9 @@ module.exports = function (grunt) {
 					{
 						src: [
 							"js/*.js",
-							"!js/min/*.js",
-							"!js/jquery.jqgrid.*.js"
+							"!js/min/*",
+							"!js/jquery.jqgrid.*.js",
+							"!js/jquery.jqgrid.min*.map"
 						],
 						dest: "dist/modules/",
 						//timestamp: true,
@@ -76,10 +104,9 @@ module.exports = function (grunt) {
 					},
 					{
 						src: [
-							"js/min/*.js",
-							"js/min/*.map"
+							"js/min/*"
 						],
-						dest: "dist/modules/min",
+						dest: "dist/modules/min/",
 						//timestamp: true,
 						expand: true,
 						filter: "isFile",
@@ -201,6 +228,7 @@ module.exports = function (grunt) {
 		},
 		cssmin: {
 			options: {
+				// compatibility: "ie8"
 				sourceMap: true,
 				report: "gzip"
 			},
@@ -219,24 +247,6 @@ module.exports = function (grunt) {
 						// one have to fix it to "sources":["ui.multiselect.css"]
 					}
 				]
-			}
-		},
-		closureCompiler: {
-			options: {
-				//checkModified: true,
-				compilerOpts: {
-					charset: "UTF-8",
-					//create_source_map: null
-					//warning_level: "QUIET",
-					//warning_level: "verbose",
-					//process_jquery_primitives: "", // This flag has no effect unless the compilation level is also set at ADVANCED_OPTIMIZATIONS.
-					create_source_map: "js/jquery.jqgrid.min.map"
-				},
-				compilerFile: "node_modules/google-closure-compiler/compiler.jar"
-			},
-			targetName: {
-				src: "js/jquery.jqgrid.src.js",
-				dest: "js/jquery.jqgrid.min.js"
 			}
 		},
 		watch: {
@@ -267,7 +277,8 @@ module.exports = function (grunt) {
 				dest: "./",
 				options: {
 					patterns: [{
-						match: /\"sources\":\[\"css\/ui\.jqgrid\.css\"\],/,
+						// "sources":["css\\ui.jqgrid.css"]
+						match: /\"sources\":\[\"css\\\\ui\.jqgrid\.css\"\],/,
 						replacement: "\"sources\":[\"ui.jqgrid.css\"],"
 					}]
 				}
@@ -277,52 +288,85 @@ module.exports = function (grunt) {
 				dest: "./",
 				options: {
 					patterns: [{
-						match: /\"sources\":\[\"plugins\/css\/ui\.multiselect\.css\"\],/,
+						// "sources":["plugins\\css\\ui.multiselect.css"]
+						match: /\"sources\":\[\"plugins\\\\css\\\\ui\.multiselect\.css\"\],/,
 						replacement: "\"sources\":[\"ui.multiselect.css\"],"
 					}]
 				}
-			},
-			dist: {
-				options: {
-					patterns: [
-						{
-							match: /\"sources\":\[\"js\/jquery\.jqgrid\.src\.js\"\],/,
-							replacement: "\"sources\":[\"jquery.jqgrid.src.js\"],"
-							/*replacement: function (match, offset, string, source, target) {
-								grunt.log.writeln(" !!! replacement: match=" + match);
-								grunt.log.writeln(" !!! replacement: offset=" + offset);
-								grunt.log.writeln(" !!! replacement: string.lenth=" + string.length);
-								grunt.log.writeln(" !!! replacement: source=" + source);
-								grunt.log.writeln(" !!! replacement: target=" + target);
-								return source;
-							}*/
-						},
-						{
-							match: /\"file\":\"js\/jquery\.jqgrid\.min\.js\",/,
-							replacement: "\"file\":\"jquery.jqgrid.min.js\","
-						}
-					]
-				},
-				files: [
-					{
-						expand: true,
-						flatten: true,
-						src: ["js/jquery.jqgrid.min.map"],
-						dest: "js/"
-					}
-				]
 			}
 		},
-		file_append: {
-			default_options: {
-				files: [
-					function () {
-						return {
-							append: "//# sourceMappingURL=jquery.jqgrid.min.map",
-							input: "js/jquery.jqgrid.min.js"
-						};
-					}
-				]
+		uglify: {
+			all: {
+				files: {
+					"js/min/grid.base.js": ["js/grid.base.js"],
+					"js/min/grid.celledit.js": ["js/grid.celledit.js"],
+					"js/min/grid.common.js": ["js/grid.common.js"],
+					"js/min/grid.custom.js": ["js/grid.custom.js"],
+					"js/min/grid.filter.js": ["js/grid.filter.js"],
+					"js/min/jsonxml.js": ["js/jsonxml.js"],
+					"js/min/grid.formedit.js": ["js/grid.formedit.js"],
+					"js/min/grid.grouping.js": ["js/grid.grouping.js"],
+					"js/min/grid.import.js": ["js/grid.import.js"],
+					"js/min/grid.inlinedit.js": ["js/grid.inlinedit.js"],
+					"js/min/grid.jqueryui.js": ["js/grid.jqueryui.js"],
+					"js/min/grid.pivot.js": ["js/grid.pivot.js"],
+					"js/min/grid.subgrid.js": ["js/grid.subgrid.js"],
+					"js/min/grid.tbltogrid.js": ["js/grid.tbltogrid.js"],
+					"js/min/grid.treegrid.js": ["js/grid.treegrid.js"],
+					"js/min/jqdnr.js": ["js/jqdnr.js"],
+					"js/min/jqmodal.js": ["js/jqmodal.js"],
+					"js/min/jquery.fmatter.js": ["js/jquery.fmatter.js"],
+					"plugins/min/grid.odata.js": ["plugins/grid.odata.js"],
+					"plugins/min/jquery.contextmenu-ui.js": ["plugins/jquery.contextmenu-ui.js"],
+					"plugins/min/jquery.contextmenu.js": ["plugins/jquery.contextmenu.js"],
+					"plugins/min/jquery.createcontexmenufromnavigatorbuttons.js": ["plugins/jquery.createcontexmenufromnavigatorbuttons.js"],
+					"plugins/min/jquery.jqgrid.showhidecolumnmenu.js": ["plugins/jquery.jqgrid.showhidecolumnmenu.js"],
+					"plugins/min/ui.multiselect.js": ["plugins/ui.multiselect.js"],
+					"js/i18n/min/grid.locale-ar.js": ["js/i18n/grid.locale-ar.js"],
+					"js/i18n/min/grid.locale-bg.js": ["js/i18n/grid.locale-bg.js"],
+					"js/i18n/min/grid.locale-ca.js": ["js/i18n/grid.locale-ca.js"],
+					"js/i18n/min/grid.locale-cn.js": ["js/i18n/grid.locale-cn.js"],
+					"js/i18n/min/grid.locale-cs.js": ["js/i18n/grid.locale-cs.js"],
+					"js/i18n/min/grid.locale-da.js": ["js/i18n/grid.locale-da.js"],
+					"js/i18n/min/grid.locale-de.js": ["js/i18n/grid.locale-de.js"],
+					"js/i18n/min/grid.locale-el.js": ["js/i18n/grid.locale-el.js"],
+					"js/i18n/min/grid.locale-en.js": ["js/i18n/grid.locale-en.js"],
+					"js/i18n/min/grid.locale-es.js": ["js/i18n/grid.locale-es.js"],
+					"js/i18n/min/grid.locale-fa.js": ["js/i18n/grid.locale-fa.js"],
+					"js/i18n/min/grid.locale-fi.js": ["js/i18n/grid.locale-fi.js"],
+					"js/i18n/min/grid.locale-fr.js": ["js/i18n/grid.locale-fr.js"],
+					"js/i18n/min/grid.locale-gl.js": ["js/i18n/grid.locale-gl.js"],
+					"js/i18n/min/grid.locale-he.js": ["js/i18n/grid.locale-he.js"],
+					"js/i18n/min/grid.locale-hr.js": ["js/i18n/grid.locale-hr.js"],
+					"js/i18n/min/grid.locale-hu.js": ["js/i18n/grid.locale-hu.js"],
+					"js/i18n/min/grid.locale-id.js": ["js/i18n/grid.locale-id.js"],
+					"js/i18n/min/grid.locale-is.js": ["js/i18n/grid.locale-is.js"],
+					"js/i18n/min/grid.locale-it.js": ["js/i18n/grid.locale-it.js"],
+					"js/i18n/min/grid.locale-ja.js": ["js/i18n/grid.locale-ja.js"],
+					"js/i18n/min/grid.locale-kr.js": ["js/i18n/grid.locale-kr.js"],
+					"js/i18n/min/grid.locale-lt.js": ["js/i18n/grid.locale-lt.js"],
+					"js/i18n/min/grid.locale-me.js": ["js/i18n/grid.locale-me.js"],
+					"js/i18n/min/grid.locale-nl.js": ["js/i18n/grid.locale-nl.js"],
+					"js/i18n/min/grid.locale-no.js": ["js/i18n/grid.locale-no.js"],
+					"js/i18n/min/grid.locale-pl.js": ["js/i18n/grid.locale-pl.js"],
+					"js/i18n/min/grid.locale-pt-br.js": ["js/i18n/grid.locale-pt-br.js"],
+					"js/i18n/min/grid.locale-pt.js": ["js/i18n/grid.locale-pt.js"],
+					"js/i18n/min/grid.locale-ro.js": ["js/i18n/grid.locale-ro.js"],
+					"js/i18n/min/grid.locale-ru.js": ["js/i18n/grid.locale-ru.js"],
+					"js/i18n/min/grid.locale-sk.js": ["js/i18n/grid.locale-sk.js"],
+					"js/i18n/min/grid.locale-sr.js": ["js/i18n/grid.locale-sr.js"],
+					"js/i18n/min/grid.locale-sv.js": ["js/i18n/grid.locale-sv.js"],
+					"js/i18n/min/grid.locale-th.js": ["js/i18n/grid.locale-th.js"],
+					"js/i18n/min/grid.locale-tr.js": ["js/i18n/grid.locale-tr.js"],
+					"js/i18n/min/grid.locale-tw.js": ["js/i18n/grid.locale-tw.js"],
+					"js/i18n/min/grid.locale-ua.js": ["js/i18n/grid.locale-ua.js"],
+					"js/i18n/min/grid.locale-vi.js": ["js/i18n/grid.locale-vi.js"],
+					"js/jquery.jqgrid.min.js": ["js/jquery.jqgrid.src.js"]
+				},
+				options: {
+					preserveComments: "some", //require("uglify-save-license"),
+					sourceMap: true
+				}
 			}
 		}
 	});
@@ -332,167 +376,17 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-tslint");
 	grunt.loadNpmTasks("grunt-contrib-concat");
-	grunt.loadNpmTasks("grunt-closure-tools");
 	grunt.loadNpmTasks("grunt-contrib-cssmin");
 	grunt.loadNpmTasks("grunt-replace");
 	grunt.loadNpmTasks("grunt-file-append");
 	grunt.loadNpmTasks("grunt-jscs");
 	grunt.loadNpmTasks("grunt-ts");
 	grunt.loadNpmTasks("grunt-contrib-watch");
+	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-newer");
 
-	var closureCompilerTasks = [],
-		regClosureCompilerTask = function (filePath, fileMinDir, fileMapDir) {
-			// build names
-			var filePathParts = filePath.split("\/"), filePathMin, filePathMap,
-				fileName = filePathParts[filePathParts.length - 1], fileNameMin, fileNameMap,
-				fileNameParts = fileName.split("."), regExp0, regExp1,
-				escapeForMatch = function (path) {
-					return path.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-				};
-
-			if (fileNameParts[fileNameParts.length - 1].toLowerCase() !== "js" || fileNameParts.length < 2) { return; }
-			if (fileNameParts[fileNameParts.length - 2].toLowerCase() !== "src") {
-				if (fileMinDir === undefined) {
-					fileNameParts[fileNameParts.length - 1] = "min";
-					fileNameParts.push("js");
-				}
-			} else {
-				fileNameParts[fileNameParts.length - 2] = "min";
-			}
-			fileNameMin = fileNameParts.join(".");
-			fileNameParts[fileNameParts.length - 1] = "map";
-			fileNameMap = fileNameParts.join(".");
-
-			filePathParts[filePathParts.length - 1] = (fileMinDir || "") + fileNameMin;
-			filePathMin = filePathParts.join("\/");
-
-			filePathParts[filePathParts.length - 1] = (fileMapDir || "") + fileNameMap;
-			filePathMap = filePathParts.join("\/");
-
-			// build two regex required for running "replace" task
-			// see http://stackoverflow.com/a/6969486/315935 about which characters need be escaped
-			regExp0 = new RegExp("\\\"sources\\\":\\[\\\"." +
-					//filePath.split("\/").join("\\\/") +    // for example "plugins\\\/grid.odata.js" +
-					escapeForMatch(filePath) +
-					"\\\"\\],");
-			regExp1 = new RegExp("\\\"file\\\":\\\"" +
-					//filePathMin.split("\/").join("\\\/") + // for example "plugins\\\/grid.odata.min.js" +
-					escapeForMatch(filePathMin) +
-					"\\\",");
-
-			// build fileDirectory
-			filePathParts.pop();
-			var fileDirectory = filePathParts.join("\/");
-			if (fileDirectory.length === 0) {
-				fileDirectory = ".";
-			}
-			fileDirectory += "/";
-
-			var taskSuffix = "_" + filePath.split("\/").join("_"),
-				taskName = "closureCompiler" + taskSuffix;
-			grunt.registerTask(taskName, function () {
-				// run "closureCompiler" task
-				grunt.config.set("closureCompiler.options.compilerOpts.create_source_map", filePathMap);
-				//grunt.config.set("closureCompiler.options.compilerOpts.output_wrapper", '"%output%//# sourceMappingURL=' + fileNameMap + '"');
-				grunt.config.set("closureCompiler.targetName.src", filePath);
-				grunt.config.set("closureCompiler.targetName.dest", filePathMin);
-				grunt.verbose.writeln("    compiling '" + filePath + "' to '" + filePathMin + "' with '" + filePathMap + "' by google closure compiler...");
-				grunt.task.run("newer:closureCompiler:targetName");
-
-				// run "replace" task
-				//grunt.log.writeln(" ### regExp0=" + regExp0);
-				//grunt.log.writeln(" ### replacement0=" + "\"sources\":[\"" +
-				//	escapeForMatch((fileMinDir === undefined ? "" : "js\/") + fileName) +
-				//	"\"],");
-				//grunt.log.writeln(" ### regExp1='" + regExp1 + "'");
-				//grunt.log.writeln(" ### replacement1=" + "\"file\":\"" +
-				//	escapeForMatch((fileMinDir === undefined ? "" : "js\/" + fileMinDir) +	fileNameMin) +
-				//	"\",");
-				//grunt.log.writeln(" ### fileName='" + fileName + "'    ### fileNameMin='" +
-				//				 fileNameMin + "'    ### fileNameMap='" + fileNameMap + "'");
-				//grunt.log.writeln(" ### filePathMap='" + filePathMap + "'");
-				//grunt.log.writeln(" ### fileDirectory='" + fileDirectory + (fileMinDir || "") + "'");
-
-				// "sources":["js/jquery.jqgrid.src.js"],
-				// "sources":["js/grid.base.js"],
-				grunt.config.set("replace.dist.options.patterns.0.match", regExp0);
-				grunt.config.set("replace.dist.options.patterns.0.replacement", "\"sources\":[\"" +
-					(fileMinDir === undefined ? "" : "../") + fileName + "\"],");
-
-				// "file":"js/jquery.jqgrid.min.js",
-				// "file":"js/min/grid.base.js",
-				grunt.config.set("replace.dist.options.patterns.1.match", regExp1);
-				grunt.config.set("replace.dist.options.patterns.1.replacement", "\"file\":\"" + fileNameMin + "\",");
-				grunt.config.set("replace.dist.files.0.src", [filePathMap]);
-
-				grunt.config.set("replace.dist.files.0.dest", fileDirectory + (fileMinDir || ""));
-				grunt.verbose.writeln("    patching 'sources' and 'file' properties of '" + filePathMap + "'");
-
-				// run "file_append" task
-				// consider to use grunt.file.write directly to prevent appending f
-				grunt.config.set("file_append.default_options.files", [
-					function () {
-						var strToAppend = "//# sourceMappingURL=" + fileNameMap + "\n";
-						//grunt.log.writeln(" ### !!!  filePathMin=" + filePathMin);
-						var input = grunt.file.read(filePathMin);
-						//grunt.log.writeln(" ### !!!  typeof input=" + (typeof input));
-						//grunt.log.writeln(" ### !!!  input.length=" + input.length);
-						if (input.lastIndexOf(strToAppend) < 0) {
-							return {
-								append: strToAppend,
-								input: filePathMin
-							};
-						} else {
-							//grunt.log.writeln(" ### !!!  skip append because the text already exist");
-							return {
-								append: "",
-								input: filePathMin
-							};
-						}
-					}
-				]);
-				grunt.verbose.writeln("    appending '//# sourceMappingURL=" + fileNameMap + "' at the end of 'file' properties of '" + filePathMin + "'");
-
-				// TODO: register new task for file_append, which use grunt.task.requires("replace")
-				grunt.registerTask("replace" + taskSuffix + ":dist", function () {
-					grunt.task.requires("closureCompiler" + taskSuffix);
-					grunt.task.run("replace:dist");
-				});
-				grunt.registerTask("file_append" + taskSuffix, function () {
-					grunt.task.requires("replace" + taskSuffix + ":dist");
-					grunt.task.run("file_append");
-				});
-				grunt.task.run(["replace" + taskSuffix + ":dist", "file_append" + taskSuffix]);
-			});
-			closureCompilerTasks.push(taskName);
-		};
-
-	regClosureCompilerTask("js/jquery.jqgrid.src.js");
-
-	grunt.file.expand({ matchBase: true }, [
-		"js/i18n/grid.locale-*.js",
-		"!js/i18n/grid.locale-*.min.js"
-	]).forEach(function (path) {
-		regClosureCompilerTask(path);
-	});
-
-	grunt.file.expand({ matchBase: true }, [
-		"js/*.js",
-		"plugins/*.js",
-		"!plugins/min/*.min.js",
-		"!js/*.min.js",
-		"!js/min/*.js",
-		"!js/jquery.jqgrid.*.js"
-	]).forEach(function (path) {
-		regClosureCompilerTask(path, "min\/", "min\/");
-	});
-
-	grunt.registerTask("closureCompilerAll", closureCompilerTasks);
-
-	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:tslint", "ts:all", "newer:jscs:all", "closureCompilerAll",
-		"newer:cssmin:target", "newer:replace:cssmin_jqgrid", "newer:replace:cssmin_multiselect",
+	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:tslint", "ts:all", "newer:jscs:all",
+		"newer:cssmin:target", "newer:replace:cssmin_jqgrid", "newer:replace:cssmin_multiselect", "uglify:all",
 		"copy"]);
-
 	grunt.registerTask("all", ["clean", "default"]);
 };
