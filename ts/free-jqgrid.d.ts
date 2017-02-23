@@ -1163,6 +1163,7 @@ declare namespace FreeJqGrid {
 		unloadNodeOnCollapse?: boolean | ((this: BodyTable, treeItem: any) => boolean);
 	}
 	interface JqGridResizingOptions {
+		autoresizeOnLoad?: boolean; 
 		afterResizeDblClick?: (this: BodyTable, options: { iCol: number, cm: ColumnModel, cmName: string }) => void;
 		columnsToReResizing?: number[]; // used internally by jqGrid
 		doubleClickSensitivity?: number; // 250
