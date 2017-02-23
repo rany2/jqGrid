@@ -49,19 +49,19 @@ $(() => {
 		assert.equal($grid.closest(".ui-jqgrid").length, 1, "Passed!");
 	});
 	QUnit.test("grid expando exists", function(assert) {
-		assert.notEqual( $grid[0].grid, undefined, "Passed!");
+		assert.notEqual( gridDom.grid, undefined, "Passed!");
 	});
 	QUnit.test("p expando exists", function(assert) {
-		assert.notEqual($grid[0].p, undefined, "Passed!");
+		assert.notEqual(gridDom.p, undefined, "Passed!");
 	});
 	QUnit.test("rows of grid exist - it's table", function(assert) {
-		assert.notEqual($grid[0].rows, undefined, "Passed!");
+		assert.notEqual(gridDom.rows, undefined, "Passed!");
 	});
 	QUnit.test("grid has 6 rows", function(assert) {
-		assert.equal($grid[0].rows.length, 6, "Passed!");
+		assert.equal(gridDom.rows.length, 6, "Passed!");
 	});
 	QUnit.test("grid has 1 hidden first rows (with class jqgfirstrow)", function(assert) {
-		assert.equal($($grid[0].rows[0]).hasClass("jqgfirstrow"), true, "Passed!");
+		assert.equal($(gridDom.rows[0]).hasClass("jqgfirstrow"), true, "Passed!");
 	});
 	QUnit.test("grid has 5 data rows (with class jqgrow)", function(assert) {
 		assert.equal($grid.find(">tbody>tr.jqgrow").length, 5, "Passed!");
@@ -116,10 +116,10 @@ $(() => {
 		assert.equal($grid[0].rows[1].id, "11", "Passed!");
 	});*/
 	QUnit.test("1-st cell of the 1-st row contain \"Angela\"", function(assert) {
-		assert.equal($($grid[0].rows[1].cells[0]).text(), "Angela", "Passed!");
+		assert.equal($((<HTMLTableRowElement>gridDom.rows[1]).cells[0]).text(), "Angela", "Passed!");
 	});
 	QUnit.test("2-d cell of the 1-st row contain \"Merkel\"", function(assert) {
-		assert.equal($($grid[0].rows[1].cells[1]).text(), "Merkel", "Passed!");
+		assert.equal($((<HTMLTableRowElement>gridDom.rows[1]).cells[1]).text(), "Merkel", "Passed!");
 	});	
 	/*
 	QUnit.test("formatted 2007-10-01 is 01-Oct-2007", function(assert) {
