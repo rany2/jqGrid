@@ -17,11 +17,13 @@
  */
 
 /*global jQuery, define, module, require */
-(function (factory) {
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["jquery"], factory);
+		define(["jquery"], function ($) {
+			return factory($, global.document);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
@@ -34,14 +36,14 @@
 						require("jquery") :
 						require("jquery")(root || window);
 			}
-			factory($);
+			factory($, root.document);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		factory(jQuery, global.document);
 	}
-}(function($) {
+}(typeof window !== "undefined" ? window : this, function($, document) {
 
   var menu, shadow, content, hash, currentTarget;
   var defaults = {

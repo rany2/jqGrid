@@ -7,22 +7,17 @@
  * see https://github.com/tonytomov/jqGrid/issues/650 for more details
  */
 /*global jQuery, define, module, require */
-(function (factory) {
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		// TODO: one have to have the reference to "../js/grid.base"
-		// in the non-minimized file and to "../js/min/grid.base"
-		// in minimized file. One can patch "../js/grid.base" to "../js/min/grid.base"
-		// before miminizing, but such patching will breaks the corresponding
-		// map file, created during minimizing.
-		// It's better, probably, to make the COPY of the patched file
-		// (with the reference to "..../min/grid.base") in the separate min folder.
 		define([
 			"jquery",
 			"./jquery.contextmenu-ui",
 			"free-jqgrid/grid.base"
-		], factory);
+		], function ($) {
+			return factory($, global, global.document);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
@@ -35,14 +30,16 @@
 						require("jquery") :
 						require("jquery")(root || window);
 			}
-			factory($);
+			require("./jquery.contextmenu-ui");
+			require("free-jqgrid/grid.base");
+			factory($, root, root.document);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		factory(jQuery, global, global.document);
 	}
-}(function ($) {
+}(typeof window !== "undefined" ? window : this, function ($, window, document) {
 	"use strict";
 	$.jgrid = $.jgrid || {};
 	$.extend($.jgrid, {

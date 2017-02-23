@@ -48,6 +48,7 @@
 						require("jquery") :
 						require("jquery")(root || window);
 			}
+			require("jquery-ui/sortable");
 			factory($);
 			return $;
 		};
@@ -55,7 +56,7 @@
 		// Browser globals
 		factory(jQuery);
 	}
-}(function($) {
+}(function ($) {
 
 $.widget("ui.multiselect", {
   options: {

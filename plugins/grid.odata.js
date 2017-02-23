@@ -15,7 +15,10 @@
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["jquery", "free-jqgrid/grid.base"], factory);
+		define([
+			"jquery",
+			"free-jqgrid/grid.base"
+		], factory);
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
@@ -28,6 +31,7 @@
 						require("jquery") :
 						require("jquery")(root || window);
 			}
+			require("free-jqgrid/grid.base");
 			factory($);
 			return $;
 		};
