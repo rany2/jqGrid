@@ -10,22 +10,29 @@
 /*jshint eqeqeq:false */
 /*global jQuery, define, HTMLElement, exports, module, require */
 /*jslint browser: true, eqeq: true, plusplus: true, unparam: true, white: true, vars: true */
-(function (factory) {
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
+		//console.log("grid.common AMD");
 		define([
 			"jquery",
 			"./grid.base",
 			"./jqdnr",
 			"./jqmodal"
-		], factory);
+		], function ($) {
+			//console.log("grid.common AMD: define callback");
+			return factory($, global.document);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
+		//console.log("grid.common CommonJS");
 		module.exports = function (root, $) {
+			//console.log("grid.common CommonJS: in module.exports");
 			if (!root) {
 				root = window;
 			}
+			//console.log("grid.common CommonJS: before require('jquery')");
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -33,19 +40,23 @@
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
 						require("jquery") :
-						require("jquery")(root || window);
+						require("jquery")(root);
 			}
+			//console.log("grid.common CommonJS: before require('./grid.base')");
 			require("./grid.base");
+			//console.log("grid.common CommonJS: before require('./jqdnr')");
 			require("./jqdnr");
+			//console.log("grid.common CommonJS: before require('./jqmodal')");
 			require("./jqmodal");
-			factory($);
+			factory($, root.document);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		//console.log("grid.common Browser: before factory");
+		factory(jQuery, global.document);
 	}
-}(function ($) {
+}(typeof window !== "undefined" ? window : this, function ($, document) {
 	"use strict";
 	var jgrid = $.jgrid, base = $.fn.jqGrid;
 	// begin module grid.common

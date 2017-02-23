@@ -16,20 +16,25 @@
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
+		//console.log("grid.custom AMD");
 		define([
 			"jquery",
 			"./grid.base",
 			"./jquery.fmatter",
 			"./grid.common"
 		], function ($) {
-			return factory($, global, global.document);
+			//console.log("grid.custom AMD: define callback");
+			return factory($, global.document);
 		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
+		//console.log("grid.custom CommonJS, typeof define=" + typeof define + ", define=" + define);
 		module.exports = function (root, $) {
+			//console.log("grid.custom CommonJS: in module.exports");
 			if (!root) {
 				root = window;
 			}
+			//console.log("grid.custom CommonJS: before require('jquery')");
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -39,17 +44,21 @@
 						require("jquery") :
 						require("jquery")(root);
 			}
+			//console.log("grid.custom CommonJS: before require('./grid.base')");
 			require("./grid.base");
+			//console.log("grid.custom CommonJS: before require('./jquery.fmatter')");
 			require("./jquery.fmatter");
+			//console.log("grid.custom CommonJS: before require('./grid.common')");
 			require("./grid.common");
-			factory($);
+			factory($, root.document);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		//console.log("grid.custom Browser: before factory");
+		factory(jQuery, global.document);
 	}
-}(typeof window !== "undefined" ? window : this, function ($, window, document) {
+}(typeof window !== "undefined" ? window : this, function ($, document) {
 	"use strict";
 	var jgrid = $.jgrid, jqID = jgrid.jqID, base = $.fn.jqGrid,
 		getGuiStyles = base.getGuiStyles, getGridRes = base.getGridRes;

@@ -9,25 +9,31 @@
 
 /*jshint eqeqeq:false, eqnull:true, devel:true */
 /*jslint browser: true, eqeq: true, plusplus: true, unparam: true, vars: true, nomen: true, continue: true, white: true, todo: true */
-/*global jQuery, define, xmlJsonClass, exports, module, require */
-(function (factory) {
+/*global jQuery, define, exports, module, require */
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
+		//console.log("grid.formedit AMD");
 		define([
 			"jquery",
 			"./grid.base",
 			"./jquery.fmatter",
 			"./grid.common",
-			"./grid.filter",
-			"./jsonxml"
-		], factory);
+			"./grid.filter"
+		], function ($) {
+			//console.log("grid.formedit AMD: define callback");
+			return factory($, global, global.document);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
+		//console.log("grid.formedit CommonJS, typeof define=" + typeof define + ", define=" + define);
 		module.exports = function (root, $) {
+			//console.log("grid.formedit CommonJS: in module.exports");
 			if (!root) {
 				root = window;
 			}
+			//console.log("grid.formedit CommonJS: before require('jquery')");
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -37,18 +43,24 @@
 						require("jquery") :
 						require("jquery")(root);
 			}
+			//console.log("grid.formedit CommonJS: before require('./grid.base')");
 			require("./grid.base");
+			//console.log("grid.formedit CommonJS: before require('./jquery.fmatter')");
 			require("./jquery.fmatter");
+			//console.log("grid.formedit CommonJS: before require('./grid.common')");
 			require("./grid.common");
-			require("./jsonxml");
-			factory($);
+			//console.log("grid.formedit CommonJS: before require('./grid.filter')");
+			require("./grid.filter");
+			//console.log("grid.formedit CommonJS: before factory");
+			factory($, root, root.document);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		//console.log("grid.formedit Browser: before factory");
+		factory(jQuery, global, global.document);
 	}
-}(function ($) {
+}(typeof window !== "undefined" ? window : this, function ($, window, document) {
 	"use strict";
 	var jgrid = $.jgrid, jqID = jgrid.jqID, base = $.fn.jqGrid, getGuiStyles = base.getGuiStyles,
 		mergeCssClasses = jgrid.mergeCssClasses, hasOneFromClasses = jgrid.hasOneFromClasses;
@@ -367,10 +379,7 @@
 
 						if (o.stringResult || p.datatype === "local") {
 							try {
-								// xmlJsonClass or JSON.stringify
-								res = window.JSON && window.JSON.stringify ?
-										JSON.stringify(filters) :
-										xmlJsonClass.toJson(filters, "", "", false);
+								res = JSON.stringify(filters);
 							} catch (ignore) { }
 							if (typeof res === "string") {
 								sdata[o.sFilter] = res;

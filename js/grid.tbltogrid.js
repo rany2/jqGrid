@@ -7,14 +7,16 @@
 /*jslint browser: true, plusplus: true, white: true */
 /*global jQuery, define, exports, module, require */
 // Addition - selector can be a class or id
-(function (factory) {
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
 		define([
 			"jquery",
 			"./grid.base"
-		], factory);
+		], function ($) {
+			return factory($, global);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
@@ -31,14 +33,13 @@
 						require("jquery")(root);
 			}
 			require("./grid.base");
-			factory($);
-			return $;
+			return factory($, root);
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		factory(jQuery, global);
 	}
-}(function ($) {
+}(typeof window !== "undefined" ? window : this, function ($, window) {
 	"use strict";
 	// begin module grid.tbltogrid
 	window.tableToGrid = function (selector, options) {
@@ -136,4 +137,5 @@
 		});
 	};
 	// end module grid.tbltogrid
+	return window.tableToGrid;
 }));

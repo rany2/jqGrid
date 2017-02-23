@@ -22,16 +22,23 @@
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
+		//console.log("jquery.fmatter AMD");
 		define([
 			"jquery",
 			"./grid.base"
-		], factory);
+		], function ($) {
+			//console.log("jquery.fmatter AMD: define callback");
+			return factory($);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
+		//console.log("jquery.fmatter CommonJS");
 		module.exports = function (root, $) {
+			//console.log("jquery.fmatter CommonJS: in module.exports");
 			if (!root) {
 				root = window;
 			}
+			//console.log("jquery.fmatter CommonJS: before require('jquery')");
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -41,12 +48,15 @@
 						require("jquery") :
 						require("jquery")(root);
 			}
+			//console.log("jquery.fmatter CommonJS: before require('./grid.base')");
 			require("./grid.base");
+			//console.log("jquery.fmatter CommonJS: before factory");
 			factory($);
 			return $;
 		};
 	} else {
 		// Browser globals
+		//console.log("jquery.fmatter Browser: before factory");
 		factory(jQuery);
 	}
 }(function ($) {

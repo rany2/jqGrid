@@ -58,7 +58,7 @@
 			require("./grid.base");
 			require("./jquery.fmatter");
 			require("./grid.common");
-			factory($);
+			factory($, root);
 			return $;
 		};
 	} else {

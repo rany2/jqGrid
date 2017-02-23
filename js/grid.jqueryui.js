@@ -11,7 +11,7 @@
 /*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
 /*global jQuery, define, exports, module, require */
 /*jslint browser: true, devel: true, eqeq: true, nomen: true, plusplus: true, unparam: true, vars: true, white: true */
-(function (factory) {
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
@@ -25,7 +25,9 @@
 			"jquery-ui/droppable",
 			"jquery-ui/resizable",
 			"jquery-ui/sortable"
-		], factory);
+		], function ($) {
+			return factory($, global, global.document);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
@@ -49,14 +51,14 @@
 			require("jquery-ui/droppable");
 			require("jquery-ui/resizable");
 			require("jquery-ui/sortable");
-			factory($);
+			factory($, root, root.document);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		factory(jQuery, global, global.document);
 	}
-}(function ($) {
+}(typeof window !== "undefined" ? window : this, function ($, window, document) {
 	"use strict";
 	var jgrid = $.jgrid, jqID = jgrid.jqID;
 	// begin module grid.jqueryui

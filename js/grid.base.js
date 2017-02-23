@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-02-18
+ * Date: 2017-02-23
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -19,15 +19,22 @@
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(["jquery"], function ($) {
-			return factory($, global, global.document);
+		//console.log("grid.base AMD");
+		define([
+			"jquery"
+		], function ($) {
+			//console.log("grid.base AMD: define callback");
+			return factory($, global.document);
 		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
+		//console.log("grid.base CommonJS");
 		module.exports = function (root, $) {
+			//console.log("grid.base CommonJS: in module.exports");
 			if (!root) {
 				root = window;
 			}
+			//console.log("grid.base CommonJS: before require('jquery')");
 			if ($ === undefined) {
 				// require("jquery") returns a factory that requires window to
 				// build a jQuery instance, we normalize how we use modules
@@ -39,14 +46,16 @@
 			}
 			//global.jQuery = $;
 			//root.jQuery = $;
-			factory($, root, root.document);
+			//console.log("grid.base CommonJS: before factory");
+			factory($, root.document);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery, global, global.document);
+		//console.log("grid.base Browser: before factory");
+		factory(jQuery, global.document);
 	}
-}(typeof window !== "undefined" ? window : this, function ($, window, document) {
+}(typeof window !== "undefined" ? window : this, function ($, document) {
 	"use strict";
 	// begin module grid.base
 	/** @const */

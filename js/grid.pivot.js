@@ -36,6 +36,7 @@
 						require("jquery") :
 						require("jquery")(root);
 			}
+			require("./jquery.fmatter");
 			require("./grid.grouping");
 			factory($);
 			return $;
