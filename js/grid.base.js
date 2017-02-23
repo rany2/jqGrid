@@ -5998,6 +5998,52 @@
 			ts.refreshIndex = refreshIndex;
 			ts.addItemDataToColumnIndex = addItemDataToColumnIndex;
 			ts.removeItemDataFromColumnIndex = removeItemDataFromColumnIndex;
+			ts.generateValueFromColumnIndex = function (cmName, separator, delimiter) {
+				var uniqueTexts = [], v = "", id, i, len;
+
+				var uniqueValues = p.indexByColumnData[cmName];
+				if (uniqueValues != null) {
+					for (v in uniqueValues) {
+						if (uniqueValues.hasOwnProperty(v)) {
+							for (id in uniqueValues[v]) {
+								if (uniqueValues[v].hasOwnProperty(id)) {
+									v = uniqueValues[v][id]; // get value in the correct case
+									break;
+								}
+							}
+							uniqueTexts.push(v);
+						}
+					}
+					// sort the values
+					if (p.ignoreCase) {
+						if (typeof String.prototype.localeCompare === "undefined") {
+							// IE10 and before
+							uniqueTexts.sort(function (a, b) {
+								var aLowCase = a.toLowerCase(),
+									bLowCase = b.toLowerCase();
+								return (aLowCase === bLowCase) ? 0 : ((aLowCase > bLowCase) ? 1 : -1);
+							});
+						} else {
+							uniqueTexts.sort(function (a, b) {
+								return a.toLowerCase().localeCompare(b.toLowerCase());
+							});
+						}
+					} else {
+						uniqueTexts.sort();
+					}
+					// convert to format of editoptions.value or searchoptions.value
+					delimiter = delimiter || ";";
+					separator = separator || ":";
+					v = "";
+					for (i = 0, len = uniqueTexts.length; i < len; i++) {
+						if (v !== "") {
+							v += delimiter || ";";
+						}
+						v += uniqueTexts[i] + (separator || ":") + uniqueTexts[i];
+					}
+				}
+				return v;
+			};
 			ts.setHeadCheckBox = setHeadCheckBox;
 			ts.fixScrollOffsetAndhBoxPadding = fixScrollOffsetAndhBoxPadding;
 			ts.constructTr = constructTr;
