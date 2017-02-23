@@ -9,7 +9,7 @@
 /*jshint eqeqeq:false, eqnull:true, devel:true */
 /*global jQuery, define, xmlJsonClass, exports, module, require */
 /*jslint browser: true, devel: true, white: true */
-(function (factory) {
+(function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
 		// AMD. Register as an anonymous module.
@@ -17,7 +17,9 @@
 			"jquery",
 			"./grid.base",
 			"./jsonxml"
-		], factory);
+		], function ($) {
+			return factory($, global);
+		});
 	} else if (typeof module === "object" && module.exports) {
 		// Node/CommonJS
 		module.exports = function (root, $) {
@@ -35,14 +37,14 @@
 			}
 			require("./grid.base");
 			require("./jsonxml");
-			factory($);
+			factory($, root);
 			return $;
 		};
 	} else {
 		// Browser globals
-		factory(jQuery);
+		factory(jQuery, global);
 	}
-}(function ($) {
+}(typeof window !== "undefined" ? window : this, function ($, window) {
 	"use strict";
 	var jgrid = $.jgrid;
 	// begin module grid.import
@@ -233,20 +235,14 @@
 				exportOptions: {}
 			}, o || {});
 			return this.each(function () {
-				var url, pdata, params;
+				var pdata;
 				if (!this.grid) {
 					return;
 				}
 				if (o.exptype === "remote") {
 					pdata = $.extend({}, this.p.postData, o.exportOptions);
 					pdata[o.oper] = o.tag;
-					params = jQuery.param(pdata);
-					if (o.url.indexOf("?") !== -1) {
-						url = o.url + "&" + params;
-					} else {
-						url = o.url + "?" + params;
-					}
-					window.location = url;
+					window.location = o.url + (o.url != null && o.url.indexOf("?") >= 0 ? "&" : "?") + $.param(pdata);
 				}
 			});
 		}
