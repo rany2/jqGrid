@@ -45,6 +45,7 @@ declare namespace FreeJqGrid {
 		fixScrollOffsetAndhBoxPadding(): void;
 		formatCol(pos: number, rowInd: number, tv: string, rawObject: any, rowId: string, rdata?: any): string;
 		formatter(rowId: string, cellval: any, colpos: number, rwdat: any, act?: "add" | "edit", rdata?: any): string;
+		generateValueFromColumnIndex(cmName: string, separator?: string, delimiter?: string);
 		modalAlert?(): void;
 		rebuildRowIndexes(): void;
 		refreshIndex(): void;
