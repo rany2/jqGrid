@@ -1681,6 +1681,7 @@ interface JQuery {
 	getInd?(): HTMLTableRowElement | number | false;
 	getLocalRow?(rowid: string): false | Object;
 	getRowData?(rowid?: string, options?: { includeId: boolean, skipHidden?: boolean }): Object[] | Object;
+	getUniqueValueFromColumnIndex?(cmName: string): string[];
 	hideCol?(cmName: string[] | string, options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
 	isBootstrapGuiStyle?(): boolean;
 	isCellEditing?(rowid: string, cmName: string, tr?: HTMLTableRowElement): boolean;
@@ -1726,6 +1727,7 @@ interface JQuery {
 	jqGrid(methodName: "getInd"): HTMLTableRowElement | number | false;
 	jqGrid(methodName: "getLocalRow", rowid: string): false | Object;
 	jqGrid(methodName: "getRowData", rowid?: string, options?: { includeId: boolean, skipHidden?: boolean }): Object[] | Object;
+	jqGrid(methodName: "getUniqueValueFromColumnIndex", cmName: string): string[];
 	jqGrid(methodName: "hideCol", cmName: string[] | string, options?: FreeJqGrid.ShowHideColOptions): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "isBootstrapGuiStyle"): boolean;
 	jqGrid(methodName: "isCellEditing", rowid: string, cmName: string, tr?: HTMLTableRowElement): boolean;
