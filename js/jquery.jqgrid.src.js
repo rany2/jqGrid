@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-02-23
+ * Date: 2017-02-24
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -5999,38 +5999,9 @@
 			ts.addItemDataToColumnIndex = addItemDataToColumnIndex;
 			ts.removeItemDataFromColumnIndex = removeItemDataFromColumnIndex;
 			ts.generateValueFromColumnIndex = function (cmName, separator, delimiter) {
-				var uniqueTexts = [], v = "", id, i, len;
+				var uniqueTexts = $(this).jqGrid("getUniqueValueFromColumnIndex", cmName), v = "", i, len;
 
-				var uniqueValues = p.indexByColumnData[cmName];
-				if (uniqueValues != null) {
-					for (v in uniqueValues) {
-						if (uniqueValues.hasOwnProperty(v)) {
-							for (id in uniqueValues[v]) {
-								if (uniqueValues[v].hasOwnProperty(id)) {
-									v = uniqueValues[v][id]; // get value in the correct case
-									break;
-								}
-							}
-							uniqueTexts.push(v);
-						}
-					}
-					// sort the values
-					if (p.ignoreCase) {
-						if (typeof String.prototype.localeCompare === "undefined") {
-							// IE10 and before
-							uniqueTexts.sort(function (a, b) {
-								var aLowCase = a.toLowerCase(),
-									bLowCase = b.toLowerCase();
-								return (aLowCase === bLowCase) ? 0 : ((aLowCase > bLowCase) ? 1 : -1);
-							});
-						} else {
-							uniqueTexts.sort(function (a, b) {
-								return a.toLowerCase().localeCompare(b.toLowerCase());
-							});
-						}
-					} else {
-						uniqueTexts.sort();
-					}
+				if (uniqueTexts != null) {
 					// convert to format of editoptions.value or searchoptions.value
 					delimiter = delimiter || ";";
 					separator = separator || ":";
@@ -6195,6 +6166,44 @@
 				commonClasses = iconSet.common;
 			}
 			return typeof commonClasses === "string" && $.inArray(testClass, commonClasses.split(" ")) >= 0;
+		},
+		getUniqueValueFromColumnIndex: function (cmName) {
+			var $t = this[0];
+			if (!$t || !$t.grid) { return null; }
+			var uniqueTexts = [], v = "", id;
+
+			var uniqueValues = $t.p.indexByColumnData[cmName];
+			if (uniqueValues != null) {
+				for (v in uniqueValues) {
+					if (uniqueValues.hasOwnProperty(v)) {
+						for (id in uniqueValues[v]) {
+							if (uniqueValues[v].hasOwnProperty(id)) {
+								v = String(uniqueValues[v][id]); // get the value in the correct case
+								break;
+							}
+						}
+						uniqueTexts.push(v);
+					}
+				}
+				// sort the values
+				if ($t.p.ignoreCase) {
+					if (typeof String.prototype.localeCompare === "undefined") {
+						// IE10 and before
+						uniqueTexts.sort(function (a, b) {
+							var aLowCase = a.toLowerCase(),
+								bLowCase = b.toLowerCase();
+							return (aLowCase === bLowCase) ? 0 : ((aLowCase > bLowCase) ? 1 : -1);
+						});
+					} else {
+						uniqueTexts.sort(function (a, b) {
+							return String(a).toLowerCase().localeCompare(String(b).toLowerCase());
+						});
+					}
+				} else {
+					uniqueTexts.sort();
+				}
+			}
+			return uniqueTexts;
 		},
 		getGridParam: function (pName) {
 			var $t = this[0];
@@ -6692,6 +6701,8 @@
 							if (oData !== undefined) {
 								// !!!!
 								p.data[pos] = $.extend(true, oData, lcdata);
+								t.removeItemDataFromColumnIndex(id);
+								t.addItemDataToColumnIndex(p.data[pos], id);
 							}
 						}
 						feedback.call(t, "afterSetRow", {
