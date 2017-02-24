@@ -6843,7 +6843,7 @@
 							} catch (exception) { rowid = randId(); }
 							//cna = p.altRows === true ? (rows.length - 1) % 2 === 0 ? cn : "" : "";
 						}
-						id = rowid;
+						id = jgrid.stripPref(p.idPrefix, rowid);
 						lcdata = {};
 						for (i = 0; i < colModel.length; i++) {
 							cm = colModel[i];
@@ -6851,7 +6851,7 @@
 							if (nm !== "rn" && nm !== "cb" && nm !== "subgrid") {
 								v = convertOnSaveLocally.call(t, data[nm], cm, undefined, id, {}, i);
 								if ($.isFunction(cm.saveLocally)) {
-									cm.saveLocally.call(t, { newValue: v, newItem: lcdata, oldItem: {}, id: id, cm: cm, cmName: nm, iCol: i });
+									cm.saveLocally.call(t, { newValue: v, newItem: lcdata, oldItem: {}, id: id, rowid: rowid, cm: cm, cmName: nm, iCol: i });
 								} else if (v !== undefined) {
 									lcdata[nm] = v;
 								}
