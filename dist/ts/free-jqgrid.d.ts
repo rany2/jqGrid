@@ -574,7 +574,7 @@ declare namespace FreeJqGrid {
 		checkValues(this: BodyTable, value: any, iCol: number | string, customobject?: any, name?: string, options?: any): boolean;
 		clearArray(array: any[]): void;
 		closeModal(h: ModalHash): void;
-		convertOnSaveLocally(this: BodyTable, nData: any, cm: any, oData: any, rowid: string, item: any, iCol: number): any;
+		convertOnSaveLocally(this: BodyTable, nData: any, cm: any, oData: any, id: string, item: any, iCol: number): any;
 		createEl(this: BodyTable, elementType: string, options: any, value: string, autoWidth?: boolean, ajaxso?: any): Element;
 		createModal(this: BodyTable, aIDs: any, content: Element | JQuery, o: CreateModalOptions, insertSelector: string | Element | JQuery, posSelector: string | Element | JQuery, appendsel?: boolean | string | Element | JQuery, css?: any): void;
 		//detectRowEditing(rowid: string): RowEditingInfo;
@@ -747,7 +747,7 @@ declare namespace FreeJqGrid {
 		lso?: "asc" | "desc" | "asc-desc" | "desc-asc" | "" | string;
 		name: string;
 		resizable?: boolean;
-		saveLocally?: (this: BodyTable, options: { newValue: any, newItem: Object, oldItem: Object, id: string, cm: ColumnModel, cmName: string, iCol: number }) => void;
+		saveLocally?: (this: BodyTable, options: { newValue: any, newItem: Object, oldItem: Object, id: string, rowid: string, cm: ColumnModel, cmName: string, iCol: number }) => void;
 		search?: boolean;
 		searchoptions?: SearchOptions;
 		searchrules?: EditOrSearchRules;
