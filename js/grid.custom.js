@@ -1305,7 +1305,7 @@
 						if (skip === 0) {
 							if (o.useColSpanStyle) {
 								// expand the header height to two rows
-								$th.attr("rowspan", $trLabels.length + 1);
+								$th.attr("rowspan", $trLabels.length + 1); // consider to use ($th.attr("rowspan") || 1) instead of $trLabels.length
 							} else {
 								$("<th>")
 									.addClass(thClasses)
