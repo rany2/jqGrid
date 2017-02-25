@@ -599,7 +599,10 @@
 									break;
 								case "custom":
 									if ($.isFunction(searchoptions.custom_value) && $elem.length > 0 && $elem[0].nodeName.toUpperCase() === "SPAN") {
-										searchoptions.custom_value.call($t, $elem.children(".customelement").first(), "set", v || "");
+										if (v === undefined) {
+											v = "";
+										}
+										searchoptions.custom_value.call($t, $elem.children(".customelement").first(), "set", v);
 									}
 									break;
 							}
@@ -1009,7 +1012,7 @@
 								}
 								break;
 							case "custom":
-								$tdInput.append("<span style='width:100%;padding:0;box-sizing:border-box;' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='" + getId(cm.name) + "'/>");
+								$tdInput.append("<span style='width:100%;padding:0;box-sizing:border-box;' name='" + (cm.index || cm.name) + "' id='" + getId(cm.name) + "'/>");
 								try {
 									if ($.isFunction(soptions.custom_element)) {
 										var celm = soptions.custom_element.call($t, soptions.defaultValue !== undefined ? soptions.defaultValue : "", soptions);
@@ -1124,7 +1127,7 @@
 				$self.on(
 					"jqGridRefreshFilterValues.filterToolbar" + (o.loadFilterDefaults ? " jqGridAfterLoadComplete.filterToolbar" : ""),
 					function () {
-						var cmName, filter, newFilters = parseFilter(true) || {}, $input, $searchOper, i;
+						var cmName, filter, newFilters = parseFilter(true) || {}, $input, $searchOper, i, $th, searchoptions;
 						if (!o.stringResult && !o.searchOperators && p.datatype !== "local" && p.search) {
 							return; // do nothing on legacy searching
 						}
@@ -1133,22 +1136,37 @@
 							if (newFilters.hasOwnProperty(cmName)) {
 								filter = newFilters[cmName];
 								$input = $(getIdSel(cmName));
-								if ($input.length > 0) {
+								$th = $input.closest("th.ui-th-column");
+								if ($input.length > 0 && $th.length > 0) {
+									searchoptions = (p.colModel[$th[0].cellIndex] || {}).searchoptions || {};
 									if ($input[0].tagName.toUpperCase() === "SELECT" && $input[0].multiple) {
 										$input.val(filter.data.split(p.inFilterSeparator || ","));
 									} else if ($input.is("input[type=checkbox]")) {
-										var $th = $input.closest("th.ui-th-column");
-										if ($th.length > 0) {
-											var onOffValue = getOnOffValue((p.colModel[$th[0].cellIndex] || {}).searchoptions || {});
-											setThreeStateCheckbox(
-												$input,
-												filter.data === onOffValue.on ?
-													1 :
-													(filter.data === onOffValue.off ? 0 : -1)
-											);
+										var onOffValue = getOnOffValue(searchoptions);
+										setThreeStateCheckbox(
+											$input,
+											filter.data === onOffValue.on ?
+												1 :
+												(filter.data === onOffValue.off ? 0 : -1)
+										);
+									} else if ($input.find(".customelement").length > 0 && $.isFunction(searchoptions.custom_value)) {
+										var oldValue = searchoptions.custom_value.call($t, $input.find(".customelement").first(), "get");
+										if (filter.data === "" && searchoptions.defaultValue !== undefined) {
+											filter.data = searchoptions.defaultValue;
 										}
-									} else if ($.trim($input.val()) !== filter.data) {
-										$input.val(filter.data);
+										if (oldValue === undefined) {
+											oldValue = "";
+										}
+										if (filter.data !== oldValue && String(filter.data) !== String(oldValue)) {
+											searchoptions.custom_value.call($t, $input.find(".customelement").first(), "set", filter.data);
+										}
+									} else {
+										if (filter.data === "" && searchoptions.defaultValue !== undefined) {
+											filter.data = searchoptions.defaultValue;
+										}
+										if ($.trim($input.val()) !== String(filter.data)) {
+											$input.val(filter.data);
+										}
 									}
 									$searchOper = $input.closest(".ui-search-input")
 											.siblings(".ui-search-oper")
