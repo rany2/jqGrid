@@ -138,8 +138,8 @@
 		// one can use typeof Object.create != "function" and use either
 		// Object.create or simple object firm, but the performance differences
 		// are so low, that the compatibility to IE8 is more important
-		yesObject = { 1: 1, x: 1, "true": 1, yes: 1, on: 1 },
-		noObject = { 0: 1, "false": 1, no: 1, off: 1 };
+		yesObject = { 1: 1, x: 1, "true": 1, yes: 1, y: 1, on: 1 },
+		noObject = { 0: 1, "false": 1, no: 1, n: 1, off: 1 };
 	$.extend(true, jgrid, {
 		formatter: { // setting common formatter settings, which are independent from the language and locale
 			date: {
@@ -185,7 +185,7 @@
 				searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] }
 			},
 			booleanCheckbox: {
-				align: "center", formatter: "checkbox",
+				align: "center", formatter: "checkbox", sorttype: "boolean",
 				edittype: "checkbox", editoptions: { value: "true:false", defaultValue: "false" },
 				convertOnSave: function (options) {
 					var newValue = options.newValue,

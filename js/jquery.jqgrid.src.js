@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-02-24
+ * Date: 2017-02-26
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2035,7 +2035,17 @@
 						}
 						$.each(_data, function () {
 							(function () {
-								var localMath = "(function (context) { var intFunc = function (jQuery, self) { return " +
+								var localMath = "(function (context) {\n" +
+										"var yesObject = { 1: 1, x: 1, \"true\": 1, yes: 1, y: 1, on: 1 }," +
+											"noObject = { 0: 1, \"false\": 1, no: 1, n: 1, off: 1 }," +
+											"normilizeBoolean = function (v) {\n" +
+											"if (typeof v === \"string\") {\n" +
+												"if (noObject[v.toLowerCase()]) { return false; } " +
+												"else if (yesObject[v.toLowerCase()]) { return true; } " +
+											"}\n" +
+											"return !!v;\n" +
+										"}," +
+										"intFunc = function (jQuery, self) { return " +
 										match +
 										"; }; return intFunc.call(context.item, context.jQuery, context.context); }(this))";
 								if (eval(localMath)) { results.push(this.item); }
@@ -2126,6 +2136,11 @@
 									val = (isNaN(Number(val)) || val === "") ? "0" : Number(val); // To be fixed with more intelligent code
 									fld = "parseInt(" + fld + "||0,10)";
 									val = String(parseInt(val, 10));
+									break;
+								case "boolean":
+									// use !! operator to convert ruthy/falsy values to boolean and then compare the values
+									fld = "normilizeBoolean(" + fld + ")";
+									val = "normilizeBoolean(" + String(val) + ")";
 									break;
 								case "float":
 								case "number":
@@ -19486,8 +19501,8 @@
 		// one can use typeof Object.create != "function" and use either
 		// Object.create or simple object firm, but the performance differences
 		// are so low, that the compatibility to IE8 is more important
-		yesObject = { 1: 1, x: 1, "true": 1, yes: 1, on: 1 },
-		noObject = { 0: 1, "false": 1, no: 1, off: 1 };
+		yesObject = { 1: 1, x: 1, "true": 1, yes: 1, y: 1, on: 1 },
+		noObject = { 0: 1, "false": 1, no: 1, n: 1, off: 1 };
 	$.extend(true, jgrid, {
 		formatter: { // setting common formatter settings, which are independent from the language and locale
 			date: {
@@ -19533,7 +19548,7 @@
 				searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] }
 			},
 			booleanCheckbox: {
-				align: "center", formatter: "checkbox",
+				align: "center", formatter: "checkbox", sorttype: "boolean",
 				edittype: "checkbox", editoptions: { value: "true:false", defaultValue: "false" },
 				convertOnSave: function (options) {
 					var newValue = options.newValue,
