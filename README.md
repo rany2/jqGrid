@@ -25,7 +25,7 @@ Free jqGrid is is available from [jsDelivr CDN](https://www.jsdelivr.com/project
 or
 ```html
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.14.0/css/ui.jqgrid.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.14.0/js/jquery.jqgrid.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.14.0/jquery.jqgrid.min.js"></script>
 ```
 **The locale file is optional**. One can, but one don't need to include `grid.locale-en.min.js`, because the same information is already included in the `jquery.jqgrid.min.js` (or `jquery.jqgrid.src.js`).
 
