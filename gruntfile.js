@@ -29,7 +29,7 @@ module.exports = function (grunt) {
 				files: [
 					{
 						src: ["js/i18n/*"],
-						dest: "dist/js/i18n/",
+						dest: "dist/i18n/",
 						//timestamp: true,
 						expand: true,
 						filter: "isFile",
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
 					},
 					{
 						src: ["js/i18n/min/*"],
-						dest: "dist/js/i18n/min/",
+						dest: "dist/i18n/min/",
 						//timestamp: true,
 						expand: true,
 						filter: "isFile",
@@ -378,7 +378,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-cssmin");
 	grunt.loadNpmTasks("grunt-replace");
-	grunt.loadNpmTasks("grunt-file-append");
 	grunt.loadNpmTasks("grunt-jscs");
 	grunt.loadNpmTasks("grunt-ts");
 	grunt.loadNpmTasks("grunt-contrib-watch");
