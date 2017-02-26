@@ -2035,7 +2035,17 @@
 						}
 						$.each(_data, function () {
 							(function () {
-								var localMath = "(function (context) { var intFunc = function (jQuery, self) { return " +
+								var localMath = "(function (context) {\n" +
+										"var yesObject = { 1: 1, x: 1, \"true\": 1, yes: 1, on: 1 }," +
+											"noObject = { 0: 1, \"false\": 1, no: 1, off: 1 }," +
+											"normilizeBoolean = function (v) {\n" +
+											"if (typeof v === \"string\") {\n" +
+												"if (noObject[v.toLowerCase()]) { return false; } " +
+												"else if (yesObject[v.toLowerCase()]) { return true; } " +
+											"}\n" +
+											"return !!v;\n" +
+										"}," +
+										"intFunc = function (jQuery, self) { return " +
 										match +
 										"; }; return intFunc.call(context.item, context.jQuery, context.context); }(this))";
 								if (eval(localMath)) { results.push(this.item); }
@@ -2126,6 +2136,11 @@
 									val = (isNaN(Number(val)) || val === "") ? "0" : Number(val); // To be fixed with more intelligent code
 									fld = "parseInt(" + fld + "||0,10)";
 									val = String(parseInt(val, 10));
+									break;
+								case "boolean":
+									// use !! operator to convert ruthy/falsy values to boolean and then compare the values
+									fld = "normilizeBoolean(" + fld + ")";
+									val = "normilizeBoolean(" + String(val) + ")";
 									break;
 								case "float":
 								case "number":
