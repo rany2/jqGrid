@@ -7,7 +7,7 @@ jqGrid was developed originally by [Tony Tomov](https://github.com/tonytomov) an
 
 The code from the GitHib repository is the fork of jqGrid 4.7.0 - the latest version available under MIT/GPL-licenses. It will be provided under MIT/GPL-licenses.
 
-Below you can find short description of minor new features and the bug fixes implemented in free jqGrid 4.13.6 (compared with version 4.13.5). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](https://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
+Below you can find short description of new features and the bug fixes implemented in free jqGrid 4.14.0 (compared with version 4.13.6). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](https://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
 
 Read [Wiki](https://github.com/free-jqgrid/jqGrid/wiki) for more detailed information about the features of free-jqGrid. The preliminary version of the documentation can be found [here](https://free-jqgrid.github.io/).
 
@@ -19,13 +19,13 @@ The package is published on [WebJars](http://www.webjars.org/) too and it's depl
 
 Free jqGrid is is available from [jsDelivr CDN](https://www.jsdelivr.com/projects/free-jqgrid) and [cdnjs](https://cdnjs.com/libraries/free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.13.6/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/free-jqgrid/4.13.6/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.14.0/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/free-jqgrid/4.14.0/js/jquery.jqgrid.min.js"></script>
 ```
 or
 ```html
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.6/css/ui.jqgrid.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.6/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.14.0/css/ui.jqgrid.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.14.0/js/jquery.jqgrid.min.js"></script>
 ```
 **The locale file is optional**. One can, but one don't need to include `grid.locale-en.min.js`, because the same information is already included in the `jquery.jqgrid.min.js` (or `jquery.jqgrid.src.js`).
 
@@ -36,39 +36,85 @@ If somebody want to test the *latest* version of free jqGrid, one can load it di
 ```
 All other language files and plugins are available from CDN too. See [the wiki article](https://github.com/free-jqgrid/jqGrid/wiki/Access-free-jqGrid-from-different-CDNs) for more details about the usage of free jqGrid from CDNs and RawGit.
 
-Remark: the above URLs will be available **after publishing** the release of the version of 4.13.6.
+Remark: the above URLs will be available **after publishing** the release of the version of 4.14.0.
 
-### Below one can see the full list of changes in the version 4.13.6 compared with 4.13.5:
+### New main features implemented in the version 4.14.0 compared with 4.13.6:
 
-* Bug fix sorting of `sorttype:"int"` for the value 0.
-* Bug fix in `columnChooser` in case of usage grouped headers (see [the commit](https://github.com/free-jqgrid/jqGrid/commit/eb2b98e26a799c2134d413a8a4c8b13dc9083d02)).
-* Small code reorganization of `reorderSelectedColumns`, used by `columnChooser`.
-* Bug fix in `reorderSelectedColumns`, used by `columnChooser`.
-* Small fix of the position of Font Awesome sorting icons in `ui.jqgrid.css`.
-* Bug fix in `columnChooser` on grids, which has no column grouping.
-* Small improvement of performance of `columnChooser`.
-* Move calling of `bindEv` (`dataInit` and `dataEvents`) *after* the elements are placed on the HTML document. It reduces the requirement of placing the main code of `dataInit` inside of `setTimeout`.
-* Some improvements of the code of `filterToolbar`.
-* Small bug fix in `createEl` to prevent creating unneeded attribute `column` in data fields of the searching dialog.
-* Add support of `stype:"checkbox"` - the 3-state checkbox with an additional *intermediate* state. One can use it in the form `stype: "checkbox", searchoptions: { sopt: ["eq"], value: "true:false" }`.
-* Change the code of `template:"booleanCheckbox"` to use `stype:"checkbox"`.
-* Bug fix of min height of the `btable` (the main table with the data) to 1px to hold horizontal scrolling position during filtering to no rows.
-* Bug fix of `padding-top` and `padding-bottom` to 0 inside of the text input in the searching toolbar in case of usage of Bootstrap GUI style.
-* Small fixes of the code based on reports of ReSharper.
-* Bug fix in `showHideCol`/`showCol`/`hideCol`. The problem were exist only in Microsoft Edge.
-* Make the code of `getAccessor` more safe.
-* Add new helper method `$.jgrid.getRelativeRect`. See [the commit](https://github.com/free-jqgrid/jqGrid/commit/8150d860a75176bb589ec2fdab89a65ce074ee90) for an example of the usage of `$.jgrid.getRelativeRect` to specify `top` option of `editGridRow` inside of `ondblClickRow` callback.
-* Add the usage of new helper method `$.jgrid.getRelativeRect` in `formatter:"actions"`.
-* Bug fix of the position of Bootstrap modal in case of usage `direction: "rtl"` in combination with the attribute `dir="rtl"` on the HTML body.
-* Improving the position of the dialog with validation error in cell editing using `$.jgrid.getRelativeRect` method.
-* Improving the look of View form and make it looks closer in both built-in GUI styles: Bootstrap and jQuery UI.
-* Improve processing of select with `multiple` attribute in the filter toolbar in case of loading the data via Ajax.
-* Update AMD dependencies of JavaScript files included in plugins folder to be used correctly in RequireJs. [The demo](http://www.ok-soft-gmbh.com/jqGrid/OK/requireJsInline3_.htm) provides an example of loading jqGrid modules and some jqGrid plugins via RequireJs.
+* New boolean property `createColumnIndex: true` in `colModel` or `generateValue: true` of `searchoptions` or `editoptions` can be used in combination with `stype: "select"` or `edittype: "select"`. The idea of the new feature come from [the old answer](http://stackoverflow.com/a/5329014/315935). jqGrid can "look through" all values in the column and fill the list of unique value, sort the values and to generate the array of strings as the results (see the new method `getUniqueValueFromColumnIndex`). Additionally jqGrid can generate `value` property of `searchoptions`/`editoptions`, which can be used by `stype: "select"`. The simplest usage of the new feature is adding `stype: "select", searchoptions: { generateValue: true, noFilterText: "Any" }` properties to any column. The demo https://jsfiddle.net/OlegKi/foxwrza9/1/ shows the usage of the new feature to generate the options of `<select>` dynamically (the column "tax"). Other columns ("name" and "ship_via") uses jQuery UI Autocomplete and select2 with dynamically generated options.
+* `getRowData`, `getCell`, `getCol` and `getDataFieldOfCell` methods work now with cells/rows, which could be **in editing mode** (inline editing or cell editing). It solves the old problem. I hope that the new changes allows to simplify the usage of jqGrid.
+* Add first support of **Bootstrap v4** (tested with 4.0.0-alpha.6). The option `guiStyle: "bootstrap4"` can be used now instead of `guiStyle: "bootstrap"` to use jqGrid with Bootstrap v4. One should of cause replace CSS of Bootstrap 3 to the CSS of Bootstrap 4.
+* The folder `ts` of free jqGrid incudes `free-jqgrid.d.ts` file with **TypeScript type declaration** of jqGrid methods, optons and events. The file is created manually and it could be still not full or contain some typing errors. Nevertheless. it provides many information, which could be helpful. Some text editors, like free [Visual Studio Code](https://code.visualstudio.com/), available for Widows, Linux and macOS, can uses the type information in [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). IntelliSense can essental speep up writing the code and can be used as context sesitive documentation of free jqGrid options, methods and events.
+* Free jqGrid supports now **editing of rowids in inline editing mode**. If one have, for exmple, the column `id` (or with the name, which corresponds tha value of `jsonReader.id`) or some other column, which has `key: true` property, and the column is editable, then the value of rowid should be the same as the value from the cells of the column. Free jqGrid detect now the changes in the column in inline editing mode and changes the rowid after saving the modifications. The new method `changeRowid` can be used to apply the chanhes of rowid manually. Additionally sends jqGrid in the case of changing of rowid the value of rowid before the modification as `"idOld"` property. The name of the property can be changed using `idold` property of `prmNames`. For example, `prmNames: { idold: "orgId"}` options renames `"idOld"` property to `"orgId"`.
+* New `saveRowValidation` callback is added to inline editing for the final validation of *all* decoded data. The problem is that the classic validation via `editrules` allows to validate a value in the cell, but it dosen't allow to validate **relation between the columns**. The new `saveRowValidation` callback will be called *after all individual fields are processed*. The `options` parameter of the callback contains `savedRow`, `newData` and some other properties, which can be helpful to make the final validation of the changes. See [the answer](http://stackoverflow.com/a/41655786/315935) and the comment to [the commit](https://github.com/free-jqgrid/jqGrid/commit/94b6218f451d62bb3fb1dc5c7b11383c906672ea) for more details.
+* New `sortIconName` callback of `colModel` or as grid option simplifies building of custom sorting icons. The demo https://jsfiddle.net/OlegKi/ffgg9wdu/ shows the usage of `sortIconName`.
 
-The new features introduced in the version 4.13.6 can be seen on [the demo](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-jqueryui-fa-stype-checkbox.htm), which uses jQuery UI, and [the another one](http://www.ok-soft-gmbh.com/jqGrid/OK/formEditOnDoubleClick-bootstrap-fa-stype-checkbox.htm), which uses Bootstrap.
+### Possible small compatibility issues
 
-Other old readmes contain the list of the features and bug fixed implemented before:
+* Move `*.css` and `*.min.js` files of plugins in subfolders `css` and `min`. The changes simplifies the usage of jqGrid with SystemJS. One could beed to adjust the paths in existing projects.
+* The Module names used in free jqGrid are the following: "free-jqgrid", "free-jqgrid-plugins", "jquery", "jquery-ui". One should uses paths mapping to map the module identifier to the real path. [The demo](http://www.ok-soft-gmbh.com/jqGrid/OK/SystemJs3_4.14.0-jquery-ui1.11.4.htm) is an example of usage SystemJS for loading free jqGrid 4.14.0 modules together with jQuery UI 1.11.4 modules. [Another demo](http://www.ok-soft-gmbh.com/jqGrid/OK/SystemJs3_4.14.0-jquery-ui1.12.1.htm) uses jQuery UI 1.12.1 modules instead. Probably more typical is loading the whole jQuery UI from CDN like in [one more demo](http://www.ok-soft-gmbh.com/jqGrid/OK/SystemJs3_4.14.0-jquery-ui1.12.1-full.htm). The same works of case with RequireJS. See [the corresponding demo](http://www.ok-soft-gmbh.com/jqGrid/OK/requireJsInline3_4.14.0.htm).
 
+### Below one can see the full list of changes in the version 4.14.0 compared with 4.13.6:
+
+* Add support of `customUnaryOperations` option to specify the names of `customUnaryOperations` operation which required no data (like `"nu"` and `"nn"`). See comment to [the commit](https://github.com/free-jqgrid/jqGrid/commit/265935c7e726b2cc571b0b33e65f0575fb9f02c1) and [the answer](http://stackoverflow.com/a/41445578/315935) for more details.
+* Small Bug fixes in `jqPivot` to allow non-string values be used in aggregators
+* New `sortIconName` property of colModel or as grid option to simplify building of custom sorting icons
+* Bug fix the problem with setting attributes on `<select>`, which be built via `dataUrl`
+* Add `saveRowValidation` callback to inline editing to final validation of all decoded data. The usage of `saveRowValidation` can be changed before publishing of new version. The later changes will allow to return error message, which jqGrid will display to the user.
+* Add first support of Bootstrap v4. The option `guiStyle: "bootstrap4"` can be used now instead of `guiStyle: "bootstrap"` to use jqGrid with Bootstrap v4 (tested with 4.0.0-alpha.6) instead of Bootstrap 3.x.
+* Allow to use callback function as the value of the property `label` of the option `yDimension` of the method `jqPivot`
+* Fixing in cell editing: the name property to cmName of editable callback to have the same names in all editing modes
+* DefinitelyTyped file free-jqgrid.d.ts with the type definitions for TypeScript
+* Bug fixes in the form Delete: remove unneeded `style='white-space:pre;'` inline style, make `reloadAfterSubmit: true` working with local grid. The fix is required in `loadonce: true` scenario if one uses `formDeleting: { reloadGridOptions: { fromServer: true } }`
+* Bug fix in processing custom buttons in info_dialog
+* Bug fixes of CSS for `nav-button` with the text
+* Use CSS classes `ui-jqgrid-pg-left`, `ui-jqgrid-pg-center`, `ui-jqgrid-pg-right` to style the pager parts
+* Bug fix in testing for empty `ExpandColumn` option
+* Add parameters to `addfunc`, `editfunc`, `viewfunc`, `delfunc` like it exist already for `searchfunc`
+* Bug fix of `footerData` metod in case of usage with `"get"` parameter
+* Extend the option of `onShowHideCol` with the options of `showHideCol` method
+* Small changes in `saveRow` and `editRow`: `rowid` and `options` parameters are added to `successfunc` like is was already before for the event `jqGridInlineSuccessSaveRow`.
+* Move some part of subgrid initializing from the base module into the subgrid module
+* Add new method `changeRowid`, which simplifys changing of rowid in the grid
+* Add `afterChangeRowid` callback and `jqGridAfterChangeRowid` event
+* Modify `saveRow` to use new `changeRowid` method
+* Add `defaultValue: false` to default checkbox `formatoptions`
+* Add new `useDefaultValuesOnGrouping: true` option of `groupingView`
+* Use `formatoptions.defaultValue` during grouping if formatter is specified. One can change the behavior to old behavior by usaging `useDefaultValuesOnGrouping: false` in `groupingView` option.
+* Move testing for `$.fn.sortable` from base module sortableColumns (from `grid.jqueryui.js`) to hide the implementation of `sortableColumns`
+* Remove some unused code from `$.jgrid.from`
+* Improvments in the old code of `addChildNode`
+* Bug fix of the options of afterChange callback of Searching Dialog, removing some unused parameters and some other minor fixes
+* Add new `idold: "idOld"` property in `prmNames`, which will be used in inline editing on id changing and remote `editurl`
+* Send additional parameter `idOld` to the server in case of id changes
+* Set `this` in the `afterClear` callback
+* Bug fix in usage of `skipSortByX` option of the method jqPivot
+* Add initial support of boolean `searchoptions.generateValue` property of `stype: "select"`
+* Add new `inFilterSeparator` parameter, which will be used in multiple select and in "in" operation
+* Filling of `indexByColumnData` parameter after column templates are expanded
+* Add new `resetWidthOrg` property of `autoResizing` property of `colModel`
+* Filling of `indexByColumnData` parameter after column templates are expanded
+* Add id and item properties in the editable callback
+* Some changes in at the begining of the files: AMD/Node/CommonJS module loading
+* Small fix: use empty object (`{}`) as `Event` in case if `setSelection` was called with `undefined` `Event`. See [the commit](https://github.com/free-jqgrid/jqGrid/commit/4e1a5e066a59b544f3bc8ac41f3c593fe0e5bebb) for more details.
+* Fix the visibility in View/Edit forms if formoptions with rowpos,colpos used and some columns are hidden
+* Move css and min.js files of plugins in subfolders css and min. The changes simplifies the usage of jqGrid in SystemJS
+* Remove some old unused properties of `groupingView`
+* Add new `isCellEditing` method and change `getRowData`, `getCell`, `getCol` and `getDataFieldOfCell` to work with editable cells/rows
+* Amall bug fix: remove the second (duplicate) triggering of `jqGridAfterEditCell` event
+* Initialize `lastSelectedData` array as copy of data if `loadonce: true` be used without `forceClientSorting: true`
+* Remove the second (duplicate) triggering of jqGridAfterEditCell event
+* Small fix in processing of options of the old excelExport method.
+* Apply `autowidth:true` **after** call of `autoResizeAllColumns` if `autoresizeOnLoad:true` option is used. The changes works espesially good with new `resetWidthOrg: true` property of `autoResizing` option. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/289) for more details.
+* Mirgate from google-closure-compiler 20170124 to uglify 2.1.0 because or bugs in minification of module header by closure compiler. See [the commit](https://github.com/free-jqgrid/jqGrid/commit/a385f56e7597c1a8caefd452598070d77012b943) for more detailes.
+* Add new method `getUniqueValueFromColumnIndex` to simplify usage of `createColumnIndex:true` with jQuery UI Autocomplete
+* Bug fix in `addRowData` in case of usage `idPrefix` with local data
+* Bug fix processing of `stype:"custom"` in searching dialog and the filter toolbar
+* Add `sorttype:"boolean"` as the workaround of problems with filtering by Boolean `false` value
+* Add `"Y"` and `"N"` to possible default values of `formatter:"checkbox"`
+
+Other old readmes contain the list of the features and bug fixed implemented in previous versions of free jqGrid:
+
+* [README4.13.6.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.6.md) contains the readme of free jqGrid 4.13.6.
 * [README4.13.5.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.5.md) contains the readme of free jqGrid 4.13.5.
 * [README4.13.4.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.4.md) contains the readme of free jqGrid 4.13.4.
 * [README4.13.3.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.3.md) contains the readme of free jqGrid 4.13.3.
