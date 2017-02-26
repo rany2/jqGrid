@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-02-24
+ * Date: 2017-02-26
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2036,8 +2036,8 @@
 						$.each(_data, function () {
 							(function () {
 								var localMath = "(function (context) {\n" +
-										"var yesObject = { 1: 1, x: 1, \"true\": 1, yes: 1, on: 1 }," +
-											"noObject = { 0: 1, \"false\": 1, no: 1, off: 1 }," +
+										"var yesObject = { 1: 1, x: 1, \"true\": 1, yes: 1, y: 1, on: 1 }," +
+											"noObject = { 0: 1, \"false\": 1, no: 1, n: 1, off: 1 }," +
 											"normilizeBoolean = function (v) {\n" +
 											"if (typeof v === \"string\") {\n" +
 												"if (noObject[v.toLowerCase()]) { return false; } " +
