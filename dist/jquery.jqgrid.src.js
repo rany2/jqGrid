@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.14.0 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.14.1-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-02-26
+ * Date: 2017-03-13
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -381,7 +381,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.14.0",
+		version: "4.14.1-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -4379,7 +4379,7 @@
 						}
 					}
 					if (p.grouping) {
-						for (gin = 0; gin < lengrp; gin++) {
+						for (gin = 0; gin < lengrp && gin < grindexes.length && gin < grtypes.length; gin++) {
 							query.orderBy(grindexes[gin], grpview.groupOrder[gin], grtypes[gin].stype, grtypes[gin].srcfmt);
 						}
 					}
@@ -13159,7 +13159,12 @@
 										}
 									}
 									o.processing = false;
-									try { $(":input:visible", frmgr).focus(); } catch (ignore) { }
+									try {
+										$(frmgr).find("input,textarea,select,button,object,*[tabindex]")
+											.filter(":input:visible:not(:disabled)")
+											.first()
+											.focus();
+									} catch (ignore) { }
 								}
 							}, jgrid.ajaxOptions, o.ajaxEditOptions);
 
@@ -13408,7 +13413,12 @@
 					$("#nNew", themodalSelector).click(function () {
 						$(".confirm", themodalSelector).hide();
 						$(frmgr).data("disabled", false);
-						setTimeout(function () { $(":input:visible", frmgr).focus(); }, 0);
+						setTimeout(function () {
+							$(frmgr).find("input,textarea,select,button,object,*[tabindex]")
+								.filter(":input:visible:not(:disabled)")
+								.first()
+								.focus();
+						}, 0);
 						return false;
 					});
 					$("#cNew", themodalSelector).click(function () {

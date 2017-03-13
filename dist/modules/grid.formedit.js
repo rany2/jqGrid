@@ -1046,7 +1046,12 @@
 										}
 									}
 									o.processing = false;
-									try { $(":input:visible", frmgr).focus(); } catch (ignore) { }
+									try {
+										$(frmgr).find("input,textarea,select,button,object,*[tabindex]")
+											.filter(":input:visible:not(:disabled)")
+											.first()
+											.focus();
+									} catch (ignore) { }
 								}
 							}, jgrid.ajaxOptions, o.ajaxEditOptions);
 
@@ -1295,7 +1300,12 @@
 					$("#nNew", themodalSelector).click(function () {
 						$(".confirm", themodalSelector).hide();
 						$(frmgr).data("disabled", false);
-						setTimeout(function () { $(":input:visible", frmgr).focus(); }, 0);
+						setTimeout(function () {
+							$(frmgr).find("input,textarea,select,button,object,*[tabindex]")
+								.filter(":input:visible:not(:disabled)")
+								.first()
+								.focus();
+						}, 0);
 						return false;
 					});
 					$("#cNew", themodalSelector).click(function () {
