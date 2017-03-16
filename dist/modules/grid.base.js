@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-03-13
+ * Date: 2017-03-16
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1262,8 +1262,10 @@
 			} else if (!newformat) {
 				newformat = "Y-m-d";
 			}
-			var
-				hours = timestamp.getHours(), // a Number, from 0 to 23, representing the hour
+			if (newformat.toLowerCase() === "u1000") {
+				return timestamp.getTime();
+			}
+			var hours = timestamp.getHours(), // a Number, from 0 to 23, representing the hour
 				i = timestamp.getMinutes(),
 				j = timestamp.getDate(),
 				n = timestamp.getMonth() + 1,
