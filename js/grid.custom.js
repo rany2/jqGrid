@@ -1172,7 +1172,7 @@
 											.siblings(".ui-search-oper")
 											.children(".soptclass");
 									$searchOper.data("soper", filter.op);
-									$searchOper.text(o.operands[filter.op]);
+									$searchOper.text(o.operands[filter.op] || (p.customSortOperations[filter.op] || {}).operand);
 								}
 							}
 						}
