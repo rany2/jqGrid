@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-03-16
+ * Date: 2017-03-20
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -4094,7 +4094,7 @@
 										v = v.textContent || v.text;
 									}
 								} else if (colReader[cmName] != null && typeof colReader[cmName] !== "string") { // isFunction(colReader[cmName])
-									v = colReader[cmName](cells);
+									v = colReader[cmName].call(self, cells, { cmName: cmName, iItem: i });
 								} else {
 									v = fieldReader(cells, typeof colReader[cmName] === "string" ? colReader[cmName] : info.name);
 								}
