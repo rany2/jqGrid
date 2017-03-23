@@ -1,5 +1,5 @@
 /**
- * @license jqGrid Croatian Translation
+ * @license jqGrid Bosnian Translation
  * Version 1.0.1 (developed for jQuery Grid 4.4)
  * msajko@gmail.com
  *
@@ -216,7 +216,7 @@ var locInfo = {
 $.jgrid = $.jgrid || {};
 $.extend(true, $.jgrid, {
 	defaults: {
-		locale: "hr"
+		locale: "bs"
 	},
 	locales: {
 		// In general the property name is free, but it's recommended to use the names based on
@@ -224,8 +224,8 @@ $.extend(true, $.jgrid, {
 		// http://rishida.net/utils/subtags/ and RFC 5646. See Appendix A of RFC 5646 for examples.
 		// One can use the lang attribute to specify language tags in HTML, and the xml:lang attribute for XML
 		// if it exists. See http://www.w3.org/International/articles/language-tags/#extlang
-		hr: $.extend({}, locInfo, { name: "hrvatski", nameEnglish: "Croatian" }),
-		"hr-HR": $.extend({}, locInfo, { name: "hrvatski (Hrvatska)", nameEnglish: "Croatian (Croatia)" })
+		bs: $.extend({}, locInfo, { name: "bosanski", nameEnglish: "Bosnian" }),
+		"bs-BA": $.extend({}, locInfo, { name: "bosanski (Bosna)", nameEnglish: "Bosnian (Bosnia)" })
 	}
 });
 }));
