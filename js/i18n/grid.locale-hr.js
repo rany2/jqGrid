@@ -43,12 +43,12 @@ var locInfo = {
 		emptyrecords: "Nema zapisa",
 		loadtext: "Učitavam...",
 		pgtext: "Stranica {0} od {1}",
-		pgfirst: "First Page",
-		pglast: "Last Page",
-		pgnext: "Next Page",
-		pgprev: "Previous Page",
-		pgrecs: "Records per Page",
-		showhide: "Toggle Expand Collapse Grid",
+		pgfirst: "Prva stranica",
+		pglast: "Zadnja stranica",
+		pgnext: "Slijedeća stranica",
+		pgprev: "Prethodna stranica",
+		pgrecs: "zapisa po stranici",
+		showhide: "Promijeni širenje/skupljanje grida",
 		savetext: "Spremanje..."
 	},
 	search: {
@@ -57,11 +57,11 @@ var locInfo = {
 		Reset: "Poništi",
 		odata: [
 			{ oper: "eq", text: "jednak" },
-			{ oper: "ne", text: "nije identičan" },
+			{ oper: "ne", text: "nije jednak" },
 			{ oper: "lt", text: "manje" },
-			{ oper: "le", text: "manje ili identično" },
+			{ oper: "le", text: "manje ili jednako" },
 			{ oper: "gt", text: "veće" },
-			{ oper: "ge", text: "veće ili identično" },
+			{ oper: "ge", text: "veće ili jednako" },
 			{ oper: "bw", text: "počinje sa" },
 			{ oper: "bn", text: "ne počinje sa " },
 			{ oper: "in", text: "je u" },
@@ -70,27 +70,27 @@ var locInfo = {
 			{ oper: "en", text: "ne završava sa" },
 			{ oper: "cn", text: "sadrži" },
 			{ oper: "nc", text: "ne sadrži" },
-			{ oper: "nu", text: "is null" },
-			{ oper: "nn", text: "is not null" }
+			{ oper: "nu", text: "je prazno" },
+			{ oper: "nn", text: "nije prazno" }
 		],
 		groupOps: [
-			{ op: "I", text: "sve" },
-			{ op: "ILI",  text: "bilo koji" }
+			{ op: "AND", text: "sve" },
+			{ op: "OR",  text: "bilo koji" }
 		],
-		addGroupTitle: "Add subgroup",
-		deleteGroupTitle: "Delete group",
-		addRuleTitle: "Add rule",
-		deleteRuleTitle: "Delete rule",
-		operandTitle: "Click to select search operation.",
-		resetTitle: "Reset Search Value"
+		addGroupTitle: "Dodaj podgrupu",
+		deleteGroupTitle: "Obriši grupu",
+		addRuleTitle: "Dodaj pravilo",
+		deleteRuleTitle: "Obriši pravilo",
+		operandTitle: "Pritisnite za promjenu operacije traženja.",
+		resetTitle: "Vrati vrijednosti na zadane"
 	},
 	edit: {
 		addCaption: "Dodaj zapis",
 		editCaption: "Promijeni zapis",
 		bSubmit: "Preuzmi",
 		bCancel: "Odustani",
-		bClose: "Zatvri",
-		saveData: "Podaci su promijenjeni! Preuzmi promijene?",
+		bClose: "Zatvori",
+		saveData: "Podaci su promijenjeni! Preuzmi promjene?",
 		bYes: "Da",
 		bNo: "Ne",
 		bExit: "Odustani",
@@ -100,13 +100,13 @@ var locInfo = {
 			minValue: "Vrijednost mora biti veća ili identična ",
 			maxValue: "Vrijednost mora biti manja ili identična",
 			email: "neispravan e-mail",
-			integer: "Molim, unjeti ispravan cijeli broj (integer)",
-			date: "Molim, unjeti ispravan datum ",
+			integer: "Molim, unijeti ispravan cijeli broj (integer)",
+			date: "Molim, unijeti ispravan datum ",
 			url: "neispravan URL. Prefiks je obavezan ('http://' or 'https://')",
 			nodefined: " nije definiran!",
 			novalue: " zahtjevan podatak je obavezan!",
 			customarray: "Opcionalna funkcija trebala bi bili polje (array)!",
-			customfcheck: "Custom function should be present in case of custom checking!"
+			customfcheck: "Kod korisničke provjere, korisnička funkcija treba biti prisutna!"
 
 		}
 	},
@@ -136,13 +136,13 @@ var locInfo = {
 		viewtext: "",
 		viewtitle: "Pregled obilježenog reda",
 		savetext: "",
-		savetitle: "Save row",
+		savetitle: "Spremi red",
 		canceltext: "",
-		canceltitle: "Cancel row editing"
+		canceltitle: "Prekini promjenu reda"
 	},
 	col: {
 		caption: "Obilježi kolonu",
-		bSubmit: "Uredu",
+		bSubmit: "U redu",
 		bCancel: "Odustani"
 	},
 	errors: {
