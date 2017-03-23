@@ -1,7 +1,7 @@
 /**
  * @license jqGrid Croatian Translation
- * Version 1.0.1 (developed for jQuery Grid 4.4)
- * msajko@gmail.com
+ * created by msajko@gmail.com
+ * modified by Nimesin info@nimesin.com 
  *
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
