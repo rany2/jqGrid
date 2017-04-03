@@ -193,10 +193,15 @@
 				$self.removeClass($j.getGuiStyles.call($self, "grid", "ui-jqgrid-btable"));
 				// The multiple removeAttr can be replace to one after dropping of support of old jQuery
 				if (p.pager) {
-					$(p.pager).empty()
-						.removeClass($j.getGuiStyles.call($self, "pagerBottom", "ui-jqgrid-pager"))
-						.removeAttr("style")
-						.removeAttr("dir");
+					if (p.pager.substr(1, $.jgrid.uidPref.length) === $.jgrid.uidPref) {
+						$(p.pager).remove();
+					} else {
+						$(p.pager).empty()
+							.removeClass($j.getGuiStyles.call($self, "pager.pager", "ui-jqgrid-pager " +
+								$j.getGuiStyles.call($self, "bottom")))
+							.removeAttr("style")
+							.removeAttr("dir");
+					}
 				}
 				$self.jqGrid("clearBeforeUnload");
 				$self.removeAttr("style")
