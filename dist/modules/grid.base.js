@@ -1241,7 +1241,7 @@
 					}
 					timestamp = new Date(ts.y, ts.m, ts.d, ts.h, ts.i, ts.s, ts.u);
 					//Apply offset to show date as local time.
-					if (offset > 0) {
+					if (offset !== 0) {
 						timestamp.setTime(Number(Number(timestamp) + (offset * 60 * 1000)));
 					}
 				}
