@@ -1250,7 +1250,7 @@
 			}
 			if (opts.userLocalTime && offset === 0) {
 				offset -= (new Date()).getTimezoneOffset();
-				if (offset > 0) {
+				if (offset !== 0) {
 					timestamp.setTime(Number(Number(timestamp) + (offset * 60 * 1000)));
 				}
 			}
