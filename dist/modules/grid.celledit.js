@@ -158,6 +158,12 @@
 						tmp = jgrid.oldDecodePostedData(tmp);
 					}
 					savedRow.push({ id: iRow, ic: iCol, name: nm, v: tmp });
+					p.editingInfo[rowid] = {
+						mode: "cellEditing",
+						savedRow: savedRow[savedRow.length - 1],
+						editable: {}
+					};
+					p.editingInfo[rowid].editable[nm] = editable;
 					if (tmp === "&nbsp;" || tmp === "&#160;" || (tmp.length === 1 && tmp.charCodeAt(0) === 160)) {
 						tmp = "";
 					}
@@ -320,6 +326,7 @@
 													$tr.addClass("edited");
 													feedback.call($t, "afterSaveCell", rowid, nm, v, iRow, iCol);
 													savedRow.splice(0, 1);
+													delete p.editingInfo[rowid];
 												} else {
 													infoDialog.call($t, errcap, ret[1], bClose);
 													$self.jqGrid("restoreCell", iRow, iCol);
@@ -352,6 +359,7 @@
 								$tr.addClass("edited");
 								feedback.call($t, "afterSaveCell", rowid, nm, v, iRow, iCol);
 								savedRow.splice(0, 1);
+								delete p.editingInfo[rowid];
 							}
 						} else {
 							try {
@@ -405,6 +413,7 @@
 					$($t).jqGrid("setCell", rowid, iCol, v, false, false, true);
 					feedback.call($t, "afterRestoreCell", rowid, v, iRow, iCol);
 					savedRow.splice(0, 1);
+					delete p.editingInfo[rowid];
 				}
 				setTimeout(function () {
 					$("#" + p.knv).attr("tabindex", "-1").focus();

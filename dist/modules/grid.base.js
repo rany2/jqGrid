@@ -1483,30 +1483,11 @@
 			return true;
 		},
 		detectRowEditing: function (rowid) {
-			var i, savedRowInfo, tr, self = this, rows = self.rows, p = self.p, isFunction = $.isFunction;
-			if (!self.grid || rows == null || p == null) {
-				return null; // this is not a grid
+			//var i, savedRowInfo, tr, self = this, rows = self.rows, p = self.p, isFunction = $.isFunction;
+			if (!this.grid || this.p == null || this.p.editingInfo == null || this.p.editingInfo[rowid] == null) {
+				return null; // this is not a grid or the row is not editing now
 			}
-			if (p.savedRow === undefined || p.savedRow.length === 0) {
-				return null; // the row is not editing now
-			}
-			for (i = 0; i < p.savedRow.length; i++) {
-				savedRowInfo = p.savedRow[i];
-				// cell editing saves in savedRow array items like {id: iRow, ic: iCol, name: colModel[iCol].name, v: cellValue}
-				if (typeof savedRowInfo.id === "number" && typeof savedRowInfo.ic === "number" &&
-						savedRowInfo.name !== undefined && savedRowInfo.v !== undefined &&
-						rows[savedRowInfo.id] != null && rows[savedRowInfo.id].id === rowid &&
-						isFunction($.fn.jqGrid.restoreCell)) {
-					// cell editing
-					tr = rows[savedRowInfo.id];
-					if (tr != null && tr.id === rowid) {
-						return { mode: "cellEditing", savedRow: savedRowInfo };
-					}
-				} else if (savedRowInfo.id === rowid && isFunction($.fn.jqGrid.restoreRow)) {
-					return { mode: "inlineEditing", savedRow: savedRowInfo };
-				}
-			}
-			return null;
+			return this.p.editingInfo[rowid];
 		},
 		// The method returns jQuery wrapper with the cell (<td>) of the row.
 		// It can return jQuery wrapper with two cells in case of usage frozen data:
@@ -1600,10 +1581,15 @@
 							}
 						}
 						if (!cm.edittype) { cm.edittype = "text"; }
-						isEditable = cm.editable;
-						isEditable = $.isFunction(isEditable) ?
-								isEditable.call(self, options) :
-								isEditable;
+						if (((p.editingInfo[tr.id] || {}).editable || {}).hasOwnProperty(nm)) {
+							// if the cell in already editing
+							isEditable = p.editingInfo[tr.id].editable[nm];
+						} else {
+							isEditable = cm.editable;
+							isEditable = $.isFunction(isEditable) ?
+									isEditable.call(self, options) :
+									isEditable;
+						}
 						if (isEditable === true || isEditable === "hidden") {
 							options.editable = isEditable;
 							if (callback.call(self, options) === false) { break; }
@@ -2789,6 +2775,7 @@
 					altRows: false,
 					selarrrow: [],
 					savedRow: [],
+					editingInfo: {},
 					shrinkToFit: true,
 					xmlReader: {},
 					//jsonReader: {},
@@ -4753,6 +4740,7 @@
 								setHeadCheckBox.call(ts, false);
 							}
 							clearArray(p.savedRow); // p.savedRow = [];
+							p.editingInfo = {};
 							return true;
 						};
 					tp += "_" + pgid;
@@ -5097,6 +5085,7 @@
 						}
 					}
 					clearArray(p.savedRow); //p.savedRow =[];
+					p.editingInfo = {};
 					if (p.scroll) {
 						var sscroll = mygrid.bDiv.scrollLeft;
 						grid.emptyRows.call(self, true, false);
@@ -5804,6 +5793,7 @@
 							setHeadCheckBox.call(self, false);
 						}
 						clearArray(p.savedRow); // p.savedRow = [];
+						p.editingInfo = {};
 					}
 					p.iRow = -1;
 					p.iCol = -1;
@@ -6520,6 +6510,7 @@
 					}
 				}
 				clearArray(p.savedRow); // p.savedRow = [];
+				p.editingInfo = {};
 			});
 		},
 		isCellEditing: function (rowid, iCol, trDom) {
@@ -7677,6 +7668,7 @@
 				p.selrow = null;
 				clearArray(p.selarrrow); // p.selarrrow= [];
 				clearArray(p.savedRow); // p.savedRow = [];
+				p.editingInfo = {};
 				clearArray(p.data); //p.data = [];
 				clearArray(p.lastSelectedData); //p.lastSelectedData = [];
 				p._index = {};
