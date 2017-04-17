@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-04-04
+ * Date: 2017-04-17
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6833,7 +6833,7 @@
 				this.each(function () {
 					var t = this, p = t.p, datalen = rdata.length, $self = $(t), rows = t.rows, k = 0,
 						getGridRowById = base.getGridRowById, colModel = p.colModel, lcdata,
-						additionalProperties = p.additionalProperties;
+						additionalProperties = p.additionalProperties, grouping;
 					if (!aradd) {
 						if (rowid !== undefined) {
 							rowid = String(rowid);
@@ -6891,7 +6891,10 @@
 							p.data.push(lcdata);
 							t.addItemDataToColumnIndex(lcdata, id);
 						}
+						grouping = p.grouping;
+						p.grouping = false; // workaround for adding row in the grid with grouping data
 						row = jgrid.parseDataToHtml.call(t, 1, [rowid], [data]);
+						p.grouping = grouping;
 						row = row.join("");
 						if (rows.length === 0) {
 							$(t.tBodies[0]).append(row);

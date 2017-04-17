@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ * Dual licensed under the MIT and GPL licenses
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ */
+
 /// <reference types="jquery" />
 /// <reference types="jqueryui" />
 
