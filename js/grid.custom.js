@@ -169,6 +169,7 @@
 				clearArray(p.lastSelectedData);
 				clearArray(p.selarrrow);
 				clearArray(p.savedRow);
+				p.editingInfo = {};
 			});
 		},
 		GridDestroy: function () {

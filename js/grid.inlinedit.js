@@ -85,7 +85,7 @@
 
 			// End compatible
 			return this.each(function () {
-				var $t = this, $self = $($t), p = $t.p, cnt = 0, focus = null, svr = {}, colModel = p.colModel, opers = p.prmNames;
+				var $t = this, $self = $($t), p = $t.p, cnt = 0, focus = null, svr = {}, editableValues = {}, colModel = p.colModel, opers = p.prmNames;
 				if (!$t.grid) { return; }
 				var o = $.extend(true, {
 						keys: false,
@@ -125,6 +125,7 @@
 					jgrid.enumEditableCells.call($t, ind, $(ind).hasClass("jqgrid-new-row") ? "add" : "edit", function (options) {
 						var cm = options.cm, $dataFiled = $(options.dataElement), dataWidth = options.dataWidth, tmp, opt, elc,
 							nm = cm.name, edittype = cm.edittype, iCol = options.iCol, editoptions = cm.editoptions || {};
+						editableValues[nm] = options.editable;
 						if (options.editable === "hidden") { return; }
 						try {
 							tmp = $.unformat.call(this, options.td, { rowId: rowid, colModel: cm }, iCol);
@@ -155,6 +156,11 @@
 					if (cnt > 0) {
 						svr.id = rowid;
 						p.savedRow.push(svr);
+						p.editingInfo[rowid] = {
+							mode: "inlineEditing",
+							savedRow: svr,
+							editable: editableValues
+						};
 						$(ind).attr("editable", "1");
 						if (focusField) {
 							if (typeof focusField === "number" && parseInt(focusField, 10) <= colModel.length) {
@@ -255,7 +261,7 @@
 			}, jgrid.inlineEdit, p.inlineEditing || {}, o);
 			// End compatible
 			// TODO: add return this.each(function(){....}
-			var tmp = {}, tmp2 = {}, postData = {}, editable, k, fr, resp, cv, savedRow, ind = $self.jqGrid("getInd", rowid, true), $tr = $(ind),
+			var tmp = {}, tmp2 = {}, postData = {}, editable, k, fr, resp, cv, editingInfo, ind = $self.jqGrid("getInd", rowid, true), $tr = $(ind),
 				opers = p.prmNames, errcap = getRes("errors.errcap"), bClose = getRes("edit.bClose"), isRemoteSave, isError,
 				displayErrorMessage = function (text, relativeElem) {
 					try {
@@ -280,7 +286,7 @@
 			o.url = o.url || p.editurl;
 			isRemoteSave = o.url !== "clientArray";
 			if (editable === "1") {
-				savedRow = ($.jgrid.detectRowEditing.call($t, rowid) || {}).savedRow;
+				editingInfo = $.jgrid.detectRowEditing.call($t, rowid);
 				jgrid.enumEditableCells.call($t, ind, $tr.hasClass("jqgrid-new-row") ? "add" : "edit", function (options) {
 					var cm = options.cm, formatter = cm.formatter, editoptions = cm.editoptions || {},
 						formatoptions = cm.formatoptions || {}, valueText = {},
@@ -291,9 +297,9 @@
 					}
 					cv = jgrid.checkValues.call($t, v, options.iCol, undefined, undefined,
 							$.extend(options, {
-								oldValue: savedRow != null ? savedRow[cm.name] : null,
+								oldValue: editingInfo != null ? editingInfo.savedRow[cm.name] : null,
 								newValue: v,
-								oldRowData: savedRow }));
+								oldRowData: editingInfo != null ? editingInfo.savedRow : null }));
 					if (cv != null && cv[0] === false) {
 						isError = true;
 						displayErrorMessage(cv[1], options.td);
@@ -334,7 +340,7 @@
 						rowid: rowid,
 						tr: ind,
 						iRow: ind.rowIndex,
-						savedRow: savedRow,
+						savedRow: editingInfo.savedRow,
 						newData: tmp,
 						mode: editOrAdd
 					};
@@ -351,7 +357,10 @@
 					for (k = 0; k < p.savedRow.length; k++) {
 						if (String(p.savedRow[k].id) === String(rowid)) { fr = k; break; }
 					}
-					if (fr >= 0) { p.savedRow.splice(fr, 1); }
+					if (fr >= 0) {
+						p.savedRow.splice(fr, 1);
+						delete p.editingInfo[rowid];
+					}
 					fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, resp, tmp, o);
 					$tr.removeClass("jqgrid-new-row").off("keydown");
 					if (ind.id !== p.idPrefix + tmp[idname]) {
@@ -408,7 +417,10 @@
 									for (j = 0; j < p.savedRow.length; j++) {
 										if (String(p.savedRow[j].id) === String(rowid)) { fr = j; break; }
 									}
-									if (fr >= 0) { p.savedRow.splice(fr, 1); }
+									if (fr >= 0) {
+										p.savedRow.splice(fr, 1);
+										delete p.editingInfo[rowid];
+									}
 									fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, jqXHR, tmp, o);
 									if (sucret[2] != null) {
 										$self.jqGrid("changeRowid", rowid, p.idPrefix + sucret[2]);
@@ -494,6 +506,7 @@
 					$self.jqGrid("setRowData", rowid, ares);
 					$(ind).attr("editable", "0").off("keydown");
 					p.savedRow.splice(fr, 1);
+					delete p.editingInfo[rowid];
 					if ($("#" + jgrid.jqID(rowid), $t).hasClass("jqgrid-new-row")) {
 						setTimeout(function () {
 							$self.jqGrid("delRowData", rowid);

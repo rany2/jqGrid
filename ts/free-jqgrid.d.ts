@@ -585,7 +585,7 @@ declare namespace FreeJqGrid {
 		createEl(this: BodyTable, elementType: string, options: any, value: string, autoWidth?: boolean, ajaxso?: any): Element;
 		createModal(this: BodyTable, aIDs: any, content: Element | JQuery, o: CreateModalOptions, insertSelector: string | Element | JQuery, posSelector: string | Element | JQuery, appendsel?: boolean | string | Element | JQuery, css?: any): void;
 		//detectRowEditing(rowid: string): RowEditingInfo;
-		detectRowEditing(this: BodyTable, rowid: string): { mode: "inlineEditing" | "cellEditing"; savedRow: any[]; };
+		detectRowEditing(this: BodyTable, rowid: string): { mode: "inlineEditing" | "cellEditing"; savedRow: any[]; editable: { [cmName: string]: boolean | "hidden" | "disabled" | "readonly" } };
 		enumEditableCells(this: BodyTable, tr: HTMLTableRowElement, mode: "add" | "edit", callback: (options: EditableCellInfo) => boolean): void;
 		extend(this: JqGridStatic, methods: any): void;
 		feedback(this: BodyTable | JQuery, p: any, eventPrefix: string, callbackSuffix: string, callbackName: string): boolean;
@@ -1397,6 +1397,7 @@ declare namespace FreeJqGrid {
 		rownumWidth?: number; // 25
 		rowTotal?: null | number;
 		savedRow?: any[];
+		editingInfo?: {[rowid: string]: { mode: "inlineEditing" | "cellEditing"; savedRow: any[]; editable: { [cmName: string]: boolean | "hidden" | "disabled" | "readonly" } }};
 		scroll?: boolean | 1;
 		scrollOffset?: number; // 0
 		scrollrows?: boolean;
