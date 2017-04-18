@@ -764,6 +764,7 @@ declare namespace FreeJqGrid {
 		summaryRound?: number; // exponent used in Math.pow during rounding of summary values during data grouping
 		summaryRoundType?: "fixed" | "round"; // can be used during calculation of summary values during data grouping
 		summaryType?: "sum" | "min" | "max" | "count" | "avg"; // can be used in data grouping
+		summaryFormat?: (this: BodyTable, group: GroupInformation, cellData: string, cellValue: any, cm: ColumnModel, summary: GroupSummaryInformation) => string;
 		stype?: "select" | "checkbox" | "custom" | "text"; // default value "text"
 		template?: "actions" | "integer" | "integerStr" | "number" | "numberStr" | "booleanCheckbox" | "booleanCheckboxFa" | string | ColumnModel;
 		title?: boolean;
