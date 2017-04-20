@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-04-17
+ * Date: 2017-04-20
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -16025,7 +16025,7 @@
 					$(p.colModel).each(function () {
 						if (this.editoptions && this.editoptions.defaultValue) {
 							var opt = this.editoptions.defaultValue;
-							o.initdata[this.name] = $.isFunction(opt) ? opt.call($t) : opt;
+							o.initdata[this.name] = $.isFunction(opt) ? opt.call($t, o) : opt;
 						}
 					});
 				}

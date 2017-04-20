@@ -538,7 +538,7 @@
 					$(p.colModel).each(function () {
 						if (this.editoptions && this.editoptions.defaultValue) {
 							var opt = this.editoptions.defaultValue;
-							o.initdata[this.name] = $.isFunction(opt) ? opt.call($t) : opt;
+							o.initdata[this.name] = $.isFunction(opt) ? opt.call($t, o) : opt;
 						}
 					});
 				}
