@@ -758,7 +758,7 @@
 					if (this.hidden === true) { $th.css("display", "none"); }
 					this.search = this.search === false ? false : true;
 					if (this.stype === undefined) { this.stype = "text"; }
-					soptions = $.extend({ mode: mode }, searchoptions);
+					soptions = $.extend({ mode: mode, name: cm.name, cm: cm, iCol: ci, id: getId(cm.name) }, searchoptions);
 					if (this.search) {
 						if (o.searchOperators) {
 							if (p.search && currentFilters[this.name] != null) {
