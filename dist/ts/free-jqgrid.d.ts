@@ -9,6 +9,9 @@
 /// <reference types="jqueryui" />
 
 declare namespace FreeJqGrid {
+	interface HDivWithLoading extends HTMLDivElement {
+		loading?: boolean; // the expando property will be set to true only during pending Ajax request to the server
+	}
 	interface GridInfo {
 		bDiv: HTMLDivElement;
 		cDiv: HTMLDivElement;
@@ -23,7 +26,7 @@ declare namespace FreeJqGrid {
 		fhDiv?: JQuery;
 		footers?: HTMLCollection | HTMLTableDataCellElement[]; // td[]
 		fsDiv?: JQuery;
-		hDiv: HTMLDivElement;
+		hDiv: HDivWithLoading;
 		headers: { el: HTMLTableHeaderCellElement; width: number; }[];
 		newWidth?: number;
 		populateVisible(this: BodyTable): void;
