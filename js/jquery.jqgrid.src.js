@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-04-20
+ * Date: 2017-04-21
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -10035,7 +10035,7 @@
 					if (this.hidden === true) { $th.css("display", "none"); }
 					this.search = this.search === false ? false : true;
 					if (this.stype === undefined) { this.stype = "text"; }
-					soptions = $.extend({ mode: mode }, searchoptions);
+					soptions = $.extend({ mode: mode, name: cm.name, cm: cm, iCol: ci, id: getId(cm.name) }, searchoptions);
 					if (this.search) {
 						if (o.searchOperators) {
 							if (p.search && currentFilters[this.name] != null) {
