@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-04-21
+ * Date: 2017-04-24
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2827,6 +2827,7 @@
 						sort: "sidx",
 						order: "sord",
 						search: "_search",
+						filters: "filters",
 						nd: "nd",
 						id: "id",
 						idold: "idOld",
@@ -4349,7 +4350,7 @@
 						}
 					}
 					if (p.search === true) {
-						var srules = p.postData.filters;
+						var srules = p.postData[(p.searching || {}).sFilter || p.prmNames.filters];
 						if (srules) {
 							if (typeof srules === "string") { srules = $.parseJSON(srules); }
 							tojLinq(srules);
@@ -9548,6 +9549,10 @@
 						beforeClear: null,
 						afterClear: null,
 						searchurl: "",
+						sField: "searchField",
+						sValue: "searchString",
+						sOper: "searchOper",
+						sFilter: p.prmNames.filters,
 						stringResult: false,
 						groupOp: "AND",
 						defaultSearch: "bw",
@@ -9595,7 +9600,7 @@
 						};
 					},
 					parseFilter = function (fillAll) {
-						var i, j, filters = p.postData.filters, filter = {}, rules, rule,
+						var i, j, filters = p.postData[o.sFilter], filter = {}, rules, rule,
 							iColByName = p.iColByName, cm, soptions;
 						if (fillAll) {
 							for (j = 0; j < colModel.length; j++) {
@@ -9815,8 +9820,8 @@
 								gi++;
 							});
 							ruleGroup += "]}";
-							$.extend(p.postData, { filters: ruleGroup });
-							$.each(["searchField", "searchString", "searchOper"], function (i, n) {
+							p.postData[o.sFilter] = ruleGroup;
+							$.each([o.sField, o.sValue, o.sOper], function (i, n) {
 								if (p.postData.hasOwnProperty(n)) { delete p.postData[n]; }
 							});
 						} else {
@@ -9904,8 +9909,8 @@
 								gi++;
 							});
 							ruleGroup += "]}";
-							$.extend(p.postData, { filters: ruleGroup });
-							$.each(["searchField", "searchString", "searchOper"], function (i, n) {
+							p.postData[o.sFilter] = ruleGroup;
+							$.each([o.sField, o.sValue, o.sOper], function (i, n) {
 								if (p.postData.hasOwnProperty(n)) { delete p.postData[n]; }
 							});
 						} else {
@@ -12237,7 +12242,7 @@
 						sField: "searchField",
 						sValue: "searchString",
 						sOper: "searchOper",
-						sFilter: "filters",
+						sFilter: p.prmNames.filters,
 						loadDefaults: true, // this options activates loading of default filters from grid's postData for Multipe Search only.
 						beforeShowSearch: null,
 						afterShowSearch: null,
@@ -12302,7 +12307,6 @@
 				var fid = "fbox_" + p.id, commonIconClass = o.commonIconClass,
 					ids = { themodal: "searchmod" + fid, modalhead: "searchhd" + fid, modalcontent: "searchcnt" + fid, resizeAlso: fid },
 					themodalSelector = "#" + jqID(ids.themodal), gboxSelector = p.gBox, gviewSelector = p.gView, each = $.each,
-
 					defaultFilters = p.postData[o.sFilter],
 					searchFeedback = function () {
 						var args = $.makeArray(arguments);

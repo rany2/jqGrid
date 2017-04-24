@@ -271,6 +271,10 @@
 						beforeClear: null,
 						afterClear: null,
 						searchurl: "",
+						sField: "searchField",
+						sValue: "searchString",
+						sOper: "searchOper",
+						sFilter: p.prmNames.filters,
 						stringResult: false,
 						groupOp: "AND",
 						defaultSearch: "bw",
@@ -318,7 +322,7 @@
 						};
 					},
 					parseFilter = function (fillAll) {
-						var i, j, filters = p.postData.filters, filter = {}, rules, rule,
+						var i, j, filters = p.postData[o.sFilter], filter = {}, rules, rule,
 							iColByName = p.iColByName, cm, soptions;
 						if (fillAll) {
 							for (j = 0; j < colModel.length; j++) {
@@ -538,8 +542,8 @@
 								gi++;
 							});
 							ruleGroup += "]}";
-							$.extend(p.postData, { filters: ruleGroup });
-							$.each(["searchField", "searchString", "searchOper"], function (i, n) {
+							p.postData[o.sFilter] = ruleGroup;
+							$.each([o.sField, o.sValue, o.sOper], function (i, n) {
 								if (p.postData.hasOwnProperty(n)) { delete p.postData[n]; }
 							});
 						} else {
@@ -627,8 +631,8 @@
 								gi++;
 							});
 							ruleGroup += "]}";
-							$.extend(p.postData, { filters: ruleGroup });
-							$.each(["searchField", "searchString", "searchOper"], function (i, n) {
+							p.postData[o.sFilter] = ruleGroup;
+							$.each([o.sField, o.sValue, o.sOper], function (i, n) {
 								if (p.postData.hasOwnProperty(n)) { delete p.postData[n]; }
 							});
 						} else {

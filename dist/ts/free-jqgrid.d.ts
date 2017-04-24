@@ -986,6 +986,10 @@ declare namespace FreeJqGrid {
 		searchOnEnter?: boolean; //true
 		searchOperators?: boolean; //false
 		searchurl?: string; // ""
+		sField?: string; // default "searchField"
+		sValue?: string; // default "searchString"
+		sOper?: string; // default "searchOper"
+		sFilter?: string; // default "filters"
 		stringResult?: boolean; //false
 		resetIcon?: string; // "&times;"
 		[propName: string]: any; // allow to have any number of other properties
@@ -1379,6 +1383,7 @@ declare namespace FreeJqGrid {
 			editoper?: string | null; // "edit"
 			id?: string | null; // "id"
 			idold?: string | null; // "idOld"
+			filters?: string | null; // "filters"
 			nd?: string | null; // "nd"
 			npage?: string | null; // null
 			oper?: string | null; // "oper"

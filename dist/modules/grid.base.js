@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-04-21
+ * Date: 2017-04-24
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2827,6 +2827,7 @@
 						sort: "sidx",
 						order: "sord",
 						search: "_search",
+						filters: "filters",
 						nd: "nd",
 						id: "id",
 						idold: "idOld",
@@ -4349,7 +4350,7 @@
 						}
 					}
 					if (p.search === true) {
-						var srules = p.postData.filters;
+						var srules = p.postData[(p.searching || {}).sFilter || p.prmNames.filters];
 						if (srules) {
 							if (typeof srules === "string") { srules = $.parseJSON(srules); }
 							tojLinq(srules);
