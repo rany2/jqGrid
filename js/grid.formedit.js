@@ -112,7 +112,7 @@
 						sField: "searchField",
 						sValue: "searchString",
 						sOper: "searchOper",
-						sFilter: "filters",
+						sFilter: p.prmNames.filters,
 						loadDefaults: true, // this options activates loading of default filters from grid's postData for Multipe Search only.
 						beforeShowSearch: null,
 						afterShowSearch: null,
@@ -177,7 +177,6 @@
 				var fid = "fbox_" + p.id, commonIconClass = o.commonIconClass,
 					ids = { themodal: "searchmod" + fid, modalhead: "searchhd" + fid, modalcontent: "searchcnt" + fid, resizeAlso: fid },
 					themodalSelector = "#" + jqID(ids.themodal), gboxSelector = p.gBox, gviewSelector = p.gView, each = $.each,
-
 					defaultFilters = p.postData[o.sFilter],
 					searchFeedback = function () {
 						var args = $.makeArray(arguments);
