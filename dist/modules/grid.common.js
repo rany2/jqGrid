@@ -476,7 +476,7 @@
 					//var msl, ovm = [], isSelected, rowid = null;
 					var msl, ovm = [], rowid = null;
 
-					if (options.multiple === true) {
+					if (options.multiple === true || options.multiple === "multiple") {
 						msl = true;
 						elem.multiple = "multiple";
 						$(elem).attr("aria-multiselectable", "true");
