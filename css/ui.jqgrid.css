@@ -1,6 +1,6 @@
 /*!
- * jqGrid 4.14.0 - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2017-02-26
+ * jqGrid 4.14.1-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
+ * Date: 2017-04-28
  */
 
 /* Grid */
@@ -1376,7 +1376,7 @@ a.clearsearchclass {
 	padding: .2em 0;
 	border-radius: .4em;
 }
-.ui-search-input .form-control {
+.ui-search-input .form-control:not([size]):not([multiple]) {
 	height: 18px;
 }
 .ui-search-input input[type=text] {
@@ -1458,6 +1458,8 @@ a.clearsearchclass {
 }
 .searchFilter .form-control {
 	padding: .1em;
+}
+.searchFilter .form-control:not([size]):not([multiple]) {
 	height: 22px;
 }
 .ui-jqgrid .searchFilter table.group td {
