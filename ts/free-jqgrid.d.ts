@@ -1331,6 +1331,7 @@ declare namespace FreeJqGrid {
 		gridstate?: "visible" | "hidden";
 		gridview?: boolean;
 		guiStyle?: string; // "jQueryUI"
+		inFilterSeparator?: boolean; // ","
 		readonly gView?: string; // "#gview_list"
 		readonly gViewId?: string; // "gview_list"
 		headertitles?: boolean;
