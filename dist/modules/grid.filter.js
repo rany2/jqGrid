@@ -139,7 +139,7 @@
 					}
 					iCol = $t.p.iPropByName[cmName];
 					if (iCol !== undefined) {
-						return { cm: $t.p.colModel[iCol], iCol: iCol, isAddProp: true };
+						return { cm: $t.p.additionalProperties[iCol], iCol: iCol, isAddProp: true };
 					}
 					return { cm: null, iCol: -1 };
 				},

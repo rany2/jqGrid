@@ -14,6 +14,7 @@ declare namespace FreeJqGrid {
 	}
 	interface GridInfo {
 		bDiv: HTMLDivElement;
+		beginReq(this: BodyTable): void;
 		cDiv: HTMLDivElement;
 		cols: HTMLCollection | HTMLTableDataCellElement[];     // td[]
 		curGbox?: JQuery | null;
@@ -21,6 +22,8 @@ declare namespace FreeJqGrid {
 		dragMove(this: GridInfo, eventObject: JQueryEventObject): void;
 		dragStart(this: GridInfo, iCol: number, eventObject: JQueryEventObject, y: number[], $th: JQuery): void;
 		eDiv: HTMLDivElement;
+		emptyRows(this: BodyTable, scroll?: boolean, clearLocalData?: boolean): void;
+		endReq(this: BodyTable): void;
 		fbDiv?: JQuery;
 		fbRows?: HTMLCollection | HTMLTableRowElement[];       // tr[]
 		fhDiv?: JQuery;
@@ -29,6 +32,7 @@ declare namespace FreeJqGrid {
 		hDiv: HDivWithLoading;
 		headers: { el: HTMLTableHeaderCellElement; width: number; }[];
 		newWidth?: number;
+		populate(this: BodyTable, npage?: number): void;
 		populateVisible(this: BodyTable): void;
 		prevRowHeight?: number;
 		resizeColumn(this: GridInfo, iCol: number, skipCallbacks: boolean, skipGridAdjustments): void;

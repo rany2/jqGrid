@@ -2237,7 +2237,10 @@
 						return self;
 					};
 					this.custom = function (ruleOp, field, data) {
-						self._append("self.p.customSortOperations." + ruleOp + ".filter.call(self,{item:this,cmName:\"" + field + "\",searchValue:\"" + data + "\"})");
+						self._append("self.p.customSortOperations." + ruleOp + ".filter.call(self,{item:this,cmName:\"" + field +
+							"\",iCol:self.p.iColByName[\"" + field + "\"]>=0 ? self.p.iColByName[\"" + field + "\"] : self.p.iPropByName[\"" + field +
+							"\"],isAddProp:self.p.iColByName[\"" + field + "\"]<0" +
+							",searchValue:\"" + data + "\"})");
 						self._setCommand(self.custom, field);
 						self._resetNegate();
 						return self;
@@ -3078,11 +3081,11 @@
 						if (inArray(name, p.reservedColumnNames) < 0 && !arrayReaderInfos.hasOwnProperty(name)) {
 							index = p.iColByName[name];
 							if (index !== undefined) {
-								arrayReaderInfos[name] = { name: colModel[index].name, index: index, order: order, type: 0 }; // INPUT_NAME_TYPE.COL_NAME
+								arrayReaderInfos[name] = { name: name, index: index, order: order, type: 0 }; // INPUT_NAME_TYPE.COL_NAME
 							} else {
 								index = p.iPropByName[name];
 								if (index !== undefined) {
-									arrayReaderInfos[name] = { name: colModel[index].name, index: index, order: order, type: 1 };// INPUT_NAME_TYPE.ADDITIONAL_PROPERTY
+									arrayReaderInfos[name] = { name: name, index: index, order: order, type: 1 };// INPUT_NAME_TYPE.ADDITIONAL_PROPERTY
 								} else if (name === (p.prmNames.rowidName || "rowid")) {
 									arrayReaderInfos[name] = { index: index, type: 2 };// INPUT_NAME_TYPE.ROWID
 								}
@@ -11167,7 +11170,7 @@
 					}
 					iCol = $t.p.iPropByName[cmName];
 					if (iCol !== undefined) {
-						return { cm: $t.p.colModel[iCol], iCol: iCol, isAddProp: true };
+						return { cm: $t.p.additionalProperties[iCol], iCol: iCol, isAddProp: true };
 					}
 					return { cm: null, iCol: -1 };
 				},
