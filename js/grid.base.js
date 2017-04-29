@@ -2237,7 +2237,10 @@
 						return self;
 					};
 					this.custom = function (ruleOp, field, data) {
-						self._append("self.p.customSortOperations." + ruleOp + ".filter.call(self,{item:this,cmName:\"" + field + "\",searchValue:\"" + data + "\"})");
+						self._append("self.p.customSortOperations." + ruleOp + ".filter.call(self,{item:this,cmName:\"" + field +
+							"\",iCol:self.p.iColByName[\"" + field + "\"]>=0 ? self.p.iColByName[\"" + field + "\"] : self.p.iPropByName[\"" + field +
+							"\"],isAddProp:self.p.iColByName[\"" + field + "\"]<0" +
+							",searchValue:\"" + data + "\"})");
 						self._setCommand(self.custom, field);
 						self._resetNegate();
 						return self;
