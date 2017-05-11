@@ -157,13 +157,6 @@
 					if (p.autoEncodeOnEdit) {
 						tmp = jgrid.oldDecodePostedData(tmp);
 					}
-					savedRow.push({ id: iRow, ic: iCol, name: nm, v: tmp });
-					p.editingInfo[rowid] = {
-						mode: "cellEditing",
-						savedRow: savedRow[savedRow.length - 1],
-						editable: {}
-					};
-					p.editingInfo[rowid].editable[nm] = editable;
 					if (tmp === "&nbsp;" || tmp === "&#160;" || (tmp.length === 1 && tmp.charCodeAt(0) === 160)) {
 						tmp = "";
 					}
@@ -174,6 +167,13 @@
 						}
 					}
 					feedback.call($t, "beforeEditCell", rowid, nm, tmp, iRow, iCol);
+					savedRow.push({ id: iRow, ic: iCol, name: nm, v: tmp });
+					p.editingInfo[rowid] = {
+						mode: "cellEditing",
+						savedRow: savedRow[savedRow.length - 1],
+						editable: {}
+					};
+					p.editingInfo[rowid].editable[nm] = editable;
 					var opt = $.extend({}, cm.editoptions || {},
 						{ id: iRow + "_" + nm, name: nm, rowId: rowid, mode: mode, cm: cm, iCol: iCol });
 					var elc = jgrid.createEl.call($t, edittype, opt, tmp, true, $.extend({}, jgrid.ajaxOptions, p.ajaxSelectOptions || {})),
