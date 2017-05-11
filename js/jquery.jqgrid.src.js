@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-04-28
+ * Date: 2017-05-11
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -8078,13 +8078,6 @@
 					if (p.autoEncodeOnEdit) {
 						tmp = jgrid.oldDecodePostedData(tmp);
 					}
-					savedRow.push({ id: iRow, ic: iCol, name: nm, v: tmp });
-					p.editingInfo[rowid] = {
-						mode: "cellEditing",
-						savedRow: savedRow[savedRow.length - 1],
-						editable: {}
-					};
-					p.editingInfo[rowid].editable[nm] = editable;
 					if (tmp === "&nbsp;" || tmp === "&#160;" || (tmp.length === 1 && tmp.charCodeAt(0) === 160)) {
 						tmp = "";
 					}
@@ -8095,6 +8088,13 @@
 						}
 					}
 					feedback.call($t, "beforeEditCell", rowid, nm, tmp, iRow, iCol);
+					savedRow.push({ id: iRow, ic: iCol, name: nm, v: tmp });
+					p.editingInfo[rowid] = {
+						mode: "cellEditing",
+						savedRow: savedRow[savedRow.length - 1],
+						editable: {}
+					};
+					p.editingInfo[rowid].editable[nm] = editable;
 					var opt = $.extend({}, cm.editoptions || {},
 						{ id: iRow + "_" + nm, name: nm, rowId: rowid, mode: mode, cm: cm, iCol: iCol });
 					var elc = jgrid.createEl.call($t, edittype, opt, tmp, true, $.extend({}, jgrid.ajaxOptions, p.ajaxSelectOptions || {})),
@@ -8898,9 +8898,9 @@
 			if (opt.dataEvents) {
 				$.each(opt.dataEvents, function () {
 					if (this.data !== undefined) {
-						$(el).on(this.type, this.data, this.fn);
+						$(el).on(this.type, typeof this.data === "object" && this.data !== null ? $.extend(true, {}, opt, this.data) : this.data, this.fn);
 					} else {
-						$(el).on(this.type, this.fn);
+						$(el).on(this.type, opt, this.fn);
 					}
 				});
 			}

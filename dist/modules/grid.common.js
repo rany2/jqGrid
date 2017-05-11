@@ -388,9 +388,9 @@
 			if (opt.dataEvents) {
 				$.each(opt.dataEvents, function () {
 					if (this.data !== undefined) {
-						$(el).on(this.type, this.data, this.fn);
+						$(el).on(this.type, typeof this.data === "object" && this.data !== null ? $.extend(true, {}, opt, this.data) : this.data, this.fn);
 					} else {
-						$(el).on(this.type, this.fn);
+						$(el).on(this.type, opt, this.fn);
 					}
 				});
 			}
