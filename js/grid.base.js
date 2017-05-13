@@ -1739,12 +1739,16 @@
 			return Math.abs(testCell - 5) > 0.1;
 		},
 		isCellClassHidden: function (className) {
-			var $testDiv = $("<div class='ui-jqgrid' style='left:10000px'><div class='ui-jqgrid-view'><div class='ui-jqgrid-bdiv'><table class='ui-jqgrid-btable' style='width:5px;'><tr class='jqgrow'><td style='width:5px;' class='" + (className || "") + "'></td></tr></table></div></div></div>"),
-				isHidden = $testDiv.appendTo("body")
-					.find("td")
-					.is(":hidden");
-			$testDiv.remove();
-			return isHidden;
+			if (className == null || className === "") {
+				return false;
+			} else {
+				var $testDiv = $("<div class='ui-jqgrid' style='left:10000px'><div class='ui-jqgrid-view'><div class='ui-jqgrid-bdiv'><table class='ui-jqgrid-btable' style='width:5px;'><tr class='jqgrow'><td style='width:5px;' class='" + (className || "") + "'></td></tr></table></div></div></div>"),
+					isHidden = $testDiv.appendTo("body")
+						.find("td")
+						.is(":hidden");
+				$testDiv.remove();
+				return isHidden;
+			}
 		},
 		cell_width: true,
 		ajaxOptions: {},
