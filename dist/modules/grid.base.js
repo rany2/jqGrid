@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-05-11
+ * Date: 2017-05-13
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -447,8 +447,8 @@
 				subgrid: {
 					plus: "ui-icon-plus",
 					minus: "ui-icon-minus",
-					openLtr: "ui-icon-carat-1-sw",
-					openRtl: "ui-icon-carat-1-se"
+					openLtr: "ui-icon-caret-1-sw",
+					openRtl: "ui-icon-caret-1-se"
 				},
 				grouping: {
 					plus: "ui-icon-circlesmall-plus",
