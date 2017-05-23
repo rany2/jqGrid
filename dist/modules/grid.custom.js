@@ -987,6 +987,14 @@
 									"' value='" + (soptions.defaultValue !== undefined ? soptions.defaultValue : "") + "'/>");
 
 								$tdInput.append($elem);
+								if (cm.createColumnIndex && soptions.generateDatalist) {
+									var dataListId = "dl_" + getId(cm.name),
+										$datalist = $self.jqGrid("generateDatalistFromColumnIndex", cm.name);
+									if ($datalist != null && $datalist.length > 0) {
+										$elem.attr("list", dataListId);
+										$tdInput.append($datalist.attr("id", dataListId));
+									}
+								}
 								if (soptions.attr) { $elem.attr(soptions.attr); }
 								bindings.push({ elem: $elem[0], options: soptions });
 								if (o.autosearch === true) {

@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-05-13
+ * Date: 2017-05-23
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6020,7 +6020,6 @@
 					// convert to format of editoptions.value or searchoptions.value
 					delimiter = delimiter || ";";
 					separator = separator || ":";
-					v = "";
 					for (i = 0, len = uniqueTexts.length; i < len; i++) {
 						if (v !== "") {
 							v += delimiter || ";";
@@ -6219,6 +6218,21 @@
 				}
 			}
 			return uniqueTexts;
+		},
+		generateDatalistFromColumnIndex: function (cmName) {
+			if (!this[0] || !this[0].grid) { return null; }
+			var uniqueTexts = this.jqGrid("getUniqueValueFromColumnIndex", cmName), i, len,
+				$dataList = $("<datalist></datalist>");
+
+			if (uniqueTexts != null && uniqueTexts.length > 0) {
+				// convert to format of editoptions.value or searchoptions.value
+				for (i = 0, len = uniqueTexts.length; i < len; i++) {
+					$dataList.append($("<option></option>").attr("value", uniqueTexts[i]));
+				}
+			} else {
+				return $(); // return empty jQuery object
+			}
+			return $dataList;
 		},
 		getGridParam: function (pName) {
 			var $t = this[0];

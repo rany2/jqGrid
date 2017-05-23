@@ -486,6 +486,14 @@
 					}
 					// data
 					$(".data", trpar).empty().append(elm);
+					if (cm.createColumnIndex && searchoptions.generateDatalist) {
+						var dataListId = "dl_" + elm.id,
+							$datalist = $($t).jqGrid("generateDatalistFromColumnIndex", cm.name);
+						if ($datalist != null && $datalist.length > 0) {
+							$(elm).attr("list", dataListId);
+							$(".data", trpar).append($datalist.attr("id", dataListId));
+						}
+					}
 					jgrid.bindEv.call($t, elm, searchoptions);
 					$(".input-elm", trpar).on("change", searchoptions, function (e) {
 						var elem = e.target, column = e.data.column;
@@ -604,6 +612,14 @@
 				// is created previously
 				//ruleDataInput.setAttribute("type", "text");
 				ruleDataTd.append(ruleDataInput);
+				if (cm.createColumnIndex && cm.searchoptions.generateDatalist) {
+					var dataListId = "dl_" + ruleDataInput.id,
+						$datalist = $($t).jqGrid("generateDatalistFromColumnIndex", cm.name);
+					if ($datalist != null && $datalist.length > 0) {
+						$(ruleDataInput).attr("list", dataListId);
+						ruleDataTd.append($datalist.attr("id", dataListId));
+					}
+				}
 				jgrid.bindEv.call($t, ruleDataInput, cm.searchoptions);
 				$(ruleDataInput).addClass(getGuiStyles("searchDialog.elem", "input-elm"))
 					.on("change", function () {

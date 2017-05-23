@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-05-13
+ * Date: 2017-05-23
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6020,7 +6020,6 @@
 					// convert to format of editoptions.value or searchoptions.value
 					delimiter = delimiter || ";";
 					separator = separator || ":";
-					v = "";
 					for (i = 0, len = uniqueTexts.length; i < len; i++) {
 						if (v !== "") {
 							v += delimiter || ";";
@@ -6219,6 +6218,21 @@
 				}
 			}
 			return uniqueTexts;
+		},
+		generateDatalistFromColumnIndex: function (cmName) {
+			if (!this[0] || !this[0].grid) { return null; }
+			var uniqueTexts = this.jqGrid("getUniqueValueFromColumnIndex", cmName), i, len,
+				$dataList = $("<datalist></datalist>");
+
+			if (uniqueTexts != null && uniqueTexts.length > 0) {
+				// convert to format of editoptions.value or searchoptions.value
+				for (i = 0, len = uniqueTexts.length; i < len; i++) {
+					$dataList.append($("<option></option>").attr("value", uniqueTexts[i]));
+				}
+			} else {
+				return $(); // return empty jQuery object
+			}
+			return $dataList;
 		},
 		getGridParam: function (pName) {
 			var $t = this[0];
@@ -10272,6 +10286,14 @@
 									"' value='" + (soptions.defaultValue !== undefined ? soptions.defaultValue : "") + "'/>");
 
 								$tdInput.append($elem);
+								if (cm.createColumnIndex && soptions.generateDatalist) {
+									var dataListId = "dl_" + getId(cm.name),
+										$datalist = $self.jqGrid("generateDatalistFromColumnIndex", cm.name);
+									if ($datalist != null && $datalist.length > 0) {
+										$elem.attr("list", dataListId);
+										$tdInput.append($datalist.attr("id", dataListId));
+									}
+								}
 								if (soptions.attr) { $elem.attr(soptions.attr); }
 								bindings.push({ elem: $elem[0], options: soptions });
 								if (o.autosearch === true) {
@@ -11521,6 +11543,14 @@
 					}
 					// data
 					$(".data", trpar).empty().append(elm);
+					if (cm.createColumnIndex && searchoptions.generateDatalist) {
+						var dataListId = "dl_" + elm.id,
+							$datalist = $($t).jqGrid("generateDatalistFromColumnIndex", cm.name);
+						if ($datalist != null && $datalist.length > 0) {
+							$(elm).attr("list", dataListId);
+							$(".data", trpar).append($datalist.attr("id", dataListId));
+						}
+					}
 					jgrid.bindEv.call($t, elm, searchoptions);
 					$(".input-elm", trpar).on("change", searchoptions, function (e) {
 						var elem = e.target, column = e.data.column;
@@ -11639,6 +11669,14 @@
 				// is created previously
 				//ruleDataInput.setAttribute("type", "text");
 				ruleDataTd.append(ruleDataInput);
+				if (cm.createColumnIndex && cm.searchoptions.generateDatalist) {
+					var dataListId = "dl_" + ruleDataInput.id,
+						$datalist = $($t).jqGrid("generateDatalistFromColumnIndex", cm.name);
+					if ($datalist != null && $datalist.length > 0) {
+						$(ruleDataInput).attr("list", dataListId);
+						ruleDataTd.append($datalist.attr("id", dataListId));
+					}
+				}
 				jgrid.bindEv.call($t, ruleDataInput, cm.searchoptions);
 				$(ruleDataInput).addClass(getGuiStyles("searchDialog.elem", "input-elm"))
 					.on("change", function () {
@@ -12834,7 +12872,15 @@
 							var $label = $("td:eq(" + (cp - 2) + ")", trdata[0]),
 								$data = $("td:eq(" + (cp - 1) + ")", trdata[0]);
 							$label.html(frmopt.label === undefined ? p.colNames[iCol] : frmopt.label || "&#160;");
-							$data[isEmptyString($data.html()) ? "html" : "append"](frmopt.elmprefix).append(elc).append(frmopt.elmsuffix);
+							var $dataCell = $data[isEmptyString($data.html()) ? "html" : "append"](frmopt.elmprefix);
+							$dataCell.append(elc).append(frmopt.elmsuffix);
+							if (elc.tagName.toUpperCase() === "INPUT" && cm.createColumnIndex && opt.generateDatalist) {
+								var $datalist = $self.jqGrid("generateDatalistFromColumnIndex", cm.name);
+								if ($datalist != null && $datalist.length > 0) {
+									$(elc).attr("list", "dl_" + elc.id);
+									$dataCell.append($datalist.attr("id", "dl_" + elc.id));
+								}
+							}
 							if (disabled) {
 								$label.addClass(disabledClass);
 								$data.addClass(disabledClass);
