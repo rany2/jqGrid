@@ -703,7 +703,7 @@ declare namespace FreeJqGrid {
 		attr?: Object;
 		clearSearch?: boolean;
 		defaultValue?: boolean;
-		generateValue?: boolean;
+		generateDatalist?: boolean;
 		searchhidden?: boolean;
 		sopt?: string[];
 		[propName: string]: any;
@@ -1689,6 +1689,7 @@ interface JQuery {
 	delRowData?(rowid: string): boolean;
 	displayErrorMessage?(htmlFragment: string): void;
 	footerData?(action?: "get" | "set", data?: Object, format?: boolean): Object | boolean;
+	generateDatalistFromColumnIndex?(cmName: string): JQuery;
 	getAutoResizableWidth?(iCol: number): number;
 	getCell?(rowid: string, cmName: string): string | false;
 	getCell?(rowid: string, iCol: number): string | false;
@@ -1735,6 +1736,7 @@ interface JQuery {
 	jqGrid(methodName: "delRowData", rowid: string): boolean;
 	jqGrid(methodName: "displayErrorMessage", htmlFragment: string): void;
 	jqGrid(methodName: "footerData", action?: "get" | "set", data?: Object, format?: boolean): Object | boolean;
+	jqGrid(methodName: "generateDatalistFromColumnIndex", cmName: string): JQuery;
 	jqGrid(methodName: "getAutoResizableWidth", iCol: number): number;
 	jqGrid(methodName: "getCell", rowid: string, cmName: string): string | false;
 	jqGrid(methodName: "getCell", rowid: string, iCol: number): string | false;

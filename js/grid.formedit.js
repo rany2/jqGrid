@@ -690,7 +690,15 @@
 							var $label = $("td:eq(" + (cp - 2) + ")", trdata[0]),
 								$data = $("td:eq(" + (cp - 1) + ")", trdata[0]);
 							$label.html(frmopt.label === undefined ? p.colNames[iCol] : frmopt.label || "&#160;");
-							$data[isEmptyString($data.html()) ? "html" : "append"](frmopt.elmprefix).append(elc).append(frmopt.elmsuffix);
+							var $dataCell = $data[isEmptyString($data.html()) ? "html" : "append"](frmopt.elmprefix);
+							$dataCell.append(elc).append(frmopt.elmsuffix);
+							if (elc.tagName.toUpperCase() === "INPUT" && cm.createColumnIndex && opt.generateDatalist) {
+								var $datalist = $self.jqGrid("generateDatalistFromColumnIndex", cm.name);
+								if ($datalist != null && $datalist.length > 0) {
+									$(elc).attr("list", "dl_" + elc.id);
+									$dataCell.append($datalist.attr("id", "dl_" + elc.id));
+								}
+							}
 							if (disabled) {
 								$label.addClass(disabledClass);
 								$data.addClass(disabledClass);
