@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-05-23
+ * Date: 2017-05-28
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -4977,7 +4977,7 @@
 					});
 					p.sortname = sort1.substring(0, sort1.length - p.sortorder.length - 1);
 				},
-				sortData = function (index, idxcol, reload, sor, obj) {
+				sortData = function (index, idxcol, reload, sor, obj, e) {
 					var self = this, mygrid = self.grid, cm = p.colModel[idxcol], disabledClasses = getGuiStyles("states.disabled");
 					if (cm == null || !cm.sortable) { return; }
 					if (p.savedRow.length > 0) { return; }
@@ -5079,7 +5079,7 @@
 						index = index.substring(5 + p.id.length + 1); // bad to be changed!?!
 						p.sortname = cm.index || index;
 					}
-					if (!feedback.call(self, "onSortCol", p.sortname, idxcol, p.sortorder)) {
+					if (!feedback.call(self, "onSortCol", p.sortname, idxcol, p.sortorder, e || {})) {
 						p.lastsort = idxcol;
 						return;
 					}
@@ -5594,7 +5594,7 @@
 					}
 					var iColByName = getColumnHeaderIndex(this);
 					if (iColByName != null) {
-						sortData.call(ts, $("div", this)[0].id, iColByName, r, d, this);
+						sortData.call(ts, $("div", this)[0].id, iColByName, r, d, this, e);
 					}
 					return false;
 				});
