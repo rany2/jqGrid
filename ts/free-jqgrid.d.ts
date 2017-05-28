@@ -1155,7 +1155,7 @@ declare namespace FreeJqGrid {
 		ignoreCase?: boolean; // true
 		readonly lastsort?: number; // 0
 		multiSort?: boolean; // false
-		onSortCol?: (this: BodyTable, cmOrIndexName: string, iCol: number, sortOrder: string) => BooleanFeedbackValues;
+		onSortCol?: (this: BodyTable, cmOrIndexName: string, iCol: number, sortOrder: string, eventObject: JQueryEventObject) => BooleanFeedbackValues;
 		sortname?: string; // ""
 		sortIconsBeforeText?: boolean; // false
 		sortIconName?: (this: BodyTable, options: { order: "asc" | "desc", iCol: number, cm: ColumnModel }) => string; // return CSS classes
@@ -1984,7 +1984,7 @@ interface JQuery {
 	on(eventName: "jqGridSelectAll", handler: (eventObject: JQueryEventObject, rowids: string[], toCheck: boolean) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridSelectRow", handler: (eventObject: JQueryEventObject, rowid: string, state: boolean, orgEventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridShowHideCol", handler: (eventObject: JQueryEventObject, show: boolean | "none" | "", cmName: string, iCol: number, options: FreeJqGrid.ShowHideColOptions) => void): FreeJqGrid.JQueryJqGrid;	
-	on(eventName: "jqGridSortCol", handler: (eventObject: JQueryEventObject, cmOrIndexName: string, iCol: number, sortOrder: string) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridSortCol", handler: (eventObject: JQueryEventObject, cmOrIndexName: string, iCol: number, sortOrder: string, orgEventObject: JQueryEventObject) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridRemapColumns", handler: (eventObject: JQueryEventObject, permutation: number[], updateCells?: boolean, keepHeader?: boolean) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridResizeDblClick", handler: (eventObject: JQueryEventObject, iCol: number, cm: FreeJqGrid.ColumnModel, orgEventObject: JQueryEventObject) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridResizeStart", handler: (eventObject: JQueryEventObject, orgEventObject: JQueryEventObject, iCol: number) => void): FreeJqGrid.JQueryJqGrid;
