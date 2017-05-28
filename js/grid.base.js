@@ -5079,7 +5079,7 @@
 						index = index.substring(5 + p.id.length + 1); // bad to be changed!?!
 						p.sortname = cm.index || index;
 					}
-					if (!feedback.call(self, "onSortCol", p.sortname, idxcol, p.sortorder, e)) {
+					if (!feedback.call(self, "onSortCol", p.sortname, idxcol, p.sortorder, e || {})) {
 						p.lastsort = idxcol;
 						return;
 					}
