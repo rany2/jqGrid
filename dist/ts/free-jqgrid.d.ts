@@ -750,7 +750,7 @@ declare namespace FreeJqGrid {
 			colpos?: number;
 		};
 		frozen?: boolean; // default value false
-		jsonmap?: (item: any) => any;
+		jsonmap?: (this: BodyTable, item: any, options: { cmName: string, iItem: number }) => any;
 		headerTitle?: string;
 		hidden?: boolean; // default value false
 		hidedlg?: boolean;
@@ -779,7 +779,7 @@ declare namespace FreeJqGrid {
 		viewable?: boolean; // default value true
 		width?: number; // default value 150
 		widthOrg?: number; // used internally by jqGrid
-		xmlmap?: (item: any) => any;
+		xmlmap?: (this: BodyTable, item: any, options: { cmName: string, iItem: number }) => any;
 		[propName: string]: any; // allow to have any number of other properties
 	}
 	interface ColumnModel extends ColumnModelWithoutLabel {
