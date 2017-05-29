@@ -4981,34 +4981,35 @@
 					var self = this, mygrid = self.grid, cm = p.colModel[idxcol], disabledClasses = getGuiStyles("states.disabled");
 					if (cm == null || !cm.sortable) { return; }
 					if (p.savedRow.length > 0) { return; }
-					if (!reload) {
-						if (p.lastsort === idxcol && p.sortname !== "") {
-							if (p.sortorder === "asc") {
-								p.sortorder = "desc";
-							} else if (p.sortorder === "desc") {
-								p.sortorder = "asc";
-							} else {
-								p.sortorder = cm.firstsortorder || "asc";
-							}
-							// first set new value of lso:
-							// "asc" -> "asc-desc", new sorting to "desc"
-							// "desc" -> "desc-asc", new sorting to "asc"
-							// "asc-desc" or "desc-asc" -> "", no new sorting ""
-							// "" -> cm.firstsortorder || "asc"
-							if (cm.lso) {
-								if (cm.lso === "asc") {
-									cm.lso += "-desc";
-								} else if (cm.lso === "desc") {
-									cm.lso += "-asc";
-								} else if ((cm.lso === "asc-desc" || cm.lso === "desc-asc") && (p.threeStateSort || p.multiSort)) {
-									cm.lso = "";
-								}
-							} else {
-								cm.lso = cm.firstsortorder || "asc";
+
+					if (p.lastsort === idxcol && p.sortname !== "") {
+						if (p.sortorder === "asc") {
+							p.sortorder = "desc";
+						} else if (p.sortorder === "desc") {
+							p.sortorder = "asc";
+						} else {
+							p.sortorder = cm.firstsortorder || "asc";
+						}
+						// first set new value of lso:
+						// "asc" -> "asc-desc", new sorting to "desc"
+						// "desc" -> "desc-asc", new sorting to "asc"
+						// "asc-desc" or "desc-asc" -> "", no new sorting ""
+						// "" -> cm.firstsortorder || "asc"
+						if (cm.lso) {
+							if (cm.lso === "asc") {
+								cm.lso += "-desc";
+							} else if (cm.lso === "desc") {
+								cm.lso += "-asc";
+							} else if ((cm.lso === "asc-desc" || cm.lso === "desc-asc") && (p.threeStateSort || p.multiSort)) {
+								cm.lso = "";
 							}
 						} else {
-							cm.lso = p.sortorder = cm.firstsortorder || "asc";
+							cm.lso = cm.firstsortorder || "asc";
 						}
+					} else {
+						cm.lso = p.sortorder = cm.firstsortorder || "asc";
+					}
+					if (!reload) {
 						p.page = 1;
 					}
 					if (p.multiSort) {
