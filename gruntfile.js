@@ -364,7 +364,9 @@ module.exports = function (grunt) {
 					"js/jquery.jqgrid.min.js": ["js/jquery.jqgrid.src.js"]
 				},
 				options: {
-					preserveComments: "some", //require("uglify-save-license"),
+					output: {
+						comments: "some"
+					},
 					sourceMap: true
 				}
 			}
