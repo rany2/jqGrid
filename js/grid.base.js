@@ -3565,6 +3565,12 @@
 									((icon != null && icon !== "") ? icon : p.treeIcons.leaf) + " tree-leaf" :
 									(isExpanded ? p.treeIcons.minus + " tree-minus" : p.treeIcons.plus + " tree-plus");
 						//normalizeTreeGridProperties(rdata); // ??? don't needed more probably
+						if (!isLeaf && icon && typeof icon === "string") {
+							var icons = icon.split(",");
+							if (icons.length === 2) {
+								iconClass = isExpanded ? icons[0] : icons [1];
+							}
+						}
 
 						v = "<div class='tree-wrap' style='width:" + ((lftpos + 1) * levelOffset) +
 							"px;'><div class='" +

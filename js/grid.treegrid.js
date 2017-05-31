@@ -53,6 +53,24 @@
 			args.unshift("");
 			args.unshift(this.p);
 			return jgrid.feedback.apply(this, args);
+		},
+		getNodeIcons = function (p, item) {
+			var icons = item[p.treeReader.icon_field],
+				treeIcons = p.treeIcons,
+				iconCollapsed = treeIcons.plus + " tree-plus",
+				iconExpanded = treeIcons.minus + " tree-minus";
+			if (icons && typeof icons === "string") {
+				icons = icons.split(",");
+				if (icons.length === 2) {
+					iconExpanded = icons[0];
+					iconCollapsed = icons[1];
+				}
+			}
+			return {
+				expanded: iconExpanded,
+				collapsed: iconCollapsed,
+				common: treeIcons.commonIconClass
+			};
 		};
 	jgrid.extend({
 		setTreeNode: function () {
@@ -373,39 +391,52 @@
 		},
 		expandNode: function (rc) {
 			return this.each(function () {
-				var $t = this, p = $t.p;
+				var $t = this, p = $t.p, id, rc1, icons;
 				if (!$t.grid || !p.treeGrid) { return; }
-				var expanded = p.treeReader.expanded_field, parent = p.treeReader.parent_id_field, loaded = p.treeReader.loaded,
-					level = p.treeReader.level_field,
-					lft = p.treeReader.left_field,
-					rgt = p.treeReader.right_field;
+				var treeReader = p.treeReader;
 
-				if (!rc[expanded]) {
-					var id = getAccessor(rc, p.localReader.id);
+				if (!rc[treeReader.expanded_field]) {
+					id = getAccessor(rc, p.localReader.id);
 					if (!treeGridFeedback.call($t, "beforeExpandNode", { rowid: id, item: rc })) { return; }
-					var rc1 = $("#" + p.idPrefix + jqID(id), $t.grid.bDiv)[0],
-						position = p._index[id];
-					if (p.treedatatype === "local" || base.isNodeLoaded.call($($t), p.data[position])) {
-						rc[expanded] = true;
-						$("div.treeclick", rc1).removeClass(p.treeIcons.plus + " tree-plus").addClass(p.treeIcons.commonIconClass).addClass(p.treeIcons.minus + " tree-minus");
-					} else if (!$t.grid.hDiv.loading) {
-						rc[expanded] = true;
-						$("div.treeclick", rc1).removeClass(p.treeIcons.plus + " tree-plus").addClass(p.treeIcons.commonIconClass).addClass(p.treeIcons.minus + " tree-minus");
+					rc1 = $("#" + p.idPrefix + jqID(id), $t.grid.bDiv)[0];
+
+					rc[treeReader.expanded_field] = true;
+					icons = getNodeIcons(p, rc);
+					$("div.treeclick", rc1).removeClass(icons.collapsed).addClass(icons.common).addClass(icons.expanded);
+					if (p.treedatatype !== "local" && !base.isNodeLoaded.call($($t), p.data[p._index[id]]) && !$t.grid.hDiv.loading) {
 						// set the value which will be used during processing of the server response
 						// in readInput
 						p.treeANode = rc1.rowIndex;
 						p.datatype = p.treedatatype;
 						base.setGridParam.call($($t), {
 							postData: p.treeGridModel === "nested" ?
-									{ nodeid: id, n_level: rc[level], n_left: rc[lft], n_right: rc[rgt] } :
-									{ nodeid: id, n_level: rc[level], parentid: rc[parent] }
+									{
+										nodeid: id,
+										n_level: rc[treeReader.level_field],
+										n_left: rc[treeReader.left_field],
+										n_right: rc[treeReader.right_field]
+									} :
+									{
+										nodeid: id,
+										n_level: rc[treeReader.level_field],
+										parentid: rc[treeReader.parent_id_field]
+									}
 						});
 						$($t).trigger("reloadGrid");
-						rc[loaded] = true;
+						rc[treeReader.loaded] = true;
 						base.setGridParam.call($($t), {
 							postData: p.treeGridModel === "nested" ?
-									{ nodeid: "", n_level: "", n_left: "", n_right: "" } :
-									{ nodeid: "", n_level: "", parentid: "" }
+									{
+										nodeid: "",
+										n_level: "",
+										n_left: "",
+										n_right: ""
+									} :
+									{
+										nodeid: "",
+										n_level: "",
+										parentid: ""
+									}
 						});
 					}
 					treeGridFeedback.call($t, "afterExpandNode", { rowid: id, item: rc });
@@ -414,18 +445,19 @@
 		},
 		collapseNode: function (rc) {
 			return this.each(function () {
-				var $t = this, p = $t.p;
+				var $t = this, p = $t.p, icons;
 				if (!$t.grid || !p.treeGrid) { return; }
 				var expanded = p.treeReader.expanded_field;
 				if (rc[expanded]) {
 					var id = getAccessor(rc, p.localReader.id);
 					if (!treeGridFeedback.call($t, "beforeCollapseNode", { rowid: id, item: rc })) { return; }
 					rc[expanded] = false;
+					icons = getNodeIcons(p, rc);
 					$("#" + p.idPrefix + jqID(id), $t.grid.bDiv) // $tr
 						.find("div.treeclick")
-						.removeClass(p.treeIcons.minus + " tree-minus")
-						.addClass(p.treeIcons.commonIconClass)
-						.addClass(p.treeIcons.plus + " tree-plus");
+						.removeClass(icons.expanded)
+						.addClass(icons.common)
+						.addClass(icons.collapsed);
 					if (p.unloadNodeOnCollapse === true || ($.isFunction(p.unloadNodeOnCollapse) && p.unloadNodeOnCollapse.call($t, rc))) {
 						rc[p.treeReader.loaded] = false;
 						$($t).jqGrid("delTreeNode", id, true);
@@ -528,6 +560,7 @@
 			return this.each(function () {
 				if (!data) { return; }
 				var $t = this, p = $t.p, $self = $($t), getInd = base.getInd,
+					iconExpanded = p.treeIcons.minus + " tree-minus",
 					method, parentindex, parentdata, parentlevel, iRow, rowind = parentid, leaf, maxright,
 					expanded = p.treeReader.expanded_field, isLeaf = p.treeReader.leaf_field, level = p.treeReader.level_field,
 					parent = p.treeReader.parent_id_field,
@@ -575,7 +608,7 @@
 						$($t.rows[prow])
 							.find("span.cell-wrapperleaf").removeClass("cell-wrapperleaf").addClass("cell-wrapper")
 							.end()
-							.find("div.tree-leaf").removeClass(p.treeIcons.leaf + " tree-leaf").addClass(p.treeIcons.commonIconClass).addClass(p.treeIcons.minus + " tree-minus");
+							.find("div.tree-leaf").removeClass(p.treeIcons.leaf + " tree-leaf").addClass(p.treeIcons.commonIconClass).addClass(iconExpanded);
 						p.data[parentindex][isLeaf] = false;
 						parentdata[loaded] = true;
 					}
