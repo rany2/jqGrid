@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.14.1 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.14.2-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-05-29
+ * Date: 2017-05-31
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -381,7 +381,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.14.1",
+		version: "4.14.2-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -3565,6 +3565,12 @@
 									((icon != null && icon !== "") ? icon : p.treeIcons.leaf) + " tree-leaf" :
 									(isExpanded ? p.treeIcons.minus + " tree-minus" : p.treeIcons.plus + " tree-plus");
 						//normalizeTreeGridProperties(rdata); // ??? don't needed more probably
+						if (!isLeaf && icon && typeof icon === "string") {
+							var icons = icon.split(",");
+							if (icons.length === 2) {
+								iconClass = isExpanded ? icons[0] : icons [1];
+							}
+						}
 
 						v = "<div class='tree-wrap' style='width:" + ((lftpos + 1) * levelOffset) +
 							"px;'><div class='" +
