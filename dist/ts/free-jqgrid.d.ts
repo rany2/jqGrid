@@ -768,6 +768,7 @@ declare namespace FreeJqGrid {
 		sortable?: boolean;
 		sortfunc?: (a: any, b: any, direction: 1 | -1, aItem: any, bItem: any) => any;
 		sortIconName?: (this: BodyTable, options: { order: "asc" | "desc", iCol: number, cm: ColumnModel }) => string; // return CSS classes
+		sorttype?: "integer" | "int" | "number" | "currency" | "float" | "numeric" | "boolean" | "date" | "datetime" | "text" | string | ((this: BodyTable, value: any, item: any) => any);
 		summaryRound?: number; // exponent used in Math.pow during rounding of summary values during data grouping
 		summaryRoundType?: "fixed" | "round"; // can be used during calculation of summary values during data grouping
 		summaryType?: "sum" | "min" | "max" | "count" | "avg"; // can be used in data grouping

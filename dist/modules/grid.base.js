@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-05-31
+ * Date: 2017-06-07
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1961,7 +1961,7 @@
 						$.each(data, function (index, v) {
 							ab = by !== "" ? jgrid.getAccessor(v, by) : v;
 							if (ab === undefined) { ab = ""; }
-							ab = findSortKey(ab, v);
+							ab = findSortKey.call(context, ab, v);
 							_sortData.push({ vSort: ab, data: v, index: index });
 						});
 						if ($.isFunction(sfunc)) {

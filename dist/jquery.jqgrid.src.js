@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-05-31
+ * Date: 2017-06-07
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1961,7 +1961,7 @@
 						$.each(data, function (index, v) {
 							ab = by !== "" ? jgrid.getAccessor(v, by) : v;
 							if (ab === undefined) { ab = ""; }
-							ab = findSortKey(ab, v);
+							ab = findSortKey.call(context, ab, v);
 							_sortData.push({ vSort: ab, data: v, index: index });
 						});
 						if ($.isFunction(sfunc)) {
@@ -12989,14 +12989,22 @@
 									$(nm, fmid).val(tmp);
 									break;
 								case "select":
-									var opv = tmp.split(",");
-									opv = $.map(opv, function (n) { return $.trim(n); });
+									var valuesToSelect = tmp.split(",");
+									valuesToSelect = $.map(valuesToSelect, function (n) { return $.trim(n); });
+									// first of all we try to select options testing the valuesToSelect,
+									// we will remove the values from valuesToSelect, which will be found by value
+									// In the next step we go through all options once more time and select the options
+									// testing there by text. In other words selection by text will be used only for
+									// values from valuesToSelect, which not exist as option by value
 									$(nm + " option", fmid).each(function () {
-										var selOpt = this, $selOpt = $(selOpt), optVal = $.trim($selOpt.val()), optText = $.trim($selOpt.text());
-										if (!cm[i].editoptions.multiple && ($.trim(tmp) === optText || opv[0] === optText || opv[0] === optVal)) {
+										var selOpt = this, $selOpt = $(selOpt), optVal = $.trim($selOpt.val()), iVal;
+										if (!cm[i].editoptions.multiple && valuesToSelect[0] === optVal) {
+											valuesToSelect.splice(0, 1);
 											selOpt.selected = true;
 										} else if (cm[i].editoptions.multiple) {
-											if ($.inArray(optText, opv) > -1 || $.inArray(optVal, opv) > -1) {
+											iVal = $.inArray(optVal, valuesToSelect);
+											if (iVal > -1) {
+												valuesToSelect.splice(iVal, 1);
 												selOpt.selected = true;
 											} else {
 												selOpt.selected = false;
@@ -13004,7 +13012,24 @@
 										} else {
 											selOpt.selected = false;
 										}
+										if (valuesToSelect.length === 0) { return false; }
 									});
+									if (valuesToSelect.length > 0) {
+										$(nm + " option", fmid).each(function () {
+											var selOpt = this, $selOpt = $(selOpt), optText = $.trim($selOpt.text()), iVal;
+											if (!cm[i].editoptions.multiple && ($.trim(tmp) === optText || valuesToSelect[0] === optText)) {
+												valuesToSelect.splice(0, 1);
+												selOpt.selected = true;
+											} else if (cm[i].editoptions.multiple) {
+												iVal = $.inArray(optText, valuesToSelect);
+												if (iVal > -1) {
+													valuesToSelect.splice(iVal, 1);
+													selOpt.selected = true;
+												}
+											}
+											if (valuesToSelect.length === 0) { return false; }
+										});
+									}
 									break;
 								case "checkbox":
 									tmp = String(tmp);
