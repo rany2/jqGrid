@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-06-07
+ * Date: 2017-06-09
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6712,6 +6712,9 @@
 								}
 								title = cm.title ? { "title": vl } : {};
 								vl = t.formatter(rowid, vl, i, data, "edit", newData);
+								if (cm.formatter === "select") {
+									title = cm.title ? { "title": stripHtml(vl) } : {};
+								}
 								var $dataFiled = $td;
 								if (p.treeGrid === true && nm === p.ExpandColumn) {
 									$dataFiled = $dataFiled.children("span.cell-wrapperleaf,span.cell-wrapper").first();
