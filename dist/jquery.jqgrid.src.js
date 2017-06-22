@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-06-09
+ * Date: 2017-06-22
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -8456,7 +8456,7 @@
 							pRot = tr.offsetTop;
 
 						if (tp === "vd") {
-							if (nRot >= ch) {
+							if (nRot >= st + ch) {
 								bDiv.scrollTop = bDiv.scrollTop + tr.clientHeight;
 							}
 						}
@@ -10674,26 +10674,6 @@
 				$tr.insertAfter($trLastWithLabels);
 				$htable.prepend($theadInTable);
 
-				if (o.useColSpanStyle) {
-					// Increase the height of resizing span of visible headers
-					$htable.find("span.ui-jqgrid-resize").each(function () {
-						var $parent = $(this).parent();
-						if ($parent.is(":visible")) {
-							this.style.cssText = "height:" + $parent.height() + "px !important;cursor:col-resize;";
-						}
-					});
-
-					// Set position of the sortable div (the main lable)
-					// with the column header text to the middle of the cell.
-					// One should not do this for hidden headers.
-					$htable.find(".ui-th-column>div").each(function () {
-						var $ts = $(this), $parent = $ts.parent();
-						if ($parent.is(":visible") && $parent.is(":has(span.ui-jqgrid-resize)") && !($ts.hasClass("ui-jqgrid-rotate") || $ts.hasClass("ui-jqgrid-rotateOldIE"))) {
-							// !!! it seems be wrong now
-							$ts.css("top", ($parent.height() - $ts.outerHeight(true)) / 2 + "px");
-						}
-					});
-				}
 				$(ts).triggerHandler("jqGridAfterSetGroupHeaders");
 			});
 		},

@@ -507,7 +507,7 @@
 							pRot = tr.offsetTop;
 
 						if (tp === "vd") {
-							if (nRot >= ch) {
+							if (nRot >= st + ch) {
 								bDiv.scrollTop = bDiv.scrollTop + tr.clientHeight;
 							}
 						}
