@@ -223,7 +223,11 @@ module.exports = function (grunt) {
 		},
 		ts: {
 			all: {
-				src: ["**/*.ts", "!node_modules/**/*.ts", "!dist/**/*.ts"]
+				src: ["**/*.ts", "!node_modules/**/*.ts", "!dist/**/*.ts"],
+				options: {
+					target: "es5",
+					lib: ["es2015", "es2017", "dom"]
+				}
 			}
 		},
 		cssmin: {
