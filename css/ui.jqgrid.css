@@ -1,6 +1,6 @@
 /*!
  * jqGrid 4.14.2-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2017-05-31
+ * Date: 2017-06-22
  */
 
 /* Grid */
@@ -231,6 +231,8 @@
 	text-align: center;
 }
 .ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+	position: relative;
+	vertical-align: middle;
 	border-top: 0 none;
 	border-bottom: 0 none;
 }
@@ -271,9 +273,10 @@
 	margin-right: -1px;
 }
 .ui-jqgrid .ui-jqgrid-labels > .ui-th-column > .ui-jqgrid-resize {
-	height: 22px;
+	top: 0;
+	height: 100%;
 	width: .3em;
-	position: relative;
+	position: absolute;
 	cursor: col-resize;
 	-webkit-touch-callout: none;
 	-ms-user-select: none;
@@ -1028,11 +1031,11 @@ select.form-control.ui-pg-selbox:not([size]):not([multiple]) {
 	padding-left: 20px;
 }
 .ui-jqgrid .ui-jqgrid-resize-ltr {
-	float: right;
+	right: 1px;
 	margin: -2px -2px -2px 0;
 }
 .ui-jqgrid .ui-jqgrid-resize-rtl {
-	float: left;
+	left: 1px;
 	margin: -2px 0 -1px -3px;
 }
 .ui-jqgrid .ui-sort-rtl {
