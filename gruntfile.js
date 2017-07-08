@@ -223,7 +223,7 @@ module.exports = function (grunt) {
 		},
 		ts: {
 			all: {
-				src: ["ts/**/*.ts", "!node_modules/**/*.ts", "!bower_components/**/*.ts", "!dist/**/*.ts"],
+				src: ["ts/**/*.ts"],
 				options: {
 					target: "es5",
 					lib: ["es2015", "es2017", "dom"]
