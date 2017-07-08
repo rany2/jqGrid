@@ -5340,12 +5340,11 @@
 						labelStyle = "text-align:left;";
 						break;
 					case "right":
-						labelStyle = "text-align:right;" + (cmi.sortable === false ? "" : "padding-right:" + p.autoResizing.widthOfVisiblePartOfSortIcon + "px;");
+						labelStyle = "text-align:right;";
 						break;
 					case "likeData":
 						labelStyle = cmi.align === undefined || cmi.align === "left" ?
-								"text-align:left;" :
-								(cmi.align === "right" ? "text-align:right;" + (cmi.sortable === false ? "" : "padding-right:" + p.autoResizing.widthOfVisiblePartOfSortIcon + "px;") : "");
+								"text-align:left;" : (cmi.align === "right" ? "text-align:right;" : "");
 						break;
 					default:
 						labelStyle = "";
