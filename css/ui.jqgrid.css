@@ -230,6 +230,12 @@
 	white-space: nowrap;
 	text-align: center;
 }
+.ui-jqgrid-labels .ui-th-column-header {
+	vertical-align: middle;
+	height: auto;
+	vertical-align: middle;
+	border-top: 0 none;
+}
 .ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
 	position: relative;
 	vertical-align: middle;
