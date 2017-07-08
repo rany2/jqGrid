@@ -6,9 +6,9 @@
     "js/jquery.jqgrid.min.js",
     "js/jquery.jqgrid.src.js",
     "js/jquery.jqgrid.min.map",
-	"css/ui.jqgrid.min.css",
+    "css/ui.jqgrid.min.css",
     "css/ui.jqgrid.css",
-	"css/ui.jqgrid.min.css.map"
+    "css/ui.jqgrid.min.css.map"
   ],
   "keywords": [
     "grid",
@@ -45,5 +45,8 @@
     "node_modules",
     "bower_components",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "DefinitelyTyped": "*"
+  }
 }
