@@ -988,9 +988,17 @@
 			// Trident/7.0 - IE11
 			// Version tokens MSIE might not reflect the actual version of the browser
 			// If Compatibility View is enabled for a webpage or the browser mode is set to an earlier version
-			var rv = -1, match = /(MSIE) ([0-9]{1,}[.0-9]{0,})/.exec(navigator.userAgent);
-			if (match != null && match.length === 3) {
-				rv = parseFloat(match[2] || -1);
+			var rv = -1, match;
+			if (navigator.appName === "Microsoft Internet Explorer") {
+				match = /(MSIE) ([0-9]{1,}[.0-9]{0,})/.exec(navigator.userAgent);
+				if (match != null && match.length === 3) {
+					rv = parseFloat(match[2] || -1);
+				}
+			} else if (navigator.appName === "Netscape") {
+				match = /rv:([0-9]{1,}[.0-9]{0,})/.exec(navigator.userAgent);
+				if (match != null && match.length === 2) {
+					rv = parseFloat(match[1] || -1);
+				}
 			}
 			return rv;
 		},
@@ -3377,6 +3385,7 @@
 			// TODO: replace altclass : "ui-priority-secondary",
 			// set default buttonicon : "ui-icon-newwin" of navButtonAdd: fa-external-link, fa-desktop or other
 			// change the order in $.extend to allows to set icons using $.jgrid (for example $.jgrid.nav). It will be ovewritten currently by p.navOptions which we set above.
+			jgrid.msie = jgrid.msiever() > 0;
 			var gv = $("<div class='" + getGuiStyles("gView", "ui-jqgrid-view") + "' role='grid' aria-multiselectable='" + !!p.multiselect + "'></div>"),
 				isMSIE = jgrid.msie, dir;
 			p.direction = trim(p.direction.toLowerCase());
