@@ -1408,7 +1408,9 @@
 				}
 				if (p.sortable) {
 					$colHeaderRow = $(grid.hDiv).find(".ui-jqgrid-htable .ui-jqgrid-labels");
-					$colHeaderRow.sortable("destroy");
+					try {
+						$colHeaderRow.sortable("destroy");
+					} catch (ignore) { }
 					$self.jqGrid("setGridParam", {
 						sortable: {
 							options: {
