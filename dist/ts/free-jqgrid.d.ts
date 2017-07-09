@@ -1154,13 +1154,16 @@ declare namespace FreeJqGrid {
 		builderSortIcons?: (this: BodyTable, iCol: number) => string;
 		forceClientSorting?: boolean;
 		ignoreCase?: boolean; // true
+		formatSortOrder?: (this: BodyTable, options: { cm: ColumnModel, sortIndex: number }) => string;
 		readonly lastsort?: number; // 0
 		multiSort?: boolean; // false
+		multiSortOrder?: "lastClickedLastSorted" | "lastClickedFirstSorted" | ((this: BodyTable, sortNames: string[], cm: ColumnModel, sortDirs: {[cmName: string]: "asc" | "desc" }) => string[]);
 		onSortCol?: (this: BodyTable, cmOrIndexName: string, iCol: number, sortOrder: string, eventObject?: JQueryEventObject) => BooleanFeedbackValues;
 		sortname?: string; // ""
 		sortIconsBeforeText?: boolean; // false
 		sortIconName?: (this: BodyTable, options: { order: "asc" | "desc", iCol: number, cm: ColumnModel }) => string; // return CSS classes
 		showOneSortIcon?: boolean; // false
+		showSortOrder?: boolean; // true
 		sortorder?: "asc" | "desc" | string; // "asc"
 		threeStateSort?: boolean; // false
 		viewsortcols?: [boolean, "vertical" | "horizontal", boolean]; // [false, "vertical", true]

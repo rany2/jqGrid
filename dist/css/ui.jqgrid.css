@@ -1,6 +1,6 @@
 /*!
- * jqGrid 4.14.2-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2017-06-22
+ * jqGrid 4.15.0-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
+ * Date: 2017-07-09
  */
 
 /* Grid */
@@ -230,6 +230,12 @@
 	white-space: nowrap;
 	text-align: center;
 }
+.ui-jqgrid-labels .ui-th-column-header {
+	vertical-align: middle;
+	height: auto;
+	vertical-align: middle;
+	border-top: 0 none;
+}
 .ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
 	position: relative;
 	vertical-align: middle;
@@ -335,6 +341,13 @@
 }
 .ui-jqgrid .s-ico > .ui-icon.ui-sort-rtl {
 	margin-right: 0;
+}
+.ui-jqgrid-sortable > .ui-jqgrid-sort-order {
+	position: relative;
+	left: -.1em;
+	top: 0;
+	font-size: 75%;
+	vertical-align: super;
 }
 
 .ui-jqgrid .ui-th-column > div {

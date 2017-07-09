@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.14.2-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.15.0-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-06-22
+ * Date: 2017-07-09
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -381,7 +381,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.14.2-pre",
+		version: "4.15.0-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -988,9 +988,17 @@
 			// Trident/7.0 - IE11
 			// Version tokens MSIE might not reflect the actual version of the browser
 			// If Compatibility View is enabled for a webpage or the browser mode is set to an earlier version
-			var rv = -1, match = /(MSIE) ([0-9]{1,}[.0-9]{0,})/.exec(navigator.userAgent);
-			if (match != null && match.length === 3) {
-				rv = parseFloat(match[2] || -1);
+			var rv = -1, match;
+			if (navigator.appName === "Microsoft Internet Explorer") {
+				match = /(MSIE) ([0-9]{1,}[.0-9]{0,})/.exec(navigator.userAgent);
+				if (match != null && match.length === 3) {
+					rv = parseFloat(match[2] || -1);
+				}
+			} else if (navigator.appName === "Netscape") {
+				match = /rv:([0-9]{1,}[.0-9]{0,})/.exec(navigator.userAgent);
+				if (match != null && match.length === 2) {
+					rv = parseFloat(match[1] || -1);
+				}
 			}
 			return rv;
 		},
@@ -2921,6 +2929,8 @@
 					guiStyle: guiStyle,
 					locale: locale,
 					multiSort: false,
+					showSortOrder: true,
+					multiSortOrder: "lastClickedLastSorted", // "lastClickedFirstSorted" or callback reodering function
 					treeIcons: {
 						commonIconClass: getIcon("treeGrid.common"),
 						plusLtr: getIcon("treeGrid.plusLtr"),
@@ -3377,6 +3387,7 @@
 			// TODO: replace altclass : "ui-priority-secondary",
 			// set default buttonicon : "ui-icon-newwin" of navButtonAdd: fa-external-link, fa-desktop or other
 			// change the order in $.extend to allows to set icons using $.jgrid (for example $.jgrid.nav). It will be ovewritten currently by p.navOptions which we set above.
+			jgrid.msie = jgrid.msiever() > 0;
 			var gv = $("<div class='" + getGuiStyles("gView", "ui-jqgrid-view") + "' role='grid' aria-multiselectable='" + !!p.multiselect + "'></div>"),
 				isMSIE = jgrid.msie, dir;
 			p.direction = trim(p.direction.toLowerCase());
@@ -4976,12 +4987,35 @@
 					}
 
 					getSortNames(sortNames, sortDirs, cm);
+					if (typeof p.sortname === "string" && p.sortname !== "" && p.sortname.split(",").length < sortNames.length) {
+						if (p.multiSortOrder === "lastClickedFirstSorted" && sortNames.length > 1) {
+							sortNames.unshift(sortNames[sortNames.length - 1]);
+							sortNames.pop();
+						} else if (isFunction(p.multiSortOrder)) {
+							sortNames = p.multiSortOrder.call(ts, sortNames, cm, sortDirs) || sortNames;
+						}
+					}
 					each(sortNames, function () {
 						if (sort1.length > 0) { sort1 += ", "; }
 						sort1 += this + " " + sortDirs[this];
 						p.sortorder = sortDirs[this];
 					});
 					p.sortname = sort1.substring(0, sort1.length - p.sortorder.length - 1);
+					if (p.showSortOrder) {
+						// reset multisort indexes
+						each(p.colModel, function () {
+							if (this.sortable) {
+								var sortIndex = inArray(this.name, sortNames);
+								$("#jqgh_" + jgrid.jqID(p.id + "_" + this.name))
+									.children(".ui-jqgrid-sort-order")
+									.html(sortIndex < 0 ?
+											"&nbsp;" :
+											isFunction(p.formatSortOrder) ?
+												p.formatSortOrder.call(ts, { cm: this, sortIndex: sortIndex }) :
+												sortIndex + 1);
+							}
+						});
+					}
 				},
 				sortData = function (index, idxcol, reload, sor, obj, e) {
 					var self = this, mygrid = self.grid, cm = p.colModel[idxcol], disabledClasses = getGuiStyles("states.disabled");
@@ -4996,25 +5030,27 @@
 						} else {
 							p.sortorder = cm.firstsortorder || "asc";
 						}
-						// first set new value of lso:
-						// "asc" -> "asc-desc", new sorting to "desc"
-						// "desc" -> "desc-asc", new sorting to "asc"
-						// "asc-desc" or "desc-asc" -> "", no new sorting ""
-						// "" -> cm.firstsortorder || "asc"
-						if (cm.lso) {
-							if (cm.lso === "asc") {
-								cm.lso += "-desc";
-							} else if (cm.lso === "desc") {
-								cm.lso += "-asc";
-							} else if ((cm.lso === "asc-desc" || cm.lso === "desc-asc") && (p.threeStateSort || p.multiSort)) {
-								cm.lso = "";
-							}
-						} else {
-							cm.lso = cm.firstsortorder || "asc";
+					} else {
+						p.sortorder = cm.firstsortorder || "asc";
+					}
+
+					// first set new value of lso:
+					// "asc" -> "asc-desc", new sorting to "desc"
+					// "desc" -> "desc-asc", new sorting to "asc"
+					// "asc-desc" or "desc-asc" -> "", no new sorting ""
+					// "" -> cm.firstsortorder || "asc"
+					if (cm.lso) {
+						if (cm.lso === "asc") {
+							cm.lso += "-desc";
+						} else if (cm.lso === "desc") {
+							cm.lso += "-asc";
+						} else if ((cm.lso === "asc-desc" || cm.lso === "desc-asc") && (p.threeStateSort || p.multiSort)) {
+							cm.lso = "";
 						}
 					} else {
-						cm.lso = p.sortorder = cm.firstsortorder || "asc";
+						cm.lso = cm.firstsortorder || "asc";
 					}
+
 					if (!reload) {
 						p.page = 1;
 					}
@@ -5198,7 +5234,7 @@
 			for (iCol = 0; iCol < p.colModel.length; iCol++) {
 				cmi = p.colModel[iCol];
 				colTemplate = typeof cmi.template === "string" ?
-						(jgridCmTemplate != null && (typeof jgridCmTemplate[cmi.template] === "object" || $.isFunction(jgridCmTemplate[cmi.template])) ?
+						(jgridCmTemplate != null && (typeof jgridCmTemplate[cmi.template] === "object" || isFunction(jgridCmTemplate[cmi.template])) ?
 								jgridCmTemplate[cmi.template] : {}) :
 						cmi.template;
 				if (isFunction(colTemplate)) {
@@ -5331,12 +5367,11 @@
 						labelStyle = "text-align:left;";
 						break;
 					case "right":
-						labelStyle = "text-align:right;" + (cmi.sortable === false ? "" : "padding-right:" + p.autoResizing.widthOfVisiblePartOfSortIcon + "px;");
+						labelStyle = "text-align:right;";
 						break;
 					case "likeData":
 						labelStyle = cmi.align === undefined || cmi.align === "left" ?
-								"text-align:left;" :
-								(cmi.align === "right" ? "text-align:right;" + (cmi.sortable === false ? "" : "padding-right:" + p.autoResizing.widthOfVisiblePartOfSortIcon + "px;") : "");
+								"text-align:left;" : (cmi.align === "right" ? "text-align:right;" : "");
 						break;
 					default:
 						labelStyle = "";
@@ -5540,6 +5575,16 @@
 								if (showOneSortIcon) {
 									$iconsSpan.children("span.ui-icon-" + notLso).hide();
 								}
+							}
+							if (p.showSortOrder) {
+								sotmp = inArray(nm, sortarr);
+								$iconsSpan.after("<span class='ui-jqgrid-sort-order'>" +
+									(sotmp < 0 ?
+										"&nbsp" :
+										isFunction(p.formatSortOrder) ?
+											p.formatSortOrder.call(ts, { cm: this, sortIndex: sotmp }) :
+											sotmp + 1) +
+									"</span>");
 							}
 						} else {
 							var notSortOrder = p.sortorder === "desc" ? "asc" : "desc";
@@ -10632,8 +10677,7 @@
 						// The text will be over the cVisibleColumns columns
 						$colHeader = $("<th>")
 							.addClass(thClasses)
-							.css({ "height": "22px", "border-top": "0 none" })
-							.html(titleText);
+							.html(titleText || "&nbsp;");
 						if (cVisibleColumns > 0) {
 							$colHeader.attr("colspan", String(cVisibleColumns));
 						}
