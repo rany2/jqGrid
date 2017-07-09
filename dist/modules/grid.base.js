@@ -5005,8 +5005,15 @@
 						// reset multisort indexes
 						each(p.colModel, function () {
 							if (this.sortable) {
-								var sortIndex = inArray(this.name, sortNames);
-								$("#jqgh_" + jgrid.jqID(p.id + "_" + this.name))
+								var sortIndex = inArray(this.name, sortNames),
+									thDivIdSelector = "#jqgh_" + jgrid.jqID(p.id + "_" + this.name),
+									$thDiv = $(thDivIdSelector);
+
+								if (p.frozenColumns) {
+									$thDiv = $thDiv.add($(grid.fhDiv).find(thDivIdSelector));
+								}
+
+								$thDiv
 									.children(".ui-jqgrid-sort-order")
 									.html(sortIndex < 0 ?
 											"&nbsp;" :
