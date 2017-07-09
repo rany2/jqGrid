@@ -342,6 +342,13 @@
 .ui-jqgrid .s-ico > .ui-icon.ui-sort-rtl {
 	margin-right: 0;
 }
+.ui-jqgrid-sortable > .ui-jqgrid-sort-order {
+	position: relative;
+	left: -.1em;
+	top: 0;
+	font-size: 75%;
+	vertical-align: super;
+}
 
 .ui-jqgrid .ui-th-column > div {
 	cursor: default;

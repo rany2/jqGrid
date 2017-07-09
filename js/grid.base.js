@@ -2929,6 +2929,8 @@
 					guiStyle: guiStyle,
 					locale: locale,
 					multiSort: false,
+					showSortOrder: true,
+					multiSortOrder: "lastClickedLastSorted", // "lastClickedFirstSorted" or callback reodering function
 					treeIcons: {
 						commonIconClass: getIcon("treeGrid.common"),
 						plusLtr: getIcon("treeGrid.plusLtr"),
@@ -4985,12 +4987,35 @@
 					}
 
 					getSortNames(sortNames, sortDirs, cm);
+					if (typeof p.sortname === "string" && p.sortname !== "" && p.sortname.split(",").length < sortNames.length) {
+						if (p.multiSortOrder === "lastClickedFirstSorted" && sortNames.length > 1) {
+							sortNames.unshift(sortNames[sortNames.length - 1]);
+							sortNames.pop();
+						} else if (isFunction(p.multiSortOrder)) {
+							sortNames = p.multiSortOrder.call(ts, sortNames, cm, sortDirs) || sortNames;
+						}
+					}
 					each(sortNames, function () {
 						if (sort1.length > 0) { sort1 += ", "; }
 						sort1 += this + " " + sortDirs[this];
 						p.sortorder = sortDirs[this];
 					});
 					p.sortname = sort1.substring(0, sort1.length - p.sortorder.length - 1);
+					if (p.showSortOrder) {
+						// reset multisort indexes
+						each(p.colModel, function () {
+							if (this.sortable) {
+								var sortIndex = inArray(this.name, sortNames);
+								$("#jqgh_" + jgrid.jqID(p.id + "_" + this.name))
+									.children(".ui-jqgrid-sort-order")
+									.html(sortIndex < 0 ?
+											"&nbsp;" :
+											isFunction(p.formatSortOrder) ?
+												p.formatSortOrder.call(ts, { cm: this, sortIndex: sortIndex }) :
+												sortIndex + 1);
+							}
+						});
+					}
 				},
 				sortData = function (index, idxcol, reload, sor, obj, e) {
 					var self = this, mygrid = self.grid, cm = p.colModel[idxcol], disabledClasses = getGuiStyles("states.disabled");
@@ -5207,7 +5232,7 @@
 			for (iCol = 0; iCol < p.colModel.length; iCol++) {
 				cmi = p.colModel[iCol];
 				colTemplate = typeof cmi.template === "string" ?
-						(jgridCmTemplate != null && (typeof jgridCmTemplate[cmi.template] === "object" || $.isFunction(jgridCmTemplate[cmi.template])) ?
+						(jgridCmTemplate != null && (typeof jgridCmTemplate[cmi.template] === "object" || isFunction(jgridCmTemplate[cmi.template])) ?
 								jgridCmTemplate[cmi.template] : {}) :
 						cmi.template;
 				if (isFunction(colTemplate)) {
@@ -5548,6 +5573,16 @@
 								if (showOneSortIcon) {
 									$iconsSpan.children("span.ui-icon-" + notLso).hide();
 								}
+							}
+							if (p.showSortOrder) {
+								sotmp = inArray(nm, sortarr);
+								$iconsSpan.after("<span class='ui-jqgrid-sort-order'>" +
+									(sotmp < 0 ?
+										"&nbsp" :
+										isFunction(p.formatSortOrder) ?
+											p.formatSortOrder.call(ts, { cm: this, sortIndex: sotmp }) :
+											sotmp + 1) +
+									"</span>");
 							}
 						} else {
 							var notSortOrder = p.sortorder === "desc" ? "asc" : "desc";
