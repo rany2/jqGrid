@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-07-09
+ * Date: 2017-07-16
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -7144,6 +7144,103 @@
 				}
 			});
 			return action === "get" ? res : success;
+		},
+		resetColumnResizerHeight: function () {
+			return this.each(function () {
+				if ($.jgrid.msie) {
+					// IE don't calculate height: 100%; in the CSS rule
+					// 		.ui-jqgrid .ui-jqgrid-labels > .ui-th-column > .ui-jqgrid-resize { ... }
+					// One have to set the height of the span.ui-jqgrid-resize explicitly
+					// to the height of the row/th
+					var $th, $resizer, i, headers = this.grid.headers, headerHeight;
+					for (i = 0; i < headers.length; i++) {
+						$th = $(headers[i].el);
+						headerHeight = $th.height();
+						if (headerHeight) {
+							$resizer = $th.children(".ui-jqgrid-resize");
+							if ($resizer.length > 0 && Math.abs(headerHeight - $resizer.height()) > 0.5) {
+								$th.children(".ui-jqgrid-resize").height(headerHeight);
+							}
+						}
+					}
+				}
+			});
+		},
+		rotateColumnHeaders: function (columnNameOrIndexes, headerHeight) {
+			return this.each(function () {
+				// TODO: reorder columns via drag&drop
+				var $self = $(this),
+					p = $self.jqGrid("getGridParam"), i, iCol, $th, columnNameOrIndex,
+					$thDiv, $inconsDiv, $textWrapper, widthIcon, widthText,
+					thPaddingLeft, thPaddingRight, thPaddingTop, thPaddingBottom;
+
+				if (!$.isArray(columnNameOrIndexes)) {
+					columnNameOrIndexes = [columnNameOrIndexes];
+				}
+
+				for (i = 0; i < columnNameOrIndexes.length; i++) {
+					columnNameOrIndex = columnNameOrIndexes[i];
+					iCol = isNaN(columnNameOrIndex) ?
+						p.iColByName[columnNameOrIndex] :
+						parseInt(columnNameOrIndex, 10);
+					if (iCol >= 0) {
+						$th = $(this.grid.headers[iCol].el);
+						$thDiv = $th.children("div");
+						$textWrapper = $thDiv.children("span." + p.autoResizing.wrapperClassName);
+						$inconsDiv = $thDiv.children("span.s-ico");
+						widthIcon = $inconsDiv.outerWidth(true);
+						widthText = $textWrapper.outerWidth();
+						thPaddingTop = parseFloat($th.css("padding-top") || 0);
+						thPaddingBottom = parseFloat($th.css("padding-bottom") || 0);
+						thPaddingLeft = parseFloat($th.css("padding-left") || 0);
+						thPaddingRight = parseFloat($th.css("padding-right") || 0);
+
+						if (p.showSortOrder) {
+							widthIcon += widthIcon * 0.5; // one can improve the calculation later !!!
+						}
+						if (headerHeight === undefined || headerHeight === 0) {
+							headerHeight = widthText + widthIcon + thPaddingLeft + thPaddingRight;
+						}
+
+						$th.height(headerHeight);
+						$th.css({
+							paddingTop: thPaddingRight + "px",
+							paddingBottom: thPaddingLeft + "px",
+							paddingLeft: thPaddingTop + "px",
+							paddingRight: thPaddingBottom + "px"
+						});
+						headerHeight = Math.max($th.parent().height(), headerHeight);
+						// we must set width of column header div BEFOR adding class "rotate" to
+						// prevent text cutting based on the current column width
+						$thDiv.css("min-width", (headerHeight - thPaddingLeft - thPaddingRight) + "px")
+									.addClass("rotate")
+									.css({ bottom: 0 });
+						p.colModel[iCol].rotated = true;
+					}
+				}
+				$self.jqGrid("resetColumnResizerHeight");
+				if (p.frozenColumns) {
+					setTimeout(function () {
+						$self.triggerHandler("jqGridResetFrozenHeights", {
+							header: {
+								resizeDiv: true,
+								resizedRows: {
+									iRowStart: 0,
+									iRowEnd: -1 // -1 means "till the end"
+								}
+							},
+							resizeFooter: true,
+							body: {
+								resizeDiv: true,
+								resizedRows: {
+									iRowStart: -1, // -1 means don't recalculate heights or rows
+									iRowEnd: -1
+								}
+							}
+						});
+					}, 0);
+				}
+			});
 		},
 		showHideCol: function (colname, show, options) {
 			return this.each(function () {
