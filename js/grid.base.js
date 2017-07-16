@@ -2930,7 +2930,9 @@
 					locale: locale,
 					multiSort: false,
 					showSortOrder: true,
-					multiSortOrder: "lastClickedLastSorted", // "lastClickedFirstSorted" or callback reodering function
+					sortOrderPosition: "afterSortIcons", // "afterSortIcons", "beforeSortIcons"
+					multiSortOrder: "lastClickedFirstSorted", // "lastClickedLastSorted", "lastClickedFirstSorted" or callback reodering function
+					maxSortColumns: 3,
 					treeIcons: {
 						commonIconClass: getIcon("treeGrid.common"),
 						plusLtr: getIcon("treeGrid.plusLtr"),
@@ -4988,11 +4990,48 @@
 
 					getSortNames(sortNames, sortDirs, cm);
 					if (typeof p.sortname === "string" && p.sortname !== "" && p.sortname.split(",").length < sortNames.length) {
+						var removeSorting = function (sortNameToRemove) {
+								each(p.colModel, function () {
+									var indexInSortNames, thDivIdSelector = "#jqgh_" + jgrid.jqID(p.id + "_" + this.name),
+										$thDiv = $(thDivIdSelector);
+									if (this.lso && (this.index || this.name) === sortNameToRemove) {
+										if (typeof sortNames.indexOf === "function") {
+											indexInSortNames = sortNames.indexOf(sortNameToRemove);
+										} else {
+											// old web browser
+											for (indexInSortNames = 0; indexInSortNames < sortNames.length; indexInSortNames++) {
+												if (sortNames[indexInSortNames] === sortNameToRemove) {
+													break;
+												}
+											}
+											if (indexInSortNames === sortNames.length) {
+												indexInSortNames = -1;
+											}
+										}
+										if (indexInSortNames >= 0) {
+											sortNames.splice(indexInSortNames, 1);
+											this.lso = "";
+										}
+									}
+									if (p.frozenColumns) {
+										$thDiv = $thDiv.add($(grid.fhDiv).find(thDivIdSelector));
+									}
+									$thDiv.children(".s-ico")[this.lso ? "show" : "hide"]();
+								});
+							};
 						if (p.multiSortOrder === "lastClickedFirstSorted" && sortNames.length > 1) {
 							sortNames.unshift(sortNames[sortNames.length - 1]);
 							sortNames.pop();
+							while (sortNames.length > p.maxSortColumns) {
+								removeSorting(sortNames[sortNames.length - 1]); //sortNames.pop() and a little more
+							}
 						} else if (isFunction(p.multiSortOrder)) {
-							sortNames = p.multiSortOrder.call(ts, sortNames, cm, sortDirs) || sortNames;
+							sortNames = p.multiSortOrder.call(ts, {
+								sortNames: sortNames,
+								cm: cm,
+								sortDirs: sortDirs,
+								removeSorting: removeSorting
+							}) || sortNames;
 						}
 					}
 					each(sortNames, function () {
@@ -5583,7 +5622,7 @@
 							}
 							if (p.showSortOrder) {
 								sotmp = inArray(nm, sortarr);
-								$iconsSpan.after("<span class='ui-jqgrid-sort-order'>" +
+								$iconsSpan[p.sortOrderPosition === "beforeSortIcons" ? "before" : "after"]("<span class='ui-jqgrid-sort-order'>" +
 									(sotmp < 0 ?
 										"&nbsp;" :
 										isFunction(p.formatSortOrder) ?
