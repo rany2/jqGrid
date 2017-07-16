@@ -1,6 +1,6 @@
 /*!
  * jqGrid 4.15.0-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2017-07-09
+ * Date: 2017-07-16
  */
 
 /* Grid */
@@ -291,6 +291,16 @@
 	user-select: none;
 	display: inline;
 	overflow: hidden;
+}
+.ui-jqgrid .ui-jqgrid-htable .ui-jqgrid-labels th div.rotate {
+	-webkit-transform: translateX(-50%) translateY(0) rotate(-90deg);
+	-moz-transform: translateX(-50%) translateY(0) (-90deg);
+	-o-transform: translateX(-50%) translateY(0) rotate(-90deg);
+	-ms-transform: translateX(-50%) translateY(0) rotate(-90deg);
+	transform: translateX(-50%) translateY(0) rotate(-90deg);
+	transform-origin: center center;
+	margin: 0;
+	left: 50%;
 }
 
 .ui-jqgrid .ui-grid-ico-sort {
@@ -1044,12 +1054,12 @@ select.form-control.ui-pg-selbox:not([size]):not([multiple]) {
 	padding-left: 20px;
 }
 .ui-jqgrid .ui-jqgrid-resize-ltr {
-	right: 1px;
-	margin: -2px -2px -2px 0;
+	right: 0;
+	margin: 0;
 }
 .ui-jqgrid .ui-jqgrid-resize-rtl {
-	left: 1px;
-	margin: -2px 0 -1px -3px;
+	left: 0;
+	margin: 0;
 }
 .ui-jqgrid .ui-sort-rtl {
 	left: 0;
@@ -1289,6 +1299,9 @@ a.clearsearchclass {
 }
 .ui-jqdialog.ui-jqgrid-bootstrap .ui-jqdialog-content .CaptionTD {
 	padding: .5em;
+}
+.ui-jqgrid.ui-jqgrid-bootstrap .frozen-bdiv.ui-jqgrid-bdiv .ui-jqgrid-btable {
+	background-color: white;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgfirstrow > td,
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgrow > td,

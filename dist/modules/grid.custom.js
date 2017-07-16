@@ -1580,7 +1580,7 @@
 								// first try with thead for the hdiv
 								$frozenRows = $hDiv.children("table").children("thead").children("tr");
 								$rows = $(hDivBase).children("div").children("table").children("thead").children("tr");
-								if ($rows.length === 0) {
+								if ($rows.length === 0 && $hDiv.children("table").length > 0) {
 									// then use tbody for bdiv
 									$frozenRows = $($hDiv.children("table")[0].rows);
 									$rows = $($(hDivBase).children("div").children("table")[0].rows);
@@ -1734,7 +1734,9 @@
 						myResize(o || fullResize);
 					});
 					if (!grid.hDiv.loading) {
-						$self.triggerHandler("jqGridAfterGridComplete");
+						setTimeout(function () {
+							$self.triggerHandler("jqGridAfterGridComplete");
+						}, 0);
 					}
 					p.frozenColumns = true;
 				}

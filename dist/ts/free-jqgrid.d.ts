@@ -1156,12 +1156,14 @@ declare namespace FreeJqGrid {
 		ignoreCase?: boolean; // true
 		formatSortOrder?: (this: BodyTable, options: { cm: ColumnModel, sortIndex: number }) => string;
 		readonly lastsort?: number; // 0
+		maxSortColumns?: number; // 3
 		multiSort?: boolean; // false
-		multiSortOrder?: "lastClickedLastSorted" | "lastClickedFirstSorted" | ((this: BodyTable, sortNames: string[], cm: ColumnModel, sortDirs: {[cmName: string]: "asc" | "desc" }) => string[]);
+		multiSortOrder?: "lastClickedLastSorted" | "lastClickedFirstSorted" | ((this: BodyTable, options: {sortNames: string[], cm: ColumnModel, sortDirs: {[cmName: string]: "asc" | "desc" }, removeSorting: (cmIndexOrName: string) => void }) => string[]);
 		onSortCol?: (this: BodyTable, cmOrIndexName: string, iCol: number, sortOrder: string, eventObject?: JQueryEventObject) => BooleanFeedbackValues;
 		sortname?: string; // ""
 		sortIconsBeforeText?: boolean; // false
 		sortIconName?: (this: BodyTable, options: { order: "asc" | "desc", iCol: number, cm: ColumnModel }) => string; // return CSS classes
+		sortOrderPosition?: "afterSortIcons" | "beforeSortIcons"; // "afterSortIcons"
 		showOneSortIcon?: boolean; // false
 		showSortOrder?: boolean; // true
 		sortorder?: "asc" | "desc" | string; // "asc"
@@ -1717,7 +1719,9 @@ interface JQuery {
 	progressBar?(options: { htmlContent: string, method: "hide" | "show", loadtype: FreeJqGrid.SaveUi }): FreeJqGrid.JQueryJqGrid;
 	remapColumns?(permutationByName: number[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
 	remapColumnsByName?(permutationByName: string[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+	resetColumnResizerHeight?: FreeJqGrid.JQueryJqGrid;
 	resetSelection?(rowid?: string): FreeJqGrid.JQueryJqGrid;
+	rotateColumnHeaders?(columnNameOrIndexes: string[], headerHeight?: number): FreeJqGrid.JQueryJqGrid;
 	setCaption?(newCaption: string): FreeJqGrid.JQueryJqGrid;
 	setCell?(rowid: string, cmName: string, nData: any, cssp?: string | Object, attrp?: Object, forceUpdate?: boolean): FreeJqGrid.JQueryJqGrid;
 	setColWidth?(iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
@@ -1764,7 +1768,9 @@ interface JQuery {
 	jqGrid(methodName: "progressBar", iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "remapColumns", permutationByName: number[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "remapColumnsByName", permutationByName: string[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "resetColumnResizerHeight"): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "resetSelection", rowid?: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "rotateColumnHeaders", columnNameOrIndexes: string[], headerHeight?: number): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "setCaption", newCaption: string): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "setCell", rowid: string, cmName: string, nData: any, cssp?: string | Object, attrp?: Object, forceUpdate?: boolean): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "setColWidth", iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
