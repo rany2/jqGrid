@@ -3775,7 +3775,7 @@
 				refreshIndex = function () {
 					var datalen = p.data.length, idname, i, val, item;
 
-					if (p.keyName === false || p.loadonce) {
+					if (p.keyName === false || (p.loadonce && p.dataTypeOrg)) {
 						idname = p.localReader.id;
 					} else {
 						idname = p.keyName;
