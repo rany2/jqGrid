@@ -5587,7 +5587,7 @@
 								sotmp = inArray(nm, sortarr);
 								$iconsSpan.after("<span class='ui-jqgrid-sort-order'>" +
 									(sotmp < 0 ?
-										"&nbsp" :
+										"&nbsp;" :
 										isFunction(p.formatSortOrder) ?
 											p.formatSortOrder.call(ts, { cm: this, sortIndex: sotmp }) :
 											sotmp + 1) +
