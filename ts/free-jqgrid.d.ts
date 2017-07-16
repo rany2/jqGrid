@@ -1719,7 +1719,9 @@ interface JQuery {
 	progressBar?(options: { htmlContent: string, method: "hide" | "show", loadtype: FreeJqGrid.SaveUi }): FreeJqGrid.JQueryJqGrid;
 	remapColumns?(permutationByName: number[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
 	remapColumnsByName?(permutationByName: string[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+	resetColumnResizerHeight?: FreeJqGrid.JQueryJqGrid;
 	resetSelection?(rowid?: string): FreeJqGrid.JQueryJqGrid;
+	rotateColumnHeaders?(columnNameOrIndexes: string[], headerHeight?: number): FreeJqGrid.JQueryJqGrid;
 	setCaption?(newCaption: string): FreeJqGrid.JQueryJqGrid;
 	setCell?(rowid: string, cmName: string, nData: any, cssp?: string | Object, attrp?: Object, forceUpdate?: boolean): FreeJqGrid.JQueryJqGrid;
 	setColWidth?(iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
@@ -1766,7 +1768,9 @@ interface JQuery {
 	jqGrid(methodName: "progressBar", iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "remapColumns", permutationByName: number[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "remapColumnsByName", permutationByName: string[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "resetColumnResizerHeight"): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "resetSelection", rowid?: string): FreeJqGrid.JQueryJqGrid;
+	jqGrid(methodName: "rotateColumnHeaders", columnNameOrIndexes: string[], headerHeight?: number): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "setCaption", newCaption: string): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "setCell", rowid: string, cmName: string, nData: any, cssp?: string | Object, attrp?: Object, forceUpdate?: boolean): FreeJqGrid.JQueryJqGrid;
 	jqGrid(methodName: "setColWidth", iCol: number, newWidth: number, adjustGridWidth?: boolean, skipGridAdjustments?: boolean): FreeJqGrid.JQueryJqGrid;
