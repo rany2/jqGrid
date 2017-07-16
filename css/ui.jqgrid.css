@@ -1300,6 +1300,9 @@ a.clearsearchclass {
 .ui-jqdialog.ui-jqgrid-bootstrap .ui-jqdialog-content .CaptionTD {
 	padding: .5em;
 }
+.ui-jqgrid.ui-jqgrid-bootstrap .frozen-bdiv.ui-jqgrid-bdiv .ui-jqgrid-btable {
+	background-color: white;
+}
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgfirstrow > td,
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgrow > td,
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgroup > td,
