@@ -7928,13 +7928,13 @@
 				p = self.p,
 				cm = p.colModel[iCol],
 				$th = $(self.grid.headers[iCol].el),
-				$thDiv = $th.find(">div"),
-				thPaddingLeft = parseFloat($th.css("padding-left") || 0),  // typically 2
-				thPaddingRight = parseFloat($th.css("padding-right") || 0),// typically 2
-				$incosDiv = $thDiv.find("span.s-ico"),
-				$wrapper = $thDiv.find(">." + p.autoResizing.wrapperClassName),
-				wrapperOuterWidth = $wrapper.outerWidth(),
-				wrapperCssWidth = parseFloat($wrapper.css("width") || 0),
+				$thDiv = $th.children("div"),
+				thPaddingLeft = parseFloat($th.css((cm.rotated ? "padding-top" : "padding-left")) || 0),  // typically 2
+				thPaddingRight = parseFloat($th.css((cm.rotated ? "padding-bottom" : "padding-right")) || 0),// typically 2
+				$incosDiv = $thDiv.children("span.s-ico"),
+				$wrapper = $thDiv.children("." + p.autoResizing.wrapperClassName),
+				wrapperOuterWidth = cm.rotated ? $wrapper.outerHeight() : $wrapper.outerWidth(),
+				wrapperCssWidth = parseFloat($wrapper.css(cm.rotated ? "height" : "width") || 0),
 				widthOuter = 0,
 				colWidth = 0,
 				compact = (cm.autoResizing != null && cm.autoResizable.compact !== undefined) ? cm.autoResizable.compact : p.autoResizing.compact,
@@ -7944,7 +7944,9 @@
 				return -1; // do nothing
 			}
 			if (!compact || $incosDiv.is(":visible") || ($incosDiv.css("display") !== "none")) {  //|| p.viewsortcols[0]
-				colWidth = $incosDiv.outerWidth(true);
+				colWidth = cm.rotated ?
+						$incosDiv.outerHeight(true) :
+						$incosDiv.outerWidth(true) + $thDiv.children(".ui-jqgrid-sort-order").outerWidth(true);
 				if (!p.sortIconsBeforeText) {
 					colWidth -= p.direction === "rtl" ?
 						parseFloat($incosDiv.css("padding-left") || 0) +
@@ -7953,9 +7955,13 @@
 						parseFloat($incosDiv.css("margin-right") || 0);
 				}
 			}
-			colWidth += wrapperOuterWidth + thPaddingLeft +
-					(wrapperCssWidth === wrapperOuterWidth ? thPaddingLeft + thPaddingRight : 0) +
-					parseFloat($thDiv.css("margin-left") || 0) + parseFloat($thDiv.css("margin-right") || 0);
+			if (cm.rotated) {
+				colWidth = Math.max(colWidth, wrapperOuterWidth + thPaddingLeft + thPaddingRight);
+			} else {
+				colWidth += wrapperOuterWidth + thPaddingLeft +
+						(wrapperCssWidth === wrapperOuterWidth ? thPaddingLeft + thPaddingRight : 0) +
+						parseFloat($thDiv.css("margin-left") || 0) + parseFloat($thDiv.css("margin-right") || 0);
+			}
 			for (iRow = 0, rows = self.rows; iRow < rows.length; iRow++) {
 				row = rows[iRow];
 				cell = row.cells[iCol];
