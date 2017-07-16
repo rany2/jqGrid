@@ -6878,7 +6878,8 @@
 
 				if (p.iColByName[idname] >= 0) {
 					$self.jqGrid("setCell", oldRowId, idname, newId);
-				} else if (p.datatype === "local" && p._index[oldId] !== undefined) {
+				}
+				if (p.datatype === "local" && p._index[oldId] !== undefined) {
 					p._index[newId] = p._index[oldId];
 					localData = p.data[p._index[oldId]];
 					delete p._index[oldId];
