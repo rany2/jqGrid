@@ -5125,8 +5125,6 @@
 								p.columnsToReResizing.push(idxcol);
 							}
 						}
-						// the index looks like "jqgh_" + p.id + "_" + colIndex (like "jqgh_list_invdate")
-						index = index.substring(5 + p.id.length + 1); // bad to be changed!?!
 						p.sortname = cm.index || index;
 					}
 					if (!feedback.call(self, "onSortCol", p.sortname, idxcol, p.sortorder, e || {})) {
@@ -5653,7 +5651,8 @@
 					}
 					var iColByName = getColumnHeaderIndex(this);
 					if (iColByName != null) {
-						sortData.call(ts, $("div", this)[0].id, iColByName, r, d, this, e);
+						// the $("div", this)[0].id looks like "jqgh_" + p.id + "_" + colIndex (like "jqgh_list_invdate")
+						sortData.call(ts, $("div", this)[0].id.substring(5 + p.id.length + 1), iColByName, r, d, this, e);
 					}
 					return false;
 				});
