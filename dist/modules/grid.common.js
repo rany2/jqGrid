@@ -412,6 +412,8 @@
 						"attr",
 						"custom_element",
 						"custom_value",
+						"generateValue",
+						"postData",
 						"selectFilled",
 						"rowId",
 						"column",
