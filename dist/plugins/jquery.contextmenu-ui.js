@@ -168,10 +168,18 @@
                 }
             }
             if (!$.isEmptyObject(cur.itemAnchorStyle)) {
-                items.children("a").css(cur.itemAnchorStyle);
+				if (isAncorRequired) {
+					items.children("a").css(cur.itemAnchorStyle);
+				} else {
+					items.css(cur.itemAnchorStyle);
+				}
             }
             if (!$.isEmptyObject(cur.itemIconSpanStyle)) {
-                items.children("a").children("span.ui-icon").css(cur.itemIconSpanStyle).parent("a").css(cur.itemIconAnchorStyle);
+				if (isAncorRequired) {
+					items.children("a").children("span.ui-icon").css(cur.itemIconSpanStyle).parent("a").css(cur.itemIconAnchorStyle);
+				} else {
+					items.children("span.ui-icon").css(cur.itemIconSpanStyle);
+				}
             }
 
             if ($.isEmptyObject(cur.itemHoverStyle)) {
