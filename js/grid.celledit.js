@@ -139,12 +139,14 @@
 				var highlightClasses = $self.jqGrid("getGuiStyles", "states.select", "edit-cell"),
 					hoverClasses = $self.jqGrid("getGuiStyles", "states.hover", "selected-row");
 				if (editable === true && ed === true && !$td.hasClass("not-editable-cell")) {
-					if (iColOld >= 0 && iRowOld >= 0) {
-						getTdByColumnIndex.call($t, $trOld[0], iColOld).removeClass(highlightClasses);
-						$trOld.removeClass(hoverClasses);
+					if (!p.noCellSelection) {
+						if (iColOld >= 0 && iRowOld >= 0) {
+							getTdByColumnIndex.call($t, $trOld[0], iColOld).removeClass(highlightClasses);
+							$trOld.removeClass(hoverClasses);
+						}
+						$td.addClass(highlightClasses);
+						$tr.addClass(hoverClasses);
 					}
-					$td.addClass(highlightClasses);
-					$tr.addClass(hoverClasses);
 					if (!cm.edittype) {
 						cm.edittype = "text";
 					}
@@ -222,12 +224,14 @@
 					});
 					feedback.call($t, "afterEditCell", rowid, nm, tmp, iRow, iCol);
 				} else {
-					if (iColOld >= 0 && iRowOld >= 0) {
-						getTdByColumnIndex.call($t, $trOld[0], iColOld).removeClass(highlightClasses);
-						$trOld.removeClass(hoverClasses);
+					if (!p.noCellSelection) {
+						if (iColOld >= 0 && iRowOld >= 0) {
+							getTdByColumnIndex.call($t, $trOld[0], iColOld).removeClass(highlightClasses);
+							$trOld.removeClass(hoverClasses);
+						}
+						$td.addClass(highlightClasses);
+						$tr.addClass(hoverClasses);
 					}
-					$td.addClass(highlightClasses);
-					$tr.addClass(hoverClasses);
 					tmp = $td.html().replace(/&#160;/ig, "");
 					feedback.call($t, "onSelectCell", rowid, nm, tmp, iRow, iCol);
 				}

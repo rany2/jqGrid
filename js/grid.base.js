@@ -5789,7 +5789,18 @@
 				.click(function (e) {
 					var highlightClass = getGuiStyles("states.select"), target = e.target,
 						$td = getTdFromTarget.call(ts, target),
-						$tr = $td.parent();
+						$tr = $td.parent(),
+						startCellEditing = function () {
+							if (p.multiselect && scb && !p.multiboxonly && cSel) {
+								setSelection.call($self0, ri, true, e);
+							}
+
+							try {
+								$j.editCell.call($self0, $tr[0].rowIndex, ci, true);
+							} catch (ignore) { }
+
+							return;
+						};
 					// we uses ts.rows context below to be sure that we don't process the clicks in the subgrid
 					// probably one can change the rule and to step over the parents till one will have
 					// "tr.jqgrow>td" AND the parent of parent (the table element) will be ts.
@@ -5809,13 +5820,8 @@
 					ci = $td[0].cellIndex;
 					tdHtml = $td.html();
 					feedback.call(ts, "onCellSelect", ri, ci, tdHtml, e);
-					if (p.cellEdit === true) {
-						if (p.multiselect && scb && cSel) {
-							setSelection.call($self0, ri, true, e);
-						} else {
-							ri = $tr[0].rowIndex;
-							try { $j.editCell.call($self0, ri, ci, true); } catch (ignore) { }
-						}
+					if (p.cellEdit === true && !p.noCellSelection) {
+						startCellEditing();
 						return;
 					}
 					if (!cSel) {
@@ -5846,7 +5852,9 @@
 							}
 						} else {
 							var oldSelRow = p.selrow;
-							setSelection.call($self0, ri, true, e);
+							if (!p.multiselect || inArray(ri, p.selarrrow) < 0) {
+								setSelection.call($self0, ri, true, e);
+							}
 							if (p.singleSelectClickMode === "toggle" && !p.multiselect && oldSelRow === ri) {
 								if (ts.grid.fbRows) {
 									$tr = $tr.add(
@@ -5869,6 +5877,9 @@
 					}
 					// it's important don't use return false in the event handler
 					// the usage of return false break checking/uchecking
+					if (p.cellEdit) {
+						startCellEditing();
+					}
 				})
 				.on("reloadGrid", function (e, opts) {
 					var self = this, gridSelf = self.grid, $self = $(this);
