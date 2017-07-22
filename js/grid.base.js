@@ -8004,10 +8004,11 @@
 		getLocalRow: function (rowid) {
 			var ret = false, ind;
 			this.each(function () {
-				if (rowid !== undefined) {
-					ind = this.p._index[stripPref(this.p.idPrefix, rowid)];
+				var p = this.p;
+				if (rowid !== undefined && p != null && p._index != null && p.data != null) {
+					ind = p._index[stripPref(p.idPrefix, rowid)];
 					if (ind >= 0) {
-						ret = this.p.data[ind];
+						ret = p.data[ind];
 					}
 				}
 			});
