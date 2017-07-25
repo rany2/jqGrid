@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-07-22
+ * Date: 2017-07-25
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2801,6 +2801,7 @@
 					lastsort: 0,
 					selrow: null,
 					singleSelectClickMode: "toggle",
+					selectOnContextMenu: true,
 					beforeSelectRow: null,
 					onSelectRow: null,
 					onSortCol: null,
@@ -5945,7 +5946,7 @@
 				.on("contextmenu", function (e) {
 					var $td = getTdFromTarget.call(ts, e.target), $tr = $td.parent(), rowid = $tr.attr("id");
 					if ($td.length === 0) { return; }
-					if (!p.multiselect) {
+					if (!p.multiselect && p.selrow !== rowid && p.selectOnContextMenu === true) {
 						// TODO: replace $self0 and ts below to method which use $(this) in case of click
 						// on the grid and the table of the main grid if one click inside the FROZEN column
 						setSelection.call($self0, rowid, true, e);
