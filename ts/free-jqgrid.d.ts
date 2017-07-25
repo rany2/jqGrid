@@ -1148,6 +1148,7 @@ declare namespace FreeJqGrid {
 		onSelectRow?: (this: BodyTable, rowid: string, state: boolean, eventObject: JQueryEventObject) => void;
 		selrow?: null | string; // null
 		selarrrow?: string[]; // []
+		selectOnContextMenu?: boolean; // true
 		singleSelectClickMode?: "toggle" | "selectonly"; // "toggle"
 	}
 	interface JqGridSortingOptions {
