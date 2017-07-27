@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-07-25
+ * Date: 2017-07-27
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1131,9 +1131,7 @@
 					var props = ["AmPm", "dayNames", "masks", "monthNames", "userLocalTime", "parseRe", "S", "srcformat"],
 						root1 = options || {},
 						root2 = (jgrid.formatter || {}).date || {},
-						root3 = p == null || p.locale == null ?
-								{} :
-								((locales[p.locale] || {}).formatter || {}).date,
+						root3 = ((locales[(p || $.jgrid.defaults).locale] || {}).formatter || {}).date,
 						iProp, nProps = props.length, result = {}, prop;
 					for (iProp = 0; iProp < nProps; iProp++) {
 						prop = props[iProp];
