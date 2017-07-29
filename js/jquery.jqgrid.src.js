@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-07-27
+ * Date: 2017-07-29
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -8232,6 +8232,16 @@
 	var getTdByColumnIndex = function (tr, iCol) {
 			var $t = this, frozenRows = $t.grid.fbRows;
 			return $((frozenRows != null && frozenRows[0].cells.length > iCol ? frozenRows[tr.rowIndex] : tr).cells[iCol]);
+		},
+		safeHeightSet = function ($elem, newHeight) {
+			var height = $elem.height();
+			if (Math.abs(height - newHeight) >= 1 && newHeight > 0) {
+				$elem.height(newHeight);
+				height = $elem.height();
+				if (Math.abs(newHeight - height) >= 1) {
+					$elem.height(newHeight + Math.round((newHeight - height)));
+				}
+			}
 		};
 	jgrid.extend({
 		editCell: function (iRow, iCol, ed) {
@@ -8342,8 +8352,11 @@
 					}
 					jgrid.bindEv.call($t, elc, opt);
 					setTimeout(function () {
+						if (p.frozenColumns && iCol < $self.jqGrid("getNumberOfFrozenColumns")) {
+							safeHeightSet($($t.rows[tr.rowIndex].cells[iCol]), $td.height());
+						}
 						$(elc).focus();
-					}, 1);
+					}, 0);
 					$("input, select, textarea", $td).on("keydown", function (e) {
 						if (e.keyCode === 27) {
 							if ($("input.hasDatepicker", $td).length > 0) {
@@ -8514,6 +8527,11 @@
 								$td.addClass("dirty-cell");
 								$tr.addClass("edited");
 								feedback.call($t, "afterSaveCell", rowid, nm, v, iRow, iCol);
+								if (p.frozenColumns && iCol < $self.jqGrid("getNumberOfFrozenColumns")) {
+									try {
+										$t.rows[tr.rowIndex].cells[iCol].style.height = "";
+									} catch (ignore) { }
+								}
 								savedRow.splice(0, 1);
 								delete p.editingInfo[rowid];
 							}
@@ -8567,6 +8585,11 @@
 						v = $.unformat.date.call($t, v, cm);
 					}
 					$($t).jqGrid("setCell", rowid, iCol, v, false, false, true);
+					if (p.frozenColumns && iCol < $($t).jqGrid("getNumberOfFrozenColumns")) {
+						try {
+							$t.rows[tr.rowIndex].cells[iCol].style.height = "";
+						} catch (ignore) { }
+					}
 					feedback.call($t, "afterRestoreCell", rowid, v, iRow, iCol);
 					savedRow.splice(0, 1);
 					delete p.editingInfo[rowid];
