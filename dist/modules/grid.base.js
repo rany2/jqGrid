@@ -5788,18 +5788,7 @@
 				.click(function (e) {
 					var highlightClass = getGuiStyles("states.select"), target = e.target,
 						$td = getTdFromTarget.call(ts, target),
-						$tr = $td.parent(),
-						startCellEditing = function () {
-							if (p.multiselect && scb && !p.multiboxonly && cSel) {
-								setSelection.call($self0, ri, true, e);
-							}
-
-							try {
-								$j.editCell.call($self0, $tr[0].rowIndex, ci, true);
-							} catch (ignore) { }
-
-							return;
-						};
+						$tr = $td.parent();
 					// we uses ts.rows context below to be sure that we don't process the clicks in the subgrid
 					// probably one can change the rule and to step over the parents till one will have
 					// "tr.jqgrow>td" AND the parent of parent (the table element) will be ts.
@@ -5812,16 +5801,26 @@
 					var scb = $(target).hasClass("cbox") &&
 							$(target).is(":enabled") &&
 							!hasOneFromClasses(target, disabledStateClasses),
-						cSel = feedback.call(ts, "beforeSelectRow", ri, e),
+						cSel = feedback.call(ts, "beforeSelectRow", ri, e), alreadySelected = false,
 						editingInfo = jgrid.detectRowEditing.call(ts, ri),
 						locked = editingInfo != null && editingInfo.mode !== "cellEditing"; // editingInfo.savedRow.ic
 					if (target.tagName === "A" || (locked && !scb)) { return; }
 					ci = $td[0].cellIndex;
 					tdHtml = $td.html();
 					feedback.call(ts, "onCellSelect", ri, ci, tdHtml, e);
-					if (p.cellEdit === true && !p.noCellSelection) {
-						startCellEditing();
-						return;
+					if (p.cellEdit === true) {
+						if (p.multiselect && scb && !p.multiboxonly && cSel) {
+							setSelection.call($self0, ri, true, e);
+							alreadySelected = true;
+						}
+
+						try {
+							$j.editCell.call($self0, $tr[0].rowIndex, ci, true);
+						} catch (ignore) { }
+
+						if (!p.noCellSelection) {
+							return;
+						}
 					}
 					if (!cSel) {
 						if (scb) {
@@ -5833,7 +5832,7 @@
 					}
 					if (!p.multikey) {
 						if (p.multiselect && p.multiboxonly) {
-							if (scb) {
+							if (scb && !alreadySelected) {
 								setSelection.call($self0, ri, true, e);
 							} else {
 								var frz = p.frozenColumns ? p.id + "_frozen" : "";
@@ -5847,11 +5846,13 @@
 									}
 								});
 								clearArray(p.selarrrow); // p.selarrrow = [];
-								setSelection.call($self0, ri, true, e);
+								if (!alreadySelected) {
+									setSelection.call($self0, ri, true, e);
+								}
 							}
 						} else {
 							var oldSelRow = p.selrow;
-							if (!p.multiselect || inArray(ri, p.selarrrow) < 0) {
+							if (!alreadySelected) {
 								setSelection.call($self0, ri, true, e);
 							}
 							if (p.singleSelectClickMode === "toggle" && !p.multiselect && oldSelRow === ri) {
@@ -5867,7 +5868,7 @@
 							}
 						}
 					} else {
-						if (e[p.multikey]) {
+						if (e[p.multikey] && !alreadySelected) {
 							setSelection.call($self0, ri, true, e);
 						} else if (p.multiselect && scb) {
 							scb = $("#jqg_" + jqID(p.id) + "_" + ri).is(":checked");
@@ -5876,9 +5877,6 @@
 					}
 					// it's important don't use return false in the event handler
 					// the usage of return false break checking/uchecking
-					if (p.cellEdit) {
-						startCellEditing();
-					}
 				})
 				.on("reloadGrid", function (e, opts) {
 					var self = this, gridSelf = self.grid, $self = $(this);
