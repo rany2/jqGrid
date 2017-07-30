@@ -5768,8 +5768,7 @@
 						$(ptr).removeClass(hoverStateClasses);
 					});
 			}
-			var ri, ci, tdHtml,
-				getTdFromTarget = function (target) {
+			var getTdFromTarget = function (target) {
 					var $td, $tr, $table;
 					do {
 						$td = $(target).closest("td");
@@ -5787,8 +5786,7 @@
 			$self0.before(grid.hDiv)
 				.click(function (e) {
 					var highlightClass = getGuiStyles("states.select"), target = e.target,
-						$td = getTdFromTarget.call(ts, target),
-						$tr = $td.parent();
+						$td = getTdFromTarget.call(ts, target), $tr = $td.parent();
 					// we uses ts.rows context below to be sure that we don't process the clicks in the subgrid
 					// probably one can change the rule and to step over the parents till one will have
 					// "tr.jqgrow>td" AND the parent of parent (the table element) will be ts.
@@ -5797,19 +5795,16 @@
 					if ($tr.length === 0 || hasOneFromClasses($tr, disabledStateClasses)) {
 						return;
 					}
-					ri = $tr[0].id;
-					var scb = $(target).hasClass("cbox") &&
-							$(target).is(":enabled") &&
-							!hasOneFromClasses(target, disabledStateClasses),
+					var ri = $tr[0].id, ci = $td[0].cellIndex,
+						scb = $(target).hasClass("cbox") &&
+							$(target).is(":enabled") && !hasOneFromClasses(target, disabledStateClasses),
 						cSel = feedback.call(ts, "beforeSelectRow", ri, e), alreadySelected = false,
 						editingInfo = jgrid.detectRowEditing.call(ts, ri),
 						locked = editingInfo != null && editingInfo.mode !== "cellEditing"; // editingInfo.savedRow.ic
 					if (target.tagName === "A" || (locked && !scb)) { return; }
-					ci = $td[0].cellIndex;
-					tdHtml = $td.html();
-					feedback.call(ts, "onCellSelect", ri, ci, tdHtml, e);
+					feedback.call(ts, "onCellSelect", ri, ci, $td.html(), e);
 					if (p.cellEdit === true) {
-						if (p.multiselect && scb && !p.multiboxonly && cSel) {
+						if (cSel && p.noCellSelection && (!p.multiselect || (scb && !p.multiboxonly))) {
 							setSelection.call($self0, ri, true, e);
 							alreadySelected = true;
 						}
