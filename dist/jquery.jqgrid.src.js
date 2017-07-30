@@ -8346,10 +8346,10 @@
 						$(elc).width($td.width() - $td.children("div.tree-wrap").outerWidth());
 					}
 					jgrid.bindEv.call($t, elc, opt);
+					if (p.frozenColumns && iCol < $self.jqGrid("getNumberOfFrozenColumns")) {
+						safeHeightSet($($t.rows[tr.rowIndex].cells[iCol]), $td.height());
+					}
 					setTimeout(function () {
-						if (p.frozenColumns && iCol < $self.jqGrid("getNumberOfFrozenColumns")) {
-							safeHeightSet($($t.rows[tr.rowIndex].cells[iCol]), $td.height());
-						}
 						$(elc).focus();
 					}, 0);
 					$("input, select, textarea", $td).on("keydown", function (e) {

@@ -1,6 +1,6 @@
 /*!
  * jqGrid 4.15.0-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2017-07-16
+ * Date: 2017-07-30
  */
 
 /* Grid */
@@ -1159,7 +1159,8 @@ a.clearsearchclass {
 .ui-jqgrid > .ui-jqgrid-view select,
 .ui-jqgrid > .ui-jqgrid-view textarea,
 .ui-jqgrid > .ui-jqgrid-view button {
-	font-size: 11px;
+	font-size: inherit;
+	text-align: inherit;
 }
 
 .ui-jqgrid .s-ico > .ui-grid-ico-sort.glyphicon {
