@@ -7923,7 +7923,7 @@
 				$self.on("keydown.jqGrid", function (event) {
 					var tr = $(this).find("tr[tabindex=0]")[0],
 						editingInfo = jgrid.detectRowEditing.call($t, $(event.target).closest("tr.jqgrow").attr("id")),
-						moveVerical = function (siblingProperty) {
+						moveVertical = function (siblingProperty) {
 							do {
 								tr = tr[siblingProperty];
 								if (tr === null) { return; }
@@ -7964,10 +7964,10 @@
 					if (tr && editingInfo === null) {
 						switch (event.keyCode) {
 							case 38: // up key
-								moveVerical("previousSibling");
+								moveVertical("previousSibling");
 								break;
 							case 40: // down key
-								moveVerical("nextSibling");
+								moveVertical("nextSibling");
 								break;
 							case 37: // left key
 								moveHorizontal("Left");
