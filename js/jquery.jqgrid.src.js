@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-07-29
+ * Date: 2017-08-07
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2883,7 +2883,7 @@
 					altclass: "ui-priority-secondary",
 					viewsortcols: [false, "vertical", true],
 					resizeclass: "",
-					autoencode: false, // true is better for the most cases, but we hold old value to have better backwards compatibility
+					autoencode: true, // one can use false to have better backwards compatibility, but one have to prevent Cross Site Scripting (XSS) manually
 					autoEncodeOnEdit: false,
 					remapColumns: [],
 					cmNamesInputOrder: [],
@@ -7923,7 +7923,7 @@
 				$self.on("keydown.jqGrid", function (event) {
 					var tr = $(this).find("tr[tabindex=0]")[0],
 						editingInfo = jgrid.detectRowEditing.call($t, $(event.target).closest("tr.jqgrow").attr("id")),
-						moveVerical = function (siblingProperty) {
+						moveVertical = function (siblingProperty) {
 							do {
 								tr = tr[siblingProperty];
 								if (tr === null) { return; }
@@ -7964,10 +7964,10 @@
 					if (tr && editingInfo === null) {
 						switch (event.keyCode) {
 							case 38: // up key
-								moveVerical("previousSibling");
+								moveVertical("previousSibling");
 								break;
 							case 40: // down key
-								moveVerical("nextSibling");
+								moveVertical("nextSibling");
 								break;
 							case 37: // left key
 								moveHorizontal("Left");
