@@ -491,10 +491,10 @@
 									case "currency":
 										var prefix = getFormaterOption("prefix"),
 											suffix = getFormaterOption("suffix");
-										if (prefix && prefix.length) {
+										if (prefix && prefix.length && v.substr(0, prefix.length) === prefix) {
 											v = v.substr(prefix.length);
 										}
-										if (suffix && suffix.length) {
+										if (suffix && suffix.length && v.length > suffix.length && v.substr(v.length - suffix.length, suffix.length) === suffix) {
 											v = v.substr(0, v.length - suffix.length);
 										}
 										v = cutThousandsSeparator(v)
