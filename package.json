@@ -55,8 +55,8 @@
   },
   "homepage": "https://github.com/free-jqgrid/jqGrid",
   "devDependencies": {
-    "@types/jquery": "^3.2.11",
-    "@types/jqueryui": "^1.11.35",
+    "@types/jquery": "^3.2.12",
+    "@types/jqueryui": "^1.11.36",
     "@types/qunit": "^2.0.31",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.1.0",
