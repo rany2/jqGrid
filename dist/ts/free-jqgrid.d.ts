@@ -548,12 +548,13 @@ declare namespace FreeJqGrid {
 		actionsNav?: FormatterActionsOptions;
 		ajaxOptions?: JQueryAjaxSettings;
 		cell_width: boolean;
-		cellattr?: { [key: string]: (rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string; };
+		cellattr?: { [key: string]: (this: BodyTable, rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string; };
 		cmTemplate?: { [key: string]: ColumnModel; };
 		defaults: JqGridStaticOptions;
 		del?: FormDeletingOptions;
 		edit?: FormEditingOptions;
 		filter?: JqFilterOptions;
+		getXmlData(this: BodyTable, obj: any, dotSeparatedNamesOrFunc: string | ((obj: any) => any), returnObj?: boolean): string | undefined | JQuery; // JQuery returns only if returnObj is true
 		guid: number;
 		guiStyles: {
 			jQueryUI: GuiStyleInfo;
@@ -575,6 +576,7 @@ declare namespace FreeJqGrid {
 		nav?: NavOptions;
 		no_legacy_api?: boolean;
 		productName: "free jqGrid";
+		rowattr?: ( (this: BodyTable, item: any, rowObject: any, rowid: string) => { [attributeName: string]: string } | null | undefined );
 		search?: SearchLocaleOptions;
 		uidPref: string;
 		version: string; // like "4.13.7" for example
@@ -726,7 +728,7 @@ declare namespace FreeJqGrid {
 		align?: "left" | "center" | "right";
 		autoResizable?: boolean; // default value false
 		autoResizing?: { minColWidth: number, maxColWidth: number, compact: boolean };
-		cellattr?: "string" | ((rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string);
+		cellattr?: "string" | ((this: BodyTable, rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string);
 		cellBuilder?: (this: BodyTable, cellValue: any, options: FormatterOptions, rowObject: any, action?: "edit" | "add") => string;
 		classes?: string; // spaceSeparatedCssClasses
 		convertOnSave?: (this: BodyTable, options: { newValue: any, cm: ColumnModel, oldValue: any, id: string, item: any, iCol: number }) => any;
@@ -1137,7 +1139,9 @@ declare namespace FreeJqGrid {
 		beforeSelectRow?: (this: BodyTable, rowid, eventObject: JQueryEventObject) => false | void;
 		readonly cb?: string;   // "#cb_list"
 		readonly cbId?: string; // "cb_list"
+		checkboxHtml?: (this: BodyTable, options: { rowid: string, iRow: number, iCol: number, data: any, checked: boolean }) => string;
 		deselectAfterSort?: boolean;
+		hasMultiselectCheckBox?: (this: BodyTable, options: { rowid: string, iRow: number, iCol: number, data: any, checked: boolean }) => string | false | undefined;
 		multiboxonly?: boolean;
 		multikey?: boolean;
 		multiPageSelection?: boolean;
@@ -1209,7 +1213,9 @@ declare namespace FreeJqGrid {
 		onPaging?: (this: BodyTable, source: "records" | "user" | "first" | "prev" | "next" | "last", options: { newPage: number, currentPage: number, lastPage: number, currentRowNum: number, newRowNum: number }) => BooleanFeedbackValues;
 		page?: number;
 		pager?: boolean | string; // default: "". Example, "#jqg1"
+		pagerCenterWidth?: number;
 		pagerLeftWidth?: number; // 125
+		pagerRightWidth?: number;
 		pagerpos?: "left" | "center" | "right";
 		pgbuttons?: boolean; // true
 		pginput?: boolean; // true
@@ -1302,7 +1308,8 @@ declare namespace FreeJqGrid {
 		altRows?: boolean;
 		arrayReader?: any[]; // used internally
 		arrayReaderInfos?: { [name: string]: { name?: string, index: string, order?: number, type: InputNameType } }; // used internally
-		autoencode?: boolean;
+		autoencode?: boolean; // true starting with version 4.15.0
+		autowidth?: boolean;
 		beforeInitGrid?: (this: BodyTable) => void;
 		beforeProcessing?: (this: BodyTable, data: any, textStatus: string, jqXhr: JQueryXHR) => false | void;
 		beforeRequest?: (this: BodyTable) => BooleanFeedbackValues;
@@ -1327,7 +1334,10 @@ declare namespace FreeJqGrid {
 				}
 			}
 		};
+		datastr?: string | any[];
 		datatype?: string | ((this: BodyTable, postData: Object | string, loadId: string, rcnt: number, npage: number, adjust: number) => void);
+		dataTypeOrg?: string;
+		deepempty?: boolean;
 		direction?: "ltr" | "rtl";
 		disableClick?: boolean;
 		editurl?: string; // "clientArray"
@@ -1365,6 +1375,7 @@ declare namespace FreeJqGrid {
 		readonly idSel?: string; // "#list"
 		inlineEditing?: InlineEditingOptions;
 		iPropByName?: {[additionalPropertyName: string]: number };
+		jqgdnd?: boolean;
 		jqXhr?: JQueryXHR; // JQueryXHR of the last pending Ajax request. Be used by abortAjaxRequest method
 		iRow?: number; // -1
 		jsonReader?: JsonOrLocalReader;
@@ -1402,6 +1413,7 @@ declare namespace FreeJqGrid {
 			order?: string | null; // "sord"
 			page?: string | null; // "page"
 			rows?: string | null; // "rows"
+			rowidName?: string; // "rowid" - will be not really used currently
 			search?: string | null; // "_search"
 			sort?: string | null; // "sidx"
 			subgridid?: string | null; // "id"
@@ -1412,6 +1424,7 @@ declare namespace FreeJqGrid {
 		remapColumns?: number[];
 		resetsearch?: boolean;
 		reservedColumnNames?: string[]; // ["rn","cb","subgrid"]
+		rowattr?: ( (this: BodyTable, item: any, rowObject: any, rowid: string) => { [attributeName: string]: string } | null | undefined );
 		rowIndexes?: {[rowid: string]: number};
 		rowNum?: number; // 10
 		rownumbers?: boolean;
@@ -1425,6 +1438,7 @@ declare namespace FreeJqGrid {
 		scrollTimeout?: number; // 40
 		search?: boolean;
 		searching?: SearchingOptions;
+		serializeGridData?: (this: BodyTable, postData: any) => Object | string;
 		sortable?: boolean | ((permutation: number[]) => void) | { exclude?: string, update?: (permutation: number[]) => void, options?: JQueryUI.SortableOptions };
 		shrinkToFit?: boolean;
 		tblwidth?: number; // 487
@@ -1994,6 +2008,7 @@ interface JQuery {
 	on(eventName: "jqGridRightClickRow", handler: (eventObject: JQueryEventObject, rowid: string, iRow: number, iCol: number, orgEventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridSelectAll", handler: (eventObject: JQueryEventObject, rowids: string[], toCheck: boolean) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridSelectRow", handler: (eventObject: JQueryEventObject, rowid: string, state: boolean, orgEventObject: JQueryEventObject) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridSerializeGridData", handler: (eventObject: JQueryEventObject, postdata: Object) => Object | string): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridShowHideCol", handler: (eventObject: JQueryEventObject, show: boolean | "none" | "", cmName: string, iCol: number, options: FreeJqGrid.ShowHideColOptions) => void): FreeJqGrid.JQueryJqGrid;	
 	on(eventName: "jqGridSortCol", handler: (eventObject: JQueryEventObject, cmOrIndexName: string, iCol: number, sortOrder: string, orgEventObject?: JQueryEventObject) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridRemapColumns", handler: (eventObject: JQueryEventObject, permutation: number[], updateCells?: boolean, keepHeader?: boolean) => void): FreeJqGrid.JQueryJqGrid;
