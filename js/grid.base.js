@@ -4961,7 +4961,7 @@
 				multiSort = function (iCol1, obj) {
 					var sort1 = "", cm = p.colModel[iCol1], so,
 						disabledClasses = getGuiStyles("states.disabled"),
-						$selTh = p.frozenColumns ? $(obj) : $(ts.grid.headers[iCol1].el),
+						$selTh = p.frozenColumns ? $(ts.grid.headers[iCol1].el).add($(obj)) : $(ts.grid.headers[iCol1].el),
 						$iconsSpan = $selTh.find("span.s-ico"),
 						$iconAsc = $iconsSpan.children("span.ui-icon-asc"),
 						$iconDesc = $iconsSpan.children("span.ui-icon-desc"),

@@ -1387,8 +1387,8 @@
 				if (!grid || p == null || p.frozenColumns === true) { return; }
 				var cm = p.colModel, i, len = cm.length, maxfrozen = -1, frozen = false, frozenIds = [], $colHeaderRow,// nonFrozenIds = [],
 					tid = jqID(p.id), // one can use p.idSel and remove "#"
-					hoverClasses = getGuiStyles.call($t, "states.hover"),
-					disabledClass = getGuiStyles.call($t, "states.disabled");
+					hoverClasses = getGuiStyles.call($t, "states.hover");
+
 				// TODO treeGrid and grouping  Support
 				// TODO: allow to edit columns AFTER frozen columns
 				if (p.subGrid === true || p.treeGrid === true || p.scroll) {
@@ -1516,21 +1516,6 @@
 						$(ftbl).width(1);
 						$(grid.fsDiv).append(ftbl);
 					}
-					// sorting stuff
-					$self.on("jqGridSortCol.setFrozenColumns", function (e, index, idxcol) {
-						var previousSelectedTh = $("tr.ui-jqgrid-labels:last th:eq(" + p.lastsort + ")", grid.fhDiv), newSelectedTh = $("tr.ui-jqgrid-labels:last th:eq(" + idxcol + ")", grid.fhDiv);
-
-						$("span.ui-grid-ico-sort", previousSelectedTh).addClass(disabledClass);
-						$(previousSelectedTh).attr("aria-selected", "false");
-						$("span.ui-icon-" + p.sortorder, newSelectedTh).removeClass(disabledClass);
-						$(newSelectedTh).attr("aria-selected", "true");
-						if (!p.viewsortcols[0]) {
-							if (p.lastsort !== idxcol) {
-								$("span.s-ico", previousSelectedTh).hide();
-								$("span.s-ico", newSelectedTh).show();
-							}
-						}
-					});
 
 					// data stuff
 					//TODO support for setRowData
