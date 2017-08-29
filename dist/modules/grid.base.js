@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-08-20
+ * Date: 2017-08-29
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -4961,7 +4961,7 @@
 				multiSort = function (iCol1, obj) {
 					var sort1 = "", cm = p.colModel[iCol1], so,
 						disabledClasses = getGuiStyles("states.disabled"),
-						$selTh = p.frozenColumns ? $(obj) : $(ts.grid.headers[iCol1].el),
+						$selTh = p.frozenColumns ? $(ts.grid.headers[iCol1].el).add($(obj)) : $(ts.grid.headers[iCol1].el),
 						$iconsSpan = $selTh.find("span.s-ico"),
 						$iconAsc = $iconsSpan.children("span.ui-icon-asc"),
 						$iconDesc = $iconsSpan.children("span.ui-icon-desc"),
@@ -6452,7 +6452,7 @@
 		},*/
 		setSelection: function (selection, onsr, e) {
 			return this.each(function () {
-				var $t = this, $self = $($t), p = $t.p, stat, pt, ner, ia, tpsr, csr, $tr,
+				var $t = this, $self = $($t), p = $t.p, stat, pt, ner, ia, tpsr, csr, $tr, editingInfo,
 					getGuiStyles = base.getGuiStyles, getGridRowById = base.getGridRowById,
 					highlightClass = getGuiStyles.call($self, "states.select"),
 					disabledClasses = getGuiStyles.call($self, "states.disabled"),
@@ -6537,11 +6537,12 @@
 					//unselect selectall checkbox when deselecting a specific row
 					$t.setHeadCheckBox(false);
 					p.selrow = pt.id;
+					editingInfo = jgrid.detectRowEditing.call($t, pt.id);
 					ia = $.inArray(p.selrow, p.selarrrow);
 					if (ia === -1) {
 						stat = true;
 						p.selarrrow.push(p.selrow);
-					} else if (jgrid.detectRowEditing.call($t, pt.id) !== null) {
+					} else if (editingInfo !== null && (editingInfo.mode === "inlineEditing" || !$(e.target).hasClass("cbox"))) {
 						// the row is editing and selected now. The checkbox is clicked
 						stat = true; // set to force the checkbox stay selected
 					} else {

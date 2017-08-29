@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-08-20
+ * Date: 2017-08-29
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -4961,7 +4961,7 @@
 				multiSort = function (iCol1, obj) {
 					var sort1 = "", cm = p.colModel[iCol1], so,
 						disabledClasses = getGuiStyles("states.disabled"),
-						$selTh = p.frozenColumns ? $(obj) : $(ts.grid.headers[iCol1].el),
+						$selTh = p.frozenColumns ? $(ts.grid.headers[iCol1].el).add($(obj)) : $(ts.grid.headers[iCol1].el),
 						$iconsSpan = $selTh.find("span.s-ico"),
 						$iconAsc = $iconsSpan.children("span.ui-icon-asc"),
 						$iconDesc = $iconsSpan.children("span.ui-icon-desc"),
@@ -6452,7 +6452,7 @@
 		},*/
 		setSelection: function (selection, onsr, e) {
 			return this.each(function () {
-				var $t = this, $self = $($t), p = $t.p, stat, pt, ner, ia, tpsr, csr, $tr,
+				var $t = this, $self = $($t), p = $t.p, stat, pt, ner, ia, tpsr, csr, $tr, editingInfo,
 					getGuiStyles = base.getGuiStyles, getGridRowById = base.getGridRowById,
 					highlightClass = getGuiStyles.call($self, "states.select"),
 					disabledClasses = getGuiStyles.call($self, "states.disabled"),
@@ -6537,11 +6537,12 @@
 					//unselect selectall checkbox when deselecting a specific row
 					$t.setHeadCheckBox(false);
 					p.selrow = pt.id;
+					editingInfo = jgrid.detectRowEditing.call($t, pt.id);
 					ia = $.inArray(p.selrow, p.selarrrow);
 					if (ia === -1) {
 						stat = true;
 						p.selarrrow.push(p.selrow);
-					} else if (jgrid.detectRowEditing.call($t, pt.id) !== null) {
+					} else if (editingInfo !== null && (editingInfo.mode === "inlineEditing" || !$(e.target).hasClass("cbox"))) {
 						// the row is editing and selected now. The checkbox is clicked
 						stat = true; // set to force the checkbox stay selected
 					} else {
@@ -10927,8 +10928,8 @@
 				if (!grid || p == null || p.frozenColumns === true) { return; }
 				var cm = p.colModel, i, len = cm.length, maxfrozen = -1, frozen = false, frozenIds = [], $colHeaderRow,// nonFrozenIds = [],
 					tid = jqID(p.id), // one can use p.idSel and remove "#"
-					hoverClasses = getGuiStyles.call($t, "states.hover"),
-					disabledClass = getGuiStyles.call($t, "states.disabled");
+					hoverClasses = getGuiStyles.call($t, "states.hover");
+
 				// TODO treeGrid and grouping  Support
 				// TODO: allow to edit columns AFTER frozen columns
 				if (p.subGrid === true || p.treeGrid === true || p.scroll) {
@@ -11056,21 +11057,6 @@
 						$(ftbl).width(1);
 						$(grid.fsDiv).append(ftbl);
 					}
-					// sorting stuff
-					$self.on("jqGridSortCol.setFrozenColumns", function (e, index, idxcol) {
-						var previousSelectedTh = $("tr.ui-jqgrid-labels:last th:eq(" + p.lastsort + ")", grid.fhDiv), newSelectedTh = $("tr.ui-jqgrid-labels:last th:eq(" + idxcol + ")", grid.fhDiv);
-
-						$("span.ui-grid-ico-sort", previousSelectedTh).addClass(disabledClass);
-						$(previousSelectedTh).attr("aria-selected", "false");
-						$("span.ui-icon-" + p.sortorder, newSelectedTh).removeClass(disabledClass);
-						$(newSelectedTh).attr("aria-selected", "true");
-						if (!p.viewsortcols[0]) {
-							if (p.lastsort !== idxcol) {
-								$("span.s-ico", previousSelectedTh).hide();
-								$("span.s-ico", newSelectedTh).show();
-							}
-						}
-					});
 
 					// data stuff
 					//TODO support for setRowData
