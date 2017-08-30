@@ -794,7 +794,7 @@ declare namespace FreeJqGrid {
 		page?: number;
 	}
 	type AddRowDataPosition = "first" | "last" | "before" | "after" | "afterSelected" | "beforeSelected";
-	type SaveUi = "disable" | "enable" | "block";
+	type LoadType = "disable" | "enable" | "block";
 	type FormIcon = [boolean, "left"|"right", string];
 	type NavKeys = [boolean, number, number]; // [shouldBeUsed, upKeyCode, downKeyCode]: [false,38,40]
 	interface FormEditingOptions extends EditFormLocaleOptions {
@@ -843,7 +843,7 @@ declare namespace FreeJqGrid {
 		saveicon?: FormIcon; // [true,"left","fa fa-floppy-o"]
 		savekey?: [boolean, number]; // [false,13]
 		savetext?: string; // default from $.jgrid.locales[currentLocale].defaults.savetext or $.jgrid.defaults.savetext
-		saveui?: SaveUi;
+		saveui?: LoadType; // "enable"
 		serializeEditData?: (this: BodyTable, postdata: Object) => Object | string;
 		skipPostTypes?: string[]; // ["image","file"]
 		top?: number;
@@ -869,6 +869,8 @@ declare namespace FreeJqGrid {
 		datawidth?: number | "auto" | "100%" | string; // "auto"
 		delData?: any;
 		delicon?: FormIcon; // [true,"left","fa fa-trash-o"]
+		deltext?: string; // default from $.jgrid.locales[currentLocale].defaults.deltext or $.jgrid.defaults.deltext or "Deleting..."
+		delui?: LoadType; // "disable" 
 		drag?: boolean;
 		height?: number | "auto" | "100%" | string; // "auto"
 		left?: number;
@@ -1385,7 +1387,7 @@ declare namespace FreeJqGrid {
 		loadComplete?: (this: BodyTable, data: any) => void;
 		loadError?: (this: BodyTable, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void;
 		loadonce?: boolean;
-		loadui?: "enable" | "disable" | "block";
+		loadui?: LoadType;
 		locale?: string; // default is "en-US". It will be overwrite if by the last included i18n\grid.locale-XX.min.js
 		localReader?: JsonOrLocalReader;
 		maxItemsToJoin?: number; // 32768
@@ -1488,8 +1490,8 @@ declare namespace FreeJqGrid {
 		beforeSaveRow?: (this: BodyTable, options: SaveRowOptions, rowid: string, editOrAdd: "add" | "edit") => BooleanFeedbackValues;
 		mtype?: string | ((this: BodyTable, editOrAdd: "add" | "edit", options: SaveRowOptions, rowid: string, postData: any) => string);
 		saveRowValidation?: (this: BodyTable, options: { options: SaveRowOptions, rowid: string, tr: HTMLTableRowElement, iRow: string, savedRow: any, newData: any, mode: "add" | "edit" }) => BooleanFeedbackValues;
-		savetext?: string; // default from $.jgrid.locales[currentLocale].defaults.savetext or $.jgrid.defaults.savetext
-		saveui?: SaveUi;
+		savetext?: string; // default from $.jgrid.locales[currentLocale].defaults.savetext or $.jgrid.defaults.savetext or "Saving..."
+		saveui?: LoadType; // "enable"
 		serializeSaveData?: (this: BodyTable, postData: any) => Object | string; 
 		restoreAfterError?: boolean;
 		[propName: string]: any; // allow to have any number of other properties
@@ -1731,7 +1733,7 @@ interface JQuery {
 	isCellEditing?(rowid: string, cmName: string, tr?: HTMLTableRowElement): boolean;
 	isCellEditing?(rowid: string, iCol: number, tr?: HTMLTableRowElement): boolean;
 	isInCommonIconClass?(testClassName: string): boolean;
-	progressBar?(options: { htmlContent: string, method: "hide" | "show", loadtype: FreeJqGrid.SaveUi }): FreeJqGrid.JQueryJqGrid;
+	progressBar?(options: { htmlContent: string, method: "hide" | "show", loadtype: FreeJqGrid.LoadType }): FreeJqGrid.JQueryJqGrid;
 	remapColumns?(permutationByName: number[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
 	remapColumnsByName?(permutationByName: string[], updateCells?: boolean, keepHeader?: boolean): FreeJqGrid.JQueryJqGrid;
 	resetColumnResizerHeight?: FreeJqGrid.JQueryJqGrid;
