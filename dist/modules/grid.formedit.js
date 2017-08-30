@@ -1801,7 +1801,9 @@
 							ajaxDelOptions: {},
 							processing: false,
 							serializeDelData: null,
-							useDataProxy: false
+							useDataProxy: false,
+							delui: "disable", // "enable", "enable" or "block"
+							deltext: getGridRes.call($self, "defaults.deltext") || "Deleting..."
 						},
 						base.getGridRes.call($self, "del"),
 						jgrid.del || {},
@@ -1899,6 +1901,7 @@
 									data: $.isFunction(o.serializeDelData) ? o.serializeDelData.call($t, postd) : postd,
 									complete: function (jqXHR, textStatus) {
 										var i;
+										$self.jqGrid("progressBar", { method: "hide", loadtype: o.delui });
 										$("#dData", dtbl + "_2").removeClass(activeClass);
 										if ((jqXHR.status >= 300 && jqXHR.status !== 304) || (jqXHR.status === 0 && jqXHR.readyState === 4)) {
 											ret[0] = false;
@@ -1957,6 +1960,7 @@
 								}
 							}
 							if (ret[0]) {
+								$self.jqGrid("progressBar", { method: "show", loadtype: o.delui, htmlcontent: o.deltext });
 								if (o.useDataProxy) {
 									var dpret = p.dataProxy.call($t, ajaxOptions, "del_" + gridId);
 									if (dpret === undefined) {

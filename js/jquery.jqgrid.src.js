@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-08-29
+ * Date: 2017-08-30
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -14193,7 +14193,9 @@
 							ajaxDelOptions: {},
 							processing: false,
 							serializeDelData: null,
-							useDataProxy: false
+							useDataProxy: false,
+							delui: "disable", // "enable", "enable" or "block"
+							deltext: getGridRes.call($self, "defaults.deltext") || "Deleting..."
 						},
 						base.getGridRes.call($self, "del"),
 						jgrid.del || {},
@@ -14291,6 +14293,7 @@
 									data: $.isFunction(o.serializeDelData) ? o.serializeDelData.call($t, postd) : postd,
 									complete: function (jqXHR, textStatus) {
 										var i;
+										$self.jqGrid("progressBar", { method: "hide", loadtype: o.delui });
 										$("#dData", dtbl + "_2").removeClass(activeClass);
 										if ((jqXHR.status >= 300 && jqXHR.status !== 304) || (jqXHR.status === 0 && jqXHR.readyState === 4)) {
 											ret[0] = false;
@@ -14349,6 +14352,7 @@
 								}
 							}
 							if (ret[0]) {
+								$self.jqGrid("progressBar", { method: "show", loadtype: o.delui, htmlcontent: o.deltext });
 								if (o.useDataProxy) {
 									var dpret = p.dataProxy.call($t, ajaxOptions, "del_" + gridId);
 									if (dpret === undefined) {
