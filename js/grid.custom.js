@@ -104,7 +104,7 @@
 						}
 						sort = cm.sortable;
 						if (typeof sort !== "boolean" || sort) {
-							self.sortData("jqgh_" + p.id + "_" + colname, i, reload, sor, sobj);
+							self.sortData(cm.index || cm.name, i, reload, sor, sobj);
 						}
 						break;
 					}
