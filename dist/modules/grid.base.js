@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-08-30
+ * Date: 2017-08-31
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -5423,7 +5423,7 @@
 				thead += "<div id='jqgh_" + p.id + "_" + cmi.name + "'" +
 					(isMSIE ? " class='ui-th-div-ie'" : "") +
 					(labelStyle === "" ? "" : " style='" + labelStyle + "'") + " role='columnheader'>";
-				headerText = cmi.autoResizable && cmi.formatter !== "actions" ?
+				headerText = (cmi.autoResizable && cmi.formatter !== "actions") || cmi.rotated ?
 							"<span class='" + p.autoResizing.wrapperClassName + "'>" + p.colNames[iCol] + "</span>" :
 							p.colNames[iCol];
 				if (p.sortIconsBeforeText) {
@@ -7175,9 +7175,10 @@
 			return this.each(function () {
 				// TODO: reorder columns via drag&drop
 				var $self = $(this),
-					p = $self.jqGrid("getGridParam"), i, iCol, $th, columnNameOrIndex,
+					p = $self.jqGrid("getGridParam"), i, iCol, th, $th, thHeight, columnNameOrIndex,
 					$thDiv, $inconsDiv, $textWrapper, widthIcon, widthText,
-					thPaddingLeft, thPaddingRight, thPaddingTop, thPaddingBottom;
+					thPaddingLeft, thPaddingRight, thPaddingTop, thPaddingBottom,
+					nColFrozen = p.frozenColumns && $.isFunction(base.getNumberOfFrozenColumns) ? $self.jqGrid("getNumberOfFrozenColumns") : 0;
 
 				if (!$.isArray(columnNameOrIndexes)) {
 					columnNameOrIndexes = [columnNameOrIndexes];
@@ -7189,7 +7190,10 @@
 						p.iColByName[columnNameOrIndex] :
 						parseInt(columnNameOrIndex, 10);
 					if (iCol >= 0) {
-						$th = $(this.grid.headers[iCol].el);
+						th = this.grid.headers[iCol].el;
+						$th = iCol < nColFrozen ?
+								$(th).add($(this.grid.fhDiv.find("#" + jqID(th.id)))) :
+								$(th);
 						$thDiv = $th.children("div");
 						$textWrapper = $thDiv.children("span." + p.autoResizing.wrapperClassName);
 						$inconsDiv = $thDiv.children("span.s-ico");
@@ -7203,21 +7207,20 @@
 						if (p.showSortOrder) {
 							widthIcon += widthIcon * 0.5; // one can improve the calculation later !!!
 						}
-						if (headerHeight === undefined || headerHeight === 0) {
-							headerHeight = widthText + widthIcon + thPaddingLeft + thPaddingRight;
-						}
-
-						$th.height(headerHeight);
+						thHeight = headerHeight === undefined || headerHeight === 0 ?
+							widthText + widthIcon + thPaddingLeft + thPaddingRight :
+							headerHeight;
+						$th.height(thHeight);
 						$th.css({
 							paddingTop: thPaddingRight + "px",
 							paddingBottom: thPaddingLeft + "px",
 							paddingLeft: thPaddingTop + "px",
 							paddingRight: thPaddingBottom + "px"
 						});
-						headerHeight = Math.max($th.parent().height(), headerHeight);
+						//thHeight = Math.max($th.parent().height(), thHeight);
 						// we must set width of column header div BEFOR adding class "rotate" to
 						// prevent text cutting based on the current column width
-						$thDiv.css("min-width", (headerHeight - thPaddingLeft - thPaddingRight) + "px")
+						$thDiv.css("min-width", (thHeight - thPaddingLeft - thPaddingRight) + "px")
 									.addClass("rotate")
 									.css({ bottom: 0 });
 						p.colModel[iCol].rotated = true;
@@ -7687,7 +7690,7 @@
 				if (iCol >= 0) {
 					$th = $($t.grid.headers[iCol].el);
 					if (p.frozenColumns) {
-						$th = $th.add($t.grid.fhDiv.find(".ui-jqgrid-htable tr.ui-jqgrid-labels th.ui-th-column").eq(iCol));
+						$th = $th.add($t.grid.fhDiv.find("#" + jqID($th)));
 					}
 					if (nData) {
 						$th.each(function () {

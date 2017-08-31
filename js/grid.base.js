@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-08-30
+ * Date: 2017-08-31
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -7178,7 +7178,7 @@
 					p = $self.jqGrid("getGridParam"), i, iCol, th, $th, thHeight, columnNameOrIndex,
 					$thDiv, $inconsDiv, $textWrapper, widthIcon, widthText,
 					thPaddingLeft, thPaddingRight, thPaddingTop, thPaddingBottom,
-					nColFrozen = p.frozenColumns && $.isFunction(base.getNumberOfFrozenColumns) ? $self.jqGrid("getNumberOfFrozenColumns") : -1;
+					nColFrozen = p.frozenColumns && $.isFunction(base.getNumberOfFrozenColumns) ? $self.jqGrid("getNumberOfFrozenColumns") : 0;
 
 				if (!$.isArray(columnNameOrIndexes)) {
 					columnNameOrIndexes = [columnNameOrIndexes];

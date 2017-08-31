@@ -97,14 +97,14 @@
 					cm = colModel[i];
 					if (cm.index === colname || cm.name === colname) {
 						if (p.frozenColumns === true && cm.frozen === true) {
-							sobj = grid.fhDiv.find("#" + p.id + "_" + colname);
+							sobj = grid.fhDiv.find("#" + jqID(p.id + "_" + colname));
 						}
 						if (!sobj || sobj.length === 0) {
 							sobj = grid.headers[i].el;
 						}
 						sort = cm.sortable;
 						if (typeof sort !== "boolean" || sort) {
-							self.sortData("jqgh_" + p.id + "_" + colname, i, reload, sor, sobj);
+							self.sortData(cm.index || cm.name, i, reload, sor, sobj);
 						}
 						break;
 					}
