@@ -7174,11 +7174,30 @@
 		rotateColumnHeaders: function (columnNameOrIndexes, headerHeight) {
 			return this.each(function () {
 				// TODO: reorder columns via drag&drop
-				var $self = $(this),
-					p = $self.jqGrid("getGridParam"), i, iCol, th, $th, thHeight, columnNameOrIndex,
-					$thDiv, $inconsDiv, $textWrapper, widthIcon, widthText,
+				var $self = $(this), p = this.p, i, iCol, th, $th, thHeight, columnNameOrIndex,
+					$thDiv, $inconsDiv, $textWrapper, $sortOrder, widthIcon, widthText,
 					thPaddingLeft, thPaddingRight, thPaddingTop, thPaddingBottom,
-					nColFrozen = p.frozenColumns && $.isFunction(base.getNumberOfFrozenColumns) ? $self.jqGrid("getNumberOfFrozenColumns") : 0;
+					nColFrozen = p.frozenColumns && $.isFunction(base.getNumberOfFrozenColumns) ? $self.jqGrid("getNumberOfFrozenColumns") : 0,
+					removeInconsDiv = function () {
+						$inconsDiv.detach();
+						/*$inconsDiv.each(function () {
+							this.parentNode.removeChild(this);
+						});*/
+						$sortOrder.detach();
+						/*$sortOrder.each(function () {
+							this.parentNode.removeChild(this);
+						});*/
+					},
+					appendInconsDiv = function () {
+						$thDiv.each(function (index) {
+							if (index < $inconsDiv.length) {
+								$(this).append($inconsDiv[index]);
+							}
+							if (index < $sortOrder.length) {
+								$(this).append($sortOrder[index]);
+							}
+						});
+					};
 
 				if (!$.isArray(columnNameOrIndexes)) {
 					columnNameOrIndexes = [columnNameOrIndexes];
@@ -7195,8 +7214,15 @@
 								$(th).add($(this.grid.fhDiv.find("#" + jqID(th.id)))) :
 								$(th);
 						$thDiv = $th.children("div");
-						$textWrapper = $thDiv.children("span." + p.autoResizing.wrapperClassName);
 						$inconsDiv = $thDiv.children("span.s-ico");
+						$sortOrder = $thDiv.children("span.ui-jqgrid-sort-order");
+						$textWrapper = $thDiv.children("span." + p.autoResizing.wrapperClassName);
+						if ($textWrapper.length < 1) {
+							removeInconsDiv();
+							$thDiv.wrapInner("<span class='" + p.autoResizing.wrapperClassName + "'></span>");
+							$textWrapper = $thDiv.children("span." + p.autoResizing.wrapperClassName);
+							appendInconsDiv();
+						}
 						widthIcon = $inconsDiv.outerWidth(true);
 						widthText = $textWrapper.outerWidth();
 						thPaddingTop = parseFloat($th.css("padding-top") || 0);
