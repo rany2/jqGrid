@@ -6723,9 +6723,9 @@
 			return resall || res;
 		},
 		delRowData: function (rowid) {
-			var success = false, rowInd, ia, nextRow;
+			var success = false;
 			this.each(function () {
-				var $t = this, p = $t.p;
+				var $t = this, p = $t.p, editingInfo = $.jgrid.detectRowEditing.call($t, rowid), rowInd, ia, nextRow;
 				rowInd = base.getGridRowById.call($($t), rowid);
 				if (!rowInd) { return false; }
 				if (p.subGrid) {
@@ -6733,6 +6733,20 @@
 					if (nextRow.hasClass("ui-subgrid")) {
 						nextRow.remove();
 					}
+				}
+				if (editingInfo != null) {
+					try {
+						if (editingInfo.mode === "inlineEditing" && base.restoreRow != null) {
+							base.restoreRow.call($($t), rowid);
+						} else if (editingInfo.mode === "cellEditing" && base.restoreCell != null) {
+							base.restoreCell.call($($t), editingInfo.savedRow.id, editingInfo.savedRow.ic);
+						}
+					} catch (ignore) { }
+				}
+				if (rowInd.rowIndex === p.iRow) { // delete row with selected/edited cell
+					// reset cell editing parameters in case of selected cells, but not editing
+					p.iRow = -1;
+					p.iCol = -1;
 				}
 				$(rowInd).remove();
 				p.records--;

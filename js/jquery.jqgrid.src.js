@@ -6723,9 +6723,9 @@
 			return resall || res;
 		},
 		delRowData: function (rowid) {
-			var success = false, rowInd, ia, nextRow;
+			var success = false;
 			this.each(function () {
-				var $t = this, p = $t.p;
+				var $t = this, p = $t.p, editingInfo = $.jgrid.detectRowEditing.call($t, rowid), rowInd, ia, nextRow;
 				rowInd = base.getGridRowById.call($($t), rowid);
 				if (!rowInd) { return false; }
 				if (p.subGrid) {
@@ -6733,6 +6733,20 @@
 					if (nextRow.hasClass("ui-subgrid")) {
 						nextRow.remove();
 					}
+				}
+				if (editingInfo != null) {
+					try {
+						if (editingInfo.mode === "inlineEditing" && base.restoreRow != null) {
+							base.restoreRow.call($($t), rowid);
+						} else if (editingInfo.mode === "cellEditing" && base.restoreCell != null) {
+							base.restoreCell.call($($t), editingInfo.savedRow.id, editingInfo.savedRow.ic);
+						}
+					} catch (ignore) { }
+				}
+				if (rowInd.rowIndex === p.iRow) { // delete row with selected/edited cell
+					// reset cell editing parameters in case of selected cells, but not editing
+					p.iRow = -1;
+					p.iCol = -1;
 				}
 				$(rowInd).remove();
 				p.records--;
@@ -8256,7 +8270,8 @@
 	// begin module grid.celledit
 	var getTdByColumnIndex = function (tr, iCol) {
 			var $t = this, frozenRows = $t.grid.fbRows;
-			return $((frozenRows != null && frozenRows[0].cells.length > iCol ? frozenRows[tr.rowIndex] : tr).cells[iCol]);
+			tr = frozenRows != null && frozenRows[0].cells.length > iCol ? frozenRows[tr.rowIndex] : tr;
+			return tr != null && tr.cells != null ? $(tr.cells[iCol]) : $();
 		},
 		safeHeightSet = function ($elem, newHeight) {
 			var height = $elem.height();
@@ -8292,7 +8307,7 @@
 					$self.jqGrid("GridNav");
 				}
 				// check to see if we have already edited cell
-				if (savedRow.length > 0) {
+				if (savedRow.length > 0 && $trOld.length > 0) {
 					// prevent second click on that field and enable selects
 					if (ed === true) {
 						if (iRow === iRowOld && iCol === iColOld) {
@@ -8440,7 +8455,7 @@
 					edit = $self.jqGrid("getGridRes", "edit"), bClose = edit.bClose,
 					savedRow = p.savedRow, fr = savedRow.length >= 1 ? 0 : null;
 				if (fr !== null) {
-					var tr = $t.rows[iRow], rowid = tr.id, $tr = $(tr), cm = p.colModel[iCol], nm = cm.name, vv,
+					var tr = $t.rows[iRow], rowid = tr != null ? tr.id : null, $tr = tr != null ? $(tr) : $(), cm = p.colModel[iCol], nm = cm.name, vv,
 						$td = getTdByColumnIndex.call($t, tr, iCol), valueText = {},
 						v = jgrid.getEditedValue.call($t, $td, cm, valueText);
 
@@ -8596,24 +8611,26 @@
 						} catch (ignore) { }
 					}
 					cm = p.colModel[iCol];
-					if (p.treeGrid === true && cm.name === p.ExpandColumn) {
+					if (p.treeGrid === true && cm != null && cm.name === p.ExpandColumn) {
 						$td.children("span.cell-wrapperleaf,span.cell-wrapper").empty();
 					} else {
 						$td.empty();
 					}
 					$td.attr("tabindex", "-1");
 					v = savedRow[0].v;
-					formatoptions = cm.formatoptions || {};
-					if (cm.formatter === "date" && formatoptions.sendFormatted !== true) {
-						// TODO: call all other predefined formatters!!! Not only formatter: "date" have the problem.
-						// Floating point separator for example
-						v = $.unformat.date.call($t, v, cm);
-					}
-					$($t).jqGrid("setCell", rowid, iCol, v, false, false, true);
-					if (p.frozenColumns && iCol < $($t).jqGrid("getNumberOfFrozenColumns")) {
-						try {
-							$t.rows[tr.rowIndex].cells[iCol].style.height = "";
-						} catch (ignore) { }
+					if (cm != null) {
+						formatoptions = cm.formatoptions || {};
+						if (cm.formatter === "date" && formatoptions.sendFormatted !== true) {
+							// TODO: call all other predefined formatters!!! Not only formatter: "date" have the problem.
+							// Floating point separator for example
+							v = $.unformat.date.call($t, v, cm);
+						}
+						$($t).jqGrid("setCell", rowid, iCol, v, false, false, true);
+						if (p.frozenColumns && iCol < $($t).jqGrid("getNumberOfFrozenColumns")) {
+							try {
+								$t.rows[tr.rowIndex].cells[iCol].style.height = "";
+							} catch (ignore) { }
+						}
 					}
 					feedback.call($t, "afterRestoreCell", rowid, v, iRow, iCol);
 					savedRow.splice(0, 1);
