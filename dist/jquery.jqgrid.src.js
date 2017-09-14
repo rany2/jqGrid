@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-09-13
+ * Date: 2017-09-14
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -14532,8 +14532,8 @@
 										left = documentElement.clientWidth;
 										top = documentElement.clientHeight;
 									}
-									left = left / 2 - parseInt(o.alertwidth, 10) / 2 - offsetGbox.left;
-									top = top / 2 - 25 - offsetGbox.top;
+									left = left / 2 - parseInt(o.alertwidth, 10) / 2 - offsetGbox.left + w.scrollX;
+									top = top / 2 - 25 - offsetGbox.top + w.scrollY;
 								}
 								jgrid.createModal.call($t, alertIDs,
 									"<div class='" + getGuiStyles.call($t, "dialog.body") + "'><div>" + o.alerttext + "</div></div>",
