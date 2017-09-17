@@ -3,6 +3,9 @@
     "node_modules/vrsource-tslint-rules/rules",
     "node_modules/tslint-eslint-rules/dist/rules"
   ],
+  "extends": [
+	"tslint-eslint-rules"
+  ],
   "rules": {
     "no-console": [true, "log"],
     "no-duplicate-imports": true,
@@ -11,6 +14,7 @@
     "no-var-keyword": true,
     "semicolon": [true],
     "variable-name": [true, "ban-keywords"],
-    "no-inner-declarations": [true, "function"]
+    "no-inner-declarations": [true, "function"],
+	"no-constant-condition": true
   }
 }
