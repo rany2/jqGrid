@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-09-14
+ * Date: 2017-09-17
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -7258,10 +7258,10 @@
 							paddingRight: thPaddingBottom + "px"
 						});
 						//thHeight = Math.max($th.parent().height(), thHeight);
-						// we must set width of column header div BEFOR adding class "rotate" to
+						// we must set width of column header div BEFOR adding class "ui-jqgrid-rotate" to
 						// prevent text cutting based on the current column width
 						$thDiv.css("min-width", (thHeight - thPaddingLeft - thPaddingRight) + "px")
-									.addClass("rotate")
+									.addClass("ui-jqgrid-rotate")
 									.css({ bottom: 0 });
 						p.colModel[iCol].rotated = true;
 					}
@@ -7308,7 +7308,8 @@
 
 				$(p.colModel).each(function (iCol) {
 					var setDisplayCssOnRows = function (rows) {
-							var iRow, nRow, row, cell;
+							var iRow, nRow, row, cell, $cell, $thDiv, $inconsDiv, $textWrapper, heightText, widthText, heightIcon, widthIcon,
+								thHeight, thPaddingTop, thPaddingBottom, thPaddingLeft, thPaddingRight;
 							for (iRow = 0, nRow = rows.length; iRow < nRow; iRow++) {
 								row = rows[iRow];
 								cell = row.cells[iCol];
@@ -7324,12 +7325,47 @@
 									 * but still see that cell.style.display is changed. As the workaround we first temporary set
 									 * height of the cell from 0 to 1px, then changes "display" style and finally reset height to 0
 									 */
+									$cell = $(cell);
 									if (iRow === 0 && $(row).hasClass("jqgfirstrow")) {
-										$(cell).css("height", "1px");
-										$(cell).css("display", show);
-										$(cell).css("height", "0");
+										$cell.css("height", "1px");
+										$cell.css("display", show);
+										$cell.css("height", "0");
 									} else {
-										$(cell).css("display", show);
+										$cell.css("display", show);
+									}
+									if (sw && cell != null && cell.tagName.toUpperCase() === "TH" && $cell.hasClass("ui-th-column")) {
+										$thDiv = $cell.children("div");
+										if ($thDiv.hasClass("ui-jqgrid-rotate")) {
+											$inconsDiv = $thDiv.children("span.s-ico");
+											$textWrapper = $thDiv.children("span." + p.autoResizing.wrapperClassName),
+											heightText = $textWrapper.outerHeight(),
+											widthText = $textWrapper.outerWidth(),
+											heightIcon = $inconsDiv.outerHeight(),
+											widthIcon = $inconsDiv.outerWidth(true);
+
+											if ($textWrapper.length > 0) {
+												thPaddingTop = parseFloat($cell.css("padding-top") || 0);
+												thPaddingBottom = parseFloat($cell.css("padding-bottom") || 0);
+												thPaddingLeft = parseFloat($cell.css("padding-left") || 0);
+												thPaddingRight = parseFloat($cell.css("padding-right") || 0);
+												if (p.showSortOrder) {
+													widthIcon += widthIcon * 0.5; // one can improve the calculation later !!!
+												}
+												thHeight = widthText + widthIcon + thPaddingLeft + thPaddingRight;
+												$cell.height(thHeight);
+												$cell.css({
+													paddingTop: thPaddingRight + "px",
+													paddingBottom: thPaddingLeft + "px",
+													paddingLeft: thPaddingTop + "px",
+													paddingRight: thPaddingBottom + "px"
+												});
+												//thHeight = Math.max($cell.parent().height(), thHeight);
+												// we must set width of column header div BEFOR adding class "ui-jqgrid-rotate" to
+												// prevent text cutting based on the current column width
+												$thDiv.css("min-width", (thHeight - thPaddingLeft - thPaddingRight) + "px")
+															.css({ bottom: 0 });
+											}
+										}
 									}
 								}
 								// to follow HTML standards exactly one should probably add hidden column in
