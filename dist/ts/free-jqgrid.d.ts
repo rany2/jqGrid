@@ -763,6 +763,7 @@ declare namespace FreeJqGrid {
 		lso?: "asc" | "desc" | "asc-desc" | "desc-asc" | "" | string;
 		name: string;
 		resizable?: boolean;
+		rotated?: boolean;
 		saveLocally?: (this: BodyTable, options: { newValue: any, newItem: Object, oldItem: Object, id: string, rowid: string, cm: ColumnModel, cmName: string, iCol: number }) => void;
 		search?: boolean;
 		searchoptions?: SearchOptions;
