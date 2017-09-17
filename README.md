@@ -1,5 +1,5 @@
 # free fork of jqGrid
-[![npm version](https://img.shields.io/npm/v/free-jqgrid.svg?style=flat)](https://www.npmjs.com/package/free-jqgrid)![downloadstotal](https://img.shields.io/npm/dt/free-jqgrid.svg?style=flat-square)&nbsp;[![Bower](https://img.shields.io/bower/v/free-jqgrid.svg?style=flat-square)](http://bower.io/search/?q=free-jqgrid)&nbsp;[![NuGet](https://img.shields.io/nuget/v/free-jqgrid.svg?style=flat-square)](https://www.nuget.org/packages/free-jqGrid/)![downloadstotal](https://img.shields.io/nuget/dt/free-jqgrid.svg?style=flat-square)&nbsp;[![Maven Central](https://img.shields.io/maven-central/v/org.webjars.npm/free-jqgrid.svg?style=flat-square)](http://search.maven.org/#search%7Cga%7C1%7Cfree-jqgrid)<br>[![CDNJS](https://img.shields.io/cdnjs/v/free-jqgrid.svg)](https://cdnjs.com/libraries/free-jqgrid/)&nbsp;[![jsDelivr CDN](https://img.shields.io/badge/jsDelivr%20CDN-v4.14.1-blue.svg)](https://www.jsdelivr.com/projects/free-jqgrid)&nbsp;<br>[![GitHub commits](https://img.shields.io/github/commits-since/free-jqgrid/jqgrid/v4.7.0.svg)](https://github.com/free-jqgrid/jqGrid/compare/v4.7.0...master)&nbsp;[![GitHub watchers](https://img.shields.io/github/watchers/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/watchers)[![GitHub forks](https://img.shields.io/github/forks/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/network)[![GitHub stars](https://img.shields.io/github/stars/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/stargazers)&nbsp;![devDependency status](https://david-dm.org/free-jqgrid/jqgrid/dev-status.svg)&nbsp;[![GitHub license](https://img.shields.io/badge/license-MIT%20or%20GNU%20GPLv2-blue.svg)](https://github.com/free-jqgrid/jqGrid/blob/master/LICENSE.md)
+[![npm version](https://img.shields.io/npm/v/free-jqgrid.svg?style=flat)](https://www.npmjs.com/package/free-jqgrid)![downloadstotal](https://img.shields.io/npm/dt/free-jqgrid.svg?style=flat-square)&nbsp;[![Bower](https://img.shields.io/bower/v/free-jqgrid.svg?style=flat-square)](http://bower.io/search/?q=free-jqgrid)&nbsp;[![NuGet](https://img.shields.io/nuget/v/free-jqgrid.svg?style=flat-square)](https://www.nuget.org/packages/free-jqGrid/)![downloadstotal](https://img.shields.io/nuget/dt/free-jqgrid.svg?style=flat-square)&nbsp;[![Maven Central](https://img.shields.io/maven-central/v/org.webjars.npm/free-jqgrid.svg?style=flat-square)](http://search.maven.org/#search%7Cga%7C1%7Cfree-jqgrid)<br>[![CDNJS](https://img.shields.io/cdnjs/v/free-jqgrid.svg)](https://cdnjs.com/libraries/free-jqgrid/)&nbsp;[![jsDelivr CDN](https://img.shields.io/badge/jsDelivr%20CDN-v4.15.0-blue.svg)](https://www.jsdelivr.com/projects/free-jqgrid)&nbsp;<br>[![GitHub commits](https://img.shields.io/github/commits-since/free-jqgrid/jqgrid/v4.7.0.svg)](https://github.com/free-jqgrid/jqGrid/compare/v4.7.0...master)&nbsp;[![GitHub watchers](https://img.shields.io/github/watchers/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/watchers)[![GitHub forks](https://img.shields.io/github/forks/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/network)[![GitHub stars](https://img.shields.io/github/stars/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/stargazers)&nbsp;![devDependency status](https://david-dm.org/free-jqgrid/jqgrid/dev-status.svg)&nbsp;[![GitHub license](https://img.shields.io/badge/license-MIT%20or%20GNU%20GPLv2-blue.svg)](https://github.com/free-jqgrid/jqGrid/blob/master/LICENSE.md)
 ---
 jqGrid is a popular jQuery Plugin for displaying and editing data in tabular form. It has some other more sophisticated features, like subgrids, TreeGrids, grouping and so on.
 
@@ -7,7 +7,7 @@ jqGrid was developed originally by [Tony Tomov](https://github.com/tonytomov) an
 
 The code from the GitHib repository is the fork of jqGrid 4.7.0 - the latest version available under MIT/GPL-licenses. It will be provided under MIT/GPL-licenses.
 
-Below you can find short description of new features and the bug fixes implemented in free jqGrid 4.14.1 (compared with version 4.14.0). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](https://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
+Below you can find short description of new features and the bug fixes implemented in free jqGrid 4.15.0 (compared with version 4.14.1). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](https://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
 
 Read [Wiki](https://github.com/free-jqgrid/jqGrid/wiki) for more detailed information about the features of free-jqGrid. The preliminary version of the documentation can be found [here](https://free-jqgrid.github.io/).
 
@@ -19,13 +19,13 @@ The package is published on [WebJars](http://www.webjars.org/) too and it's depl
 
 Free jqGrid is is available from [jsDelivr CDN](https://www.jsdelivr.com/projects/free-jqgrid) and [cdnjs](https://cdnjs.com/libraries/free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid@4.14.1/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.14.1/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.0/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.0/js/jquery.jqgrid.min.js"></script>
 ```
 or
 ```html
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.14.1/css/ui.jqgrid.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.14.1/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.0/css/ui.jqgrid.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.0/jquery.jqgrid.min.js"></script>
 ```
 **The locale file is optional**. One can, but one don't need to include `grid.locale-en.min.js`, because the same information is already included in the `jquery.jqgrid.min.js` (or `jquery.jqgrid.src.js`).
 
@@ -36,44 +36,70 @@ If somebody want to test the *latest* version of free jqGrid, one can load it di
 ```
 All other language files and plugins are available from CDN too. See [the wiki article](https://github.com/free-jqgrid/jqGrid/wiki/Access-free-jqGrid-from-different-CDNs) for more details about the usage of free jqGrid from CDNs and RawGit.
 
-Remark: the above URLs will be available **after publishing** the release of the version of 4.14.1.
+Remark: the above URLs will be available **after publishing** the release of the version of 4.15.0.
 
-### New main features implemented in the version 4.14.1 compared with 4.14.0:
+### New main features implemented in the version 4.15.0 compared with 4.14.1:
 
-* Add support of `generateDatalist:true` in `searchoptions` and new method `generateDatalistFromColumnIndex`. The option `generateDatalist: true` can be added to `searchoptions` of the column, which has `createColumnIndex: true`. It generates `<datalist>` with unique values of the column. As the result, one gets the feature close to Autocomplete using only built-in functionality of HTML5. The demo https://jsfiddle.net/OlegKi/su7ebs65/ shows the usage of the feature. The demo is close to the demo https://jsfiddle.net/OlegKi/yvbt6w54/ from the [README](https://github.com/free-jqgrid/jqGrid/blob/master/README4.14.0.md) to the version 4.14.0, but it uses no jQuery UI Autocomplete.
-* Performance improvement in `$.jgrid.isCellClassHidden` method. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/330) for more details.
-* Allow to use callback functions as the value of Boolean properties of `editrules`.
-* Initialize `this` and add the options for `jsonmap`/`xmlmap` defined as functions. Add second `options` parameter with two properties: `cmName` and `iItem`.
-* Add `filters` property of `prmNames` and `searching.sFilter` allows to change the name of postData properties used for filtering.
-* Add `Event` parameter to `onSortCol` callback and `jqGridSortCol` event. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/336) for more details.
+* New methods `rotateColumnHeaders` allow to rotate the column headers to -90 degree. It could be practical to hold the grid compact in case of usage columns with small conent like checkboxes. Such columns could have header, which text is longer the the checkboxes. If one need to display many such columns then ratation of the column headers of such columns can essentially reduce the width od the grid and to improve the visibility. The CSS of the column resizer is changed to have better results in medern web browsers. The old Internet Explorer calculate wrong height of resizer with the new settings. The method `resetColumnResizerHeight` fixs the height of column resizer in IE. It will be automatically called in `rotateColumnHeaders` near to the end. I still not sure that recalculation of the height of the resize in IE should be done in other situations. Because of that I made the method public.
+* New options milti-sorting option (`multiSort: true`): `showSortOrder`, `multiSortOrder` and `formatSortOrder`. The default behavior of multisorting is changed. It uses now new options by default. The option `showSortOrder: true` follows deiplaying of small 1-based index of sorting near the column header. It visualize the order of sorting columns. See the comment of [the commit](https://github.com/free-jqgrid/jqGrid/commit/77e0c884db30623d26f43b28b454125a865327ec) for more detailed information.
+* New multiselect options `maxSortColumns` and `sortOrderPosition` are added. New numeric option `maxSortColumns` with default value 3 allows to reduce the total number of column by which the grid could be sorted. It works only in case of usage `multiSortOrder: "lastClickedFirstSorted"` option. If the user clicks of the 4th column header and `maxSortColumns` is 3 then the column with the 4th sorting index will be removed and the grid will be sorted by 3 columns maximal. Such behavir simplify for the user removing of sorting by unneed columns. New option `sortOrderPosition` with two allowed values `"afterSortIcons"` and `"beforeSortIcons"` provides more customization possibilities. Default value is `"afterSortIcons"`, but `sortOrderPosition: "beforeSortIcons"` could be interesing, for example, in case of combination with `sortIconsBeforeTex. The option `multiSortOrder` could be used as callback function additionally to the usage as `"lastClickedFirstSorted"` or `"lastClickedLastSorted"`. The callback has now only one `options` parameter with `sortNames`, `cm`, `sortDirs` and `removeSorting` properties. New property `removeSorting` is the function, which can be used by `multiSortOrder` callback to remove some column from sorting. As I mention above, the option `maxSortColumns` works only in case of usage `multiSortOrder: "lastClickedFirstSorted"`. If the callback want to implement close behavior it should be able to remove sorting order. In the case it can call `options.removeSorting` function with the element of `options.sortNames` array as parameter.
+* Cell editing is extended. On can use now cell editing in combined with `multiselect: true`. One can `noCellSelection: true` to change the default behavior of cell editing and to replace cell celection to selection of rows.
 
-### Below one can see the full list of changes in the version 4.14.1 compared with 4.14.0:
+The default value of `autoencode` option is changed to `autoencode: true`. Such changes could have minor **compatibility** issue, but the comfort of usage for new users seems be more important. New setting `autoencode: true` is important to prevent Cross Site Scipting (XSS) *by default*.
 
-* Bug fix in `sortData` in case of usage reload parameter set to `true`. The method `sortData` be used for example inside of the method `sortGrid`.
-* Allow to use callback functions as the value of Boolean properties of `editrules`.
-* Add `Event` parameter to `onSortCol` callback and `jqGridSortCol` event. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/336) for more details.
-* Add support of `generateDatalist:true` in `searchoptions` and new method `generateDatalistFromColumnIndex`. The option `generateDatalist: true` can be added to `searchoptions` of the column, which has `createColumnIndex: true`. It generates `<datalist>` with unique values of the column. As the result, one gets the feature close to Autocomplete using only built-in functionality of HTML5.
-* Performance improvement in `$.jgrid.isCellClassHidden` method. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/330) for more details.
-* Bug fix in the name of the subgrid open icon in jQuery UI `iconSet`. The typing error in the class name is fixed.
-* Fill `savedRow` after `beforeEditCell`. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/328) for more details.
-* Initialize `data` property of events called by `dataEvents`.
-* Small bug fixes in the usage of of `additionalProperties` and `iPropByName`.
-* Fix processing of IN operation and multiselect in Searching Dialog. See [the answer](https://stackoverflow.com/a/43681749/315935) for more details.
-* Add `filters` property of `prmNames` and `searching.sFilter` allows to change the name of postData properties used for filtering.
-* Extension of `filterToolbar`: add `name`, `cm` and `id` properties of `options` parameter of `dataInit`.
-* Add `options` as the second parameter of `editoptions.defaultValue` callback function.
-* Bug fix: prevent possible recursion in `getCell` and `getRowData` methods if `editable` property is a function, which calls the methods. New `editingInfo` parameter of jqGrid is introduced. The method `$.jgrid.detectRowEditing` is simplified to mostly one line of code, which uses `editingInfo`. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/315) for more details.
-* Bug fix in `addRowData` in case of data grouping is enabled. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/319) for more details.
-* Bug fix the bug in `parseDate` in processing of negative time offsets relative to UTC (processing the ISO date with `Z` formatter).
-* Bug fix of deleting previously created pager (`pager: true`). See [the issue](https://github.com/free-jqgrid/jqGrid/issues/308) for more details.
-* Changes in Croatian locale, adding Bosnian Translation. See [the issue](https://github.com/free-jqgrid/jqGrid/issues/306) for more details.
-* Bug fix: reset of custom filtering operation after clear (click on `x` button) in the filter toolbar. See [the question](http://stackoverflow.com/q/42908639/315935) for additional information.
-* Initialize `this` and add the options for `jsonmap`/`xmlmap` defined as functions. Add second `options` parameter with two properties: `cmName` and `iItem`.
-* Bug fix: add support of `u1000` format of date as `newformat` of `parseDate`.
-* Bug fix in `editGridRow` (form editing): set focus only on the first focusable element.
+### Below one can see the full list of changes in the version 4.15.0 compared with 4.14.1:
+
+* Fix/extend `free-jqgrid.d.ts` to describe more full all existing options, methods and events
+* Fix calculation of alert position of form editing if no `alerttop` and `alertleft` specified
+* Bug fix for correct deleting of row in cell editing mode
+* Fix the code of `rotateColumnHeaders` to work on columns, which has not `autoResizable:true` property
+* Fix `sortGrid` to use `sortData` correctly (the first parameter)
+* Some bug fixes in working with frozen columns
+* Add `delui` and `deltext` options of `delGridRow`. New options allows to display div with some information like `"Deleting..."` during Ajax request to delete row(s). See [the issue #365](https://github.com/free-jqgrid/jqGrid/issues/365) for more details.
+* Fix selection in multiselct mode if used in combination with cell editing and if checkbox of multiselect is clicked during cell editing in the line
+* Fix working with prefix/suffix in `filterToolbar` in case of currency formatter
+* Fix typing error in the name of internaly use function: from `moveVerical` to `moveVertical`
+* Improve formatting of the code of the old plugin `ui.multiselect.js`
+* Change default value for `autoencode` option from the old value `false` to `true`. Such changes could have compatibility issue, but I think that the comfort for new users is more important. New setting `autoencode: true` is important to prevent Cross Site Scipting (XSS) *by default*.
+* Fix unneeded border if the first hidden row of grouping headers in Bootstrap
+* Fix CSS rules: improve alignment of the editing elements of jqGrid
+* Remove "shaking" of grid with frozen columns during start of cell editing
+* Fixes in row selection logic in combination with cell editing
+* Fix the height of rows during cell editing when frozen columns be editing
+* Improve the code of `$.jgrid.parseDate` for better upwards compatibility. See the comment for [the commit](https://github.com/free-jqgrid/jqGrid/commit/63c1833f718bb45a736417a312b57bfedaa6bb6f) for more details.
+* Add Boolean `selectOnContextMenu` option, which allows to prevent row selection on contextmenu (right mouse click). One can use the option `selectOnContextMenu: false` to prevent selection of the row on contextmenu (right mouse click) before call of `onRightClickRow` callback or `jqGridRightClickRow` event. One can still select the row, if needed, inside the callback (or inside the event) by call of `setSelection` method.
+* Make the code of `getLocalRow` method mode safe
+* Inctroduce new Boolean option `noCellSelection`, which can be combined with cell editing
+* Bug fix of `setAttributes` function of `createEl` to prevent setting `generateValue` and `postData` as DOM attributes
+* Fix applying `itemIconSpanStyle` and `itemAnchorStyle` options for jQuery UI menu without ancors
+* Bug fix in the code of `changeRowid` method to refresh `_index` after chaning of id
+* Fix: remove transparence of btable used in frozen div of Bootstrap
+* Add first version of implementation of new methods `rotateColumnHeaders` and `resetColumnResizerHeight`
+* Add new multiselect options `maxSortColumns`, `sortOrderPosition`. Change default value of `multiSortOrder` and the options of `multiSortOrder` callback. See the comment of [the commit](https://github.com/free-jqgrid/jqGrid/commit/9152f47430bb16778a2e59bd9530409b9fbe6660) for more detailes.
+* Fix the usage of the `index` parameter of internal `dataSort` function
+* Fix the bug in `refreshIndex` if one use wrong input parameters: `loadonce:true` with local `datatype`
+* Some preliminary changes in auto-resizing for new property in `colModel`: `rotated: true`
+* Fix: make the code of `setFrozenColumns` more safe (prevent exception)
+* Fix the problem with asyncronous processing in latest versions of jQuery
+* Fix `setFrozenColumns` to be more safe for exceptions in case of usage `sortable` option
+* Add new options of milti-sorting implemented: `showSortOrder`, `multiSortOrder` and `formatSortOrder`. See the comment of [the commit](https://github.com/free-jqgrid/jqGrid/commit/77e0c884db30623d26f43b28b454125a865327ec) for more detailed information.
+* Fix CSS inline styles of column header in case of usage labelAlign:"right" or labelAlign:"likeData"
+* Fix detection of IE web browser
+* Move some CSS settings of groupped header (ui-th-column-header) from JavaScript code to CSS
+* Add DefinitelyTyped package in devDependencies of bower.json
+* Change options used by TypeScript compiler to use "es2015", "es2017" and "dom"
+* Change CSS rules of `.ui-jqgrid-resize` to hold 100% height of the resizer div, adjust the code of `setGroupHeaders`
+* Bug fix in vertical scrolling during cell editing
+* Fix title of formatter:"select" in `setRowData`
+* Fix processing of formatter:"select", edittype: "select" during navigation in Add/Edit forms
+* Initialize `this` as DOM of grid in sorttype defined as function
+* Allow to specify classes with custom icons for TreeGrid nodes. The `icon` property of input data of TreeGrid already could specify the custom class of **leafs** of TreeGrid. The changes allows to specify custom icons of **nodes** of TreeGrid too. The nodes displays one from **two** icons depend on the state of the node (expanded or collapsed). The `icon` property can now specify the two icons, which need be comma separated. For example, one can use `icon: "ui-icon-folder-open,ui-icon-folder-collapsed"` in case of using jQuery UI icons.
+* Fix the URLs to jsdelivr.net CDN
+* Fix uglify option to hold license comment in minimized files
 
 Other old readmes contain the list of the features and bug fixed implemented in previous versions of free jqGrid:
 
+* [README4.14.1.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.14.1.md) contains the readme of free jqGrid 4.14.1.
 * [README4.14.0.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.14.0.md) contains the readme of free jqGrid 4.14.0.
 * [README4.13.6.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.6.md) contains the readme of free jqGrid 4.13.6.
 * [README4.13.5.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.13.5.md) contains the readme of free jqGrid 4.13.5.
