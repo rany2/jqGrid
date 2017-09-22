@@ -570,6 +570,7 @@ declare namespace FreeJqGrid {
 			[propName: string]: IconsInfo;
 		};
 		inlineEdit?: InlineEditingOptions;
+		inlineNavOptions?: InlineNavOptions;
 		jqModal?: JqModalOptions; // { toTop: true }
 		locales: { [key: string]: JqGridStaticLocaleOptions; };
 		msie: boolean;
