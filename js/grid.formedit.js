@@ -871,14 +871,14 @@
 				function setNullsOrUnformat() {
 					var url = o.url || p.editurl;
 					$.each(colModel, function (i, cm) {
-						var cmName = cm.name, value = postdata[cmName];
-						if (cm.formatter === "date" && (cm.formatoptions == null || cm.formatoptions.sendFormatted !== true)) {
-							// TODO: call all other predefined formatters!!! Not only formatter: "date" have the problem.
-							// Floating point separator for example
-							postdata[cmName] = $.unformat.date.call($t, value, cm);
-						}
-						if (url !== "clientArray" && cm.editoptions && cm.editoptions.NullIfEmpty === true) {
-							if (postdata.hasOwnProperty(cmName) && value === "") {
+						var cmName = cm.name;
+						if (postdata.hasOwnProperty(cmName)) {
+							if (cm.formatter === "date" && (cm.formatoptions == null || cm.formatoptions.sendFormatted !== true)) {
+								// TODO: call all other predefined formatters!!! Not only formatter: "date" have the problem.
+								// Floating point separator for example
+								postdata[cmName] = $.unformat.date.call($t, postdata[cmName], cm);
+							}
+							if (url !== "clientArray" && cm.editoptions && cm.editoptions.NullIfEmpty === true && postdata[cmName] === "") {
 								postdata[cmName] = "null";
 							}
 						}
