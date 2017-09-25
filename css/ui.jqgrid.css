@@ -1,6 +1,6 @@
 /*!
  * jqGrid 4.15.1-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2017-09-22
+ * Date: 2017-09-25
  */
 
 /* Grid */
@@ -10,7 +10,7 @@
 	-webkit-box-sizing: content-box;
 	box-sizing: content-box;
 	-ms-touch-action: none;
-	touch-action: none;
+	touch-action: manipulation;
 }
 .ui-jqgrid div {
 	line-height: normal;
