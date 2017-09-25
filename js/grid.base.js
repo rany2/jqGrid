@@ -8167,7 +8167,7 @@
 			if (!compact || $incosDiv.is(":visible") || ($incosDiv.css("display") !== "none")) {  //|| p.viewsortcols[0]
 				colWidth = cm.rotated ?
 						$incosDiv.outerHeight(true) :
-						$incosDiv.outerWidth(true) + ($sortOrder.length > 0 ? $thDiv.children(".ui-jqgrid-sort-order").outerWidth(true) : 0);
+						$incosDiv.outerWidth(true) + ($sortOrder.length > 0 ? $sortOrder.outerWidth(true) : 0);
 				if (!p.sortIconsBeforeText) {
 					colWidth -= p.direction === "rtl" ?
 						parseFloat($incosDiv.css("padding-left") || 0) +
