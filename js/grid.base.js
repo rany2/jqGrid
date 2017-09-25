@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-09-18
+ * Date: 2017-09-25
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -8152,6 +8152,7 @@
 				thPaddingLeft = parseFloat($th.css((cm.rotated ? "padding-top" : "padding-left")) || 0),  // typically 2
 				thPaddingRight = parseFloat($th.css((cm.rotated ? "padding-bottom" : "padding-right")) || 0),// typically 2
 				$incosDiv = $thDiv.children("span.s-ico"),
+				$sortOrder = $thDiv.children(".ui-jqgrid-sort-order"),
 				$wrapper = $thDiv.children("." + p.autoResizing.wrapperClassName),
 				wrapperOuterWidth = cm.rotated ? $wrapper.outerHeight() : $wrapper.outerWidth(),
 				wrapperCssWidth = parseFloat($wrapper.css(cm.rotated ? "height" : "width") || 0),
@@ -8166,7 +8167,7 @@
 			if (!compact || $incosDiv.is(":visible") || ($incosDiv.css("display") !== "none")) {  //|| p.viewsortcols[0]
 				colWidth = cm.rotated ?
 						$incosDiv.outerHeight(true) :
-						$incosDiv.outerWidth(true) + $thDiv.children(".ui-jqgrid-sort-order").outerWidth(true);
+						$incosDiv.outerWidth(true) + ($sortOrder.length > 0 ? $thDiv.children(".ui-jqgrid-sort-order").outerWidth(true) : 0);
 				if (!p.sortIconsBeforeText) {
 					colWidth -= p.direction === "rtl" ?
 						parseFloat($incosDiv.css("padding-left") || 0) +
