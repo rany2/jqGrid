@@ -5796,16 +5796,19 @@
 						return;
 					}
 					var ri = $tr[0].id, ci = $td[0].cellIndex,
-						scb = $(target).hasClass("cbox") &&
+						checkboxClicked = $(target).hasClass("cbox") &&
 							$(target).is(":enabled") && !hasOneFromClasses(target, disabledStateClasses),
-						cSel = feedback.call(ts, "beforeSelectRow", ri, e), alreadySelected = false,
+						selectionAllowed = feedback.call(ts, "beforeSelectRow", ri, e), alreadySelected = false,
 						editingInfo = jgrid.detectRowEditing.call(ts, ri),
 						locked = editingInfo != null && editingInfo.mode !== "cellEditing"; // editingInfo.savedRow.ic
-					if (target.tagName === "A" || (locked && !scb)) { return; }
+					if (target.tagName === "A" || (locked && !checkboxClicked)) { return; }
 					feedback.call(ts, "onCellSelect", ri, ci, $td.html(), e);
 					if (p.cellEdit === true) {
-						if (cSel && p.noCellSelection && (!p.multiselect || (scb && !p.multiboxonly))) {
+						if (selectionAllowed && p.multiselect && checkboxClicked) {
 							setSelection.call($self0, ri, true, e);
+							if (checkboxClicked && !p.noCellSelection) {
+								return;
+							}
 							alreadySelected = true;
 						}
 
@@ -5813,12 +5816,12 @@
 							$j.editCell.call($self0, $tr[0].rowIndex, ci, true);
 						} catch (ignore) { }
 
-						if (!p.noCellSelection) {
+						if (!p.multiselect || !p.noCellSelection || (p.multiboxonly && alreadySelected)) {
 							return;
 						}
 					}
-					if (!cSel) {
-						if (scb) {
+					if (!selectionAllowed) {
+						if (checkboxClicked) {
 							// selection is not allowed by beforeSelectRow, but the multiselect
 							// checkbox is clicked.
 							$(target).prop("checked", false);
@@ -5827,7 +5830,7 @@
 					}
 					if (!p.multikey) {
 						if (p.multiselect && p.multiboxonly) {
-							if (scb && !alreadySelected) {
+							if (checkboxClicked && !alreadySelected) {
 								setSelection.call($self0, ri, true, e);
 							} else {
 								var frz = p.frozenColumns ? p.id + "_frozen" : "";
@@ -5865,9 +5868,9 @@
 					} else {
 						if (e[p.multikey] && !alreadySelected) {
 							setSelection.call($self0, ri, true, e);
-						} else if (p.multiselect && scb) {
-							scb = $("#jqg_" + jqID(p.id) + "_" + ri).is(":checked");
-							$("#jqg_" + jqID(p.id) + "_" + ri).prop("checked", !scb);
+						} else if (p.multiselect && checkboxClicked) {
+							checkboxClicked = $("#jqg_" + jqID(p.id) + "_" + ri).is(":checked");
+							$("#jqg_" + jqID(p.id) + "_" + ri).prop("checked", !checkboxClicked);
 						}
 					}
 					// it's important don't use return false in the event handler
