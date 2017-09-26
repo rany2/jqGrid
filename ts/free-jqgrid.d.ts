@@ -694,12 +694,13 @@ declare namespace FreeJqGrid {
 		[propName: string]: any;
 	}
 	interface EditOptions {
-		buildSelect: (this: BodyTable, data: any, jqXhr: JQueryXHR, cm: ColumnModel, iCol: number) => string;
+		buildSelect?: (this: BodyTable, data: any, jqXhr: JQueryXHR, cm: ColumnModel, iCol: number) => string;
 		dataEvents?: { type: string, data?: any, fn: (e) => void }[];
 		dataInit?: (this: BodyTable, element: Element, options: EditOptions) => void;
 		dataUrl?: string | ((this: BodyTable, rowid: string, value: string, cmName: string, ajaxContext: { elem: Element, options: any, cm: ColumnModel, mode: "cell" | "addForm" | "editForm" | "add" | "edit", rowid: string, iCol: number, ovm: string[] }) => string);
 		generateValue?: boolean;
-		value?: string | { [propName: string]: string };
+		value?: string | (() => string) | { [propName: string]: string };
+		defaultValue?: string | (() => string) | boolean; // boolean for SearchOptions compatibility
 		[propName: string]: any; // attribute for the editable element
 	}
 	interface SearchOptions extends EditOptions {
@@ -728,7 +729,7 @@ declare namespace FreeJqGrid {
 	interface ColumnModelWithoutLabel {
 		align?: "left" | "center" | "right";
 		autoResizable?: boolean; // default value false
-		autoResizing?: { minColWidth: number, maxColWidth: number, compact: boolean };
+		autoResizing?: { minColWidth?: number, maxColWidth?: number, compact?: boolean };
 		cellattr?: "string" | ((this: BodyTable, rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string);
 		cellBuilder?: (this: BodyTable, cellValue: any, options: FormatterOptions, rowObject: any, action?: "edit" | "add") => string;
 		classes?: string; // spaceSeparatedCssClasses
@@ -1059,12 +1060,20 @@ declare namespace FreeJqGrid {
 	interface InlineNavOptions {
 		edit?: boolean;
 		editicon?: string; // "ui-icon-pencil"
+		edittitle?: string;
+		edittext?: string;
 		add?: boolean;
 		addicon?: string; // "ui-icon-plus"
+		addtext?: string;
+		addtitle?: string;
 		save?: boolean;
 		saveicon?: string; //"ui-icon-disk",
+		savetitle?: string;
+		savetext?: string;
 		cancel?: boolean;
 		cancelicon?: string; //"ui-icon-cancel",
+		canceltitle?: string;
+		canceltext?: string;
 		commonIconClass?: string; //"ui-icon",
 		iconsOverText?: boolean;
 		addParams?: AddRowOptions;
@@ -1140,7 +1149,7 @@ declare namespace FreeJqGrid {
 		subGridWidth?: number; // 16
 	}
 	interface JqGridSelectionOptions {
-		beforeSelectRow?: (this: BodyTable, rowid, eventObject: JQueryEventObject) => false | void;
+		beforeSelectRow?: (this: BodyTable, rowid: string, eventObject: JQueryEventObject) => false | void;
 		readonly cb?: string;   // "#cb_list"
 		readonly cbId?: string; // "cb_list"
 		checkboxHtml?: (this: BodyTable, options: { rowid: string, iRow: number, iCol: number, data: any, checked: boolean }) => string;
@@ -1476,7 +1485,7 @@ declare namespace FreeJqGrid {
 		aftersavefunc?: (this: BodyTable, rowid: string, jqXhr: JQueryXHR, postData: any, options: SaveRowOptions) => void;
 		errorfunc?: (this: BodyTable, rowid: string, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void;
 		extraparam?: Object;
-		successfunc?: (this: BodyTable, jqXhr: JQueryXHR, rowid: string, options: FreeJqGrid.SaveRowOptions) => boolean | [boolean, any];
+		successfunc?: (this: BodyTable, jqXhr: JQueryXHR, rowid: string, options: FreeJqGrid.SaveRowOptions, editOrAdd: string, postData: any) => boolean | [boolean, any];
 		url?: string | ((this: BodyTable, rowid: string, editOrAdd: "add" | "edit", postData: any, options: SaveRowOptions) => string);
 	}
 	interface EditRowOptions extends BaseSaveRowOptions {
@@ -1500,7 +1509,7 @@ declare namespace FreeJqGrid {
 	}
 	interface AddRowOptions {
 		addRowParams?: EditRowOptions;
-		beforeAddRow: (this: BodyTable, options: AddRowOptions) => BooleanFeedbackValues;
+		beforeAddRow?: (this: BodyTable, options: AddRowOptions) => BooleanFeedbackValues;
 		initdata?: any;
 		position?: AddRowDataPosition;
 		rowID?: null | string | ((options: AddRowOptions) => string);
