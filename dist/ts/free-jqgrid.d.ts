@@ -699,7 +699,7 @@ declare namespace FreeJqGrid {
 		dataInit?: (this: BodyTable, element: Element, options: EditOptions) => void;
 		dataUrl?: string | ((this: BodyTable, rowid: string, value: string, cmName: string, ajaxContext: { elem: Element, options: any, cm: ColumnModel, mode: "cell" | "addForm" | "editForm" | "add" | "edit", rowid: string, iCol: number, ovm: string[] }) => string);
 		generateValue?: boolean;
-		value?: string | { [propName: string]: string };
+		value?: string | { [propName: string]: string } | (() => string | { [propName: string]: string });
 		defaultValue?: string | (() => string) | boolean; // boolean for SearchOptions compatibility
 		[propName: string]: any; // attribute for the editable element
 	}

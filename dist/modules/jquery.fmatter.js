@@ -602,7 +602,7 @@
 	$FnFmatter.select = function (cellval, opts) {
 		var ret = [], colModel = opts.colModel, defaultValue,
 			op = $.extend({}, colModel.editoptions || {}, colModel.formatoptions || {}),
-			oSelect = op.value, sep = op.separator || ":", delim = op.delimiter || ";";
+			oSelect = typeof op.value === "function" ? op.value() : op.value, sep = op.separator || ":", delim = op.delimiter || ";";
 		if (oSelect) {
 			var msl = op.multiple === true ? true : false, scell = [], sv,
 			mapFunc = function (n, j) { if (j > 0) { return n; } };
@@ -649,7 +649,7 @@
 		// jqGrid specific
 		var colModel = opts.colModel, $fnDefaultFormat = $FnFmatter.defaultFormat,
 			op = $.extend({}, colModel.editoptions || {}, colModel.formatoptions || {}),
-			oSelect = op.value, sep = op.separator || ":", delim = op.delimiter || ";",
+			oSelect = typeof op.value === "function" ? op.value() : op.value, sep = op.separator || ":", delim = op.delimiter || ";",
 			defaultValue, defaultValueDefined = op.defaultValue !== undefined,
 			isMultiple = op.multiple === true ? true : false, sv, so, i, nOpts, selOptions = {},
 			mapFunc = function (n, j) { if (j > 0) { return n; } };
@@ -960,7 +960,7 @@
 			delim = op.delimiter === undefined ? ";" : op.delimiter;
 
 		if (op.value) {
-			var oSelect = op.value,
+			var oSelect = typeof op.value === "function" ? op.value() : op.value,
 				msl = op.multiple === true ? true : false,
 				scell = [], sv, mapFunc = function (n, k) { if (k > 0) { return n; } };
 			if (msl) { scell = cell.split(","); scell = $.map(scell, function (n) { return $.trim(n); }); }
