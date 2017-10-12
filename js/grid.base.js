@@ -1705,7 +1705,11 @@
 					ret = obj;
 					while (ret != null && i--) {
 						p = prm.shift();
-						ret = ret[p];
+						if (ret.hasOwnProperty(p)) {
+							ret = ret[p];
+						} else {
+							ret = undefined;
+						}
 					}
 				}
 			} catch (ignore) { }
