@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.15.1 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.15.2-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-09-30
+ * Date: 2017-10-12
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -381,7 +381,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.15.1",
+		version: "4.15.2-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -1705,7 +1705,11 @@
 					ret = obj;
 					while (ret != null && i--) {
 						p = prm.shift();
-						ret = ret[p];
+						if (ret.hasOwnProperty(p)) {
+							ret = ret[p];
+						} else {
+							ret = undefined;
+						}
 					}
 				}
 			} catch (ignore) { }
