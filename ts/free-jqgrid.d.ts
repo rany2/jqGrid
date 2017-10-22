@@ -858,13 +858,13 @@ declare namespace FreeJqGrid {
 		[propName: string]: any; // allow to have any number of other properties
 	}
 	interface FormDeletingOptions extends DeleteFormLocaleOptions {
-		afterComplete?: (this: BodyTable, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery) => void;
+		afterComplete?: (this: BodyTable, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery, rowids: string[]) => void;
 		afterShowForm?: (this: BodyTable, $form: JQuery) => void;
-		afterSubmit?: (this: BodyTable, $form: JQuery) => void;
+		afterSubmit?: (this: BodyTable, jqXhr: JQueryXHR, postdata: Object | string, rowids: string[]) => void;
 		ajaxDelOptions?: JQueryAjaxSettings;
 		beforeInitData?: (this: BodyTable, $form: JQuery) => BooleanFeedbackValues;
 		beforeShowForm?: (this: BodyTable, $form: JQuery) => void;
-		beforeSubmit?: (this: BodyTable, postdata: Object | string, $form: JQuery) => [true] | [true, any] | undefined | [false, string];
+		beforeSubmit?: (this: BodyTable, postdata: Object | string, rowids: string[]) => [true] | [true, any] | undefined | [false, string];
 		cancelicon?: FormIcon; // [true,"left","fa fa-ban"]
 		closeOnEscape?: boolean;
 		commonIconClass?: string; // "fa"
@@ -876,9 +876,10 @@ declare namespace FreeJqGrid {
 		delui?: LoadType; // "disable" 
 		drag?: boolean;
 		height?: number | "auto" | "100%" | string; // "auto"
+		idSeparator?: string; // ","
 		left?: number;
 		mtype?: string; // "POST"
-		onclickSubmit?: (this: BodyTable, options: FormDeletingOptions, postdata: Object | string) => Object | string;
+		onclickSubmit?: (this: BodyTable, options: FormDeletingOptions, postdata: Object | string, rowids: string[]) => Object | string;
 		onClose?: (this: BodyTable, selector: string | Element | JQuery) => boolean;
 		processing?: boolean; // internal used
 		reloadAfterSubmit?: boolean;
@@ -887,7 +888,7 @@ declare namespace FreeJqGrid {
 		resize?: boolean;
 		serializeDelData?: (this: BodyTable, postdata: Object | string) => Object | string;
 		top?: number;
-		url?: string | ((this: BodyTable, rowid: string, postdata: Object | string, options: FormDeletingOptions) => string);
+		url?: string | ((this: BodyTable, rowid: string, postdata: Object | string, options: FormDeletingOptions, rowids: string[]) => string);
 		useDataProxy?: boolean;
 		width?: number | "auto" | "100%" | string; // "auto"
 		[propName: string]: any; // allow to have any number of other properties
@@ -2053,7 +2054,7 @@ interface JQuery {
 
 	// form deleting events
 	on(eventName: "jqGridDeleteAfterShowForm", handler: (eventObject: JQueryEventObject, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
-	on(eventName: "jqGridAddEditAfterComplete", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridDeleteAfterComplete", handler: (eventObject: JQueryEventObject, jqXhr: JQueryXHR, postdata: Object | string, $form: JQuery, rowids: string[]) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridDeleteBeforeInitData", handler: (eventObject: JQueryEventObject, $form: JQuery) => FreeJqGrid.BooleanFeedbackValues): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridDeleteBeforeShowForm", handler: (eventObject: JQueryEventObject, $form: JQuery) => void): FreeJqGrid.JQueryJqGrid;
 
