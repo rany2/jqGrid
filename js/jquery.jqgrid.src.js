@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-10-12
+ * Date: 2017-10-22
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -14279,6 +14279,7 @@
 							//jqModal : true,
 							closeOnEscape: false,
 							delData: {},
+							idSeparator: ",",
 							onClose: null,
 							ajaxDelOptions: {},
 							processing: false,
@@ -14309,7 +14310,7 @@
 				if (!$.isArray(rowids)) { rowids = [String(rowids)]; }
 				if ($(themodalSelector)[0] !== undefined) {
 					if (!deleteFeedback("beforeInitData", $(dtbl))) { return; }
-					$("#DelData>td", dtbl).text(rowids.join()).data("rowids", rowids);
+					$("#DelData>td", dtbl).text(rowids.join(o.idSeparator)).data("rowids", rowids);
 					$("#DelError", dtbl).hide();
 					if (o.processing === true) {
 						o.processing = false;
@@ -14332,7 +14333,7 @@
 					tbl += "<table class='DelTable'><tbody>";
 					// error data
 					tbl += "<tr id='DelError' style='display:none'><td class='" + errorClass + "'></td></tr>";
-					tbl += "<tr id='DelData' style='display:none'><td >" + rowids.join() + "</td></tr>";
+					tbl += "<tr id='DelData' style='display:none'><td >" + rowids.join(o.idSeparator) + "</td></tr>";
 					tbl += "<tr><td class='delmsg'>" + o.msg + "</td></tr>";
 					// buttons at footer
 					tbl += "</tbody></table></div></div>";
@@ -14358,8 +14359,8 @@
 							postdata = $delData.text(), //the pair is name=val1,val2,...
 							formRowIds = $delData.data("rowids"),
 							cs = {};
-						if ($.isFunction(o.onclickSubmit)) { cs = o.onclickSubmit.call($t, o, postdata) || {}; }
-						if ($.isFunction(o.beforeSubmit)) { ret = o.beforeSubmit.call($t, postdata) || ret; }
+						if ($.isFunction(o.onclickSubmit)) { cs = o.onclickSubmit.call($t, o, postdata, formRowIds) || {}; }
+						if ($.isFunction(o.beforeSubmit)) { ret = o.beforeSubmit.call($t, postdata, formRowIds) || ret; }
 						if (ret[0] && !o.processing) {
 							o.processing = true;
 							opers = p.prmNames;
@@ -14374,13 +14375,13 @@
 									postdata[pk] = jgrid.stripPref(p.idPrefix, postdata[pk]);
 								}
 							}
-							postd[idname] = postdata.join();
+							postd[idname] = postdata.join(o.idSeparator);
 							$(this).addClass(activeClass);
 							var url = o.url || p.editurl,
 								ajaxOptions = $.extend({
-									url: $.isFunction(url) ? url.call($t, postd[idname], postd, o) : url,
+									url: $.isFunction(url) ? url.call($t, postd[idname], postd, o, formRowIds) : url,
 									type: o.mtype,
-									data: $.isFunction(o.serializeDelData) ? o.serializeDelData.call($t, postd) : postd,
+									data: $.isFunction(o.serializeDelData) ? o.serializeDelData.call($t, postd, formRowIds) : postd,
 									complete: function (jqXHR, textStatus) {
 										var i;
 										$self.jqGrid("progressBar", { method: "hide", loadtype: o.delui });
@@ -14396,7 +14397,7 @@
 											// data is posted successful
 											// execute aftersubmit with the returned data from server
 											if ($.isFunction(o.afterSubmit)) {
-												ret = o.afterSubmit.call($t, jqXHR, postd) || [true];
+												ret = o.afterSubmit.call($t, jqXHR, postd, formRowIds) || [true];
 											}
 										}
 										if (ret[0] === false) {
@@ -14417,7 +14418,7 @@
 												$self.trigger("reloadGrid", [$.extend({}, o.reloadGridOptions || {})]);
 											}
 											setTimeout(function () {
-												deleteFeedback("afterComplete", jqXHR, postdata, $(dtbl));
+												deleteFeedback("afterComplete", jqXHR, postdata, $(dtbl), formRowIds);
 											}, 50);
 										}
 										o.processing = false;
