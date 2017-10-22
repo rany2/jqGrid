@@ -886,7 +886,7 @@ declare namespace FreeJqGrid {
 		reloadGridOptions?: ReloadGridOptions;
 		removemodal?: boolean;
 		resize?: boolean;
-		serializeDelData?: (this: BodyTable, postdata: Object | string) => Object | string;
+		serializeDelData?: (this: BodyTable, postdata: Object | string, rowids: string[]) => Object | string;
 		top?: number;
 		url?: string | ((this: BodyTable, rowid: string, postdata: Object | string, options: FormDeletingOptions, rowids: string[]) => string);
 		useDataProxy?: boolean;
