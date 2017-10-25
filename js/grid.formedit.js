@@ -1804,7 +1804,7 @@
 							serializeDelData: null,
 							useDataProxy: false,
 							delui: "disable", // "enable", "enable" or "block"
-							deltext: getGridRes.call($self, "defaults.deltext") || "Deleting..."
+							deltext: base.getGridRes.call($self, "defaults.deltext") || "Deleting..."
 						},
 						base.getGridRes.call($self, "del"),
 						jgrid.del || {},
