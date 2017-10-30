@@ -5689,7 +5689,7 @@
 					if (t.length !== 1) { return; }
 					if (!p.viewsortcols[2]) {
 						r = true;
-						d = t.hasClass("ui-icon-desc") ? "desc" : "asc";
+						d = t.hasClass("ui-icon-desc") ? "asc" : "desc";
 					}
 					var iColByName = getColumnHeaderIndex(this);
 					if (iColByName != null) {
