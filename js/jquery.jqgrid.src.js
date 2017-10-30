@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-10-25
+ * Date: 2017-10-30
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -5689,7 +5689,7 @@
 					if (t.length !== 1) { return; }
 					if (!p.viewsortcols[2]) {
 						r = true;
-						d = t.hasClass("ui-icon-desc") ? "desc" : "asc";
+						d = t.hasClass("ui-icon-desc") ? "asc" : "desc";
 					}
 					var iColByName = getColumnHeaderIndex(this);
 					if (iColByName != null) {
