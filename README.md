@@ -40,7 +40,7 @@ Remark: the above URLs will be available **after publishing** the release of the
 
 ### Below one can see the full list of changes in the version 4.15.2 compared with 4.15.1:
 
-* Bug fix in sorting in case of usage `viewsortcols` option with `viewsortcols[2]` euqal to false.
+* Bug fix in sorting in case of usage `viewsortcols` option with `viewsortcols[2]` equal to false.
 * Bug fix in the usage of `getGridRes` inside of `delGridRow` method.
 * update `free-jqgrid.d.ts` to include new parameter of `serializeDelData`. 
 * Add `idSeparator` option of form deleting. Add array of rowids as the last parameter of some callbacks and `jqGridDeleteAfterComplete` event. Add array of rowids as additional parameter of callbacks `afterComplete`, `afterSubmit`, `beforeSubmit`, `onclickSubmit` and `url` and the event `jqGridDeleteAfterComplete`. See [here](https://github.com/free-jqgrid/jqGrid/commit/425a03f59607e52718106304f48acee11bd5aaae) for more details.
