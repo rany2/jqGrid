@@ -2095,8 +2095,10 @@
 										left = documentElement.clientWidth;
 										top = documentElement.clientHeight;
 									}
-									left = left / 2 - parseInt(o.alertwidth, 10) / 2 - offsetGbox.left + w.scrollX;
-									top = top / 2 - 25 - offsetGbox.top + w.scrollY;
+									left = left / 2 - parseInt(o.alertwidth, 10) / 2 - offsetGbox.left +
+											((w.pageXOffset !== undefined) ? w.pageXOffset : (documentElement || document.body.parentNode || document.body).scrollLeft);
+									top = top / 2 - 25 - offsetGbox.top +
+											((w.pageYOffset !== undefined) ? w.pageYOffset : (documentElement || document.body.parentNode || document.body).scrollTop);
 								}
 								jgrid.createModal.call($t, alertIDs,
 									"<div class='" + getGuiStyles.call($t, "dialog.body") + "'><div>" + o.alerttext + "</div></div>",
