@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.15.2 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.15.3-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-10-30
+ * Date: 2017-11-11
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -381,7 +381,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.15.2",
+		version: "4.15.3-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -14577,8 +14577,10 @@
 										left = documentElement.clientWidth;
 										top = documentElement.clientHeight;
 									}
-									left = left / 2 - parseInt(o.alertwidth, 10) / 2 - offsetGbox.left + w.scrollX;
-									top = top / 2 - 25 - offsetGbox.top + w.scrollY;
+									left = left / 2 - parseInt(o.alertwidth, 10) / 2 - offsetGbox.left +
+											((w.pageXOffset !== undefined) ? w.pageXOffset : (documentElement || document.body.parentNode || document.body).scrollLeft);
+									top = top / 2 - 25 - offsetGbox.top +
+											((w.pageYOffset !== undefined) ? w.pageYOffset : (documentElement || document.body.parentNode || document.body).scrollTop);
 								}
 								jgrid.createModal.call($t, alertIDs,
 									"<div class='" + getGuiStyles.call($t, "dialog.body") + "'><div>" + o.alerttext + "</div></div>",
