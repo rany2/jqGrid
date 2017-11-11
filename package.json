@@ -74,6 +74,6 @@
     "tslint": "^5.8.0",
     "tslint-eslint-rules": "^4.1.1",
     "typescript": "^2.6.1",
-    "vrsource-tslint-rules": "^5.1.1"
+    "vrsource-tslint-rules": "^5.8.0"
   }
 }
