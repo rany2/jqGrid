@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-11-11
+ * Date: 2017-12-10
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -20316,7 +20316,9 @@
 		};
 	};
 	$FnFmatter.showlink.pageFinalization = function (iCol) {
-		var $self = $(this), p = this.p, colModel = p.colModel, cm = colModel[iCol], iRow, rows = this.rows, nRows = rows.length, row, td,
+		var $self = $(this), cm = this.p.colModel[iCol],
+			wrapperClassName = this.p.autoResizing.wrapperClassName,
+			iRow, rows = this.rows, nRows = rows.length, row, td,
 			onClick = function (e) {
 				var $tr = $(this).closest(".jqgrow");
 				if ($tr.length > 0) {
@@ -20337,7 +20339,7 @@
 				row = rows[iRow];
 				if ($(row).hasClass("jqgrow")) {
 					td = row.cells[iCol];
-					if (cm.autoResizable && td != null && $(td.firstChild).hasClass(p.autoResizing.wrapperClassName)) {
+					if (cm.autoResizable && td != null && $(td.firstChild).hasClass(wrapperClassName)) {
 						td = td.firstChild;
 					}
 					if (td != null) {
@@ -20522,11 +20524,11 @@
 			};
 	};
 	$FnFmatter.rowactions = function (e, act) {
-		var $tr = $(this).closest("tr.jqgrow"), rid = $tr.attr("id"),
+		var $td = $(this).closest("tr.jqgrow>td"), $tr = $td.parent(), rid = $tr.attr("id"),
 			$id = $(this).closest("table.ui-jqgrid-btable").attr("id").replace(/_frozen([^_]*)$/, "$1"),
 			$grid = $("#" + jgrid.jqID($id)), $t = $grid[0], p = $t.p, i, n, customAction, actop,
 			relativeTop = jgrid.getRelativeRect.call($t, $tr).top,
-			cm = p.colModel[jgrid.getCellIndex(this)],
+			cm = p.colModel[$td[0].cellIndex],
 			op = $.extend(true, { extraparam: {} }, jgrid.actionsNav || {},	p.actionsNavOptions || {}, cm.formatoptions || {});
 
 		if (p.editOptions !== undefined) {
@@ -20598,33 +20600,30 @@
 		return false; // prevent other processing of the click on the row
 	};
 	$FnFmatter.actions = function (cellval, opts, rwd, act) {
-		var rowid = opts.rowId, str = "", $t = this, p = $t.p, $self = $($t), i, customAction, info, displayMask = {},
+		var rowid = opts.rowId, str = "", $t = this, $self = $($t), i, info, customAction, displayMask = {},
 			edit = getGridRes.call($self, "edit") || {},
 			op = $.extend({
-				editbutton: true,
-				delbutton: true,
-				editformbutton: false,
-				commonIconClass: "ui-icon",
-				editicon: "ui-icon-pencil",
-				delicon: "ui-icon-trash",
-				saveicon: "ui-icon-disk",
-				cancelicon: "ui-icon-cancel",
-				savetitle: edit.bSubmit || "",
-				canceltitle: edit.bCancel || ""
-			},
-			getGridRes.call($self, "nav") || {},
-			jgrid.nav || {},
-			p.navOptions || {},
-			getGridRes.call($self, "actionsNav") || {},
-			jgrid.actionsNav || {},
-			p.actionsNavOptions || {},
-			opts.colModel.formatoptions || {}),
+					editbutton: true,
+					delbutton: true,
+					editformbutton: false,
+					commonIconClass: "ui-icon",
+					editicon: "ui-icon-pencil",
+					delicon: "ui-icon-trash",
+					saveicon: "ui-icon-disk",
+					cancelicon: "ui-icon-cancel",
+					savetitle: edit.bSubmit || "",
+					canceltitle: edit.bCancel || ""
+				},
+				getGridRes.call($self, "nav") || {},
+				jgrid.nav || {},
+				$t.p.navOptions || {},
+				getGridRes.call($self, "actionsNav") || {},
+				jgrid.actionsNav || {},
+				$t.p.actionsNavOptions || {},
+				(opts.colModel || {}).formatoptions || {}),
 			cssIconClass = function (name) {
 				return jgrid.mergeCssClasses(op.commonIconClass, op[name + "icon"]);
 			},
-			hoverClass = $self.jqGrid("getGuiStyles", "states.hover"),
-			hoverAttributes = "onmouseover=\"jQuery(this).addClass('" + hoverClass +
-				"');\" onmouseout=\"jQuery(this).removeClass('" + hoverClass + "');\"",
 			buttonInfos = [
 				{ action: "edit", actionName: "formedit", display: op.editformbutton },
 				{ action: "edit", display: !op.editformbutton && op.editbutton },
@@ -20639,22 +20638,25 @@
 					(options.hidden ? "' style='display:none;" : "") +
 					"' class='" + encodeAttr($self.jqGrid("getGuiStyles", "actionsButton", "ui-pg-div ui-inline-" + action)) + "' " +
 					(idPrefix !== null ? "id='j" + encodeAttr(idPrefix + "Button_" + rowid) : "") +
-					"' onclick=\"return jQuery.fn.fmatter.rowactions.call(this,event,'" + actionName + "');\" " +
-					(options.noHovering ? "" : hoverAttributes) + "><span class='" +
+					"' data-jqactionname=\"" + actionName + "\" " +
+					(options.noHovering ? "" : "' data-jqhovering=\"1\" ") +
+					"><span class='" +
 					encodeAttr(cssIconClass(action)) + "'></span></div>";
 			},
 			n = op.custom != null ? op.custom.length - 1 : -1;
 
 		if (rowid === undefined || fmatter.isEmpty(rowid)) { return ""; }
+
 		if ($.isFunction(op.isDisplayButtons)) {
 			try {
-				displayMask = op.isDisplayButtons.call($t, opts, rwd, act) || {};
+				displayMask = op.isDisplayButtons.call(this, op, rwd, act) || {};
 			} catch (ignore) {}
 		}
 		while (n >= 0) {
 			customAction = op.custom[n--];
 			buttonInfos[customAction.position === "first" ? "unshift" : "push"](customAction);
 		}
+
 		for (i = 0, n = buttonInfos.length; i < n; i++) {
 			info = $.extend({}, buttonInfos[i], displayMask[buttonInfos[i].action] || {});
 			if (info.display !== false) {
@@ -20665,6 +20667,9 @@
 	};
 	$FnFmatter.actions.pageFinalization = function (iCol) {
 		var $self = $(this), p = this.p, colModel = p.colModel, cm = colModel[iCol],
+			wrapperClassName = p.autoResizing.wrapperClassName,
+			hoverClass = $self.jqGrid("getGuiStyles", "states.hover"),
+			iRow, rows = this.rows, nRows = rows.length, row, td,
 			showHideEditDelete = function (show, rowid) {
 				var maxfrozen = 0, tr, $actionsDiv, len = colModel.length, i;
 				for (i = 0; i < len; i++) {
@@ -20702,6 +20707,19 @@
 			hideEditDelete = function (e, rowid) {
 				showHideEditDelete(false, rowid);
 				return false;
+			},
+			onMouseOver = function (e) {
+				if ($(e.target).closest("div.ui-pg-div").data("jqhovering") === 1) {
+					$(this).addClass(hoverClass);
+				}
+			},
+			onMouseOut = function (e) {
+				if ($(e.target).closest("div.ui-pg-div").data("jqhovering") === 1) {
+					$(this).removeClass(hoverClass);
+				}
+			},
+			onClick = function (e) {
+				return $FnFmatter.rowactions.call(this, e, $(e.target).closest("div.ui-pg-div").data("jqactionname"));
 			};
 		if (cm.formatoptions == null || !cm.formatoptions.editformbutton) {
 			// we use unbind to be sure that we don't register the same events multiple times
@@ -20709,6 +20727,21 @@
 			$self.on("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
 			$self.off("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
 			$self.on("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
+		}
+		for (iRow = 0; iRow < nRows; iRow++) {
+			row = rows[iRow];
+			if ($(row).hasClass("jqgrow")) {
+				td = row.cells[iCol];
+				if (cm.autoResizable && td != null && $(td.firstChild).hasClass(wrapperClassName)) {
+					td = td.firstChild;
+				}
+				if (td != null) {
+					$(td.firstChild).on("click", onClick);
+					$(td.firstChild).children("div.ui-pg-div")
+						.on("mouseover", onMouseOver)
+						.on("mouseout", onMouseOut);
+				}
+			}
 		}
 	};
 	$.unformat = function (cellval, options, pos, cnt) {

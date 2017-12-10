@@ -663,6 +663,11 @@ declare namespace FreeJqGrid {
 		onClick: (options: {rowid: string, event: JQueryEventObject, action: string, options: FormatterActionsCustomButton }) => void;
 		[propName: string]: any; // attribute for the editable element
 	}
+	interface FormatterActionButtonMask {
+		display?: boolean;    // whether to include the button in the actions div
+		hidden?: boolean;     // whether to add style="display:none;" to the button
+		noHovering?: boolean; // whether to add/remove hovering classes on mouseover/mouseout events
+	}
 	interface FormatterActionsOptions {
 		editbutton?: boolean;
 		delbutton?: boolean;
@@ -674,7 +679,7 @@ declare namespace FreeJqGrid {
 		cancelicon?: string; // "ui-icon-cancel",
 		savetitle?: string; // edit.bSubmit || "",
 		canceltitle?: string; // edit.bCancel || ""
-		isDisplayButtons?: (this: BodyTable, options: FormatterOptions, rwd, act) => boolean;
+		isDisplayButtons?: (this: BodyTable, options: FormatterOptions, rwd, act) => { [propName: string]: FormatterActionButtonMask };
 		custom?: FormatterActionsCustomButton[];
 		editOptions?: FormEditingOptions;
 		delOptions?: FormDeletingOptions;
