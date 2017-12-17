@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-12-10
+ * Date: 2017-12-17
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -4200,6 +4200,22 @@
 					// refresh rowIndexes cash in case of usage grouping
 					if (p.grouping) {
 						rebuildRowIndexes.call(self);
+
+						// bind onclick on +/- icon of grouping header to the call of groupingToggle
+						var expandOrCollapseGroup = function (e) {
+								var groupHeaderId = $(this).closest("tr.jqgroup").attr("id");
+								$self.jqGrid("groupingToggle", groupHeaderId, this, e);
+								return false;
+							},
+							$tr;
+						for (i = 0; i < self.rows.length; i++) {
+							$tr = $(self.rows[i]);
+							if ($tr.hasClass("jqgroup")) {
+								$tr.children("td")
+									.children("span.tree-wrap")
+									.click(expandOrCollapseGroup);
+							}
+						}
 					}
 
 					//

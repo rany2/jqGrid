@@ -509,9 +509,7 @@
 					icon = "<span style='cursor:pointer;margin-" +
 						(p.direction === "rtl" ? "right:" : "left:") + (n.idx * 12) +
 						"px;' class='" + grp.commonIconClass + " " +
-						(groupCollapse ? grp.plusicon : grp.minusicon) + " tree-wrap" +
-						"' onclick=\"jQuery('#" + jgrid.jqID(p.id).replace("\\", "\\\\") +
-						"').jqGrid('groupingToggle','" + hid + "', this);return false;\"></span>";
+						(groupCollapse ? grp.plusicon : grp.minusicon) + " tree-wrap'></span>";
 				if (grp._locgr) {
 					if (!(n.startRow + n.cnt > (page - 1) * rn && n.startRow < page * rn)) {
 						return true;
