@@ -1160,6 +1160,7 @@ declare namespace FreeJqGrid {
 		readonly cbId?: string; // "cb_list"
 		checkboxHtml?: (this: BodyTable, options: { rowid: string, iRow: number, iCol: number, data: any, checked: boolean }) => string;
 		deselectAfterSort?: boolean;
+		resetPageAfterSort?: boolean; // true
 		hasMultiselectCheckBox?: (this: BodyTable, options: { rowid: string, iRow: number, iCol: number, data: any, checked: boolean }) => string | false | undefined;
 		multiboxonly?: boolean;
 		multikey?: boolean;
