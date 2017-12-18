@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-12-17
+ * Date: 2017-12-19
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2869,6 +2869,7 @@
 					scroll: false,
 					multiboxonly: false,
 					deselectAfterSort: true,
+					resetPageAfterSort: true,
 					multiPageSelection: false,
 					scrollrows: false,
 					autowidth: false,
@@ -5116,7 +5117,7 @@
 						cm.lso = cm.firstsortorder || "asc";
 					}
 
-					if (!reload) {
+					if (!reload && p.resetPageAfterSort) {
 						p.page = 1;
 					}
 					if (p.multiSort) {
