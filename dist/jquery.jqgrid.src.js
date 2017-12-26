@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-12-19
+ * Date: 2017-12-26
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -6372,8 +6372,7 @@
 				}
 				if (self.grid && typeof newParams === "object") {
 					if (overwrite === true) {
-						var params = $.extend({}, self.p, newParams);
-						self.p = params;
+						$.extend(self.p, newParams);
 					} else {
 						$.extend(true, self.p, newParams);
 					}
