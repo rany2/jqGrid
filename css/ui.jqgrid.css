@@ -1,6 +1,6 @@
 /*!
- * jqGrid 4.15.2 - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2017-10-30
+ * jqGrid 4.15.3-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
+ * Date: 2017-12-26
  */
 
 /* Grid */
@@ -1444,6 +1444,9 @@ a.clearsearchclass {
 	margin: 0;
 	box-shadow: none;
 }
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-actions .ui-pg-div.btn:not(:first-child) {
+	margin-left: .125em;
+}
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgrow .sgbutton-div .sgbutton.btn {
 	padding: 0;
 	cursor: pointer;
@@ -1495,7 +1498,8 @@ a.clearsearchclass {
 	padding: .2em;
 }
 .queryresult {
-	margin-bottom: 1em;
+	margin-bottom: .5em;
+	padding: .25em;
 }
 .group.modal-content tr td {
 	padding: .2em .1em;
@@ -1504,7 +1508,11 @@ a.clearsearchclass {
 	padding: .1em;
 }
 .searchFilter .form-control:not([size]):not([multiple]) {
-	height: 22px;
+	height: 2em;
+}
+.searchFilter .btn {
+    margin-left: .125em;
+    padding: .2em .375em;
 }
 .ui-jqgrid .searchFilter table.group td {
 	padding: 1px;
