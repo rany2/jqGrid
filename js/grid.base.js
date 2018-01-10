@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-12-26
+ * Date: 2017-01-10
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -3468,7 +3468,7 @@
 						attrStr = cellAttrFunc.call(ts, rowId, cellValue, rawObject, cm, rdata);
 						if (typeof attrStr === "string") {
 							// ??? probably one can create object with properties from the attrStr
-							// and then to use one common function with constructTr to combin the default
+							// and then to use one common function with constructTr to combine the default
 							// properties with the properties used in cellattr and rowattr.
 							// Probably one could use $.extend with the most attributes. The exception are
 							// only class and style attributes which hold multi-values with " " or ";" as separator
@@ -7152,7 +7152,7 @@
 				if (action === "set" && isEmpty(data)) { return false; }
 				success = true;
 				var ftable = $(t.grid.sDiv)
-						.children(".ui-jqgrid-hbox")
+						.children(".ui-jqgrid-hbox" + (p.direction === "rtl" ? "-rtl" : ""))
 						.children(".ui-jqgrid-ftable")[0];
 				if (ftable == null || ftable.rows == null) { return false; }
 				var cells = ftable.rows[0].cells, colModel = p.colModel,
