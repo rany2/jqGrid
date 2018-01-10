@@ -1447,6 +1447,9 @@ a.clearsearchclass {
 .ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-actions .ui-pg-div.btn:not(:first-child) {
 	margin-left: .125em;
 }
+.ui-jqgrid.ui-jqgrid-bootstrap .ui-jqgrid-actions .ui-pg-div.btn.ui-inline-save {
+	margin-left: 0;
+}
 .ui-jqgrid.ui-jqgrid-bootstrap tr.jqgrow .sgbutton-div .sgbutton.btn {
 	padding: 0;
 	cursor: pointer;
