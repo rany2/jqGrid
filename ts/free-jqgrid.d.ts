@@ -1329,6 +1329,7 @@ declare namespace FreeJqGrid {
 		arrayReader?: any[]; // used internally
 		arrayReaderInfos?: { [name: string]: { name?: string, index: string, order?: number, type: InputNameType } }; // used internally
 		autoencode?: boolean; // true starting with version 4.15.0
+		autoResizing?: { adjustGridWidth?: boolean, compact?: boolean, fixWidthOnShrink?: boolean, maxColWidth?: number, minColWidth?: number, resetWidthOrg?: boolean, widthOfVisiblePartOfSortIcon?: number, wrapperClassName?: string };
 		autowidth?: boolean;
 		beforeInitGrid?: (this: BodyTable) => void;
 		beforeProcessing?: (this: BodyTable, data: any, textStatus: string, jqXhr: JQueryXHR) => false | void;
