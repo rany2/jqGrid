@@ -689,7 +689,9 @@
 					deleteGroupButton: "ui-corner-all"
 				},
 				searchToolbar: {
-					menu: "ui-menu-jqueryui",
+					menu: "ui-menu-jqueryui ui-menu ui-widget ui-widget-content ui-corner-all",
+					menuItem: "ui-menu-item",
+					menuItemButton: "ui-corner-all",
 					operButton: "ui-corner-all",
 					clearButton: "ui-corner-all"
 				},
@@ -780,6 +782,8 @@
 				},
 				searchToolbar: {
 					menu: "dropdown-menu",
+					menuItem: "",
+					menuItemButton: "ui-corner-all",
 					operButton: "btn btn-xs btn-default",
 					clearButton: "btn btn-xs btn-default"
 				},
@@ -824,7 +828,7 @@
 					body: "modal-body",
 					footer: "modal-footer",
 					content: "modal-content",
-					hr: "hidden",
+					hr: "d-none",
 					closeButton: "btn btn-xs btn-secondary",
 					fmButton: "btn btn-secondary",
 					dataField: "form-control",
@@ -883,6 +887,8 @@
 				},
 				searchToolbar: {
 					menu: "dropdown-menu",
+					menuItem: "",
+					menuItemButton: "dropdown-item",
 					operButton: "btn btn-xs btn-secondary",
 					clearButton: "btn btn-xs btn-secondary"
 				},
@@ -9870,8 +9876,8 @@
 				var getMinimizeIcon = function (path) {
 						return base.getIconRes.call($t, "gridMinimize." + path);
 					},
-					visibleGridIcon = getMinimizeIcon("visible"), // "ui-icon-circle-triangle-n"
-					hiddenGridIcon = getMinimizeIcon("hidden");  // "ui-icon-circle-triangle-s"
+					visibleGridIcon = getMinimizeIcon("visible"),
+					hiddenGridIcon = getMinimizeIcon("hidden");
 				if (state === "hidden") {
 					$(".ui-jqgrid-bdiv, .ui-jqgrid-hdiv", p.gView).slideUp("fast");
 					if (p.pager) { $(p.pager).slideUp("fast"); }
@@ -10362,12 +10368,15 @@
 									itemText = item.text;
 								}
 								selclass = selected === itemOper ? highlightClass : "";
-								str += '<li class="ui-menu-item ' + selclass + '" role="presentation"><a class="ui-corner-all g-menu-item" tabindex="0" role="menuitem" value="' + htmlEncode(itemOper) + '" data-oper="' + htmlEncode(itemOperand) + '"><table><tr><td style="width:25px">' + htmlEncode(itemOperand) + '</td><td>' + htmlEncode(itemText) + '</td></tr></table></a></li>';
+								str += '<li class="' +
+									getGuiStyles.call($t, "searchToolbar.menuItem", "ui-jqgrid-menu-item " + selclass) +
+									'" role="presentation"><a class="' +
+									getGuiStyles.call($t, "searchToolbar.menuItemButton", "g-menu-item") +
+									'" tabindex="0" role="menuitem" value="' + htmlEncode(itemOper) + '" data-oper="' + htmlEncode(itemOperand) + '"><table><tr><td style="width:25px">' + htmlEncode(itemOperand) + '</td><td>' + htmlEncode(itemText) + '</td></tr></table></a></li>';
 							}
 						}
 						str += "</ul>";
 						$("body").append(str);
-						$("#sopt_menu").addClass("ui-menu ui-widget ui-widget-content ui-corner-all");
 						$("#sopt_menu > li > a").hover(
 							function () { $(this).addClass(hoverClasses); },
 							function () { $(this).removeClass(hoverClasses); }
