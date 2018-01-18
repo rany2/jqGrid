@@ -1,6 +1,6 @@
 /*!
  * jqGrid 4.15.3-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2017-12-26
+ * Date: 2018-01-18
  */
 
 /* Grid */
@@ -983,6 +983,10 @@ select.form-control.ui-pg-selbox:not([size]):not([multiple]) {
 	text-align: center;
 	zoom: 1;
 }
+.ui-jqdialog.ui-jqgrid-bootstrap .navButton .fm-button {
+	padding: .375em .75em;
+	margin-left: .125em;
+}
 .ui-jqdialog .fm-button > span {
 	display: inline-block;
 	vertical-align: middle;
@@ -1093,12 +1097,12 @@ select.form-control.ui-pg-selbox:not([size]):not([multiple]) {
 	position: absolute;
 	padding: .2em;
 }
-.ui-search-menu.ui-menu .ui-menu-item {
+.ui-search-menu.ui-menu .ui-jqgrid-menu-item {
 	list-style-image: none;
 	padding-right: 0;
 	padding-left: 0;
 }
-.ui-search-menu.ui-menu .ui-menu-item a {
+.ui-search-menu.ui-menu .ui-jqgrid-menu-item a {
 	text-decoration: none;
 	display: block;
 }
@@ -1132,13 +1136,13 @@ a.clearsearchclass {
 	text-decoration: none;
 	cursor: pointer;
 }
-.ui-search-menu .ui-menu-item .g-menu-item {
+.ui-search-menu .ui-jqgrid-menu-item .g-menu-item {
 	padding: .2em;
 }
-.ui-menu-jqueryui .ui-menu-item .g-menu-item:not(.ui-state-hover) {
+.ui-menu-jqueryui .ui-jqgrid-menu-item .g-menu-item:not(.ui-state-hover) {
 	border: 1px solid transparent;
 }
-.ui-menu-jqueryui .ui-menu-item .g-menu-item:hover {
+.ui-menu-jqueryui .ui-jqgrid-menu-item .g-menu-item:hover {
 	font-weight: normal;
 }
  
@@ -1255,19 +1259,19 @@ a.clearsearchclass {
 }
 
 /* Classes for jquery.contextmenu-ui.js plugin we included here */
-.jqContextMenu .ui-menu .ui-menu-item a.ui-state-hover {
+.jqContextMenu .ui-menu .ui-jqgrid-menu-item a.ui-state-hover {
 	font-weight: normal;
 	margin: -1px;
 }
-.jqContextMenu .ui-menu .ui-menu-item.ui-state-hover {
+.jqContextMenu .ui-menu .ui-jqgrid-menu-item.ui-state-hover {
 	font-weight: normal;
 	margin: -1px;
 }
-.jqContextMenu .ui-menu-icons > .ui-menu-item {
+.jqContextMenu .ui-menu-icons > .ui-jqgrid-menu-item {
 	font-size: 11px;
 }
 /* Classes for jQuery.jqGrid.showHideColumnMenu.js plugin */
-.ui-jqgrid-showHideColumnMenu .ui-menu-item:hover {
+.ui-jqgrid-showHideColumnMenu .ui-jqgrid-menu-item:hover {
 	font-weight: normal;
 }
 .ui-jqgrid-disablePointerEvents {
@@ -1495,7 +1499,8 @@ a.clearsearchclass {
 	vertical-align: middle;
 }
 .ui-jqdialog.ui-jqgrid-bootstrap .FormData .DataTD input.form-control[type="checkbox"] {
-	width: 34px; /* change width:100% to the width the same like the height */
+	width: 2.193em;
+	height: 2.193em;
 }
 .DelTable .delmsg {
 	padding: .2em;

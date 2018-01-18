@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-10
+ * Date: 2017-01-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -689,7 +689,9 @@
 					deleteGroupButton: "ui-corner-all"
 				},
 				searchToolbar: {
-					menu: "ui-menu-jqueryui",
+					menu: "ui-menu-jqueryui ui-menu ui-widget ui-widget-content ui-corner-all",
+					menuItem: "ui-menu-item",
+					menuItemButton: "ui-corner-all",
 					operButton: "ui-corner-all",
 					clearButton: "ui-corner-all"
 				},
@@ -780,6 +782,8 @@
 				},
 				searchToolbar: {
 					menu: "dropdown-menu",
+					menuItem: "",
+					menuItemButton: "ui-corner-all",
 					operButton: "btn btn-xs btn-default",
 					clearButton: "btn btn-xs btn-default"
 				},
@@ -824,7 +828,7 @@
 					body: "modal-body",
 					footer: "modal-footer",
 					content: "modal-content",
-					hr: "hidden",
+					hr: "d-none",
 					closeButton: "btn btn-xs btn-secondary",
 					fmButton: "btn btn-secondary",
 					dataField: "form-control",
@@ -883,6 +887,8 @@
 				},
 				searchToolbar: {
 					menu: "dropdown-menu",
+					menuItem: "",
+					menuItemButton: "dropdown-item",
 					operButton: "btn btn-xs btn-secondary",
 					clearButton: "btn btn-xs btn-secondary"
 				},
