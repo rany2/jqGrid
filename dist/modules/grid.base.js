@@ -829,8 +829,8 @@
 					footer: "modal-footer",
 					content: "modal-content",
 					hr: "d-none",
-					closeButton: "btn btn-xs btn-secondary",
-					fmButton: "btn btn-secondary",
+					closeButton: "btn btn-xs btn-outline-primary",
+					fmButton: "btn btn-outline-secondary",
 					dataField: "form-control",
 					viewCellLabel: "",
 					viewLabel: "control-label",
@@ -862,9 +862,9 @@
 				gridTitle: "",
 				gridError: "alert alert-danger",
 				gridErrorText: "sr-only",
-				titleButton: "btn btn-xs btn-default",
+				titleButton: "btn btn-xs btn-outline-primary",
 				actionsDiv: "",
-				actionsButton: "btn btn-xs btn-default",
+				actionsButton: "btn btn-xs btn-outline-secondary",
 				toolbarUpper: "",
 				toolbarBottom: "",
 				pager: {
@@ -889,8 +889,8 @@
 					menu: "dropdown-menu",
 					menuItem: "",
 					menuItemButton: "dropdown-item",
-					operButton: "btn btn-xs btn-default",
-					clearButton: "btn btn-xs btn-default"
+					operButton: "btn btn-xs btn-outline-secondary",
+					clearButton: "btn btn-xs btn-outline-secondary"
 				},
 				top: "ui-jqgrid-bootstrap-corner-top",
 				bottom: "ui-jqgrid-bootstrap-corner-bottom",

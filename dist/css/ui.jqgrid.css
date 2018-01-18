@@ -630,7 +630,7 @@ span.ui-jqgrid-cell-wrapper {
 	border-style: none;
 }
 .ui-jqgrid .ui-pg-button:not(.ui-state-hover),
-.jqgrow .ui-jqgrid-actions .ui-pg-div:not(.ui-state-hover) {
+.ui-jqgrid-jquery-ui .jqgrow .ui-jqgrid-actions .ui-pg-div:not(.ui-state-hover) {
 	border: 1px solid transparent;
 }
 .ui-pager-control .ui-pg-table {
