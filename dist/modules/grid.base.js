@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-10
+ * Date: 2017-01-18
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -862,9 +862,9 @@
 				gridTitle: "",
 				gridError: "alert alert-danger",
 				gridErrorText: "sr-only",
-				titleButton: "btn btn-xs btn-secondary",
+				titleButton: "btn btn-xs btn-default",
 				actionsDiv: "",
-				actionsButton: "btn btn-xs btn-secondary",
+				actionsButton: "btn btn-xs btn-default",
 				toolbarUpper: "",
 				toolbarBottom: "",
 				pager: {
@@ -879,18 +879,18 @@
 					label: "form-control",
 					elem: "form-control",
 					operationGroup: "form-inline",
-					addRuleButton: "btn btn-xs btn-secondary",
-					deleteRuleButton: "btn btn-xs btn-secondary",
+					addRuleButton: "btn btn-xs btn-default",
+					deleteRuleButton: "btn btn-xs btn-default",
 					operationSelect: "form-control",
-					addGroupButton: "btn btn-xs btn-secondary",
-					deleteGroupButton: "btn btn-xs btn-secondary"
+					addGroupButton: "btn btn-xs btn-default",
+					deleteGroupButton: "btn btn-xs btn-default"
 				},
 				searchToolbar: {
 					menu: "dropdown-menu",
 					menuItem: "",
 					menuItemButton: "dropdown-item",
-					operButton: "btn btn-xs btn-secondary",
-					clearButton: "btn btn-xs btn-secondary"
+					operButton: "btn btn-xs btn-default",
+					clearButton: "btn btn-xs btn-default"
 				},
 				top: "ui-jqgrid-bootstrap-corner-top",
 				bottom: "ui-jqgrid-bootstrap-corner-bottom",
