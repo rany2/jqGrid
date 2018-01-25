@@ -7112,6 +7112,7 @@
 							position: pos,
 							srcRowid: src,
 							iRow: sind,
+							tr: rows[sind],
 							localData: lcdata,
 							iData: p.data.length - 1
 						});
