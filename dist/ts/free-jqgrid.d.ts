@@ -880,12 +880,16 @@ declare namespace FreeJqGrid {
 		deltext?: string; // default from $.jgrid.locales[currentLocale].defaults.deltext or $.jgrid.defaults.deltext or "Deleting..."
 		delui?: LoadType; // "disable" 
 		drag?: boolean;
+		errorTextFormat?: (this: BodyTable, jqXhr: JQueryXHR) => string;
 		height?: number | "auto" | "100%" | string; // "auto"
+		jqModal?: boolean;
 		idSeparator?: string; // ","
 		left?: number;
+		modal?: boolean;
 		mtype?: string; // "POST"
 		onclickSubmit?: (this: BodyTable, options: FormDeletingOptions, postdata: Object | string, rowids: string[]) => Object | string;
 		onClose?: (this: BodyTable, selector: string | Element | JQuery) => boolean;
+		overlay?: number;
 		processing?: boolean; // internal used
 		reloadAfterSubmit?: boolean;
 		reloadGridOptions?: ReloadGridOptions;
@@ -893,6 +897,7 @@ declare namespace FreeJqGrid {
 		resize?: boolean;
 		serializeDelData?: (this: BodyTable, postdata: Object | string, rowids: string[]) => Object | string;
 		top?: number;
+		toTop?: boolean;
 		url?: string | ((this: BodyTable, rowid: string, postdata: Object | string, options: FormDeletingOptions, rowids: string[]) => string);
 		useDataProxy?: boolean;
 		width?: number | "auto" | "100%" | string; // "auto"
