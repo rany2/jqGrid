@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-18
+ * Date: 2017-01-25
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -7112,6 +7112,7 @@
 							position: pos,
 							srcRowid: src,
 							iRow: sind,
+							tr: rows[sind],
 							localData: lcdata,
 							iData: p.data.length - 1
 						});
@@ -20339,11 +20340,11 @@
 		};
 	};
 	$FnFmatter.showlink.pageFinalization = function (iCol) {
-		var $self = $(this), cm = this.p.colModel[iCol],
-			wrapperClassName = this.p.autoResizing.wrapperClassName,
+		var $self = $(this), p = this.p, cm = p.colModel[iCol],
+			wrapperClassName = p.autoResizing.wrapperClassName,
 			iRow, rows = this.rows, nRows = rows.length, row, td,
 			onClick = function (e) {
-				var $tr = $(this).closest(".jqgrow");
+				var $td = $(this).closest("tr.jqgrow>td"), $tr = $td.parent(), iCol = $td[0].cellIndex, cm = p.colModel[iCol];
 				if ($tr.length > 0) {
 					return cm.formatoptions.onClick.call($self[0], {
 						iCol: iCol,
@@ -20689,46 +20690,47 @@
 		return "<div class='" + encodeAttr($self.jqGrid("getGuiStyles", "actionsDiv", "ui-jqgrid-actions")) + "'>" + str + "</div>";
 	};
 	$FnFmatter.actions.pageFinalization = function (iCol) {
-		var $self = $(this), p = this.p, colModel = p.colModel, cm = colModel[iCol],
+		var $self = $(this), p = this.p, cm = p.colModel[iCol],
 			wrapperClassName = p.autoResizing.wrapperClassName,
 			hoverClass = $self.jqGrid("getGuiStyles", "states.hover"),
-			iRow, rows = this.rows, nRows = rows.length, row, td,
-			showHideEditDelete = function (show, rowid) {
-				var maxfrozen = 0, tr, $actionsDiv, len = colModel.length, i;
-				for (i = 0; i < len; i++) {
-					// from left, no breaking frozen
-					if (colModel[i].frozen !== true) {
-						break;
+			iRow, rows = this.rows, nRows = rows.length, row,
+			showHideEditDelete = (function (cmName) {
+				return function (show, tr) {
+					var maxfrozen = 0, $actionsDiv, colModel = p.colModel, len = colModel.length, i, iCol = p.iColByName[cmName];
+					for (i = 0; i < len; i++) {
+						// from left, no breaking frozen
+						if (colModel[i].frozen !== true) {
+							break;
+						}
+						maxfrozen = i;
 					}
-					maxfrozen = i;
-				}
-				tr = $self.jqGrid("getGridRowById", rowid);
-				if (tr != null && tr.cells != null) {
-					//$actionsDiv = cm.frozen ? $("tr#"+jgrid.jqID(rid)+" td:eq("+jgrid.getCellIndex(this)+") > div",$grid) :$(this).parent(),
-					iCol = p.iColByName[cm.name];
-					$actionsDiv = $(tr.cells[iCol]).children(".ui-jqgrid-actions");
-					if (cm.frozen && p.frozenColumns && iCol <= maxfrozen) {
-						// uses the corresponding tr from frozen div with the same rowIndex ADDITIONALLY
-						// to the standard action div
-						$actionsDiv = $actionsDiv
-								.add($($self[0].grid.fbRows[tr.rowIndex].cells[iCol])
-								.children(".ui-jqgrid-actions"));
+					if (tr != null && tr.cells != null) {
+						$actionsDiv = $(tr.cells[iCol]).children(".ui-jqgrid-actions");
+						if (colModel[iCol].frozen && p.frozenColumns && iCol <= maxfrozen) {
+							// uses the corresponding tr from frozen div with the same rowIndex ADDITIONALLY
+							// to the standard action div
+							$actionsDiv = $actionsDiv
+									.add($($self[0].grid.fbRows[tr.rowIndex].cells[iCol])
+									.children(".ui-jqgrid-actions"));
+						}
+						if (show) {
+							$actionsDiv.find(">.ui-inline-edit,>.ui-inline-del").show();
+							$actionsDiv.find(">.ui-inline-save,>.ui-inline-cancel").hide();
+						} else {
+							$actionsDiv.find(">.ui-inline-edit,>.ui-inline-del").hide();
+							$actionsDiv.find(">.ui-inline-save,>.ui-inline-cancel").show();
+						}
 					}
-					if (show) {
-						$actionsDiv.find(">.ui-inline-edit,>.ui-inline-del").show();
-						$actionsDiv.find(">.ui-inline-save,>.ui-inline-cancel").hide();
-					} else {
-						$actionsDiv.find(">.ui-inline-edit,>.ui-inline-del").hide();
-						$actionsDiv.find(">.ui-inline-save,>.ui-inline-cancel").show();
-					}
-				}
-			},
+				};
+			})(cm.name),
 			showEditDelete = function (e, rowid) {
-				showHideEditDelete(true, rowid);
+				var tr = $self.jqGrid("getGridRowById", rowid);
+				showHideEditDelete(true, tr);
 				return false;
 			},
 			hideEditDelete = function (e, rowid) {
-				showHideEditDelete(false, rowid);
+				var tr = $self.jqGrid("getGridRowById", rowid);
+				showHideEditDelete(false, tr);
 				return false;
 			},
 			onMouseOver = function (e) {
@@ -20743,19 +20745,9 @@
 			},
 			onClick = function (e) {
 				return $FnFmatter.rowactions.call(this, e, $(e.target).closest("div.ui-pg-div").data("jqactionname"));
-			};
-		if (cm.formatoptions == null || !cm.formatoptions.editformbutton) {
-			// we use unbind to be sure that we don't register the same events multiple times
-			$self.off("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
-			$self.on("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
-			$self.off("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
-			$self.on("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
-		}
-		for (iRow = 0; iRow < nRows; iRow++) {
-			row = rows[iRow];
-			if ($(row).hasClass("jqgrow")) {
-				td = row.cells[iCol];
-				if (cm.autoResizable && td != null && $(td.firstChild).hasClass(wrapperClassName)) {
+			},
+			bindEvents = function (td, autoResizable) {
+				if (autoResizable && td != null && $(td.firstChild).hasClass(wrapperClassName)) {
 					td = td.firstChild;
 				}
 				if (td != null) {
@@ -20764,6 +20756,27 @@
 						.on("mouseover", onMouseOver)
 						.on("mouseout", onMouseOut);
 				}
+			},
+			bindRowEvents = (function (cmName) {
+				return function (e, options) {
+						var iColToBind = p.iColByName[cmName]; // it could be changed index because of reordering of columns
+						bindEvents(options.tr.cells[iColToBind], p.colModel[iColToBind].autoResizable);
+					};
+			})(cm.name);
+
+		if (cm.formatoptions == null || !cm.formatoptions.editformbutton) {
+			// we use unbind to be sure that we don't register the same events multiple times
+			$self.off("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
+			$self.on("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
+			$self.off("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
+			$self.on("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
+			$self.off("jqGridAfterAddRow.jqGridFormatter", bindRowEvents);
+			$self.on("jqGridAfterAddRow.jqGridFormatter", bindRowEvents);
+		}
+		for (iRow = 0; iRow < nRows; iRow++) {
+			row = rows[iRow];
+			if ($(row).hasClass("jqgrow")) {
+				bindEvents(row.cells[iCol], cm.autoResizable);
 			}
 		}
 	};

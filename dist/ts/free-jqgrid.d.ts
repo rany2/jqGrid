@@ -1318,7 +1318,7 @@ declare namespace FreeJqGrid {
 
 		actionsNavOptions?: FormatterActionsOptions;
 		additionalProperties?: (string | ColumnModel)[];
-		afterAddRow?: (this: BodyTable, options: { rowid: string, inputData: Object | Object[], position: AddRowDataPosition, srcRowid?: string, iRow?: number, localData?: Object, iData?: number }) => void;
+		afterAddRow?: (this: BodyTable, options: { rowid: string, inputData: Object | Object[], position: AddRowDataPosition, srcRowid?: string, iRow: number, tr: HTMLTableRowElement, localData?: Object, iData?: number }) => void;
 		afterChangeRowid?: (this: BodyTable, options: { rowid: string, oldRowid: string, iRow: number, tr: HTMLTableRowElement }) => void;
 		afterDelRow?: (this: BodyTable, rowid: string) => void;
 		afterInsertRow?: (this: BodyTable, rowid: string, item: { [cmOrPropName: string]: any }, srcItem: any) => void;
@@ -2008,7 +2008,7 @@ interface JQuery {
 	jqResize(handle: Element | string | JQuery, alsoResize: Element | string | JQuery): JQuery;
 
 	// jqGrid events
-	on(eventName: "jqGridAfterAddRow", handler: (eventObject: JQueryEventObject, options: { rowid: string, inputData: Object | Object[], position: FreeJqGrid.AddRowDataPosition, srcRowid?: string, iRow?: number, localData?: Object, iData?: number }) => void): FreeJqGrid.JQueryJqGrid;
+	on(eventName: "jqGridAfterAddRow", handler: (eventObject: JQueryEventObject, options: { rowid: string, inputData: Object | Object[], position: FreeJqGrid.AddRowDataPosition, srcRowid?: string, iRow: number, tr: HTMLTableRowElement, localData?: Object, iData?: number }) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAfterChangeRowid", handler: (ventObject: JQueryEventObject, options: { rowid: string, oldRowid: string, iRow: number, tr: HTMLTableRowElement }) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAfterDelRow", handler: (eventObject: JQueryEventObject, rowid: string) => void): FreeJqGrid.JQueryJqGrid;
 	on(eventName: "jqGridAfterInsertRow", handler: (eventObject: JQueryEventObject, rowid: string, item: { [cmOrPropName: string]: any }, srcItem: any) => void): FreeJqGrid.JQueryJqGrid;

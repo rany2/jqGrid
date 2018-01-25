@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-18
+ * Date: 2017-01-25
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -7112,6 +7112,7 @@
 							position: pos,
 							srcRowid: src,
 							iRow: sind,
+							tr: rows[sind],
 							localData: lcdata,
 							iData: p.data.length - 1
 						});
