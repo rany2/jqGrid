@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.15.3-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.15.3 - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
- * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2017-01-25
+ * Date: 2018-02-16
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -381,7 +381,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.15.3-pre",
+		version: "4.15.3",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -8329,7 +8329,7 @@
 	/**
 	 * jqGrid extension for cellediting Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
-	 * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -11434,7 +11434,7 @@
 	/**
 	 * jqFilter  jQuery jqGrid filter addon.
 	 * Copyright (c) 2011-2014, Tony Tomov, tony@trirand.com
-	 * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -12568,7 +12568,7 @@
 	/**
 	 * jqGrid extension for form editing Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
-	 * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -15953,7 +15953,7 @@
 	/**
 	 * jqGrid extension for manipulating Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com,  http://trirand.com/blog/
-	 * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -17591,7 +17591,7 @@
 	/**
 	 * jqGrid pivot functions
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
-	 * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * The modul is created initially by Tony Tomov and it's full rewritten
 	 * for free jqGrid: https://github.com/free-jqgrid/jqGrid by Oleg Kiriljuk
 	 * Dual licensed under the MIT and GPL licenses:
@@ -18412,7 +18412,7 @@
 	/**
 	 * jqGrid extension for SubGrid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
-	 * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -18850,7 +18850,7 @@
 	/**
 	 * jqGrid extension - Tree Grid
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
-	 * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -19499,7 +19499,7 @@
 	 *
 	 * $Version: 2007.08.19 +r2
 	 * Updated by Oleg Kiriljuk to support touch devices
-	 * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 */
 	// begin module jqdnr
 	var namespace = ".jqGrid", mouseDown = "mousedown", mouseMove = "mousemove", mouseUp = "mouseup",
@@ -19654,7 +19654,7 @@
 	 *
 	 * $Version: 07/06/2008 +r13
 	 * Changed by Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
-	 * Copyright (c) 2014-2017, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 */
 	// begin module jqmodal
 	var jqmHashLength = 0,
