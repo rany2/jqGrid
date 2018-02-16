@@ -46,7 +46,7 @@ Remark: the above URLs will be available **after publishing** the release of the
 * Add Slovenian locale `grid.locale-sl.js`.
 * Fix of `ui.jqgrid.css`: use transparency of border on actions buttons only in case of usage jQueryUI style.
 * Fix some compatibility issues with final Bootstrap 4.0.0 CSS. Usage of more `btn-default` class instead of `btn-secondary` in case of usage Bootrtrap 4.
-* Bug fix in `footerData` in case of `direction: "rtl"`. See [the answer](https://stackoverflow.com/q/48186526/315935) for more details.
+* Bug fix in `footerData` in case of `direction: "rtl"`. See [the answer](https://stackoverflow.com/a/48195281/315935) for more details.
 * Add documentation of `autoResizing` option of jqGrid (in `free-jqgrid.d.ts`).
 * Improved translate of Hungarian locale `grid.locale-hu.js`. See [pull request #411](https://github.com/free-jqgrid/jqGrid/pull/411) for more details.
 * Bug fix of `setGridParam` in case of usage `overwrite=true` option. See [the issue #409](https://github.com/free-jqgrid/jqGrid/issues/409) for more details.
