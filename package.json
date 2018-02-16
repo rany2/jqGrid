@@ -19,7 +19,7 @@
     }
   ],
   "title": "free jqGrid",
-  "version": "4.15.3-pre",
+  "version": "4.15.3",
   "description": "grid as jQuery plugin - fork of jqGrid before licensing change",
   "main": "js/jquery.jqgrid.src.js",
   "style": "css/ui.jqgrid.css",
@@ -55,10 +55,10 @@
   },
   "homepage": "https://github.com/free-jqgrid/jqGrid",
   "devDependencies": {
-    "@types/jquery": "^3.2.18",
-    "@types/jqueryui": "^1.12.1",
+    "@types/jquery": "^3.3.0",
+    "@types/jqueryui": "^1.12.2",
     "@types/qunit": "^2.0.31",
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.2",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
@@ -73,7 +73,7 @@
     "grunt-tslint": "^5.0.1",
     "tslint": "^5.9.1",
     "tslint-eslint-rules": "^4.1.1",
-    "typescript": "^2.6.2",
+    "typescript": "^2.7.2",
     "vrsource-tslint-rules": "^5.8.0"
   }
 }
