@@ -1170,6 +1170,7 @@ declare namespace FreeJqGrid {
 		multiboxonly?: boolean;
 		multikey?: boolean;
 		multiPageSelection?: boolean;
+		selectAllMode?: "filtered" | "all"; // "filtered"
 		multiselect?: boolean;
 		multiselectPosition?: "left" | "right" | "none";
 		multiselectWidth?: number; // 16

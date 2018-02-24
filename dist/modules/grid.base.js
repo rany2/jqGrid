@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.15.3 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.15.4-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-02-16
+ * Date: 2018-02-22
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -381,7 +381,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.15.3",
+		version: "4.15.4-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -2877,6 +2877,7 @@
 					deselectAfterSort: true,
 					resetPageAfterSort: true,
 					multiPageSelection: false,
+					selectAllMode: "filtered",
 					scrollrows: false,
 					autowidth: false,
 					scrollOffset: 18,
@@ -5503,13 +5504,20 @@
 						},
 						frozenRows = grid.fbRows,
 						skipClasses = disabledStateClasses + " ui-subgrid jqgroup jqfoot jqgfirstrow jqgskipselect",
-						id, ids = p._index;
+						id, ids = p._index, iSel;
 					clearArray(p.selarrrow); // p.selarrrow = [];
 					if (this.checked) {
 						toCheck = true;
 						p.selrow = ts.rows.length > 1 ? ts.rows[ts.rows.length - 1].id : null;
 						if (p.multiPageSelection && (p.datatype === "local" || p.treeGrid)) {
-							if (p.data != null && p.data.length > 0 && ids != null) {
+							if (p.selectAllMode === "filtered" && p.lastSelectedData != null && p.lastSelectedData.length > 0) {
+								p.selarrrow = [];
+								for (iSel = 0; iSel < p.lastSelectedData.length; iSel++) {
+									if (p.lastSelectedData[iSel].hasOwnProperty(p.localReader.id)) {
+										p.selarrrow.push(p.idPrefix + p.lastSelectedData[iSel][p.localReader.id]);
+									}
+								}
+							} else if (p.data != null && p.data.length > 0 && ids != null) {
 								// add to selarrrow all
 								for (id in ids) {
 									if (ids.hasOwnProperty(id)) {
