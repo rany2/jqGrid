@@ -2877,6 +2877,7 @@
 					deselectAfterSort: true,
 					resetPageAfterSort: true,
 					multiPageSelection: false,
+					selectAllMode: "filtered",
 					scrollrows: false,
 					autowidth: false,
 					scrollOffset: 18,
@@ -5503,13 +5504,20 @@
 						},
 						frozenRows = grid.fbRows,
 						skipClasses = disabledStateClasses + " ui-subgrid jqgroup jqfoot jqgfirstrow jqgskipselect",
-						id, ids = p._index;
+						id, ids = p._index, iSel;
 					clearArray(p.selarrrow); // p.selarrrow = [];
 					if (this.checked) {
 						toCheck = true;
 						p.selrow = ts.rows.length > 1 ? ts.rows[ts.rows.length - 1].id : null;
 						if (p.multiPageSelection && (p.datatype === "local" || p.treeGrid)) {
-							if (p.data != null && p.data.length > 0 && ids != null) {
+							if (p.selectAllMode === "filtered" && p.lastSelectedData != null && p.lastSelectedData.length > 0) {
+								p.selarrrow = [];
+								for (iSel = 0; iSel < p.lastSelectedData.length; iSel++) {
+									if (p.lastSelectedData[iSel].hasOwnProperty(p.localReader.id)) {
+										p.selarrrow.push(p.idPrefix + p.lastSelectedData[iSel][p.localReader.id]);
+									}
+								}
+							} else if (p.data != null && p.data.length > 0 && ids != null) {
 								// add to selarrrow all
 								for (id in ids) {
 									if (ids.hasOwnProperty(id)) {
