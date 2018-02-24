@@ -486,9 +486,9 @@
 					}
 					// data
 					$(".data", trpar).empty().append(elm);
-					if (cm.createColumnIndex && searchoptions.generateDatalist) {
+					if (columns.createColumnIndex && searchoptions.generateDatalist) {
 						var dataListId = "dl_" + elm.id,
-							$datalist = $($t).jqGrid("generateDatalistFromColumnIndex", cm.name);
+							$datalist = $($t).jqGrid("generateDatalistFromColumnIndex", columns.name);
 						if ($datalist != null && $datalist.length > 0) {
 							$(elm).attr("list", dataListId);
 							$(".data", trpar).append($datalist.attr("id", dataListId));
