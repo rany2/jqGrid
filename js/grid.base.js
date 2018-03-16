@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-02-22
+ * Date: 2018-03-06
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -8225,7 +8225,7 @@
 				row = rows[iRow];
 				cell = row.cells[iCol];
 				$cell = $(row.cells[iCol]);
-				if (cell != null && ($(row).hasClass("jqgrow") || ($(row).hasClass("jqgroup") && cell.colSpan === 1))) {
+				if (cell != null && ($(row).hasClass("jqgrow") && row.style.display !== "none" && cell.style.display !== "none" || ($(row).hasClass("jqgroup") && cell.colSpan === 1))) {
 					$cellFirstChild = $(cell.firstChild);
 					if ($cellFirstChild.hasClass(wrapperClassName)) {
 						colWidth = Math.max(colWidth, $cellFirstChild.outerWidth() + widthOuter);
