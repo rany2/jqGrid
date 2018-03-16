@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-03-06
+ * Date: 2018-03-16
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -4048,7 +4048,7 @@
 						if (arrayReaderInfos[idName]) {
 							idIndex = arrayReaderInfos[idName].order;
 						}
-						if (isXML) {
+						if (isXML && p.keyName === false) {
 							if (typeof idName === "string" && /^\[\w+\]$/.test(idName)) {
 								idName = attrReader(idName.substring(1, idName.length - 1));
 							} else if (typeof idName === "string" && /^\w+$/.test(idName)) {
