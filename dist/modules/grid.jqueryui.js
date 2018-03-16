@@ -838,7 +838,11 @@
 									var grid;
 									if (opts1.autoid) {
 										if ($.isFunction(opts1.autoid)) {
-											grid = opts1.autoid.call(this, getdata);
+											grid = opts1.autoid.call(this, getdata, {
+												rowid: accept,
+												ev: ev,
+												ui: ui
+											});
 										} else {
 											grid = Math.ceil(Math.random() * 1000);
 											grid = opts1.autoidprefix + grid;
