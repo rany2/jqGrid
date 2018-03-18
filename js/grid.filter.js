@@ -545,7 +545,12 @@
 				var editoptions = $.extend({}, cm.editoptions || {});
 				delete editoptions.readonly;
 				delete editoptions.disabled;
-				var searchoptions = $.extend({}, editoptions, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name });
+				var searchoptions = $.extend(
+						{},
+						editoptions,
+						cm.searchoptions || {},
+						getCmInfo(cm.cmName),
+						{ id: jgrid.randId(), name: cm.name, mode: "search" });
 				searchoptions.column = cm;
 				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
 						$.extend({}, searchoptions, searchoptions.attr || {}),
