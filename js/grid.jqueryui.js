@@ -807,21 +807,26 @@
 							},
 							drop: function (ev, ui) {
 								if (!$(ui.draggable).hasClass("jqgrow")) { return; }
-								var accept = $(ui.draggable).attr("id");
-								var getdata = ui.draggable.parent().parent().jqGrid("getRowData", accept);
+								var rowid = $(ui.draggable).attr("id"),
+									$srcGrid = ui.draggable.parent().parent(),
+									getdata = $srcGrid.jqGrid("getRowData", rowid);
 								if (!opts1.dropbyname) {
-									var i = 0, tmpdata = {}, nm, key;
-									var dropmodel = $("#" + jqID(this.id)).jqGrid("getGridParam", "colModel");
+									var tmpdata = {}, iSrc, iDest, srcName, destName,
+										srcColModel = $srcGrid.jqGrid("getGridParam", "colModel"),
+										destColModel = $("#" + jqID(this.id)).jqGrid("getGridParam", "colModel");
 									try {
-										for (key in getdata) {
-											if (getdata.hasOwnProperty(key)) {
-												nm = dropmodel[i].name;
-												if (!(nm === "cb" || nm === "rn" || nm === "subgrid")) {
-													if (getdata.hasOwnProperty(key) && dropmodel[i]) {
-														tmpdata[nm] = getdata[key];
+										for (iSrc = 0, iDest = 0; iSrc < srcColModel.length && iDest < destColModel.length; iSrc++) {
+											srcName = srcColModel[iSrc].name;
+											if (!(srcName === "cb" || srcName === "rn" || srcName === "subgrid")) {
+												// src column found, which need be copied
+												for (; iDest < destColModel.length; iDest++) {
+													destName = destColModel[iDest].name;
+													if (!(destName === "cb" || destName === "rn" || destName === "subgrid")) {
+														tmpdata[destName] = getdata[srcName];
+														break;
 													}
 												}
-												i++;
+												iDest++;
 											}
 										}
 										getdata = tmpdata;
@@ -839,7 +844,7 @@
 									if (opts1.autoid) {
 										if ($.isFunction(opts1.autoid)) {
 											grid = opts1.autoid.call(this, getdata, {
-												rowid: accept,
+												rowid: rowid,
 												ev: ev,
 												ui: ui
 											});
