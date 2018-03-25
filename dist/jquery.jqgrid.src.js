@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-03-18
+ * Date: 2018-03-25
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -921,8 +921,8 @@
 				value :
 				String(value)
 					.replace(/&/g, "&amp;")
-					.replace(/\"/g, "&quot;")
-					.replace(/\'/g, "&#39;")
+					.replace(/"/g, "&quot;")
+					.replace(/'/g, "&#39;")
 					.replace(/\//g, "&#47;")
 					.replace(/</g, "&lt;")
 					.replace(/>/g, "&gt;");
@@ -932,7 +932,7 @@
 				value :
 				String(value)
 					.replace(/&/g, "&amp;")
-					.replace(/\"/g, "&quot;")
+					.replace(/"/g, "&quot;")
 					.replace(/</g, "&lt;")
 					.replace(/>/g, "&gt;");
 		},
@@ -1054,7 +1054,7 @@
 			v = String(v);
 			if (v) {
 				v = v.replace(/<("[^"]*"|'[^']*'|[^'">])*>/gi, "");
-				return (v && v !== "&nbsp;" && v !== "&#160;") ? v.replace(/\"/g, "'") : "";
+				return (v && v !== "&nbsp;" && v !== "&#160;") ? v.replace(/"/g, "'") : "";
 			}
 			return v;
 		},
@@ -1840,7 +1840,7 @@
 						if (_trim) {
 							phrase = $.trim(phrase);
 						}
-						phrase = phrase.toString().replace(/\\/g, "\\\\").replace(/\"/g, "\\\"");
+						phrase = phrase.toString().replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
 						return _usecase ? phrase : phrase.toUpperCase();
 					};
 					/** @private */
@@ -3455,7 +3455,7 @@
 						styleValue = cm.align ? "text-align:" + cm.align + ";" : "",
 						attrStr, matches, value, tilteValue,
 						encodeAttr = function (v) {
-							return typeof v === "string" ? v.replace(/\'/g, "&#39;") : v;
+							return typeof v === "string" ? v.replace(/'/g, "&#39;") : v;
 						},
 						rest = " aria-describedby='" + p.id + "_" + cm.name + "'";
 					if (cm.hidden === true) { styleValue += "display:none;"; }
@@ -3529,7 +3529,7 @@
 						}
 					}
 					result = styleValue !== "" ? "style='" + styleValue + "'" : "";
-					result += (classes !== undefined ? (" class='" + classes + "'") : "") + ((cm.title && cellValue) ? (" title='" + stripHtml(tv).replace(/\'/g, "&apos;") + "'") : "");
+					result += (classes !== undefined ? (" class='" + classes + "'") : "") + ((cm.title && cellValue) ? (" title='" + stripHtml(tv).replace(/'/g, "&apos;") + "'") : "");
 					result += rest;
 					return result;
 				},
@@ -18669,7 +18669,7 @@
 							}
 						});
 						if ($(this).hasClass("sgcollapsed")) {
-							if (p.subGridOptions.reloadOnExpand === true || (p.subGridOptions.reloadOnExpand === false && !$(r).hasClass('ui-subgrid'))) {
+							if (p.subGridOptions.reloadOnExpand === true || (p.subGridOptions.reloadOnExpand === false && !$(r).hasClass("ui-subgrid"))) {
 								atd = pos >= 1 ? "<td colspan='" + pos + "'>&#160;</td>" : "";
 								if (!subGridFeedback.call(ts, "beforeExpand", subgridDivId, rowid)) {
 									return;
@@ -18742,8 +18742,13 @@
 					iRow++;
 				}
 				if (p.subGridOptions.expandOnLoad === true) {
+					var iColSubgrid = p.iColByName.subgrid;
 					$(ts.rows).filter(".jqgrow").each(function (index, row) {
-						$(row.cells[0]).click();
+						$(row.cells[iColSubgrid])
+							.filter(".sgcollapsed")
+							.children(".sgbutton-div")
+							.children(".sgbutton")
+							.click();
 					});
 				}
 				ts.subGridXml = function (xml, sid) {
@@ -20135,8 +20140,8 @@
 				if (isNumber(opts.decimalPlaces)) {
 					// Round to the correct decimal place
 					var nDecimalPlaces = opts.decimalPlaces;
-					var nDecimal = Math.pow(10, nDecimalPlaces);
-					sOutput = String(Math.round(nData * nDecimal) / nDecimal);
+					// we use rounding described in http://www.jacklmoore.com/notes/rounding-in-javascript/
+					sOutput = String(Number(Math.round(nData + "e" + nDecimalPlaces) + "e-" + nDecimalPlaces));
 					nDotIndex = sOutput.lastIndexOf(".");
 					if (nDecimalPlaces > 0) {
 						// Add the decimal separator

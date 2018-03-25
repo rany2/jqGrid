@@ -274,7 +274,7 @@
 							}
 						});
 						if ($(this).hasClass("sgcollapsed")) {
-							if (p.subGridOptions.reloadOnExpand === true || (p.subGridOptions.reloadOnExpand === false && !$(r).hasClass('ui-subgrid'))) {
+							if (p.subGridOptions.reloadOnExpand === true || (p.subGridOptions.reloadOnExpand === false && !$(r).hasClass("ui-subgrid"))) {
 								atd = pos >= 1 ? "<td colspan='" + pos + "'>&#160;</td>" : "";
 								if (!subGridFeedback.call(ts, "beforeExpand", subgridDivId, rowid)) {
 									return;
@@ -347,8 +347,13 @@
 					iRow++;
 				}
 				if (p.subGridOptions.expandOnLoad === true) {
+					var iColSubgrid = p.iColByName.subgrid;
 					$(ts.rows).filter(".jqgrow").each(function (index, row) {
-						$(row.cells[0]).click();
+						$(row.cells[iColSubgrid])
+							.filter(".sgcollapsed")
+							.children(".sgbutton-div")
+							.children(".sgbutton")
+							.click();
 					});
 				}
 				ts.subGridXml = function (xml, sid) {
