@@ -73,7 +73,7 @@
     "grunt-tslint": "^5.0.1",
     "tslint": "^5.9.1",
     "tslint-eslint-rules": "^5.1.0",
-    "typescript": "^2.7.2",
+    "typescript": "^2.8.1",
     "vrsource-tslint-rules": "^5.8.2"
   }
 }
