@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-03-25
+ * Date: 2018-03-31
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -2413,7 +2413,8 @@
 			var self = this, p = self.p, $self = $(self), i, j, altr, cn1, selr, idr, rd, cells, iStartTrTag,
 				selected = false, rowData = [], grpdata = [],
 				cn = (p.altRows === true && !$self.jqGrid("isBootstrapGuiStyle")) ? p.altclass : "",
-				hiderow = p.grouping ? p.groupingView.groupCollapse === true : false,
+				grp = p.groupingView,
+				hiderow = false,
 				rn = parseInt(p.rowNum, 10), cmName, $j = $.fn.jqGrid,
 				// prepare to build the map rowIndexes, which will simplify us to get rowIndex
 				// of any row of table by its rowid.
@@ -2484,15 +2485,17 @@
 							rowData.push(addCell(idr, rd[cmName], j, i + rcnt, cells, rd));
 					}
 				}
-				if (p.grouping && $j.groupingPrepare && !p.groupingView._locgr) {
-					$j.groupingPrepare.call($self, rd, i);
-					if ($.isFunction(p.groupingView.groupCollapse)) {
-						hiderow = p.groupingView.groupCollapse.call(self, {
-								group: p.groupingView.groups[p.groupingView.groups.length - 1],
-								rowid: idr,
-								data: rd
-							});
+				if (p.grouping) {
+					if ($j.groupingPrepare && !grp._locgr) {
+						$j.groupingPrepare.call($self, rd, i);
 					}
+					hiderow = $.isFunction(grp.groupCollapse) ?
+						grp.groupCollapse.call(self, {
+							group: grp.groups[grp.groups.length - 1],
+							rowid: idr,
+							data: rd
+						}) :
+						grp.groupCollapse;
 				}
 				rowData[iStartTrTag] = self.constructTr(idr, hiderow, cn1, rd, cells, selr);
 				rowData.push("</tr>");
@@ -2514,7 +2517,7 @@
 			}
 			if (p.grouping && $j.groupingRender) {
 				if (readAllInputData) {
-					p.groupingView._locgr = true;
+					grp._locgr = true;
 				}
 				rowData = [$j.groupingRender.call($self, grpdata, rn)];
 				jgrid.clearArray(grpdata); //grpdata = null;
