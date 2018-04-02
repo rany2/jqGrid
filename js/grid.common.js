@@ -451,6 +451,16 @@
 				case "checkbox": //what code for simple checkbox
 					elem = document.createElement("input");
 					elem.type = "checkbox";
+					if (vl === "" || vl == null) {
+						vl = !options.hasOwnProperty("defaultValue") ?
+								"false" :
+								$.isFunction(options.defaultValue) ?
+									options.defaultValue.call($t, {
+										cellValue: vl,
+										options: options
+									}) :
+									options.defaultValue;
+					}
 					if (!options.value) {
 						var vl1 = String(vl).toLowerCase();
 						if (vl1.search(/(false|f|0|no|n|off|undefined)/i) < 0 && vl1 !== "") {
@@ -467,7 +477,7 @@
 							elem.checked = true;
 							elem.defaultChecked = true;
 						}
-						elem.value = cbval[0];
+						elem.value = vl;
 						$(elem).data("offval", cbval[1]);
 					}
 					setAttributes(elem, options, ["value"]);
