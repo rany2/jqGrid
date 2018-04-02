@@ -40,6 +40,7 @@ Remark: the above URLs will be available **after publishing** the release of the
 
 ### Below one can see the full list of changes in the version 4.15.4 compared with 4.15.3:
 
+* Bug fix in initializing checkbox with `stype:"checkbox"` in searching dialog
 * Small fixes in CSS to improve compatibility with Bootstrap 4
 * Bug fix: call of `groupCollapse` callback if `_locgr:true` option of `groupingView` is used.
 * Remove unneeded escaping of quotes in `RegEx` expressions
