@@ -7,7 +7,7 @@ jqGrid was developed originally by [Tony Tomov](https://github.com/tonytomov) an
 
 The code from the GitHib repository is the fork of jqGrid 4.7.0 - the latest version available under MIT/GPL-licenses. It will be provided under MIT/GPL-licenses.
 
-Below you can find short description of the bug fixes implemented in free jqGrid 4.15.3 (compared with version 4.15.2). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](https://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
+Below you can find short description of the bug fixes implemented in free jqGrid 4.15.4 (compared with version 4.15.3). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](https://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
 
 Read [Wiki](https://github.com/free-jqgrid/jqGrid/wiki) for more detailed information about the features of free-jqGrid. The preliminary version of the documentation can be found [here](https://free-jqgrid.github.io/).
 
@@ -19,13 +19,13 @@ The package is published on [WebJars](http://www.webjars.org/) too and it's depl
 
 Free jqGrid is is available from [jsDelivr CDN](https://www.jsdelivr.com/projects/free-jqgrid) and [cdnjs](https://cdnjs.com/libraries/free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.3/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.3/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.4/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.4/js/jquery.jqgrid.min.js"></script>
 ```
 or
 ```html
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.3/css/ui.jqgrid.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.3/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/css/ui.jqgrid.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/jquery.jqgrid.min.js"></script>
 ```
 **The locale file is optional**. One can, but one don't need to include `grid.locale-en.min.js`, because the same information is already included in the `jquery.jqgrid.min.js` (or `jquery.jqgrid.src.js`).
 
@@ -36,28 +36,27 @@ If somebody want to test the *latest* version of free jqGrid, one can load it di
 ```
 All other language files and plugins are available from CDN too. See [the wiki article](https://github.com/free-jqgrid/jqGrid/wiki/Access-free-jqGrid-from-different-CDNs) for more details about the usage of free jqGrid from CDNs and RawGit.
 
-Remark: the above URLs will be available **after publishing** the release of the version of 4.15.3.
+Remark: the above URLs will be available **after publishing** the release of the version of 4.15.4.
 
-### Below one can see the full list of changes in the version 4.15.3 compared with 4.15.2:
+### Below one can see the full list of changes in the version 4.15.4 compared with 4.15.3:
 
-* Fix documentation (`free-jqgrid.d.ts`): add some properties and callback `errorTextFormat` to the definition of `FormDeletingOptions`. See [the issue #416](https://github.com/free-jqgrid/jqGrid/issues/416) for more details.
-* Bug fix of `pageFinalization` of formaters action and showlink. See [the comment](https://stackoverflow.com/questions/48186526/cant-get-result-from-total-footerdata-in-jqgrid/48195281#comment-83788072) for more details.
-* Add `tr` property to `options` of `afterAddRow` callback and `jqGridAfterAdd`.
-* Add Slovenian locale `grid.locale-sl.js`.
-* Fix of `ui.jqgrid.css`: use transparency of border on actions buttons only in case of usage jQueryUI style.
-* Fix some compatibility issues with final Bootstrap 4.0.0 CSS. Usage of more `btn-default` class instead of `btn-secondary` in case of usage Bootrtrap 4.
-* Bug fix in `footerData` in case of `direction: "rtl"`. See [the answer](https://stackoverflow.com/a/48195281/315935) for more details.
-* Add documentation of `autoResizing` option of jqGrid (in `free-jqgrid.d.ts`).
-* Improved translate of Hungarian locale `grid.locale-hu.js`. See [pull request #411](https://github.com/free-jqgrid/jqGrid/pull/411) for more details.
-* Bug fix of `setGridParam` in case of usage `overwrite=true` option. See [the issue #409](https://github.com/free-jqgrid/jqGrid/issues/409) for more details.
-* Small changes in CSS to improve the look in Bootstrap 4 (in case of usage `guiStyle: "bootstrap4"` of cause)
-* Small code optimization: add local `p = self.p` inside of `reloadGrid`. See [pull request #408](https://github.com/free-jqgrid/jqGrid/pull/408) for more details.
-* Add new jqGrid option `resetPageAfterSort` to prevent resetting of page number during sorting. See [the issue #406](https://github.com/free-jqgrid/jqGrid/issues/406) for more details.
-* Improve the code of `formatter:"actions"` and data grouping to remove inline event handler and to allow to use jqGrid with less restrictive Content Security Policy. See [the issue #403](https://github.com/free-jqgrid/jqGrid/issues/403) for more details.
-* Fix documentation (`free-jqgrid.d.ts`) of `isDisplayButtons` callback, which can be used for `formatter:"actions"`. See [the answer](https://stackoverflow.com/a/29735149/315935) for more details.
+* Small fixes in CSS to improve compatibility with Bootstrap 4
+* Bug fix: call of `groupCollapse` callback if `_locgr:true` option of `groupingView` is used.
+* Remove unneeded escaping of quotes in `RegEx` expressions
+* Bug fix in subgrid in case of usage `expandOnLoad:true` in combination with `mustiselect:true`
+* Improving rounding precision in formatting of numbers
+* Bug fix in `gridDnD` method in case if usage `dropbyname:false` option.
+* Bug fix initializing of `mode:"search"` in all places of `grid.filters.js` module.
+* Extend parameters of `autoid` callback option of `gridDnD` method with additional `options` parameter.
+* Bug fix reading of XML if `key:true` is used in `colModel`. See [the issue #427](https://github.com/free-jqgrid/jqGrid/issues/427) for more details.
+* Bug fix processing of grouping headers in method `getAutoResizableWidth` used for auto-adjustment of the width of columns.
+* Introduce new option `selectAllMode`, change default behavior of `selectAll` button for `multiPageSelection` mode. New option `selectAllMode` can have `"filtered"` or `"all"` values. `"all"` means old behavior where all local data will be selected. The default value of `selectAllMode` is `"filtered"`, which means that only the last filtered data (not only from the current page) will be selected.
+* Bug fix in the last parameter of `formatDisplayField` callback of data grouping. Adjusting `free-jqgrid.d.ts` (the documentation) of `formatDisplayField`.
+* Bug fix in the usage of `<datalist>` (`createColumnIndex: true` and `searchoptions: {generateDatalist: true, ...}`) in Searching Dialog.
 
 Other old readmes contain the list of the features and bug fixed implemented in previous versions of free jqGrid:
 
+* [README4.15.3.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.15.3.md) contains the readme of free jqGrid 4.15.3.
 * [README4.15.2.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.15.2.md) contains the readme of free jqGrid 4.15.2.
 * [README4.15.1.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.15.1.md) contains the readme of free jqGrid 4.15.1.
 * [README4.15.0.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.15.0.md) contains the readme of free jqGrid 4.15.0.
