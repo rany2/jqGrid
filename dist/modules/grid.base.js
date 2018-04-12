@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.15.4 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.15.5-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-04-02
+ * Date: 2018-04-11
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -381,7 +381,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.15.4",
+		version: "4.15.5-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -816,6 +816,7 @@
 					select: "table-success",
 					disabled: "disabled ui-jqgrid-disablePointerEvents",
 					hover: "active",
+					hoverTh: "table-active",
 					error: "danger",
 					active: "active",
 					textOfClickable: ""
@@ -5420,6 +5421,7 @@
 				thead = "<thead><tr class='ui-jqgrid-labels' role='row'>", headerText,
 				tbody = "<tbody><tr style='display:none;'>",
 				hoverStateClasses = getGuiStyles("states.hover"),
+				hoverThStateClasses = getGuiStyles("states.hoverTh") || hoverStateClasses,
 				disabledStateClasses = getGuiStyles("states.disabled");
 
 			if (p.multiSort) {
@@ -5489,8 +5491,8 @@
 				.children("tr")
 				.children("th")
 				.hover(
-					function () { $(this).addClass(hoverStateClasses); },
-					function () { $(this).removeClass(hoverStateClasses); }
+					function () { $(this).addClass(hoverThStateClasses); },
+					function () { $(this).removeClass(hoverThStateClasses); }
 				);
 			if (p.multiselect) {
 				$(p.cb, hTable).on("click", function () {

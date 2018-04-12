@@ -1147,8 +1147,8 @@ declare namespace FreeJqGrid {
 	}
 	interface JqGridSubGridOptions {
 		ajaxSubgridOptions?: JQueryAjaxSettings;
-		beforeCollapse?: (this: BodyTable, subgridDivId: string, rowid: string) => void;
-		beforeExpand?: (this: BodyTable, subgridDivId: string, rowid: string) => void;
+		subGridBeforeCollapse?: (this: BodyTable, subgridDivId: string, rowid: string) => void;
+		subGridBeforeExpand?: (this: BodyTable, subgridDivId: string, rowid: string) => void;
 		loadSubgridError?: (this: BodyTable, jqXhr: JQueryXHR, textStatus: string, errorThrown: string) => void;
 		serializeSubGridData?: (this: BodyTable, postData: any) => Object | string;
 		subGrid?: boolean;
