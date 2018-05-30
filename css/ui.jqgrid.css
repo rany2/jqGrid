@@ -855,6 +855,9 @@ select.form-control.ui-pg-selbox:not([size]):not([multiple]) {
 	right: auto;
 	left: auto;
 }
+.ui-jqgrid-bootstrap.modal > .modal-dialog {
+	max-width: none;
+}
 .ui-jqdialog-content,
 .ui-jqdialog .ui-jqdialog-content {
 	border: 0;
