@@ -479,6 +479,7 @@
 							addedrow: "first",
 							topinfo: "",
 							bottominfo: "",
+							labelswidth: "",
 							savekey: [false, 13],
 							navkeys: [false, 38, 40],
 							checkOnSubmit: false,
@@ -602,7 +603,10 @@
 				}
 				function createData(rowid1, tb, maxcols) {
 					var cnt = 0, retpos = [], ind = false, $tb = $(tb),
-						tdtmpl = "<td class='CaptionTD'>&#160;</td><td class='DataTD'>&#160;</td>", tmpl = "", i; //*2
+						labelsWidth = String(o.labelswidth) + (!o.labelswidth || isNaN(o.labelswidth) ? "" : "px"),
+						tdtmpl = "<td class='CaptionTD" +
+							(labelsWidth ? "' style='width:" + labelsWidth + ";" : "") +
+							"'>&#160;</td><td class='DataTD'>&#160;</td>", tmpl = "", i; //*2
 					for (i = 1; i <= maxcols; i++) {
 						tmpl += tdtmpl;
 					}
