@@ -702,7 +702,7 @@
 						iconsOverText: o.iconsOverText,
 						id: gid + "_ilsave",
 						onClickButton: function () {
-							if (!hasOneFromClasses(this, disabledClass)) {
+							if (!hasOneFromClasses(this, disabledClass) && p.savedRow.length > 0) {
 								var sr = p.savedRow[0].id;
 								if (sr) {
 									var opers = p.prmNames, oper = opers.oper, tmpParams = o.editParams;
@@ -733,7 +733,7 @@
 						iconsOverText: o.iconsOverText,
 						id: gid + "_ilcancel",
 						onClickButton: function () {
-							if (!hasOneFromClasses(this, disabledClass)) {
+							if (!hasOneFromClasses(this, disabledClass) && p.savedRow.length > 0) {
 								var sr = p.savedRow[0].id, cancelPrm = o.editParams;
 								if (sr) {
 									if ($("#" + jgrid.jqID(sr), $t).hasClass("jqgrid-new-row")) {
