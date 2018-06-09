@@ -1194,6 +1194,7 @@ declare namespace FreeJqGrid {
 		sortname?: string; // ""
 		sortIconsBeforeText?: boolean; // false
 		sortIconName?: (this: BodyTable, options: { order: "asc" | "desc", iCol: number, cm: ColumnModel }) => string; // return CSS classes
+		sortingDuringEditing?: "prevent" | "cancel" | "save"; // "prevent"
 		sortOrderPosition?: "afterSortIcons" | "beforeSortIcons"; // "afterSortIcons"
 		showOneSortIcon?: boolean; // false
 		showSortOrder?: boolean; // true
@@ -1243,6 +1244,7 @@ declare namespace FreeJqGrid {
 		pagerLeftWidth?: number; // 125
 		pagerRightWidth?: number;
 		pagerpos?: "left" | "center" | "right";
+		pagingDuringEditing?: "prevent" | "cancel" | "save"; // "prevent"
 		pgbuttons?: boolean; // true
 		pginput?: boolean; // true
 		reccount?: number; // 0
@@ -1448,6 +1450,7 @@ declare namespace FreeJqGrid {
 		};
 		quickEmpty?: boolean | "quickest";
 		reloadGridOptions?: ReloadGridOptions;
+		reloadingDuringEditing?: "prevent" | "cancel" | "save"; // "prevent"
 		remapColumns?: number[];
 		resetsearch?: boolean;
 		reservedColumnNames?: string[]; // ["rn","cb","subgrid"]
