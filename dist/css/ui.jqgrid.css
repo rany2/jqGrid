@@ -141,7 +141,7 @@
 }
 .ui-jqgrid .ui-jqgrid-caption .ui-jqgrid-titlebar-close span.ui-icon,
 .ui-jqdialog-titlebar-ltr .ui-jqdialog-titlebar-close span.ui-icon {
-	right: 3px;
+	right: 3.5px;
 }
 
 .ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.ui-icon {
@@ -149,14 +149,26 @@
 }
 
 .ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.fa,
+.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.fa,
 .ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.glyphicon {
 	/*  the values below are based on the difference between the
 		font-size of fa-icon and the font size of the parent element */
 	font-size: 14px;
 	margin-top: -2px;
 }
+.ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > .svg-inline--fa {
+	font-size: 14px;
+	display: block;
+	margin-top: -.125em;
+	margin-left: -.125em;
+}
 .ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.fa {
 	margin-left: -1px;
+}
+.ui-jqdialog-titlebar-close > .svg-inline--fa {
+	display: block;
+	margin-left: .0625em;
+    margin-top: -.0625em;
 }
 .ui-jqgrid .ui-jqgrid-titlebar > .ui-jqgrid-titlebar-close > span.glyphicon {
 	margin-left: -2px;
@@ -170,17 +182,30 @@
 }
 
 /* Resizer */
-.ui-jqdialog .ui-resizable-handle {
+/*.ui-jqdialog .ui-resizable-handle {
 	right: -3px;
 	bottom: -3px;
+}*/
+.ui-jqdialog .ui-resizable-handle > .ui-icon {
+	right: -1px;
+    bottom: -1px;
 }
-.ui-jqdialog .ui-resizable-handle.fa {
-	bottom: 1px;
-	right: -2px;
+.ui-jqdialog .ui-resizable-handle > .fa {
+    font-size: 12px;
+    right: -2px;
+    position: relative;
 }
-.ui-jqdialog .ui-resizable-handle.glyphicon {
-	right: -2px;
-	bottom: -3.8px;
+.ui-jqdialog .ui-resizable-handle > .svg-inline--fa {
+	font-size: 12px;
+    right: -1px;
+	/*right: -2px;
+    bottom: -1px;*/
+	position: relative;
+}
+.ui-jqdialog .ui-resizable-handle > .glyphicon {
+	font-size: 12px;
+	right: -1px;
+	bottom: -2.8px;
 }
 
 /* Header */
@@ -207,6 +232,8 @@
 	padding: 0 2px 0 2px;
 }
 .ui-jqgrid-htable > thead > .jqg-first-row-header > th {
+	padding-top: 0;
+	padding-bottom: 0;
 	border-bottom: 0 none;
 	border-top: 0 none;
 }
@@ -855,6 +882,9 @@ select.form-control.ui-pg-selbox:not([size]):not([multiple]) {
 	right: auto;
 	left: auto;
 }
+.ui-jqgrid-bootstrap.modal > .modal-dialog {
+	max-width: none;
+}
 .ui-jqdialog-content,
 .ui-jqdialog .ui-jqdialog-content {
 	border: 0;
@@ -1215,6 +1245,9 @@ a.clearsearchclass {
 }
 .ui-jqgrid .s-ico > .ui-state-disabled.fa {
 	padding: 0;
+}
+.ui-jqgrid .s-ico > .svg-inline--fa.fa-sort-down {
+	margin-top: -1.05em;
 }
 .jqgrow .ui-pg-div > span.fa {
 	font-weight: normal;

@@ -533,6 +533,78 @@
 					plusRtl: "fa-lg fa-caret-left"
 				}
 			},
+			fontAwesomeSVG: {
+				common: "fas", //"fa"
+				pager: {
+					common: "fa-fw",
+					first: "fa-step-backward",
+					prev: "fa-backward",
+					next: "fa-forward",
+					last: "fa-step-forward"
+				},
+				sort: {
+					common: "fa-lg",        // common: "",
+					asc: "fa-sort-up", //"fa-sort-asc",     // asc: "fa-sort-amount-asc",
+					desc: "fa-sort-down" //"fa-sort-desc"    // desc: "fa-sort-amount-desc"
+				},
+				gridMinimize: {
+					visible: "fa-chevron-circle-up",
+					hidden: "fa-chevron-circle-down"
+				},
+				nav: {
+					common: "fa-lg fa-fw",
+					edit: "fa-pencil-alt",
+					add: "fa-plus",
+					del: "fa-trash-alt",
+					search: "fa-search",
+					refresh: "fa-sync", //"fa-refresh",
+					view: "fa-file",
+					save: "fa-save",
+					cancel: "fa-ban",
+					newbutton: "fa-external-link-alt"
+				},
+				actions: {
+					common: "fa-fw",
+					edit: "fa-pencil-alt",
+					del: "fa-trash-alt",
+					save: "fa-save",
+					cancel: "fa-ban"
+				},
+				form: {
+					close: "fa-times",
+					prev: "fa-caret-left",
+					next: "fa-caret-right",
+					save: "fa-save",
+					undo: "fa-undo",
+					del: "fa-trash-alt",
+					cancel: "fa-ban",
+					resizableLtr: "fa-rss fa-lg fa-rotate-270"
+				},
+				search: {
+					search: "fa-search",
+					reset: "fa-undo",
+					query: "fa-comments"
+				},
+				subgrid: {
+					common: "fa-fw",
+					plus: "fa-plus",
+					minus: "fa-minus",
+					openLtr: "fa-reply fa-rotate-180",
+					openRtl: "fa-share fa-rotate-180"
+				},
+				grouping: {
+					common: "fa-fw",
+					plus: "fa-plus-square",
+					minus: "fa-minus-square"
+				},
+				treeGrid: {
+					common: "fa-fw",
+					minus: "fa-lg fa-sort-down", //"fa-lg fa-sort-desc",
+					leaf: "fa-dot-circle",
+					plusLtr: "fa-lg fa-caret-right",
+					plusRtl: "fa-lg fa-caret-left"
+				}
+			},
 			glyph: {
 				common: "glyphicon",
 				pager: {
@@ -2767,6 +2839,9 @@
 					page: 1,
 					rowNum: 20,
 					maxRowNum: 10000,
+					pagingDuringEditing: "prevent", // "prevent", "cancel" or "save"
+					sortingDuringEditing: "prevent", // "prevent", "cancel" or "save"
+					reloadingDuringEditing: "prevent", // "prevent", "cancel" or "save"
 					autoresizeOnLoad: false,
 					columnsToReResizing: [],
 					autoResizing: {
@@ -4773,6 +4848,34 @@
 						$(p.cb, gridSelf.fhDiv).prop("checked", checked);
 					}
 				},
+				cancelOrSaveEditing = function (mode) {
+					// The current code don't take in the consideration errors during
+					// remote saving/canceling. The standard behavior in case of
+					// remote saving/canceling is wating till the server response and
+					// holding inline/cell editing if saving/canceling failed by some
+					// server reason. The current code of cancelOrSaveEditing
+					// don't wait for the server response
+					var iEditing, savedRowInfo;
+					for (iEditing = 0; iEditing < p.savedRow.length; iEditing++) {
+						savedRowInfo = p.savedRow[iEditing];
+						if (mode === "save") {
+							if (savedRowInfo.hasOwnProperty("ic")) {
+								$self0.jqGrid("saveCell", savedRowInfo.id, savedRowInfo.ic);
+							} else {
+								$self0.jqGrid("saveRow", savedRowInfo.id);
+							}
+						} else {
+							// mode === "cancel"
+							if (savedRowInfo.hasOwnProperty("ic")) {
+								$self0.jqGrid("restoreCell", savedRowInfo.id, savedRowInfo.ic);
+							} else {
+								$self0.jqGrid("restoreRow", savedRowInfo.id);
+							}
+						}
+					}
+					//clearArray(p.savedRow); // p.savedRow = [];
+					//p.editingInfo = {};
+				},
 				setPager = function (pgid, tp) {
 					var hoverClasses = getGuiStyles("states.hover"), disabledClasses = getGuiStyles("states.disabled"),
 						sep = "<td class='ui-pg-button " + disabledClasses + "'><span class='ui-separator'></span></td>",
@@ -4781,6 +4884,9 @@
 						pgl = "<table " + "style='table-layout:auto;white-space: pre;" + blockAlign + "' class='ui-pg-table'><tbody><tr>",
 						str = "", pgcnt, lft, cent, rgt, twd, i,
 						clearVals = function (onpaging, newPage, newRowNum) {
+							if (p.savedRow.length > 0 && p.pagingDuringEditing === "prevent") {
+								return false;
+							}
 							if (!feedback.call(ts, "onPaging", onpaging, {
 									newPage: newPage,
 									currentPage: intNum(p.page, 1),
@@ -4797,8 +4903,7 @@
 								}
 								setHeadCheckBox.call(ts, false);
 							}
-							clearArray(p.savedRow); // p.savedRow = [];
-							p.editingInfo = {};
+							cancelOrSaveEditing(p.pagingDuringEditing);
 							return true;
 						};
 					tp += "_" + pgid;
@@ -5097,7 +5202,7 @@
 				sortData = function (index, idxcol, reload, sor, obj, e) {
 					var self = this, mygrid = self.grid, cm = p.colModel[idxcol], disabledClasses = getGuiStyles("states.disabled");
 					if (cm == null || !cm.sortable) { return; }
-					if (p.savedRow.length > 0) { return; }
+					if (p.savedRow.length > 0 && p.sortingDuringEditing === "prevent") { return; }
 
 					if (p.lastsort === idxcol && p.sortname !== "") {
 						if (p.sortorder === "asc") {
@@ -5142,14 +5247,14 @@
 							$previousSelectedTh = headers[p.lastsort] ? $(headers[p.lastsort].el) : $(),
 							$newSelectedTh = p.frozenColumns ? $(obj) : $(headers[idxcol].el),
 							$iconsSpan = $newSelectedTh.find("span.s-ico"),
-							$iconsActive = $iconsSpan.children("span.ui-icon-" + p.sortorder),
-							$iconsInictive = $iconsSpan.children("span.ui-icon-" + (p.sortorder === "asc" ? "desc" : "asc"));
+							$iconsActive = $iconsSpan.children(".ui-icon-" + p.sortorder),
+							$iconsInictive = $iconsSpan.children(".ui-icon-" + (p.sortorder === "asc" ? "desc" : "asc"));
 
 						cm = p.colModel[p.lastsort];
-						$previousSelectedTh.find("span.ui-grid-ico-sort").addClass(disabledClasses);
+						$previousSelectedTh.find(".ui-grid-ico-sort").addClass(disabledClasses);
 						$previousSelectedTh.attr("aria-selected", "false");
 						if (p.frozenColumns) {
-							fhDiv.find("span.ui-grid-ico-sort").addClass(disabledClasses);
+							fhDiv.find(".ui-grid-ico-sort").addClass(disabledClasses);
 							fhDiv.find("th").attr("aria-selected", "false");
 						}
 						if (!p.viewsortcols[0]) {
@@ -5210,8 +5315,7 @@
 							clearArray(p.selarrrow); //p.selarrrow =[];
 						}
 					}
-					clearArray(p.savedRow); //p.savedRow =[];
-					p.editingInfo = {};
+					cancelOrSaveEditing(p.sortingDuringEditing);
 					if (p.scroll) {
 						var sscroll = mygrid.bDiv.scrollLeft;
 						grid.emptyRows.call(self, true, false);
@@ -5918,6 +6022,9 @@
 				})
 				.on("reloadGrid", function (e, opts) {
 					var self = this, gridSelf = self.grid, $self = $(this), p = self.p;
+					if (p.savedRow.length > 0 && p.reloadingDuringEditing === "prevent") {
+						return false;
+					}
 					if (p.treeGrid === true) {
 						p.datatype = p.treedatatype;
 					}
@@ -5946,6 +6053,7 @@
 						clearArray(p.savedRow); // p.savedRow = [];
 						p.editingInfo = {};
 					}
+					cancelOrSaveEditing(p.reloadingDuringEditing);
 					p.iRow = -1;
 					p.iCol = -1;
 					if (p.scroll) { grid.emptyRows.call(self, true, false); }
@@ -6674,8 +6782,8 @@
 						}
 					}
 				}
-				clearArray(p.savedRow); // p.savedRow = [];
-				p.editingInfo = {};
+				//clearArray(p.savedRow); // p.savedRow = [];
+				//p.editingInfo = {};
 			});
 		},
 		isCellEditing: function (rowid, iCol, trDom) {
