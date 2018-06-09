@@ -533,6 +533,78 @@
 					plusRtl: "fa-lg fa-caret-left"
 				}
 			},
+			fontAwesomeSVG: {
+				common: "fas", //"fa"
+				pager: {
+					common: "fa-fw",
+					first: "fa-step-backward",
+					prev: "fa-backward",
+					next: "fa-forward",
+					last: "fa-step-forward"
+				},
+				sort: {
+					common: "fa-lg",        // common: "",
+					asc: "fa-sort-up", //"fa-sort-asc",     // asc: "fa-sort-amount-asc",
+					desc: "fa-sort-down" //"fa-sort-desc"    // desc: "fa-sort-amount-desc"
+				},
+				gridMinimize: {
+					visible: "fa-chevron-circle-up",
+					hidden: "fa-chevron-circle-down"
+				},
+				nav: {
+					common: "fa-lg fa-fw",
+					edit: "fa-pencil-alt",
+					add: "fa-plus",
+					del: "fa-trash-alt",
+					search: "fa-search",
+					refresh: "fa-sync", //"fa-refresh",
+					view: "fa-file",
+					save: "fa-save",
+					cancel: "fa-ban",
+					newbutton: "fa-external-link-alt"
+				},
+				actions: {
+					common: "fa-fw",
+					edit: "fa-pencil-alt",
+					del: "fa-trash-alt",
+					save: "fa-save",
+					cancel: "fa-ban"
+				},
+				form: {
+					close: "fa-times",
+					prev: "fa-caret-left",
+					next: "fa-caret-right",
+					save: "fa-save",
+					undo: "fa-undo",
+					del: "fa-trash-alt",
+					cancel: "fa-ban",
+					resizableLtr: "fa-rss fa-lg fa-rotate-270"
+				},
+				search: {
+					search: "fa-search",
+					reset: "fa-undo",
+					query: "fa-comments"
+				},
+				subgrid: {
+					common: "fa-fw",
+					plus: "fa-plus",
+					minus: "fa-minus",
+					openLtr: "fa-reply fa-rotate-180",
+					openRtl: "fa-share fa-rotate-180"
+				},
+				grouping: {
+					common: "fa-fw",
+					plus: "fa-plus-square",
+					minus: "fa-minus-square"
+				},
+				treeGrid: {
+					common: "fa-fw",
+					minus: "fa-lg fa-sort-down", //"fa-lg fa-sort-desc",
+					leaf: "fa-dot-circle",
+					plusLtr: "fa-lg fa-caret-right",
+					plusRtl: "fa-lg fa-caret-left"
+				}
+			},
 			glyph: {
 				common: "glyphicon",
 				pager: {
@@ -5175,14 +5247,14 @@
 							$previousSelectedTh = headers[p.lastsort] ? $(headers[p.lastsort].el) : $(),
 							$newSelectedTh = p.frozenColumns ? $(obj) : $(headers[idxcol].el),
 							$iconsSpan = $newSelectedTh.find("span.s-ico"),
-							$iconsActive = $iconsSpan.children("span.ui-icon-" + p.sortorder),
-							$iconsInictive = $iconsSpan.children("span.ui-icon-" + (p.sortorder === "asc" ? "desc" : "asc"));
+							$iconsActive = $iconsSpan.children(".ui-icon-" + p.sortorder),
+							$iconsInictive = $iconsSpan.children(".ui-icon-" + (p.sortorder === "asc" ? "desc" : "asc"));
 
 						cm = p.colModel[p.lastsort];
-						$previousSelectedTh.find("span.ui-grid-ico-sort").addClass(disabledClasses);
+						$previousSelectedTh.find(".ui-grid-ico-sort").addClass(disabledClasses);
 						$previousSelectedTh.attr("aria-selected", "false");
 						if (p.frozenColumns) {
-							fhDiv.find("span.ui-grid-ico-sort").addClass(disabledClasses);
+							fhDiv.find(".ui-grid-ico-sort").addClass(disabledClasses);
 							fhDiv.find("th").attr("aria-selected", "false");
 						}
 						if (!p.viewsortcols[0]) {
