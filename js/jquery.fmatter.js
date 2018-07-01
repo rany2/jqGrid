@@ -925,6 +925,9 @@
 			row = rows[iRow];
 			if ($(row).hasClass("jqgrow")) {
 				bindEvents(row.cells[iCol], cm.autoResizable);
+				if (fbRows != null && fbRows[iRow] != null) {
+					bindEvents(fbRows[iRow].cells[iCol], cm.autoResizable);
+				}
 			}
 		}
 	};
