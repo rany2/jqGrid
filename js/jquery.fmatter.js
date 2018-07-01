@@ -99,14 +99,13 @@
 				disabled = jgrid.formatter.checkbox.disabled;
 			}
 
-			if (disabled === true && base.isInCommonIconClass.call(this, "fa")) {
-				checkedClasses = checkedClasses || "fa fa-check-square-o fa-lg";
-				checked = buildCheckbox(checkedClasses);
-				unchecked = buildCheckbox(uncheckedClasses || "fa fa-square-o fa-lg");
-			} else if (disabled === true && base.isInCommonIconClass.call(this, "glyphicon")) {
-				checkedClasses = checkedClasses || "glyphicon glyphicon-check";
-				checked = buildCheckbox(checkedClasses);
-				unchecked = buildCheckbox(uncheckedClasses || "glyphicon glyphicon-unchecked");
+			var checkedIcon = base.getIconRes.call(this, "checkbox.checked"),
+				checkedIconClasses = base.getIconRes.call(this, "checkbox.checkedClasses"),
+				uncheckedIcon = base.getIconRes.call(this, "checkbox.unchecked");
+			if (disabled === true && (checkedClasses || uncheckedClasses || checkedIcon || uncheckedIcon)) {
+				checked = buildCheckbox(checkedClasses || checkedIcon);
+				unchecked = buildCheckbox(uncheckedClasses || uncheckedIcon);
+				checkedClasses = checkedIconClasses ? checkedIconClasses : checkedClasses || checkedIcon;
 			} else {
 				checkedClasses = "";
 				title += disabled === true ? " disabled='disabled'" : "";
@@ -362,7 +361,7 @@
 			$elem = $(elem);
 
 		return (checkboxOptions.checkedClasses ?
-					jgrid.hasAllClasses($elem.children("i"), checkboxOptions.checkedClasses) :
+					jgrid.hasAllClasses($elem.children("i,svg"), checkboxOptions.checkedClasses) :
 					$elem.children("input").is(":checked")) ?
 				checkboxOptions.yes :
 				checkboxOptions.no;
@@ -842,7 +841,7 @@
 		var $self = $(this), p = this.p, cm = p.colModel[iCol],
 			wrapperClassName = p.autoResizing.wrapperClassName,
 			hoverClass = $self.jqGrid("getGuiStyles", "states.hover"),
-			iRow, rows = this.rows, nRows = rows.length, row,
+			iRow, rows = this.rows, fbRows = this.grid.fbRows, nRows = rows.length, row,
 			showHideEditDelete = (function (cmName) {
 				return function (show, tr) {
 					var maxfrozen = 0, $actionsDiv, colModel = p.colModel, len = colModel.length, i, iCol = p.iColByName[cmName];
