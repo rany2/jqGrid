@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-04-21
+ * Date: 2018-07-01
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -531,10 +531,15 @@
 					leaf: "fa-dot-circle-o",
 					plusLtr: "fa-lg fa-caret-right",
 					plusRtl: "fa-lg fa-caret-left"
+				},
+				checkbox: {
+					checkedClasses: "fa-check-square-o",
+					checked: "fa-check-square-o fa-lg",
+					unchecked: "fa-square-o fa-lg"
 				}
 			},
-			fontAwesomeSVG: {
-				common: "fas", //"fa"
+			fontAwesome5: {
+				//common: "fas", //"fa"
 				pager: {
 					common: "fa-fw",
 					first: "fa-step-backward",
@@ -603,7 +608,33 @@
 					leaf: "fa-dot-circle",
 					plusLtr: "fa-lg fa-caret-right",
 					plusRtl: "fa-lg fa-caret-left"
+				},
+				checkbox: {
+					ignoreParents: true,
+					checkedClasses: "fa-check-square",
+					checked: "far fa-check-square fa-lg",
+					unchecked: "far fa-square fa-lg"
 				}
+			},
+			fontAwesomeBrands: {
+				baseIconSet: "fontAwesome5",
+				common: "fab"
+			},
+			fontAwesomeLight: {
+				baseIconSet: "fontAwesome5",
+				common: "fal"
+			},
+			fontAwesomeRegular: {
+				baseIconSet: "fontAwesome5",
+				common: "far"
+			},
+			fontAwesomeSolid: {
+				baseIconSet: "fontAwesome5",
+				common: "fas"
+			},
+			fontAwesomeSVG: {
+				baseIconSet: "fontAwesome5",
+				common: "fas"
 			},
 			glyph: {
 				common: "glyphicon",
@@ -675,6 +706,11 @@
 					leaf: "glyphicon-record", // glyphicon-unchecked
 					plusLtr: "glyphicon-triangle-right",
 					plusRtl: "glyphicon-triangle-left"
+				},
+				checkbox: {
+					checkedClasses: "glyphicon-check",
+					checked: "glyphicon-check",
+					unchecked: "glyphicon-unchecked"
 				}
 			}
 		},
@@ -6371,7 +6407,7 @@
 			if (!$t || !$t.p) { return ""; }
 
 			var p = $t.p, iconSet = jgrid.icons[p.iconSet],
-				getIcon = function (basePath, path) {
+				getIcon = function (basePath, path, alternativeRoot) {
 					var pathParts = path.split("."), root, n = pathParts.length, part, i, classes = [];
 					basePath = typeof basePath === "string" ? jgrid.icons[basePath] : basePath;
 					if (basePath == null) {
@@ -6380,11 +6416,18 @@
 					root = basePath;
 					if (root.common) {
 						classes.push(root.common);
+					} else if (alternativeRoot && alternativeRoot.common) {
+						classes.push(alternativeRoot.common);
 					}
 					for (i = 0; i < n; i++) {
 						part = pathParts[i];
 						if (!part) {
 							break;
+						}
+						if (i + 1 === n && root.ignoreParents) {
+							// the final level
+							// Verify that ignoreParents mode is set on the level
+							classes = []; // reset array of classes
 						}
 						root = root[part];
 						if (root === undefined) {
@@ -6407,7 +6450,7 @@
 			}
 			var classes = getIcon(p.iconSet, path);
 			if (classes === "" && iconSet.baseIconSet != null) {
-				classes = getIcon(iconSet.baseIconSet, path);
+				classes = getIcon(iconSet.baseIconSet, path, jgrid.icons[p.iconSet]);
 			}
 			return classes || "";
 		},

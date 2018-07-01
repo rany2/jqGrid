@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-04-21
+ * Date: 2018-07-01
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -531,10 +531,15 @@
 					leaf: "fa-dot-circle-o",
 					plusLtr: "fa-lg fa-caret-right",
 					plusRtl: "fa-lg fa-caret-left"
+				},
+				checkbox: {
+					checkedClasses: "fa-check-square-o",
+					checked: "fa-check-square-o fa-lg",
+					unchecked: "fa-square-o fa-lg"
 				}
 			},
-			fontAwesomeSVG: {
-				common: "fas", //"fa"
+			fontAwesome5: {
+				//common: "fas", //"fa"
 				pager: {
 					common: "fa-fw",
 					first: "fa-step-backward",
@@ -603,7 +608,33 @@
 					leaf: "fa-dot-circle",
 					plusLtr: "fa-lg fa-caret-right",
 					plusRtl: "fa-lg fa-caret-left"
+				},
+				checkbox: {
+					ignoreParents: true,
+					checkedClasses: "fa-check-square",
+					checked: "far fa-check-square fa-lg",
+					unchecked: "far fa-square fa-lg"
 				}
+			},
+			fontAwesomeBrands: {
+				baseIconSet: "fontAwesome5",
+				common: "fab"
+			},
+			fontAwesomeLight: {
+				baseIconSet: "fontAwesome5",
+				common: "fal"
+			},
+			fontAwesomeRegular: {
+				baseIconSet: "fontAwesome5",
+				common: "far"
+			},
+			fontAwesomeSolid: {
+				baseIconSet: "fontAwesome5",
+				common: "fas"
+			},
+			fontAwesomeSVG: {
+				baseIconSet: "fontAwesome5",
+				common: "fas"
 			},
 			glyph: {
 				common: "glyphicon",
@@ -675,6 +706,11 @@
 					leaf: "glyphicon-record", // glyphicon-unchecked
 					plusLtr: "glyphicon-triangle-right",
 					plusRtl: "glyphicon-triangle-left"
+				},
+				checkbox: {
+					checkedClasses: "glyphicon-check",
+					checked: "glyphicon-check",
+					unchecked: "glyphicon-unchecked"
 				}
 			}
 		},
@@ -6371,7 +6407,7 @@
 			if (!$t || !$t.p) { return ""; }
 
 			var p = $t.p, iconSet = jgrid.icons[p.iconSet],
-				getIcon = function (basePath, path) {
+				getIcon = function (basePath, path, alternativeRoot) {
 					var pathParts = path.split("."), root, n = pathParts.length, part, i, classes = [];
 					basePath = typeof basePath === "string" ? jgrid.icons[basePath] : basePath;
 					if (basePath == null) {
@@ -6380,11 +6416,18 @@
 					root = basePath;
 					if (root.common) {
 						classes.push(root.common);
+					} else if (alternativeRoot && alternativeRoot.common) {
+						classes.push(alternativeRoot.common);
 					}
 					for (i = 0; i < n; i++) {
 						part = pathParts[i];
 						if (!part) {
 							break;
+						}
+						if (i + 1 === n && root.ignoreParents) {
+							// the final level
+							// Verify that ignoreParents mode is set on the level
+							classes = []; // reset array of classes
 						}
 						root = root[part];
 						if (root === undefined) {
@@ -6407,7 +6450,7 @@
 			}
 			var classes = getIcon(p.iconSet, path);
 			if (classes === "" && iconSet.baseIconSet != null) {
-				classes = getIcon(iconSet.baseIconSet, path);
+				classes = getIcon(iconSet.baseIconSet, path, jgrid.icons[p.iconSet]);
 			}
 			return classes || "";
 		},
@@ -9231,7 +9274,7 @@
 			}
 			if (o.resize) {
 				if ($.fn.jqResize) {
-					$(mc).append("<div class='jqResize ui-resizable-handle ui-resizable-se'><span class='" + o.resizingRightBottomIcon + "'></span></div>");
+					$(mc).append("<div class='jqResize ui-resizable-handle ui-resizable-se " + o.resizingRightBottomIcon + "'></div>");
 					$(themodalSelector).jqResize(".jqResize", resizeAlso);
 				} else {
 					try {
@@ -20100,14 +20143,13 @@
 				disabled = jgrid.formatter.checkbox.disabled;
 			}
 
-			if (disabled === true && base.isInCommonIconClass.call(this, "fa")) {
-				checkedClasses = checkedClasses || "fa fa-check-square-o fa-lg";
-				checked = buildCheckbox(checkedClasses);
-				unchecked = buildCheckbox(uncheckedClasses || "fa fa-square-o fa-lg");
-			} else if (disabled === true && base.isInCommonIconClass.call(this, "glyphicon")) {
-				checkedClasses = checkedClasses || "glyphicon glyphicon-check";
-				checked = buildCheckbox(checkedClasses);
-				unchecked = buildCheckbox(uncheckedClasses || "glyphicon glyphicon-unchecked");
+			var checkedIcon = base.getIconRes.call(this, "checkbox.checked"),
+				checkedIconClasses = base.getIconRes.call(this, "checkbox.checkedClasses"),
+				uncheckedIcon = base.getIconRes.call(this, "checkbox.unchecked");
+			if (disabled === true && (checkedClasses || uncheckedClasses || checkedIcon || uncheckedIcon)) {
+				checked = buildCheckbox(checkedClasses || checkedIcon);
+				unchecked = buildCheckbox(uncheckedClasses || uncheckedIcon);
+				checkedClasses = checkedIconClasses ? checkedIconClasses : checkedClasses || checkedIcon;
 			} else {
 				checkedClasses = "";
 				title += disabled === true ? " disabled='disabled'" : "";
@@ -20363,7 +20405,7 @@
 			$elem = $(elem);
 
 		return (checkboxOptions.checkedClasses ?
-					jgrid.hasAllClasses($elem.children("i"), checkboxOptions.checkedClasses) :
+					jgrid.hasAllClasses($elem.children("i,svg"), checkboxOptions.checkedClasses) :
 					$elem.children("input").is(":checked")) ?
 				checkboxOptions.yes :
 				checkboxOptions.no;
@@ -20843,7 +20885,7 @@
 		var $self = $(this), p = this.p, cm = p.colModel[iCol],
 			wrapperClassName = p.autoResizing.wrapperClassName,
 			hoverClass = $self.jqGrid("getGuiStyles", "states.hover"),
-			iRow, rows = this.rows, nRows = rows.length, row,
+			iRow, rows = this.rows, fbRows = this.grid.fbRows, nRows = rows.length, row,
 			showHideEditDelete = (function (cmName) {
 				return function (show, tr) {
 					var maxfrozen = 0, $actionsDiv, colModel = p.colModel, len = colModel.length, i, iCol = p.iColByName[cmName];
@@ -20927,6 +20969,9 @@
 			row = rows[iRow];
 			if ($(row).hasClass("jqgrow")) {
 				bindEvents(row.cells[iCol], cm.autoResizable);
+				if (fbRows != null && fbRows[iRow] != null) {
+					bindEvents(fbRows[iRow].cells[iCol], cm.autoResizable);
+				}
 			}
 		}
 	};

@@ -377,6 +377,7 @@ declare namespace FreeJqGrid {
 		common?: string; // "ui-icon",
 		pager?: {
 			common?: string;
+			ignoreParents?: boolean;
 			first?: string; // "ui-icon-seek-first",
 			prev?: string; // "ui-icon-seek-prev",
 			next?: string; // "ui-icon-seek-next",
@@ -384,16 +385,19 @@ declare namespace FreeJqGrid {
 		};
 		sort?: {
 			common?: string;
+			ignoreParents?: boolean;
 			asc?: string; // "ui-icon-triangle-1-n",
 			desc?: string; // "ui-icon-triangle-1-s"
 		};
 		gridMinimize?: {
 			common?: string;
+			ignoreParents?: boolean;
 			visible?: string; // "ui-icon-circle-triangle-n",
 			hidden?: string; // "ui-icon-circle-triangle-s"
 		};
 		nav?: {
 			common?: string;
+			ignoreParents?: boolean;
 			edit?: string; // "ui-icon-pencil",
 			add?: string; // "ui-icon-plus",
 			del?: string; // "ui-icon-trash",
@@ -406,6 +410,7 @@ declare namespace FreeJqGrid {
 		};
 		actions?: {
 			common?: string; // string;
+			ignoreParents?: boolean;
 			edit?: string; // "ui-icon-pencil",
 			del?: string; // "ui-icon-trash",
 			save?: string; // "ui-icon-disk",
@@ -413,6 +418,7 @@ declare namespace FreeJqGrid {
 		};
 		form?: {
 			common?: string;
+			ignoreParents?: boolean;
 			close?: string; // "ui-icon-closethick",
 			prev?: string; // "ui-icon-triangle-1-w",
 			next?: string; // "ui-icon-triangle-1-e",
@@ -424,12 +430,14 @@ declare namespace FreeJqGrid {
 		};
 		search?: {
 			common?: string;
+			ignoreParents?: boolean;
 			search?: string; // "ui-icon-search",
 			reset?: string; // "ui-icon-arrowreturnthick-1-w",
 			query?: string; // "ui-icon-comment"
 		};
 		subgrid?: {
 			common?: string;
+			ignoreParents?: boolean;
 			plus?: string; // "ui-icon-plus",
 			minus?: string; // "ui-icon-minus",
 			openLtr?: string; // "ui-icon-carat-1-sw",
@@ -437,15 +445,23 @@ declare namespace FreeJqGrid {
 		};
 		grouping?: {
 			common?: string; // string;
+			ignoreParents?: boolean;
 			plus?: string; // "ui-icon-circlesmall-plus",
 			minus?: string; // "ui-icon-circlesmall-minus"
 		};
 		treeGrid?: {
 			common?: string;
+			ignoreParents?: boolean;
 			minus?: string; // "ui-icon-triangle-1-s",
 			leaf?: string; // "ui-icon-radio-off",
 			plusLtr?: string; // "ui-icon-triangle-1-e",
 			plusRtl?: string; // "ui-icon-triangle-1-w"
+		};
+		checkbox ?: {
+			ignoreParents?: boolean;
+			checkedClasses?: string; // "fa-check-square-o",
+			checked?: string; // "fa-check-square-o fa-lg",
+			unchecked?: string; // "fa-square-o fa-lg"
 		};
 	}
 	interface GuiStyleInfo {
