@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-07-01
+ * Date: 2018-07-04
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -20254,6 +20254,7 @@
 					align: "center",
 					label: "",
 					autoResizable: false,
+					title: false,
 					frozen: true,
 					fixed: true,
 					hidedlg: true,

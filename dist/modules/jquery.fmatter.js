@@ -210,6 +210,7 @@
 					align: "center",
 					label: "",
 					autoResizable: false,
+					title: false,
 					frozen: true,
 					fixed: true,
 					hidedlg: true,
