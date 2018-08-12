@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-07-04
+ * Date: 2018-07-16
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1345,7 +1345,7 @@
 								}
 								break;
 						}
-						if (date[k] !== undefined) {
+						if (date[k] !== undefined && date[k] !== "" && !isNaN(date[k])) {
 							ts[format[k].toLowerCase()] = parseInt(date[k], 10);
 						}
 					}
