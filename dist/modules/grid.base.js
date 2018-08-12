@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-07-04
+ * Date: 2018-08-12
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1345,7 +1345,7 @@
 								}
 								break;
 						}
-						if (date[k] !== undefined) {
+						if (date[k] !== undefined && date[k] !== "" && !isNaN(date[k])) {
 							ts[format[k].toLowerCase()] = parseInt(date[k], 10);
 						}
 					}
@@ -3565,7 +3565,15 @@
 					return stripPref(p.idPrefix, rowId);
 				},
 				formatCol = function (pos, rowInd, tv, rawObject, rowId, rdata) {
-					var cm = p.colModel[pos], cellAttrFunc, cellValue = tv, rPrefix,
+					var cm = p.colModel[pos], cellAttrFunc,
+						rPrefix = cm.autoResizable ? "<span class='" + p.autoResizing.wrapperClassName + "'>" : "",
+						// see https://github.com/free-jqgrid/jqGrid/issues/74#issuecomment-107675796
+						// we will cut formatted string like "<span class='ui-jqgrid-cell-wrapper'>193,81</span>"
+						// to substring "193,81". The formatting (comma, point, dollar and so on) still stay.
+						unwrappedCellValue = cm.autoResizable ? tv.substring(rPrefix.length, tv.length - "</span>".length) : tv,
+						cellValue = p.useUnformattedDataForCellAttr && rdata != null ?
+							rdata[cm.name] :
+							(cm.autoResizable ? unwrappedCellValue : tv),
 						result, classes = cm.classes,
 						styleValue = cm.align ? "text-align:" + cm.align + ";" : "",
 						attrStr, matches, value, tilteValue,
@@ -3578,16 +3586,7 @@
 						styleValue += "width: " + grid.headers[pos].width + "px;";
 					} else if (isFunction(cm.cellattr) || (typeof cm.cellattr === "string" && jgrid.cellattr != null && isFunction(jgrid.cellattr[cm.cellattr]))) {
 						cellAttrFunc = isFunction(cm.cellattr) ? cm.cellattr : jgrid.cellattr[cm.cellattr];
-						if (p.useUnformattedDataForCellAttr && rdata != null) {
-							cellValue = rdata[cm.name];
-						} else if (cm.autoResizable) {
-							// see https://github.com/free-jqgrid/jqGrid/issues/74#issuecomment-107675796
-							// we will cut formatted string like "<span class='ui-jqgrid-cell-wrapper'>193,81</span>"
-							// to substring "193,81". The formatting (comma, point, dollar and so on) still stay.
-							rPrefix = "<span class='" + p.autoResizing.wrapperClassName + "'>";
-							cellValue = tv.substring(rPrefix.length, tv.length - "</span>".length);
-						}
-						attrStr = cellAttrFunc.call(ts, rowId, cellValue, rawObject, cm, rdata);
+						attrStr = cellAttrFunc.call(ts, rowId, cellValue, rawObject, cm, rdata, unwrappedCellValue);
 						if (typeof attrStr === "string") {
 							// ??? probably one can create object with properties from the attrStr
 							// and then to use one common function with constructTr to combine the default
@@ -3604,7 +3603,6 @@
 								//    Attribute names must consist of one or more characters other than the space
 								//    characters, U+0000 NULL, """, "'", ">", "/", "=", the control characters,
 								//    and any characters that are not defined by Unicode.
-								// An important example is attribute name with "-" in the middle: "data-sometext"
 								// An important example is attribute name with "-" in the middle: "data-sometext"
 								matches = /^\s*(\w+[\w|\-]*)\s*=\s*([\"|\'])(.*?)\2(.*)/.exec(attrStr);
 								if (matches === null || matches.length < 5) {

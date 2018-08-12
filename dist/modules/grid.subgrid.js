@@ -142,7 +142,7 @@
 								f = cm.mapping || cm.name;
 								if (f) {
 									for (i = 0; i < f.length; i++) {
-										subGridCell($tr, $(f[i], this).text() || "&#160;", i);
+										subGridCell($tr, jgrid.getXmlData(this, f[i]) || "&#160;", i);
 									}
 								}
 							}
@@ -167,7 +167,7 @@
 									f = cm.mapping || cm.name;
 									if (f.length) {
 										for (j = 0; j < f.length; j++) {
-											subGridCell($tr, cur[f[j]] || "&#160;", j);
+											subGridCell($tr, jgrid.getAccessor(cur, f[j]) || "&#160;", j);
 										}
 									}
 								}

@@ -1,6 +1,6 @@
 /*!
- * jqGrid 4.15.4 - free jqGrid: https://github.com/free-jqgrid/jqGrid 
- * Date: 2018-04-02
+ * jqGrid 4.15.5-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid 
+ * Date: 2018-08-12
  */
 
 /* Grid */
@@ -1343,6 +1343,10 @@ a.clearsearchclass {
 	font-size: 16px;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view {
+	font-size: 12px;
+}
+.ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view .btn,
+.ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-pager .btn {
 	font-size: 12px;
 }
 .ui-jqgrid.ui-jqgrid-bootstrap > .ui-jqgrid-view .fa,

@@ -564,7 +564,7 @@ declare namespace FreeJqGrid {
 		actionsNav?: FormatterActionsOptions;
 		ajaxOptions?: JQueryAjaxSettings;
 		cell_width: boolean;
-		cellattr?: { [key: string]: (this: BodyTable, rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string; };
+		cellattr?: { [key: string]: (this: BodyTable, rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any, formattedCellValue: string) => string; };
 		cmTemplate?: { [key: string]: ColumnModel; };
 		defaults: JqGridStaticOptions;
 		del?: FormDeletingOptions;
@@ -751,7 +751,7 @@ declare namespace FreeJqGrid {
 		align?: "left" | "center" | "right";
 		autoResizable?: boolean; // default value false
 		autoResizing?: { minColWidth?: number, maxColWidth?: number, compact?: boolean };
-		cellattr?: "string" | ((this: BodyTable, rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any) => string);
+		cellattr?: "string" | ((this: BodyTable, rowId: string, cellValue: any, rowObject: any, cm: ColumnModel, rdata: any, formattedCellValue: string) => string);
 		cellBuilder?: (this: BodyTable, cellValue: any, options: FormatterOptions, rowObject: any, action?: "edit" | "add") => string;
 		classes?: string; // spaceSeparatedCssClasses
 		convertOnSave?: (this: BodyTable, options: { newValue: any, cm: ColumnModel, oldValue: any, id: string, item: any, iCol: number }) => any;
