@@ -40,7 +40,8 @@ Remark: the above URLs will be available **after publishing** the release of the
 
 ### New main features implemented in the version 4.15.5 compared with 4.15.4:
 
-* Add support of free Font Awesome 5.x. To use the feature one need to include Font Awesome 5.x either as CSS (by including `https://use.fontawesome.com/releases/v5.2.0/css/all.css` for example) or as SVG file (by including `https://use.fontawesome.com/releases/v5.2.0/js/all.js`). More examples of the usage will be published later [here](https://free-jqgrid.github.io/getting-started/index.html). Additionally one have to use `iconSet: "fontAwesomeSolid"` or `iconSet: "fontAwesomeSVG"` instead of `iconSet: "fontAwesome"`, which means Font Awesome 4.x.
+* Add support of free Font Awesome 5.x. To use the feature one need to include Font Awesome 5.x either as CSS (by including `https://use.fontawesome.com/releases/v5.2.0/css/all.css` for example) or as SVG file (by including `https://use.fontawesome.com/releases/v5.2.0/js/all.js`). More examples of the usage will be published later [here](https://free-jqgrid.github.io/getting-started/index.html). Additionally, one has to use `iconSet: "fontAwesomeSolid"` or `iconSet: "fontAwesomeSVG"` instead of `iconSet: "fontAwesome"`, which means Font Awesome 4.x.
+* Add 3 new option: `sortingDuringEditing`, `pagingDuringEditing`, `reloadingDuringEditing` with values `"prevent"`, `"cancel"` or `"save"`. The default behavior in previous versions of jqGrid: preventing sorting if the grid is in inline or in cell editing. Including new option `sortingDuringEditing: "cancel"` or `sortingDuringEditing: "save"` will allows sorting. The currently editing data will be discarded or saved depend on the value of `sortingDuringEditing` option. The same problem exists in case of paging or reloading the grid. The options `pagingDuringEditing`, `reloadingDuringEditing` helps to specify the desired behavior.
 
 ### Below one can see the full list of changes in the version 4.15.5 compared with 4.15.4:
 
@@ -52,13 +53,13 @@ Remark: the above URLs will be available **after publishing** the release of the
 * Bug fix in header grouping in Bootstrap
 * Add `labelswidth` option to Add/Edit form
 * Small fixes in the code of `inlineNav` to make the code more safe
-* Add 3 new option: `sortingDuringEditing`, `pagingDuringEditing`, `reloadingDuringEditing` with values `"prevent"`, `"cancel"` or `"save"`
-* Add support of Font Awesome 5 as SVG with JS
+* Add 3 new option: `sortingDuringEditing`, `pagingDuringEditing`, `reloadingDuringEditing` with values `"prevent"`, `"cancel"` or `"save"`. The default behavior in previous versions of jqGrid: preventing sorting if the grid is in inline or in cell editing. Including new option `sortingDuringEditing: "cancel"` or `sortingDuringEditing: "save"` will allows sorting. The currently editing data will be discarded or saved depend on the value of `sortingDuringEditing` option. The same problem exists in case of paging or reloading the grid. The options `pagingDuringEditing`, `reloadingDuringEditing` helps to specify the desired behavior.
+* Add support of Font Awesome 5 as SVG with JS. See [the commit](https://github.com/free-jqgrid/jqGrid/commit/3d701bcb8ecec7002abd13a6edee558a819c4e40) and [another one](https://github.com/free-jqgrid/jqGrid/commit/0ca99884529c2c3c8602909e3c51ad48cc82d9ae) for more details.
 * Bug fix in `formatter:"actions"` to support frozen columns
 * Add `title: false` property of `colModel` in `template: "actions"`
 * Small fixes in parsing of dates to reduce NaNs in results
 * Fixes in legacy subgrid to allow to use dot-separated names and callbacks in `subGridModel`
-* Add formatted value as additional parameter of `cellattr` callback to simplify using cellattr together with formatters
+* Add formatted value as additional parameter of `cellattr` callback to simplify using of `cellattr` together with formatters
 * Bug fix of button size in case of usage Bootstrap 4.x
 
 Other old readmes contain the list of the features and bug fixed implemented in previous versions of free jqGrid:
