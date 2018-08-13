@@ -1,5 +1,5 @@
 # free fork of jqGrid
-[![npm version](https://img.shields.io/npm/v/free-jqgrid.svg?style=flat)](https://www.npmjs.com/package/free-jqgrid)![downloadspermonth](https://img.shields.io/npm/dm/free-jqgrid.svg?style=flat-square)&nbsp;[![Bower](https://img.shields.io/bower/v/free-jqgrid.svg?style=flat-square)](http://bower.io/search/?q=free-jqgrid)&nbsp;[![NuGet](https://img.shields.io/nuget/v/free-jqgrid.svg?style=flat-square)](https://www.nuget.org/packages/free-jqGrid/)![downloadstotal](https://img.shields.io/nuget/dt/free-jqgrid.svg?style=flat-square)&nbsp;[![Maven Central](https://img.shields.io/maven-central/v/org.webjars.npm/free-jqgrid.svg?style=flat-square)](http://search.maven.org/#search%7Cga%7C1%7Cfree-jqgrid)<br>[![CDNJS](https://img.shields.io/cdnjs/v/free-jqgrid.svg)](https://cdnjs.com/libraries/free-jqgrid/)&nbsp;[![jsDelivr CDN](https://img.shields.io/badge/jsDelivr%20CDN-v4.15.4-blue.svg)](https://www.jsdelivr.com/projects/free-jqgrid) [![](https://data.jsdelivr.com/v1/package/npm/free-jqgrid/badge?style=rounded)](https://www.jsdelivr.com/package/npm/free-jqgrid)&nbsp;<br>[![GitHub commits](https://img.shields.io/github/commits-since/free-jqgrid/jqgrid/v4.7.0.svg)](https://github.com/free-jqgrid/jqGrid/compare/v4.7.0...master)&nbsp;[![GitHub watchers](https://img.shields.io/github/watchers/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/watchers)[![GitHub forks](https://img.shields.io/github/forks/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/network)[![GitHub stars](https://img.shields.io/github/stars/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/stargazers)&nbsp;![devDependency status](https://david-dm.org/free-jqgrid/jqgrid/dev-status.svg)&nbsp;[![GitHub license](https://img.shields.io/badge/license-MIT%20or%20GNU%20GPLv2-blue.svg)](https://github.com/free-jqgrid/jqGrid/blob/master/LICENSE.md)
+[![npm version](https://img.shields.io/npm/v/free-jqgrid.svg?style=flat)](https://www.npmjs.com/package/free-jqgrid)![downloadspermonth](https://img.shields.io/npm/dm/free-jqgrid.svg?style=flat-square)&nbsp;[![Bower](https://img.shields.io/bower/v/free-jqgrid.svg?style=flat-square)](http://bower.io/search/?q=free-jqgrid)&nbsp;[![NuGet](https://img.shields.io/nuget/v/free-jqgrid.svg?style=flat-square)](https://www.nuget.org/packages/free-jqGrid/)![downloadstotal](https://img.shields.io/nuget/dt/free-jqgrid.svg?style=flat-square)&nbsp;[![Maven Central](https://img.shields.io/maven-central/v/org.webjars.npm/free-jqgrid.svg?style=flat-square)](http://search.maven.org/#search%7Cga%7C1%7Cfree-jqgrid)<br>[![CDNJS](https://img.shields.io/cdnjs/v/free-jqgrid.svg)](https://cdnjs.com/libraries/free-jqgrid/)&nbsp;[![jsDelivr CDN](https://img.shields.io/badge/jsDelivr%20CDN-v4.15.5-blue.svg)](https://www.jsdelivr.com/projects/free-jqgrid) [![](https://data.jsdelivr.com/v1/package/npm/free-jqgrid/badge?style=rounded)](https://www.jsdelivr.com/package/npm/free-jqgrid)&nbsp;<br>[![GitHub commits](https://img.shields.io/github/commits-since/free-jqgrid/jqgrid/v4.7.0.svg)](https://github.com/free-jqgrid/jqGrid/compare/v4.7.0...master)&nbsp;[![GitHub watchers](https://img.shields.io/github/watchers/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/watchers)[![GitHub forks](https://img.shields.io/github/forks/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/network)[![GitHub stars](https://img.shields.io/github/stars/free-jqgrid/jqGrid.svg)](https://github.com/free-jqgrid/jqGrid/stargazers)&nbsp;![devDependency status](https://david-dm.org/free-jqgrid/jqgrid/dev-status.svg)&nbsp;[![GitHub license](https://img.shields.io/badge/license-MIT%20or%20GNU%20GPLv2-blue.svg)](https://github.com/free-jqgrid/jqGrid/blob/master/LICENSE.md)
 ---
 jqGrid is a popular jQuery Plugin for displaying and editing data in tabular form. It has some other more sophisticated features, like subgrids, TreeGrids, grouping and so on.
 
@@ -7,7 +7,7 @@ jqGrid was developed originally by [Tony Tomov](https://github.com/tonytomov) an
 
 The code from the GitHib repository is the fork of jqGrid 4.7.0 - the latest version available under MIT/GPL-licenses. It will be provided under MIT/GPL-licenses.
 
-Below you can find short description of the bug fixes implemented in free jqGrid 4.15.4 (compared with version 4.15.3). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](https://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
+Below you can find short description of the bug fixes implemented in free jqGrid 4.15.5 (compared with version 4.15.4). The version is developed by [Oleg Kiriljuk](https://github.com/OlegKi), alias [Oleg](https://stackoverflow.com/users/315935/oleg) on the stackoverflow and [OlegK](http://www.trirand.com/blog/?page_id=393) on trirand forum.
 
 Read [Wiki](https://github.com/free-jqgrid/jqGrid/wiki) for more detailed information about the features of free-jqGrid. The preliminary version of the documentation can be found [here](https://free-jqgrid.github.io/).
 
@@ -19,13 +19,13 @@ The package is published on [WebJars](http://www.webjars.org/) too and it's depl
 
 Free jqGrid is is available from [jsDelivr CDN](https://www.jsdelivr.com/projects/free-jqgrid) and [cdnjs](https://cdnjs.com/libraries/free-jqgrid). Thus one can use it directly from Internet by including for example the URLs like
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.4/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.4/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.5/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.5/js/jquery.jqgrid.min.js"></script>
 ```
 or
 ```html
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/css/ui.jqgrid.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
 ```
 **The locale file is optional**. One can, but one don't need to include `grid.locale-en.min.js`, because the same information is already included in the `jquery.jqgrid.min.js` (or `jquery.jqgrid.src.js`).
 
@@ -36,27 +36,34 @@ If somebody want to test the *latest* version of free jqGrid, one can load it di
 ```
 All other language files and plugins are available from CDN too. See [the wiki article](https://github.com/free-jqgrid/jqGrid/wiki/Access-free-jqGrid-from-different-CDNs) for more details about the usage of free jqGrid from CDNs and RawGit.
 
-Remark: the above URLs will be available **after publishing** the release of the version of 4.15.4.
+Remark: the above URLs will be available **after publishing** the release of the version of 4.15.5.
 
-### Below one can see the full list of changes in the version 4.15.4 compared with 4.15.3:
+### New main features implemented in the version 4.15.5 compared with 4.15.4:
 
-* Bug fix in initializing checkbox with `stype:"checkbox"` in searching dialog
-* Small fixes in CSS to improve compatibility with Bootstrap 4
-* Bug fix: call of `groupCollapse` callback if `_locgr:true` option of `groupingView` is used.
-* Remove unneeded escaping of quotes in `RegEx` expressions
-* Bug fix in subgrid in case of usage `expandOnLoad:true` in combination with `mustiselect:true`
-* Improving rounding precision in formatting of numbers
-* Bug fix in `gridDnD` method in case if usage `dropbyname:false` option.
-* Bug fix initializing of `mode:"search"` in all places of `grid.filters.js` module.
-* Extend parameters of `autoid` callback option of `gridDnD` method with additional `options` parameter.
-* Bug fix reading of XML if `key:true` is used in `colModel`. See [the issue #427](https://github.com/free-jqgrid/jqGrid/issues/427) for more details.
-* Bug fix processing of grouping headers in method `getAutoResizableWidth` used for auto-adjustment of the width of columns.
-* Introduce new option `selectAllMode`, change default behavior of `selectAll` button for `multiPageSelection` mode. New option `selectAllMode` can have `"filtered"` or `"all"` values. `"all"` means old behavior where all local data will be selected. The default value of `selectAllMode` is `"filtered"`, which means that only the last filtered data (not only from the current page) will be selected.
-* Bug fix in the last parameter of `formatDisplayField` callback of data grouping. Adjusting `free-jqgrid.d.ts` (the documentation) of `formatDisplayField`.
-* Bug fix in the usage of `<datalist>` (`createColumnIndex: true` and `searchoptions: {generateDatalist: true, ...}`) in Searching Dialog.
+* Add support of free Font Awesome 5.x. To use the feature one need to include Font Awesome 5.x either as CSS (by including `https://use.fontawesome.com/releases/v5.2.0/css/all.css` for example) or as SVG file (by including `https://use.fontawesome.com/releases/v5.2.0/js/all.js`). More examples of the usage will be published later [here](https://free-jqgrid.github.io/getting-started/index.html). Additionally one have to use `iconSet: "fontAwesomeSolid"` or `iconSet: "fontAwesomeSVG"` instead of `iconSet: "fontAwesome"`, which means Font Awesome 4.x.
+
+### Below one can see the full list of changes in the version 4.15.5 compared with 4.15.4:
+
+* Bug fix in initializing checkbox with `stype: "checkbox"` in searching dialog
+* Add new property `states.hoverTh` in `$.jgrid.icons.bootstrap4` to have hover effect on column headers
+* Fix the names of 2 subGrid callbacks in `free-jqgrid.d.ts` file
+* Bug fix in form editing of `edittype: "checkbox"`, `formatter: "checkbox"`
+* Bug fix in resizing of dialogs in Bootrtrap 4
+* Bug fix in header grouping in Bootstrap
+* Add `labelswidth` option to Add/Edit form
+* Small fixes in the code of `inlineNav` to make the code more safe
+* Add 3 new option: `sortingDuringEditing`, `pagingDuringEditing`, `reloadingDuringEditing` with values `"prevent"`, `"cancel"` or `"save"`
+* Add support of Font Awesome 5 as SVG with JS
+* Bug fix in `formatter:"actions"` to support frozen columns
+* Add `title: false` property of `colModel` in `template: "actions"`
+* Small fixes in parsing of dates to reduce NaNs in results
+* Fixes in legacy subgrid to allow to use dot-separated names and callbacks in `subGridModel`
+* Add formatted value as additional parameter of `cellattr` callback to simplify using cellattr together with formatters
+* Bug fix of button size in case of usage Bootstrap 4.x
 
 Other old readmes contain the list of the features and bug fixed implemented in previous versions of free jqGrid:
 
+* [README4.15.4.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.15.4.md) contains the readme of free jqGrid 4.15.4.
 * [README4.15.3.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.15.3.md) contains the readme of free jqGrid 4.15.3.
 * [README4.15.2.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.15.2.md) contains the readme of free jqGrid 4.15.2.
 * [README4.15.1.md](https://github.com/free-jqgrid/jqGrid/blob/master/README4.15.1.md) contains the readme of free jqGrid 4.15.1.
