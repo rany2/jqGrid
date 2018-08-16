@@ -1546,6 +1546,7 @@ declare namespace FreeJqGrid {
 		initdata?: any;
 		position?: AddRowDataPosition;
 		rowID?: null | string | ((options: AddRowOptions) => string);
+		srcRowid?: string;
 		useDefValues?: boolean;
 		useFormatter?: boolean;
 		[propName: string]: any; // allow to have any number of other properties
