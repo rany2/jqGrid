@@ -2,13 +2,13 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.15.5 - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.15.6-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-08-13
+ * Date: 2018-08-16
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -381,7 +381,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.15.5",
+		version: "4.15.6-pre",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -16613,6 +16613,7 @@
 						useDefValues: true,
 						useFormatter: false,
 						beforeAddRow: null,
+						//srcRowid: undefined,
 						addRowParams: { extraparam: {} }
 					}, jgrid.inlineEdit, p.inlineEditing || {}, oMuligrid || {});
 				if (!editFeedback.call($t, o, "beforeAddRow", o.addRowParams)) { return; }
@@ -16627,7 +16628,7 @@
 					});
 				}
 				o.rowID = p.idPrefix + o.rowID;
-				$self.jqGrid("addRowData", o.rowID, o.initdata, o.position);
+				$self.jqGrid("addRowData", o.rowID, o.initdata, o.position, o.srcRowid);
 				$("#" + jgrid.jqID(o.rowID), $t).addClass("jqgrid-new-row");
 				if (o.useFormatter) {
 					$("#" + jgrid.jqID(o.rowID) + " .ui-inline-edit", $t).click();

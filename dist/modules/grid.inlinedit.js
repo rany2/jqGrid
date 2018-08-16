@@ -529,6 +529,7 @@
 						useDefValues: true,
 						useFormatter: false,
 						beforeAddRow: null,
+						//srcRowid: undefined,
 						addRowParams: { extraparam: {} }
 					}, jgrid.inlineEdit, p.inlineEditing || {}, oMuligrid || {});
 				if (!editFeedback.call($t, o, "beforeAddRow", o.addRowParams)) { return; }
@@ -543,7 +544,7 @@
 					});
 				}
 				o.rowID = p.idPrefix + o.rowID;
-				$self.jqGrid("addRowData", o.rowID, o.initdata, o.position);
+				$self.jqGrid("addRowData", o.rowID, o.initdata, o.position, o.srcRowid);
 				$("#" + jgrid.jqID(o.rowID), $t).addClass("jqgrid-new-row");
 				if (o.useFormatter) {
 					$("#" + jgrid.jqID(o.rowID) + " .ui-inline-edit", $t).click();
