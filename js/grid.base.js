@@ -7216,7 +7216,7 @@
 						}
 						grouping = p.grouping;
 						p.grouping = false; // workaround for adding row in the grid with grouping data
-						row = jgrid.parseDataToHtml.call(t, 1, [rowid], [data]);
+						row = jgrid.parseDataToHtml.call(t, 1, [rowid], [lcdata]);
 						p.grouping = grouping;
 						row = row.join("");
 						if (rows.length === 0) {
