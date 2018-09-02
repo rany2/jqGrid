@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-08-16
+ * Date: 2018-09-02
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -7189,7 +7189,7 @@
 							cm = colModel[i];
 							nm = cm.name;
 							if (nm !== "rn" && nm !== "cb" && nm !== "subgrid") {
-								v = convertOnSaveLocally.call(t, data[nm], cm, undefined, id, {}, i);
+								v = convertOnSaveLocally.call(t, getAccessor(data, nm), cm, undefined, id, {}, i);
 								if ($.isFunction(cm.saveLocally)) {
 									cm.saveLocally.call(t, { newValue: v, newItem: lcdata, oldItem: {}, id: id, rowid: rowid, cm: cm, cmName: nm, iCol: i });
 								} else if (v !== undefined) {
