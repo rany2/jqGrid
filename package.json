@@ -56,7 +56,7 @@
   "homepage": "https://github.com/free-jqgrid/jqGrid",
   "devDependencies": {
     "@types/jquery": "^3.3.6",
-    "@types/jqueryui": "^1.12.3",
+    "@types/jqueryui": "^1.12.4",
     "@types/qunit": "^2.5.2",
     "grunt": "^1.0.3",
     "grunt-contrib-clean": "^1.1.0",
@@ -73,7 +73,7 @@
     "grunt-tslint": "^5.0.2",
     "tslint": "^5.11.0",
     "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.0.1",
+    "typescript": "^3.0.3",
     "vrsource-tslint-rules": "^5.8.2"
   }
 }
