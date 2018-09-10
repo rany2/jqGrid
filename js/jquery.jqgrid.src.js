@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-09-02
+ * Date: 2018-09-10
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -9420,17 +9420,18 @@
 			try { $dlg.focus(); } catch (ignore) { }
 		},
 		bindEv: function (el, opt) {
-			var $t = this;
+			var $t = this, p = $t.p;
 			if ($.isFunction(opt.dataInit)) {
 				opt.dataInit.call($t, el, opt);
 			}
 			if (opt.dataEvents) {
 				$.each(opt.dataEvents, function () {
-					if (this.data !== undefined) {
-						$(el).on(this.type, typeof this.data === "object" && this.data !== null ? $.extend(true, {}, opt, this.data) : this.data, this.fn);
-					} else {
-						$(el).on(this.type, opt, this.fn);
-					}
+					var data = this.data === undefined ?
+							$.extend({ gridId: p.id, gridIdSel: p.idSel }, opt) :
+							(typeof this.data === "object" && this.data !== null ?
+								$.extend(true, { gridId: p.id, gridIdSel: p.idSel }, opt, this.data) :
+								this.data);
+					$(el).on(this.type, data, this.fn);
 				});
 			}
 		},
@@ -14942,7 +14943,7 @@
 								if (o.refreshstate !== "currentfilter") {
 									p.postData.filters = "";
 									try {
-										$("#fbox_" + gridIdEscaped).jqFilter("resetFilter");
+										$("#fbox_" + gridIdEscaped.substr(1)).jqFilter("resetFilter");
 									} catch (ignore) { }
 									if ($.isFunction($t.clearToolbar)) { $t.clearToolbar(false); }
 								}

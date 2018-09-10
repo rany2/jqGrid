@@ -381,17 +381,18 @@
 			try { $dlg.focus(); } catch (ignore) { }
 		},
 		bindEv: function (el, opt) {
-			var $t = this;
+			var $t = this, p = $t.p;
 			if ($.isFunction(opt.dataInit)) {
 				opt.dataInit.call($t, el, opt);
 			}
 			if (opt.dataEvents) {
 				$.each(opt.dataEvents, function () {
-					if (this.data !== undefined) {
-						$(el).on(this.type, typeof this.data === "object" && this.data !== null ? $.extend(true, {}, opt, this.data) : this.data, this.fn);
-					} else {
-						$(el).on(this.type, opt, this.fn);
-					}
+					var data = this.data === undefined ?
+							$.extend({ gridId: p.id, gridIdSel: p.idSel }, opt) :
+							(typeof this.data === "object" && this.data !== null ?
+								$.extend(true, { gridId: p.id, gridIdSel: p.idSel }, opt, this.data) :
+								this.data);
+					$(el).on(this.type, data, this.fn);
 				});
 			}
 		},
