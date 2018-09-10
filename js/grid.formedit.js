@@ -2257,7 +2257,7 @@
 								if (o.refreshstate !== "currentfilter") {
 									p.postData.filters = "";
 									try {
-										$("#fbox_" + gridIdEscaped).jqFilter("resetFilter");
+										$("#fbox_" + gridIdEscaped.substr(1)).jqFilter("resetFilter");
 									} catch (ignore) { }
 									if ($.isFunction($t.clearToolbar)) { $t.clearToolbar(false); }
 								}
