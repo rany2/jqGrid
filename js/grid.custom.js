@@ -794,7 +794,7 @@
 								(soptions.searchtitle != null ? soptions.searchtitle : getRes("search.operandTitle")) +
 								"' data-soper='" + so + "' class='" +
 								getGuiStyles.call($t, "searchToolbar.operButton", "soptclass") +
-								"' data-colname='" + this.name + "'>" + sot + "</a>");
+								"' data-colname='" + this.name + "'>" + htmlEncode(sot) + "</a>");
 						}
 						$tdOper.data("colindex", ci);
 						if (soptions.sopt == null || soptions.sopt.length === 1) {
