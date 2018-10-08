@@ -8,7 +8,7 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-09-10
+ * Date: 2018-10-08
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -10621,7 +10621,7 @@
 								(soptions.searchtitle != null ? soptions.searchtitle : getRes("search.operandTitle")) +
 								"' data-soper='" + so + "' class='" +
 								getGuiStyles.call($t, "searchToolbar.operButton", "soptclass") +
-								"' data-colname='" + this.name + "'>" + sot + "</a>");
+								"' data-colname='" + this.name + "'>" + htmlEncode(sot) + "</a>");
 						}
 						$tdOper.data("colindex", ci);
 						if (soptions.sopt == null || soptions.sopt.length === 1) {
