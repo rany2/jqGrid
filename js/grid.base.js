@@ -3912,7 +3912,7 @@
 					for (i = 0; i < datalen; i++) {
 						item = p.data[i];
 						val = getAccessor(item, idname);
-						if (val === undefined) {
+						if (val === undefined && item != null) {
 							val = String(randId()); //String(i + 1);
 							if (item[idname] === undefined) {
 								item[idname] = val;
@@ -6918,31 +6918,35 @@
 			this.each(function () {
 				var $t = this, p = $t.p, editingInfo = $.jgrid.detectRowEditing.call($t, rowid), rowInd, ia, nextRow;
 				rowInd = base.getGridRowById.call($($t), rowid);
-				if (!rowInd) { return false; }
-				if (p.subGrid) {
-					nextRow = $(rowInd).next();
-					if (nextRow.hasClass("ui-subgrid")) {
-						nextRow.remove();
-					}
-				}
-				if (editingInfo != null) {
-					try {
-						if (editingInfo.mode === "inlineEditing" && base.restoreRow != null) {
-							base.restoreRow.call($($t), rowid);
-						} else if (editingInfo.mode === "cellEditing" && base.restoreCell != null) {
-							base.restoreCell.call($($t), editingInfo.savedRow.id, editingInfo.savedRow.ic);
+				if (rowInd) {
+					if (p.subGrid) {
+						nextRow = $(rowInd).next();
+						if (nextRow.hasClass("ui-subgrid")) {
+							nextRow.remove();
 						}
-					} catch (ignore) { }
+					}
+					if (editingInfo != null) {
+						try {
+							if (editingInfo.mode === "inlineEditing" && base.restoreRow != null) {
+								base.restoreRow.call($($t), rowid);
+							} else if (editingInfo.mode === "cellEditing" && base.restoreCell != null) {
+								base.restoreCell.call($($t), editingInfo.savedRow.id, editingInfo.savedRow.ic);
+							}
+						} catch (ignore) { }
+					}
+					if (rowInd.rowIndex === p.iRow) { // delete row with selected/edited cell
+						// reset cell editing parameters in case of selected cells, but not editing
+						p.iRow = -1;
+						p.iCol = -1;
+					}
+					$(rowInd).remove();
+					p.records--;
+					p.reccount--;
+					$t.updatepager(true, false);
 				}
-				if (rowInd.rowIndex === p.iRow) { // delete row with selected/edited cell
-					// reset cell editing parameters in case of selected cells, but not editing
-					p.iRow = -1;
-					p.iCol = -1;
-				}
-				$(rowInd).remove();
-				p.records--;
-				p.reccount--;
-				$t.updatepager(true, false);
+				// if rowInd is undefined then we could still need delete
+				// idata from p.data, p._index, p.selarrrow and so on
+
 				success = true;
 				if (p.multiselect) {
 					ia = $.inArray(rowid, p.selarrrow);
@@ -6960,6 +6964,14 @@
 						$t.removeItemDataFromColumnIndex(id);
 						p.data.splice(pos, 1);
 						$t.refreshIndex(); // ??? it could be less expansive
+						if (!rowInd) {
+							// fix the pager if item is deleted not on the current page
+							var rn = parseInt(p.rowNum, 10);
+							p.records = p.data.length;
+							p.reccount = Math.min(p.records, rn);
+							p.lastpage = Math.ceil(p.records / rn);
+							$t.updatepager(true, false);
+						}
 					}
 				}
 				$t.rebuildRowIndexes();
