@@ -4,11 +4,11 @@
 /**
  * @license jqGrid 4.15.6-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
- * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2018-10-08
+ * Date: 2019-01-16
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -3912,7 +3912,7 @@
 					for (i = 0; i < datalen; i++) {
 						item = p.data[i];
 						val = getAccessor(item, idname);
-						if (val === undefined) {
+						if (val === undefined && item != null) {
 							val = String(randId()); //String(i + 1);
 							if (item[idname] === undefined) {
 								item[idname] = val;
@@ -6918,31 +6918,35 @@
 			this.each(function () {
 				var $t = this, p = $t.p, editingInfo = $.jgrid.detectRowEditing.call($t, rowid), rowInd, ia, nextRow;
 				rowInd = base.getGridRowById.call($($t), rowid);
-				if (!rowInd) { return false; }
-				if (p.subGrid) {
-					nextRow = $(rowInd).next();
-					if (nextRow.hasClass("ui-subgrid")) {
-						nextRow.remove();
-					}
-				}
-				if (editingInfo != null) {
-					try {
-						if (editingInfo.mode === "inlineEditing" && base.restoreRow != null) {
-							base.restoreRow.call($($t), rowid);
-						} else if (editingInfo.mode === "cellEditing" && base.restoreCell != null) {
-							base.restoreCell.call($($t), editingInfo.savedRow.id, editingInfo.savedRow.ic);
+				if (rowInd) {
+					if (p.subGrid) {
+						nextRow = $(rowInd).next();
+						if (nextRow.hasClass("ui-subgrid")) {
+							nextRow.remove();
 						}
-					} catch (ignore) { }
+					}
+					if (editingInfo != null) {
+						try {
+							if (editingInfo.mode === "inlineEditing" && base.restoreRow != null) {
+								base.restoreRow.call($($t), rowid);
+							} else if (editingInfo.mode === "cellEditing" && base.restoreCell != null) {
+								base.restoreCell.call($($t), editingInfo.savedRow.id, editingInfo.savedRow.ic);
+							}
+						} catch (ignore) { }
+					}
+					if (rowInd.rowIndex === p.iRow) { // delete row with selected/edited cell
+						// reset cell editing parameters in case of selected cells, but not editing
+						p.iRow = -1;
+						p.iCol = -1;
+					}
+					$(rowInd).remove();
+					p.records--;
+					p.reccount--;
+					$t.updatepager(true, false);
 				}
-				if (rowInd.rowIndex === p.iRow) { // delete row with selected/edited cell
-					// reset cell editing parameters in case of selected cells, but not editing
-					p.iRow = -1;
-					p.iCol = -1;
-				}
-				$(rowInd).remove();
-				p.records--;
-				p.reccount--;
-				$t.updatepager(true, false);
+				// if rowInd is undefined then we could still need delete
+				// idata from p.data, p._index, p.selarrrow and so on
+
 				success = true;
 				if (p.multiselect) {
 					ia = $.inArray(rowid, p.selarrrow);
@@ -6960,6 +6964,14 @@
 						$t.removeItemDataFromColumnIndex(id);
 						p.data.splice(pos, 1);
 						$t.refreshIndex(); // ??? it could be less expansive
+						if (!rowInd) {
+							// fix the pager if item is deleted not on the current page
+							var rn = parseInt(p.rowNum, 10);
+							p.records = p.data.length;
+							p.reccount = Math.min(p.records, rn);
+							p.lastpage = Math.ceil(p.records / rn);
+							$t.updatepager(true, false);
+						}
 					}
 				}
 				$t.rebuildRowIndexes();
@@ -8491,7 +8503,7 @@
 	/**
 	 * jqGrid extension for cellediting Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
-	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -11607,7 +11619,7 @@
 	/**
 	 * jqFilter  jQuery jqGrid filter addon.
 	 * Copyright (c) 2011-2014, Tony Tomov, tony@trirand.com
-	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -12746,7 +12758,7 @@
 	/**
 	 * jqGrid extension for form editing Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
-	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -16131,7 +16143,7 @@
 	/**
 	 * jqGrid extension for manipulating Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com,  http://trirand.com/blog/
-	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -17779,7 +17791,7 @@
 	/**
 	 * jqGrid pivot functions
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
-	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * The modul is created initially by Tony Tomov and it's full rewritten
 	 * for free jqGrid: https://github.com/free-jqgrid/jqGrid by Oleg Kiriljuk
 	 * Dual licensed under the MIT and GPL licenses:
@@ -18600,7 +18612,7 @@
 	/**
 	 * jqGrid extension for SubGrid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
-	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -19043,7 +19055,7 @@
 	/**
 	 * jqGrid extension - Tree Grid
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
-	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -19692,7 +19704,7 @@
 	 *
 	 * $Version: 2007.08.19 +r2
 	 * Updated by Oleg Kiriljuk to support touch devices
-	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 */
 	// begin module jqdnr
 	var namespace = ".jqGrid", mouseDown = "mousedown", mouseMove = "mousemove", mouseUp = "mouseup",
@@ -19847,7 +19859,7 @@
 	 *
 	 * $Version: 07/06/2008 +r13
 	 * Changed by Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
-	 * Copyright (c) 2014-2018, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
 	 */
 	// begin module jqmodal
 	var jqmHashLength = 0,
