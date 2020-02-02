@@ -199,7 +199,14 @@ $.widget("ui.multiselect", {
 	},
 	_getOptionNode: function(option) {
 		option = $(option);
-		var node = $('<li class="ui-state-default ui-element" title="'+(option.attr("title") || option.text())+'"><span class="ui-icon"></span>'+option.text()+'<a href="#" class="action"><span class="ui-corner-all ui-icon"></span></a></li>').hide();
+		var node = $('<li>',
+			{
+				class: 'ui-state-default ui-element',
+				title: option.text(),
+				'data-selected-value': option.val()
+			})
+			.append('<span class="ui-icon"></span>'+option.html()+'<a href="#" class="action"><span class="ui-corner-all ui-icon"></span></a></li>')
+			.hide();
 		node.data('optionLink', option);
 		return node;
 	},
