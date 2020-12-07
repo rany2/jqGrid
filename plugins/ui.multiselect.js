@@ -230,7 +230,7 @@ $.widget("ui.multiselect", {
 	},
 	_getOptionNode: function(option) {
 		option = $(option);
-		var node = $('<li class="ui-element '+this._getGuiStyles("multiselect.listItem")+'" title="'+(option.attr("title") || option.text())+'"><span/>'+option.text()+'<a href="#" class="action"><span class="ui-corner-all"/></a></li>').hide();
+		var node = $('<li class="ui-element '+this._getGuiStyles("multiselect.listItem")+'" title="'+(option.attr("title") || option.text())+'"><span>'+option.text()+'</span><a href="#" class="action"><span class="ui-corner-all"></span></a></li>').hide();
 		node.data('optionLink', option);
 		return node;
 	},
