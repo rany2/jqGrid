@@ -1322,6 +1322,7 @@
 						// The text will be over the cVisibleColumns columns
 						$colHeader = $("<th>")
 							.addClass(thClasses)
+							.addClass(cghi.className)
 							.html(titleText || "&nbsp;");
 						if (cVisibleColumns > 0) {
 							$colHeader.attr("colspan", String(cVisibleColumns));

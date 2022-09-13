@@ -2661,6 +2661,16 @@
 						isNoFilterValueExist = true;
 					}
 				}
+			} else if (Array.isArray(value)) {
+				for (i = 0 ; i < value.length ; i++) {
+					optionInfos.push({
+						value: value[i][0],
+						innerHtml: value[i][1],
+						selectValue: $.trim(value[i][0]),
+						selectText: $.trim(value[i][1]),
+						selected: false
+					});
+				}
 			} else if (typeof value === "object") {
 				for (key in value) {
 					if (value.hasOwnProperty(key)) {
