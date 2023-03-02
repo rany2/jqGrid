@@ -199,7 +199,7 @@
 		},
 		_getOptionNode: function(option) {
 			option = $(option);
-			var node = $('<li class="ui-state-default ui-element" title="'+(option.attr("title") || option.text())+'"><span class="ui-icon"/>'+option.text()+'<a href="#" class="action"><span class="ui-corner-all ui-icon"/></a></li>').hide();
+			var node = $('<li class="ui-state-default ui-element" title="'+(option.attr("title") || option.text())+'"><span class="ui-icon">'+option.text()+'</span><a href="#" class="action"><span class="ui-corner-all ui-icon"></span></a></li>').hide();
 			node.data('optionLink', option);
 			return node;
 		},
