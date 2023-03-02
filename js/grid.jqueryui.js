@@ -426,7 +426,7 @@
 				   "destroy")
 				   */
 				dlog: function (options) {
-					if (options == "destroy") {
+					if (options === "destroy") {
 						jgrid.hideModal.call($self, selector);
 						return;
 					}

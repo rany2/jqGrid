@@ -180,24 +180,9 @@ module.exports = function (grunt) {
 				dest: "js/jquery.jqgrid.src.js"
 			}
 		},
-		jshint: {
+		eslint: {
 			all: {
 				src: ["js/jquery.jqgrid.src.js"],
-				options: {
-					//'-W069': false
-					//"-W041": false,
-					"boss": true,
-					"curly": true,
-					"eqeqeq": true,
-					"eqnull": true,
-					"expr": true,
-					"immed": true,
-					"noarg": true,
-					//"quotmark": "double",
-					"undef": true,
-					"unused": true,
-					"node": true
-				}
 			}
 		},
 		tslint: {
@@ -211,14 +196,6 @@ module.exports = function (grunt) {
 					"ts/free-jqgrid.d.ts",
 					"ts/tests/*.ts"
 				]
-			}
-		},
-		jscs: {
-			all: {
-				src: ["gruntfile.js", "js/*.js", "!js/*.min.js"],
-				options: {
-					config: ".jscsrc"
-				}
 			}
 		},
 		ts: {
@@ -379,18 +356,17 @@ module.exports = function (grunt) {
 
 	grunt.loadNpmTasks("grunt-contrib-clean");
 	grunt.loadNpmTasks("grunt-contrib-copy");
-	grunt.loadNpmTasks("grunt-contrib-jshint");
+	grunt.loadNpmTasks("gruntify-eslint");
 	grunt.loadNpmTasks("grunt-tslint");
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-cssmin");
 	grunt.loadNpmTasks("grunt-replace");
-	grunt.loadNpmTasks("grunt-jscs");
 	grunt.loadNpmTasks("grunt-ts");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-newer");
 
-	grunt.registerTask("default", ["newer:concat:all", "newer:jshint:all", "newer:tslint", "ts:all", "newer:jscs:all",
+	grunt.registerTask("default", ["newer:concat:all", "eslint", "newer:tslint", "ts:all",
 		"newer:cssmin:target", "newer:replace:cssmin_jqgrid", "newer:replace:cssmin_multiselect", "uglify:all",
 		"copy"]);
 	grunt.registerTask("all", ["clean", "default"]);
