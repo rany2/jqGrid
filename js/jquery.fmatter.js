@@ -246,7 +246,7 @@
 			if (!this.isValue(o)) {
 				return true;
 			}
-			o = $.trim(o).replace(/&nbsp;/ig, "").replace(/&#160;/ig, "");
+			o = $.jgrid.trim(o).replace(/&nbsp;/ig, "").replace(/&#160;/ig, "");
 			return o === "";
 		},
 		NumberFormat: function (nData, opts) {
@@ -609,7 +609,7 @@
 			var msl = op.multiple === true ? true : false, scell = [], sv,
 			mapFunc = function (n, j) { if (j > 0) { return n; } };
 			if (msl) {
-				scell = $.map(String(cellval).split(","), function (n) { return $.trim(n); });
+				scell = $.map(String(cellval).split(","), function (n) { return $.jgrid.trim(n); });
 			}
 			if (typeof oSelect === "string") {
 				// maybe here we can use some caching with care ????
@@ -619,7 +619,7 @@
 					if (sv.length > 2) {
 						sv[1] = $.map(sv, mapFunc).join(sep);
 					}
-					v = $.trim(sv[0]);
+					v = $.jgrid.trim(sv[0]);
 					if (op.defaultValue === v) {
 						defaultValue = sv[1];
 					}
@@ -627,7 +627,7 @@
 						if ($.inArray(v, scell) > -1) {
 							ret.push(sv[1]);
 						}
-					} else if (v === $.trim(cellval)) {
+					} else if (v === $.jgrid.trim(cellval)) {
 						ret = [sv[1]];
 						break;
 					}
@@ -664,7 +664,7 @@
 				if (sv.length > 2) {
 					sv[1] = $.map(sv, mapFunc).join(sep);
 				}
-				selOptions[$.trim(sv[0])] = sv[1];
+				selOptions[$.jgrid.trim(sv[0])] = sv[1];
 			}
 		} else if (fmatter.isObject(oSelect)) {
 			selOptions = oSelect;
@@ -679,7 +679,7 @@
 		return isMultiple ?
 			function (cellValue) {
 				var ret = [], iOpt,
-					splitedCell = $.map(String(cellValue).split(","), function (n) { return $.trim(n); });
+					splitedCell = $.map(String(cellValue).split(","), function (n) { return $.jgrid.trim(n); });
 				for (iOpt = 0; iOpt < splitedCell.length; iOpt++) {
 					cellValue = splitedCell[iOpt];
 					if (selOptions.hasOwnProperty(cellValue)) {
@@ -1011,7 +1011,7 @@
 			var oSelect = typeof op.value === "function" ? op.value() : op.value,
 				msl = op.multiple === true ? true : false,
 				scell = [], sv, mapFunc = function (n, k) { if (k > 0) { return n; } };
-			if (msl) { scell = cell.split(","); scell = $.map(scell, function (n) { return $.trim(n); }); }
+			if (msl) { scell = cell.split(","); scell = $.map(scell, function (n) { return $.jgrid.trim(n); }); }
 			if (typeof oSelect === "string") {
 				var so = oSelect.split(delim), j = 0, i;
 				for (i = 0; i < so.length; i++) {
@@ -1020,11 +1020,11 @@
 						sv[1] = $.map(sv, mapFunc).join(sep);
 					}
 					if (msl) {
-						if ($.inArray($.trim(sv[1]), scell) > -1) {
+						if ($.inArray($.jgrid.trim(sv[1]), scell) > -1) {
 							ret[j] = sv[0];
 							j++;
 						}
-					} else if ($.trim(sv[1]) === $.trim(cell)) {
+					} else if ($.jgrid.trim(sv[1]) === $.jgrid.trim(cell)) {
 						ret[0] = sv[0];
 						break;
 					}

@@ -1010,7 +1010,7 @@
 			return typeof value === "function";
 		},
 		trim: function (value) {
-			return String.prototype.trim.call(value);
+			return String.prototype.jgrid.trim.call(value);
 		},
 		htmlDecode: function (value) {
 			if (value && (value === "&nbsp;" ||
@@ -1976,7 +1976,7 @@
 					this._getStr = function (s) {
 						var phrase = [];
 						if (_trim) {
-							phrase.push("jQuery.trim(");
+							phrase.push("jQuery.jgrid.trim(");
 						}
 						phrase.push("String(" + s + " || '')");
 						if (_trim) {
@@ -2001,7 +2001,7 @@
 					/** @private */
 					this._toStr = function (phrase) {
 						if (_trim) {
-							phrase = $.trim(phrase);
+							phrase = $.jgrid.trim(phrase);
 						}
 						phrase = phrase.toString().replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
 						return _usecase ? phrase : phrase.toUpperCase();
@@ -2133,7 +2133,7 @@
 							findSortKey = type;
 						} else {
 							findSortKey = function ($cell) {
-								$cell = $cell != null ? $.trim(String($cell)) : "";
+								$cell = $cell != null ? $.jgrid.trim(String($cell)) : "";
 								return _usecase ? $cell : $cell.toUpperCase();
 							};
 						}
@@ -2191,7 +2191,7 @@
 						_usecase = true;
 						return self;
 					};
-					this.trim = function () {
+					this.jgrid.trim = function () {
 						_trim = true;
 						return self;
 					};
@@ -2366,7 +2366,7 @@
 					};
 					this.startsWith = function (f, v) {
 						var val = (v == null) ? f : v,
-							length = _trim ? $.trim(val.toString()).length : val.toString().length;
+							length = _trim ? $.jgrid.trim(val.toString()).length : val.toString().length;
 
 						self._append(self._getStr(f) + ".substr(0," + length + ") == " + self._getStr("\"" + self._toStr(v) + "\""));
 						self._setCommand(self.startsWith, f);
@@ -2375,7 +2375,7 @@
 					};
 					this.endsWith = function (f, v) {
 						var val = (v == null) ? f : v,
-							length = _trim ? $.trim(val.toString()).length : val.toString().length;
+							length = _trim ? $.jgrid.trim(val.toString()).length : val.toString().length;
 						self._append(self._getStr(f) + ".substr(" + self._getStr(f) + ".length-" + length + "," + length + ") == \"" + self._toStr(v) + "\"");
 						self._setCommand(self.endsWith, f);
 						self._resetNegate();
@@ -2394,7 +2394,7 @@
 						return self._getGroup(_data, by, dir, type, datefmt);
 					};
 					this.orderBy = function (by, dir, stype, dfmt, sfunc) {
-						dir = dir == null ? "a" : $.trim(dir.toString().toLowerCase());
+						dir = dir == null ? "a" : $.jgrid.trim(dir.toString().toLowerCase());
 						if (stype == null) { stype = "text"; }
 						if (dfmt == null) { dfmt = "Y-m-d"; }
 						if (sfunc == null) { sfunc = false; }
@@ -2707,8 +2707,8 @@
 					optionInfos.push({
 						value: sv[0],
 						innerHtml: sv[1],
-						selectValue: $.trim(sv[0]),
-						selectText: $.trim(sv[1]),
+						selectValue: $.jgrid.trim(sv[0]),
+						selectText: $.jgrid.trim(sv[1]),
 						selected: false
 					});
 					if (sv[0] === "") {
@@ -2721,8 +2721,8 @@
 						optionInfos.push({
 							value: key,
 							innerHtml: value[key],
-							selectValue: $.trim(key),
-							selectText: $.trim(value[key]),
+							selectValue: $.jgrid.trim(key),
+							selectText: $.jgrid.trim(value[key]),
 							selected: false
 						});
 					}
@@ -2734,10 +2734,10 @@
 
 			if (typeof valuesToSelect === "string") {
 				ovm = isMultiple ?
-						$.map(valuesToSelect.split(","), function (n) { return $.trim(n); }) :
-						[$.trim(valuesToSelect)];
+						$.map(valuesToSelect.split(","), function (n) { return $.jgrid.trim(n); }) :
+						[$.jgrid.trim(valuesToSelect)];
 
-				valuesToSelect = $.trim(valuesToSelect);
+				valuesToSelect = $.jgrid.trim(valuesToSelect);
 
 				// mark selection
 				// 1) first by value
@@ -2824,7 +2824,7 @@
 			// en-US or some other which exist
 			var ts = this, localData, localDataStr, $self0 = $(ts),
 				isFunction = $.jgrid.isFunction, isArray = $.isArray, extend = $.extend, inArray = $.inArray,
-				trim = $.trim, each = $.each, setSelection = $j.setSelection, getGridRes = $j.getGridRes,
+				trim = $.jgrid.trim, each = $.each, setSelection = $j.setSelection, getGridRes = $j.getGridRes,
 				fatalErrorFunction = isFunction(defaults.fatalError) ? defaults.fatalError : alert,
 				locale = pin.locale || defaults.locale || "en-US",
 				direction = locales[locale] != null && typeof locales[locale].isRTL === "boolean" ? (locales[locale].isRTL ? "rtl" : "ltr") : "ltr",
@@ -2856,7 +2856,7 @@
 								msg = div.innerHTML;
 								try {
 									// remove HTML, if it has no text
-									if ($.trim($(msg).text()) === "") {
+									if ($.jgrid.trim($(msg).text()) === "") {
 										msg = "";
 									}
 								}
@@ -5157,7 +5157,7 @@
 					// sortNames, sortDirs MUST be initialized to [] and {} before
 					// process sortname
 					each((p.sortname + " " + p.sortorder).split(","), function () {
-						var s = $.trim(this).split(" ");
+						var s = $.jgrid.trim(this).split(" ");
 						if (s.length === 2) {
 							sortNames.push(s[0]);
 						}
@@ -7360,7 +7360,7 @@
 						if ($.inArray(nm, p.reservedColumnNames) < 0) {
 							if (data !== false) {
 								vl = $(cells[iCol]).text();
-								if ($.trim(vl)) {
+								if ($.jgrid.trim(vl)) {
 									res[nm] = vl;
 								}
 							} else {

@@ -469,7 +469,7 @@
 										break;
 								}
 							} else {
-								v = $.trim($elem.val());
+								v = $.jgrid.trim($elem.val());
 								switch (cm.formatter) {
 									case "integer":
 										v = cutThousandsSeparator(v)
@@ -1185,7 +1185,7 @@
 										if (filter.data === "" && searchoptions.defaultValue !== undefined) {
 											filter.data = searchoptions.defaultValue;
 										}
-										if ($.trim($input.val()) !== String(filter.data)) {
+										if ($.jgrid.trim($input.val()) !== String(filter.data)) {
 											$input.val(filter.data);
 										}
 									}

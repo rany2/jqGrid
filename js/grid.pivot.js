@@ -174,7 +174,7 @@
 
 		self.items = [];
 		self.indexesOfSourceData = [];
-		self.trimByCollect = trimByCollect;
+		self.jgrid.trimByCollect = trimByCollect;
 		self.caseSensitive = caseSensitive;
 		self.skipSort = skipSort;
 		self.fieldLength = dimensionLength;
@@ -250,8 +250,8 @@
 			for (iField = 0; iField < fieldLength; iField++) {
 				v = item[fieldNames[iField]];
 				if (v !== undefined) {
-					if (typeof v === "string" && self.trimByCollect) {
-						v = $.trim(v);
+					if (typeof v === "string" && self.jgrid.trimByCollect) {
+						v = $.jgrid.trim(v);
 					}
 					values[iField] = v;
 				}
@@ -356,7 +356,7 @@
 				xIndexLength, indexesOfDataWithTheSameXValues, iYData, itemYData, indexesOfDataWithTheSameYValues,
 				iRows, agr, outputItem, previousY, groupHeaders, iRowsY, xIndex, yIndex, yIndexLength,
 				indexDataBy = function (dimension, skipSort, compareVectors) {
-					var index = new ArrayOfFieldsets(o.trimByCollect, o.caseSensitive, skipSort, dimension);
+					var index = new ArrayOfFieldsets(o.jgrid.trimByCollect, o.caseSensitive, skipSort, dimension);
 					if ($.jgrid.isFunction(compareVectors)) {
 						index.compareVectorsEx = compareVectors;
 					}

@@ -909,7 +909,7 @@
 
 				if (!opts.connectWith) { return; }
 				opts.connectWith = opts.connectWith.split(",");
-				opts.connectWith = $.map(opts.connectWith, function (n) { return $.trim(n); });
+				opts.connectWith = $.map(opts.connectWith, function (n) { return $.jgrid.trim(n); });
 				$.data($t, "dnd", opts);
 
 				if ($t.p.reccount !== 0 && !$t.p.jqgdnd) {
@@ -964,7 +964,7 @@
 				if (opts.handles) {
 					// test for "e, w"
 					var ar = $.map(String(opts.handles).split(","), function (item) {
-						return $.trim(item);
+						return $.jgrid.trim(item);
 					});
 					if (ar.length === 2 && ((ar[0] === "e" && ar[1] === "w") || (ar[1] === "e" && ar[1] === "w"))) {
 						sel = p.gView + ">div:not(.frozen-div)";

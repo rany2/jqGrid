@@ -494,10 +494,10 @@
 						elem.multiple = "multiple";
 						$(elem).attr("aria-multiselectable", "true");
 						ovm = vl.split(",");
-						ovm = $.map(ovm, function (n) { return $.trim(n); });
+						ovm = $.map(ovm, function (n) { return $.jgrid.trim(n); });
 					} else {
 						msl = false;
-						ovm[0] = $.trim(vl);
+						ovm[0] = $.jgrid.trim(vl);
 					}
 					if (options.size === undefined) {
 						options.size = msl ? 3 : 1;
@@ -535,7 +535,7 @@
 									options1 = $.extend({}, this.options), rowid1 = this.rowid, mode1 = this.mode,
 									a = $.jgrid.isFunction(options1.buildSelect) ? options1.buildSelect.call($t, data, jqXHR, cm1, iCol1) : data;
 								if (typeof a === "string") {
-									a = $($.trim(a)).html();
+									a = $($.jgrid.trim(a)).html();
 								}
 								if (a) {
 									//$(elem1).empty(); // ???
@@ -546,7 +546,7 @@
 											//if(i===0) { this.selected = false; }
 											// fix IE8/IE7 problem with selecting of the first item on multiple=true
 											if (iOpt === 0 && elem1.multiple) { this.selected = false; }
-											if ($.inArray($.trim($(this).val()), ovm1) > -1) {
+											if ($.inArray($.jgrid.trim($(this).val()), ovm1) > -1) {
 												// this.setAttribute("selected", "selected");
 												this.selected = true;
 												isSelected1 = true;
@@ -554,7 +554,7 @@
 										});
 										if (!isSelected1) {
 											$("option", elem1).each(function () {
-												if ($.inArray($.trim($(this).text()), ovm1) > -1) {
+												if ($.inArray($.jgrid.trim($(this).text()), ovm1) > -1) {
 													// this.setAttribute("selected", "selected");
 													this.selected = true;
 												}
