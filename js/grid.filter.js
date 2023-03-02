@@ -511,6 +511,9 @@
 					});
 					setTimeout(function () { //IE, Opera, Chrome
 						rule.data = $(elm).val();
+						if (cm.inputtype == 'select' && cm.searchoptions.multiple && $.isArray(rule.data)) {
+							rule.data = rule.data.join(",");
+						}
 						that.onchange();  // signals that the filter has changed
 					}, 0);
 				});
