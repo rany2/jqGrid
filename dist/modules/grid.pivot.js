@@ -319,7 +319,7 @@
 			// data should come in json format
 			// The function return the new colModel and the transformed data
 			// again with group setup options which then will be passed to the grid
-			var self = this[0], isArray = $.isArray, summaries = {},
+			var self = this[0], isArray = Array.isArray, summaries = {},
 				groupingView = {
 					groupField: [],
 					groupSummary: [],

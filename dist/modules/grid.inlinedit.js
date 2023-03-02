@@ -398,7 +398,7 @@
 								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [ jqXHR, rowid, o, editOrAdd, postData ]);
 								if (sucret == null || sucret === true) { sucret = [ true, tmp ]; }
 								if (sucret[0] && isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR, rowid, o, editOrAdd, postData); }
-								if ($.isArray(sucret)) {
+								if (Array.isArray(sucret)) {
 									// expect array - status, data, rowid
 									ret = sucret[0];
 									tmp = sucret[1] || tmp;

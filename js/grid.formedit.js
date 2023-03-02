@@ -1826,7 +1826,7 @@
 					activeClass = getGuiStateStyles.call($t, "active"),
 					errorClass = getGuiStateStyles.call($t, "error");
 
-				if (!$.isArray(rowids)) { rowids = [ String(rowids) ]; }
+				if (!Array.isArray(rowids)) { rowids = [ String(rowids) ]; }
 				if ($(themodalSelector)[0] !== undefined) {
 					if (!deleteFeedback("beforeInitData", $(dtbl))) { return; }
 					$("#DelData>td", dtbl).text(rowids.join(o.idSeparator)).data("rowids", rowids);

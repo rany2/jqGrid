@@ -508,7 +508,7 @@
 					});
 					setTimeout(function () { //IE, Opera, Chrome
 						rule.data = $(elm).val();
-						if (cm.inputtype == 'select' && cm.searchoptions.multiple && $.isArray(rule.data)) {
+						if (cm.inputtype == 'select' && cm.searchoptions.multiple && Array.isArray(rule.data)) {
 							rule.data = rule.data.join(",");
 						}
 						that.onchange();  // signals that the filter has changed
@@ -638,7 +638,7 @@
 							// value of checkbox contains checked value
 							rule.data = $(this).data("offval");
 						}
-						if ($.isArray(rule.data)) {
+						if (Array.isArray(rule.data)) {
 							rule.data = rule.data.join(p.inFilterSeparator || ",");
 						}
 						that.onchange(); // signals that the filter has changed

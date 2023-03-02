@@ -1089,7 +1089,7 @@
 					return args[parseInt(i, 10)];
 				}
 				for (j = 0; j < al; j++) {
-					if ($.isArray(args[j])) {
+					if (Array.isArray(args[j])) {
 						nmarr = args[j];
 						k = nmarr.length;
 						while (k--) {
@@ -2823,7 +2823,7 @@
 			// TODO: verify that pin.locale exists in locales. If it's not exist then change it to
 			// en-US or some other which exist
 			var ts = this, localData, localDataStr, $self0 = $(ts),
-				isFunction = $.jgrid.isFunction, isArray = $.isArray, extend = $.extend, inArray = $.inArray,
+				isFunction = $.jgrid.isFunction, isArray = Array.isArray, extend = $.extend, inArray = $.inArray,
 				trim = $.jgrid.trim, each = $.each, setSelection = $j.setSelection, getGridRes = $j.getGridRes,
 				fatalErrorFunction = isFunction(defaults.fatalError) ? defaults.fatalError : alert,
 				locale = pin.locale || defaults.locale || "en-US",
@@ -6419,7 +6419,7 @@
 			// One need get defaultPropName from $.jgrid root first. If no value exist then one should get it from $.jgrid[reg] root
 			var res = jgrid.getRes(locales[$t.p.locale], defaultPropName) || jgrid.getRes(locales["en-US"], defaultPropName),
 				resDef = jgrid.getRes(jgrid, defaultPropName);
-			return typeof res === "object" && res !== null && !$.isArray(res) ?
+			return typeof res === "object" && res !== null && !Array.isArray(res) ?
 				$.extend(true, {}, res, resDef || {}) : // !!! Expensive and can be slow !!!
 				resDef !== undefined ? resDef : res;
 		},
@@ -7136,7 +7136,7 @@
 				if (p.selrow === oldRowId) {
 					p.selrow = newRowId;
 				}
-				if ($.isArray(p.selarrrow)) {
+				if (Array.isArray(p.selarrrow)) {
 					i = $.inArray(oldRowId, p.selarrrow);
 					if (i >= 0) {
 						p.selarrrow[i] = newRowId;
@@ -7174,7 +7174,7 @@
 			if ($.inArray(pos, [ "first", "last", "before", "after", "afterSelected", "beforeSelected" ]) < 0) { pos = "last"; }
 			var success = false, nm, row, sind, i, v, aradd, cnm, cn, data, cm, id;
 			if (rdata) {
-				if ($.isArray(rdata)) {
+				if (Array.isArray(rdata)) {
 					aradd = true;
 					//pos = "last";
 					cnm = rowid;
@@ -7434,7 +7434,7 @@
 						});
 					};
 
-				if (!$.isArray(columnNameOrIndexes)) {
+				if (!Array.isArray(columnNameOrIndexes)) {
 					columnNameOrIndexes = [ columnNameOrIndexes ];
 				}
 

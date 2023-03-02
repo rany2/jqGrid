@@ -1089,7 +1089,7 @@
 					return args[parseInt(i, 10)];
 				}
 				for (j = 0; j < al; j++) {
-					if ($.isArray(args[j])) {
+					if (Array.isArray(args[j])) {
 						nmarr = args[j];
 						k = nmarr.length;
 						while (k--) {
@@ -2823,7 +2823,7 @@
 			// TODO: verify that pin.locale exists in locales. If it's not exist then change it to
 			// en-US or some other which exist
 			var ts = this, localData, localDataStr, $self0 = $(ts),
-				isFunction = $.jgrid.isFunction, isArray = $.isArray, extend = $.extend, inArray = $.inArray,
+				isFunction = $.jgrid.isFunction, isArray = Array.isArray, extend = $.extend, inArray = $.inArray,
 				trim = $.jgrid.trim, each = $.each, setSelection = $j.setSelection, getGridRes = $j.getGridRes,
 				fatalErrorFunction = isFunction(defaults.fatalError) ? defaults.fatalError : alert,
 				locale = pin.locale || defaults.locale || "en-US",
@@ -6419,7 +6419,7 @@
 			// One need get defaultPropName from $.jgrid root first. If no value exist then one should get it from $.jgrid[reg] root
 			var res = jgrid.getRes(locales[$t.p.locale], defaultPropName) || jgrid.getRes(locales["en-US"], defaultPropName),
 				resDef = jgrid.getRes(jgrid, defaultPropName);
-			return typeof res === "object" && res !== null && !$.isArray(res) ?
+			return typeof res === "object" && res !== null && !Array.isArray(res) ?
 				$.extend(true, {}, res, resDef || {}) : // !!! Expensive and can be slow !!!
 				resDef !== undefined ? resDef : res;
 		},
@@ -7136,7 +7136,7 @@
 				if (p.selrow === oldRowId) {
 					p.selrow = newRowId;
 				}
-				if ($.isArray(p.selarrrow)) {
+				if (Array.isArray(p.selarrrow)) {
 					i = $.inArray(oldRowId, p.selarrrow);
 					if (i >= 0) {
 						p.selarrrow[i] = newRowId;
@@ -7174,7 +7174,7 @@
 			if ($.inArray(pos, [ "first", "last", "before", "after", "afterSelected", "beforeSelected" ]) < 0) { pos = "last"; }
 			var success = false, nm, row, sind, i, v, aradd, cnm, cn, data, cm, id;
 			if (rdata) {
-				if ($.isArray(rdata)) {
+				if (Array.isArray(rdata)) {
 					aradd = true;
 					//pos = "last";
 					cnm = rowid;
@@ -7434,7 +7434,7 @@
 						});
 					};
 
-				if (!$.isArray(columnNameOrIndexes)) {
+				if (!Array.isArray(columnNameOrIndexes)) {
 					columnNameOrIndexes = [ columnNameOrIndexes ];
 				}
 
@@ -9492,7 +9492,7 @@
 					"cm",
 					"iCol"
 				];
-				if (exl !== undefined && $.isArray(exl)) {
+				if (exl !== undefined && Array.isArray(exl)) {
 					$.merge(exclude, exl);
 				}
 				$.each(atr, function (attrName, value) {
@@ -9895,14 +9895,14 @@
 					if (!(rqfield === false && isEmpty(val))) {
 						if ($.jgrid.isFunction(edtrul.custom_func)) {
 							ret = edtrul.custom_func.call(g, val, nm, iCol);
-							return $.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
+							return Array.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
 						}
 						return [ false, editMsg.customfcheck, "" ];
 					}
 				} else if ($.jgrid.isFunction(edtrul.custom)) {
 					if (!(rqfield === false && isEmpty(val))) {
 						ret = edtrul.custom.call(g, options);
-						return $.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
+						return Array.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
 					}
 				}
 			}
@@ -12095,6 +12095,9 @@
 					});
 					setTimeout(function () { //IE, Opera, Chrome
 						rule.data = $(elm).val();
+						if (cm.inputtype == 'select' && cm.searchoptions.multiple && Array.isArray(rule.data)) {
+							rule.data = rule.data.join(",");
+						}
 						that.onchange();  // signals that the filter has changed
 					}, 0);
 				});
@@ -12222,7 +12225,7 @@
 							// value of checkbox contains checked value
 							rule.data = $(this).data("offval");
 						}
-						if ($.isArray(rule.data)) {
+						if (Array.isArray(rule.data)) {
 							rule.data = rule.data.join(p.inFilterSeparator || ",");
 						}
 						that.onchange(); // signals that the filter has changed
@@ -14543,7 +14546,7 @@
 					activeClass = getGuiStateStyles.call($t, "active"),
 					errorClass = getGuiStateStyles.call($t, "error");
 
-				if (!$.isArray(rowids)) { rowids = [ String(rowids) ]; }
+				if (!Array.isArray(rowids)) { rowids = [ String(rowids) ]; }
 				if ($(themodalSelector)[0] !== undefined) {
 					if (!deleteFeedback("beforeInitData", $(dtbl))) { return; }
 					$("#DelData>td", dtbl).text(rowids.join(o.idSeparator)).data("rowids", rowids);
@@ -15349,7 +15352,7 @@
 						var iSummary, summary, st;
 						for (iSummary = 0; iSummary < counter.summary.length; iSummary++) {
 							summary = counter.summary[iSummary];
-							st = $.isArray(summary.st) ? summary.st[newGroup.idx] : summary.st;
+							st = Array.isArray(summary.st) ? summary.st[newGroup.idx] : summary.st;
 							if ($.jgrid.isFunction(st)) {
 								summary.v = st.call($t, summary.v, summary.nm, record, newGroup);
 							} else {
@@ -15420,7 +15423,7 @@
 							lastvalues[i] = v;
 							counters[i] = counter;
 						} else {
-							if (typeof v !== "object" && ($.isArray(isInTheSameGroup) && $.jgrid.isFunction(isInTheSameGroup[i]) ? !isInTheSameGroup[i].call($t, lastvalues[i], v, i, grp) : lastvalues[i] !== v)) {
+							if (typeof v !== "object" && (Array.isArray(isInTheSameGroup) && $.jgrid.isFunction(isInTheSameGroup[i]) ? !isInTheSameGroup[i].call($t, lastvalues[i], v, i, grp) : lastvalues[i] !== v)) {
 								// This record is not in same group as previous one
 								groups.push(newGroup);
 								lastvalues[i] = v;
@@ -15633,8 +15636,8 @@
 					cm = colModel[iCol];
 					for (iSummary = 0; iSummary < fdata.summary.length; iSummary++) {
 						summary = fdata.summary[iSummary];
-						summaryType = $.isArray(summary.st) ? summary.st[g.idx] : summary.st;
-						summaryTpl = $.isArray(cm.summaryTpl) ? cm.summaryTpl[g.idx] : (cm.summaryTpl || "{0}");
+						summaryType = Array.isArray(summary.st) ? summary.st[g.idx] : summary.st;
+						summaryTpl = Array.isArray(cm.summaryTpl) ? cm.summaryTpl[g.idx] : (cm.summaryTpl || "{0}");
 						if (summary.nm === cm.name) {
 							if (typeof summaryType === "string" && summaryType.toLowerCase() === "avg") {
 								if (summary.sd && summary.vd) {
@@ -15740,7 +15743,7 @@
 				}
 				toEnd++;
 				try {
-					if ($.isArray(grp.formatDisplayField) && $.jgrid.isFunction(grp.formatDisplayField[n.idx])) {
+					if (Array.isArray(grp.formatDisplayField) && $.jgrid.isFunction(grp.formatDisplayField[n.idx])) {
 						n.displayValue = grp.formatDisplayField[n.idx].call($t, n.displayValue, n.value, colModel[cp[n.idx]], n.idx, n, i);
 						gv = n.displayValue;
 					} else {
@@ -16516,7 +16519,7 @@
 								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [ jqXHR, rowid, o, editOrAdd, postData ]);
 								if (sucret == null || sucret === true) { sucret = [ true, tmp ]; }
 								if (sucret[0] && isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR, rowid, o, editOrAdd, postData); }
-								if ($.isArray(sucret)) {
+								if (Array.isArray(sucret)) {
 									// expect array - status, data, rowid
 									ret = sucret[0];
 									tmp = sucret[1] || tmp;
@@ -18114,7 +18117,7 @@
 			// data should come in json format
 			// The function return the new colModel and the transformed data
 			// again with group setup options which then will be passed to the grid
-			var self = this[0], isArray = $.isArray, summaries = {},
+			var self = this[0], isArray = Array.isArray, summaries = {},
 				groupingView = {
 					groupField: [],
 					groupSummary: [],
@@ -21130,7 +21133,7 @@
 						break;
 					}
 				}
-			} else if (fmatter.isObject(oSelect) || $.isArray(oSelect)) {
+			} else if (fmatter.isObject(oSelect) || Array.isArray(oSelect)) {
 				if (!msl) { scell[0] = cell; }
 				ret = $.map(scell, function (n) {
 					var rv;

@@ -133,7 +133,7 @@
 						var iSummary, summary, st;
 						for (iSummary = 0; iSummary < counter.summary.length; iSummary++) {
 							summary = counter.summary[iSummary];
-							st = $.isArray(summary.st) ? summary.st[newGroup.idx] : summary.st;
+							st = Array.isArray(summary.st) ? summary.st[newGroup.idx] : summary.st;
 							if ($.jgrid.isFunction(st)) {
 								summary.v = st.call($t, summary.v, summary.nm, record, newGroup);
 							} else {
@@ -204,7 +204,7 @@
 							lastvalues[i] = v;
 							counters[i] = counter;
 						} else {
-							if (typeof v !== "object" && ($.isArray(isInTheSameGroup) && $.jgrid.isFunction(isInTheSameGroup[i]) ? !isInTheSameGroup[i].call($t, lastvalues[i], v, i, grp) : lastvalues[i] !== v)) {
+							if (typeof v !== "object" && (Array.isArray(isInTheSameGroup) && $.jgrid.isFunction(isInTheSameGroup[i]) ? !isInTheSameGroup[i].call($t, lastvalues[i], v, i, grp) : lastvalues[i] !== v)) {
 								// This record is not in same group as previous one
 								groups.push(newGroup);
 								lastvalues[i] = v;
@@ -417,8 +417,8 @@
 					cm = colModel[iCol];
 					for (iSummary = 0; iSummary < fdata.summary.length; iSummary++) {
 						summary = fdata.summary[iSummary];
-						summaryType = $.isArray(summary.st) ? summary.st[g.idx] : summary.st;
-						summaryTpl = $.isArray(cm.summaryTpl) ? cm.summaryTpl[g.idx] : (cm.summaryTpl || "{0}");
+						summaryType = Array.isArray(summary.st) ? summary.st[g.idx] : summary.st;
+						summaryTpl = Array.isArray(cm.summaryTpl) ? cm.summaryTpl[g.idx] : (cm.summaryTpl || "{0}");
 						if (summary.nm === cm.name) {
 							if (typeof summaryType === "string" && summaryType.toLowerCase() === "avg") {
 								if (summary.sd && summary.vd) {
@@ -524,7 +524,7 @@
 				}
 				toEnd++;
 				try {
-					if ($.isArray(grp.formatDisplayField) && $.jgrid.isFunction(grp.formatDisplayField[n.idx])) {
+					if (Array.isArray(grp.formatDisplayField) && $.jgrid.isFunction(grp.formatDisplayField[n.idx])) {
 						n.displayValue = grp.formatDisplayField[n.idx].call($t, n.displayValue, n.value, colModel[cp[n.idx]], n.idx, n, i);
 						gv = n.displayValue;
 					} else {

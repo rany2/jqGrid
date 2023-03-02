@@ -422,7 +422,7 @@
 					"cm",
 					"iCol"
 				];
-				if (exl !== undefined && $.isArray(exl)) {
+				if (exl !== undefined && Array.isArray(exl)) {
 					$.merge(exclude, exl);
 				}
 				$.each(atr, function (attrName, value) {
@@ -825,14 +825,14 @@
 					if (!(rqfield === false && isEmpty(val))) {
 						if ($.jgrid.isFunction(edtrul.custom_func)) {
 							ret = edtrul.custom_func.call(g, val, nm, iCol);
-							return $.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
+							return Array.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
 						}
 						return [ false, editMsg.customfcheck, "" ];
 					}
 				} else if ($.jgrid.isFunction(edtrul.custom)) {
 					if (!(rqfield === false && isEmpty(val))) {
 						ret = edtrul.custom.call(g, options);
-						return $.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
+						return Array.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
 					}
 				}
 			}
