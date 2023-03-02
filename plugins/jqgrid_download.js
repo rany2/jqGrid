@@ -32,8 +32,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root || window);
+					require("jquery") :
+					require("jquery")(root || window);
 			}
 			require("./jquery.contextmenu-ui");
 			require("free-jqgrid/grid.base");
@@ -45,65 +45,65 @@
 		factory(jQuery, global, global.document);
 	}
 }(typeof window !== "undefined" ? window : this, function ($, window, document){
-    "use strict";
-    $.jgrid.extend({
-	jqgrid_download: function (format = 'csv', separator = ',', endline = '\n' )
-        {
-          format = format.toLowerCase();
-          switch(format)
+	"use strict";
+	$.jgrid.extend({
+		jqgrid_download: function (format = 'csv', separator = ',', endline = '\n' )
+		{
+			format = format.toLowerCase();
+			switch(format)
 	  {
 	    case 'csv':
-              this._csv(separator, endline);
+					this._csv(separator, endline);
 	      break;
 	    default:
-              alert('Format ' + format + ' is not yet supported \n Please use: csv');
+					alert('Format ' + format + ' is not yet supported \n Please use: csv');
 	  } 
-	}, 
-        _csv: function(separator, endline)
-          {
+		}, 
+		_csv: function(separator, endline)
+		{
 	    let data   = jQuery(this).jqGrid("getGridParam", "lastSelectedData");
 	    let col    = jQuery(this).jqGrid("getGridParam", "colModel");
 	    let rows   = [];
 	    let header = [];
 
-            for(let c in col)
-            {
-              header.push(col[c]['name']);
-            }
-            rows.push(header);
-            for(let d in data)
-            {
-              let row = [];
-              for(let c in col)
-              {
+			for(let c in col)
+			{
+				header.push(col[c]['name']);
+			}
+			rows.push(header);
+			for(let d in data)
+			{
+				let row = [];
+				for(let c in col)
+				{
                	let name = col[c]['name'];
-		let col_val = data[d][name];
-		if(typeof col_val === 'string')
-		{
-                  if(col_val.indexOf(',') > -1)
-                  {
-                   col_val = '"' + col_val + '"';
-                  }
-                  row.push(col_val);
-		}
-                else
-		{
-                  row.push(col_val);
-		}
-              }
-              rows.push(row);
-            }
+					let col_val = data[d][name];
+					if(typeof col_val === 'string')
+					{
+						if(col_val.indexOf(',') > -1)
+						{
+							col_val = '"' + col_val + '"';
+						}
+						row.push(col_val);
+					}
+					else
+					{
+						row.push(col_val);
+					}
+				}
+				rows.push(row);
+			}
 
-            let csv  = rows.map(e => e.join(separator)).join(endline);
-            let blob = new Blob([csv],{type: 'text/csv;charset=utf-8;'});
-            let uri  = URL.createObjectURL(blob);
-            let link = document.createElement("a");
-            link.download = jQuery(this).jqGrid("getGridParam", "caption") + '.csv';
-            link.href = uri;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }
+			let csv  = rows.map(e => e.join(separator)).join(endline);
+			let blob = new Blob([ csv ], {type: 'text/csv;charset=utf-8;'});
+			let uri  = URL.createObjectURL(blob);
+			let link = document.createElement("a");
+			link.download = jQuery(this).jqGrid("getGridParam", "caption") + '.csv';
+			link.href = uri;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
 
 	});
 }));

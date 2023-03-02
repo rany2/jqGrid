@@ -30,8 +30,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root || window);
+					require("jquery") :
+					require("jquery")(root || window);
 			}
 			require("./jquery.contextmenu-ui");
 			require("free-jqgrid/grid.base");
@@ -45,7 +45,7 @@
 }(typeof window !== "undefined" ? window : this, function ($, window, document) {
 	"use strict";
 	/*global $ */
-    /*jslint plusplus: true, browser: true, eqeq: true, unparam: true, white: true */
+	/*jslint plusplus: true, browser: true, eqeq: true, unparam: true, white: true */
 	$.jgrid.extend({
 		createContexMenuFromNavigatorButtons: function (pager, opt) {
 			var grid = this, menuId = "menu_" + grid[0].id, menuUl = $("<ul>"),

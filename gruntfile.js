@@ -185,7 +185,6 @@ module.exports = function (grunt) {
 				src: ["js/jquery.jqgrid.src.js"],
 			},
 			options: {
-				"fix": true,
 			}
 		},
 		tslint: {

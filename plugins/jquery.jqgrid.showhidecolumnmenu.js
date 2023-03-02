@@ -27,8 +27,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root || window);
+					require("jquery") :
+					require("jquery")(root || window);
 			}
 			require("./jquery.contextmenu-ui");
 			require("free-jqgrid/grid.base");
@@ -51,7 +51,7 @@
 			shrink: false,
 			menuStyle: { "float": "left" },
 			modifyMenuItem: function ($li, cm, options) {
-				if ($.inArray(cm.name, ["rn", "subgrid", "cb"]) >= 0) { // skip predefined columns
+				if ($.inArray(cm.name, [ "rn", "subgrid", "cb" ]) >= 0) { // skip predefined columns
 					if (!options.allowHideInernalColumns) {
 						$li.hide();
 					}
@@ -93,14 +93,14 @@
 										iCol = iColByName[ghItem.startColumnName] + j;
 										cm = colModel[iCol];
 										colHeader[iCol] = $.isFunction(options.buildItemText) ?
-												options.buildItemText.call($self[0], {
-													iCol: iCol,
-													cm: cm,
-													cmName: cm.name,
-													colName: colNames[iCol],
-													groupTitleText: ghItem.titleText
-												}) :
-												$.jgrid.stripHtml(ghItem.titleText) + ": " +
+											options.buildItemText.call($self[0], {
+												iCol: iCol,
+												cm: cm,
+												cmName: cm.name,
+												colName: colNames[iCol],
+												groupTitleText: ghItem.titleText
+											}) :
+											$.jgrid.stripHtml(ghItem.titleText) + ": " +
 													$.jgrid.stripHtml(colNames[iCol] === "" ? cm.name : colNames[iCol]);
 									}
 								}
@@ -110,22 +110,22 @@
 								if (colHeader[iCol] === undefined) {
 									cm = colModel[iCol];
 									colHeader[iCol] = $.isFunction(options.buildItemText) ?
-											options.buildItemText.call($self[0], {
-												iCol: iCol,
-												cm: cm,
-												cmName: cm.name,
-												colName: colNames[iCol],
-												groupTitleText: null
-											}) :
-											$.jgrid.stripHtml(colNames[iCol]);
+										options.buildItemText.call($self[0], {
+											iCol: iCol,
+											cm: cm,
+											cmName: cm.name,
+											colName: colNames[iCol],
+											groupTitleText: null
+										}) :
+										$.jgrid.stripHtml(colNames[iCol]);
 								}
 							}
 							// fill the menu items now
 							for (iCol = 0; iCol < nCol; iCol++) {
 								cm = colModel[iCol];
 								$li = $("<li></li>")
-										.data("iCol", iCol)
-										.html(colHeader[iCol]);
+									.data("iCol", iCol)
+									.html(colHeader[iCol]);
 								options.modifyMenuItem.call($self[0], $li, cm, options);
 								$li.prepend(cm.hidden ? options.checkboxUnChecked : options.checkboxChecked);
 								if (isAncorRequired) {
