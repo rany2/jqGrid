@@ -44,7 +44,7 @@
 					emptyFormatter = function () {
 						return "";
 					};
-				if (grp !== null && ((typeof grp === "object") || $.isFunction(grp))) {
+				if (grp !== null && ((typeof grp === "object") || $.jgrid.isFunction(grp))) {
 					if (!grp.groupField.length) {
 						p.grouping = false;
 					} else {
@@ -133,7 +133,7 @@
 						for (iSummary = 0; iSummary < counter.summary.length; iSummary++) {
 							summary = counter.summary[iSummary];
 							st = $.isArray(summary.st) ? summary.st[newGroup.idx] : summary.st;
-							if ($.isFunction(st)) {
+							if ($.jgrid.isFunction(st)) {
 								summary.v = st.call($t, summary.v, summary.nm, record, newGroup);
 							} else {
 								summary.v = groupingCalculationsHandler.call($($t), st, summary.v, summary.nm, summary.sr, summary.srt, record);
@@ -203,7 +203,7 @@
 							lastvalues[i] = v;
 							counters[i] = counter;
 						} else {
-							if (typeof v !== "object" && ($.isArray(isInTheSameGroup) && $.isFunction(isInTheSameGroup[i]) ? !isInTheSameGroup[i].call($t, lastvalues[i], v, i, grp) : lastvalues[i] !== v)) {
+							if (typeof v !== "object" && ($.isArray(isInTheSameGroup) && $.jgrid.isFunction(isInTheSameGroup[i]) ? !isInTheSameGroup[i].call($t, lastvalues[i], v, i, grp) : lastvalues[i] !== v)) {
 								// This record is not in same group as previous one
 								groups.push(newGroup);
 								lastvalues[i] = v;
@@ -359,7 +359,7 @@
 				// appears/disappears after expanding/collapsing
 				$t.fixScrollOffsetAndhBoxPadding();
 				$($t).triggerHandler("jqGridGroupingClickGroup", [hid, collapsed]);
-				if ($.isFunction(p.onClickGroup)) {
+				if ($.jgrid.isFunction(p.onClickGroup)) {
 					p.onClickGroup.call($t, hid, collapsed);
 				}
 			});
@@ -498,7 +498,7 @@
 			sumreverse.reverse();
 			$.each(groups, function (i, n) {
 				var gv, clid = p.id + "ghead_" + n.idx, hid = clid + "_" + i,
-					groupCollapse = $.isFunction(grp.groupCollapse) ?
+					groupCollapse = $.jgrid.isFunction(grp.groupCollapse) ?
 						grp.groupCollapse.call($t, { group: n, rowid: hid }) :
 						grp.groupCollapse,
 					jj, kk, ik, colspan = 1, offset = 0, sgr, gg, end, grpTextStr,
@@ -523,7 +523,7 @@
 				}
 				toEnd++;
 				try {
-					if ($.isArray(grp.formatDisplayField) && $.isFunction(grp.formatDisplayField[n.idx])) {
+					if ($.isArray(grp.formatDisplayField) && $.jgrid.isFunction(grp.formatDisplayField[n.idx])) {
 						n.displayValue = grp.formatDisplayField[n.idx].call($t, n.displayValue, n.value, colModel[cp[n.idx]], n.idx, n, i);
 						gv = n.displayValue;
 					} else {
@@ -535,7 +535,7 @@
 				str += "<tr id='" + hid + "' data-jqgrouplevel='" + n.idx + "' " +
 					(groupCollapse && parentGroupCollapse ? "style='display:none;' " : "") +
 					"role='row' class='" + jqgroupClass + " " + clid + "'>";
-				grpTextStr = $.isFunction(grp.groupText[n.idx]) ?
+				grpTextStr = $.jgrid.isFunction(grp.groupText[n.idx]) ?
 					grp.groupText[n.idx].call($t, gv, n.cnt, n.summary) :
 					jgrid.template(grp.groupText[n.idx], gv, n.cnt, n.summary);
 				if (typeof grpTextStr !== "string" && typeof grpTextStr !== "number") {

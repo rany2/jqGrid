@@ -137,7 +137,7 @@
 				}
 				$td = getTdByColumnIndex.call($t, tr, iCol);
 				var editable = cm.editable, mode = "cell";
-				if ($.isFunction(editable)) {
+				if ($.jgrid.isFunction(editable)) {
 					editable = editable.call($t, {
 						rowid: rowid,
 						iCol: iCol,
@@ -173,7 +173,7 @@
 					if (tmp === "&nbsp;" || tmp === "&#160;" || (tmp.length === 1 && tmp.charCodeAt(0) === 160)) {
 						tmp = "";
 					}
-					if ($.isFunction(p.formatCell)) {
+					if ($.jgrid.isFunction(p.formatCell)) {
 						var tmp2 = p.formatCell.call($t, rowid, nm, tmp, iRow, iCol);
 						if (tmp2 !== undefined) {
 							tmp = tmp2;
@@ -274,7 +274,7 @@
 						if (vv !== undefined) {
 							v = vv;
 						}
-						if ($.isFunction(p.beforeSaveCell)) {
+						if ($.jgrid.isFunction(p.beforeSaveCell)) {
 							vv = p.beforeSaveCell.call($t, rowid, nm, v, iRow, iCol);
 							if (vv !== undefined) {
 								v = vv;
@@ -295,7 +295,7 @@
 							formatoptions = cm.formatoptions || {};
 						if (cv == null || cv === true || cv[0] === true) {
 							var addpost = $self.triggerHandler("jqGridBeforeSubmitCell", [rowid, nm, v, iRow, iCol]) || {};
-							if ($.isFunction(p.beforeSubmitCell)) {
+							if ($.jgrid.isFunction(p.beforeSubmitCell)) {
 								addpost = p.beforeSubmitCell.call($t, rowid, nm, v, iRow, iCol);
 								if (!addpost) {
 									addpost = {};
@@ -319,7 +319,7 @@
 									postdata = $.extend(addpost, postdata);
 									if (p.autoEncodeOnEdit) {
 										$.each(postdata, function (n, val) {
-											if (!$.isFunction(val)) {
+											if (!$.jgrid.isFunction(val)) {
 												postdata[n] = jgrid.oldEncodePostedData(val);
 											}
 										});
@@ -327,15 +327,15 @@
 									$self.jqGrid("progressBar", { method: "show", loadtype: p.loadui, htmlcontent: $self.jqGrid("getGridRes", "defaults.savetext") || "Saving..." });
 									grid.hDiv.loading = true;
 									$.ajax($.extend({
-										url: $.isFunction(p.cellurl) ? p.cellurl.call($t, p.cellurl, iRow, iCol, rowid, v, nm) : p.cellurl,
-										//data :$.isFunction(p.serializeCellData) ? p.serializeCellData.call($t, postdata) : postdata,
+										url: $.jgrid.isFunction(p.cellurl) ? p.cellurl.call($t, p.cellurl, iRow, iCol, rowid, v, nm) : p.cellurl,
+										//data :$.jgrid.isFunction(p.serializeCellData) ? p.serializeCellData.call($t, postdata) : postdata,
 										data: jgrid.serializeFeedback.call($t, p.serializeCellData, "jqGridSerializeCellData", postdata),
 										type: "POST",
 										complete: function (jqXHR) {
 											grid.endReq.call($t);
 											if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 												var ret = $self.triggerHandler("jqGridAfterSubmitCell", [$t, jqXHR, postdata.id, nm, v, iRow, iCol]) || [true, ""];
-												if (ret === true || (ret[0] === true && $.isFunction(p.afterSubmitCell))) {
+												if (ret === true || (ret[0] === true && $.jgrid.isFunction(p.afterSubmitCell))) {
 													ret = p.afterSubmitCell.call($t, jqXHR, postdata.id, nm, v, iRow, iCol);
 												}
 												if (ret == null || ret === true || ret[0] === true) {
@@ -353,7 +353,7 @@
 										},
 										error: function (jqXHR, textStatus, errorThrown) {
 											$self.triggerHandler("jqGridErrorCell", [jqXHR, textStatus, errorThrown]);
-											if ($.isFunction(p.errorCell)) {
+											if ($.jgrid.isFunction(p.errorCell)) {
 												p.errorCell.call($t, jqXHR, textStatus, errorThrown);
 												$self.jqGrid("restoreCell", iRow, iCol);
 											} else {
@@ -414,7 +414,7 @@
 				var savedRow = p.savedRow, $td = getTdByColumnIndex.call($t, tr, iCol);
 				if (savedRow.length >= 1) {
 					// datepicker fix
-					if ($.isFunction($.fn.datepicker)) {
+					if ($.jgrid.isFunction($.fn.datepicker)) {
 						try {
 							$("input.hasDatepicker", $td).datepicker("hide");
 						} catch (ignore) { }
@@ -460,7 +460,7 @@
 				for (i = iCol + 1; i < p.colModel.length; i++) {
 					cm = p.colModel[i];
 					editable = cm.editable;
-					if ($.isFunction(editable)) {
+					if ($.jgrid.isFunction(editable)) {
 						editable = editable.call($t, {
 							rowid: rows[iRow].id,
 							iCol: i,
@@ -494,7 +494,7 @@
 				for (i = iCol - 1; i >= 0; i--) {
 					cm = p.colModel[i];
 					editable = cm.editable;
-					if ($.isFunction(editable)) {
+					if ($.jgrid.isFunction(editable)) {
 						editable = editable.call($t, {
 							rowid: rows[iRow].id,
 							iCol: i,

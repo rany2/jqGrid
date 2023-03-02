@@ -349,7 +349,7 @@
 						.on("click",
 							{ click: this.onClick },
 							function (e) {
-								if ($.isFunction(e.data.click)) {
+								if ($.jgrid.isFunction(e.data.click)) {
 									e.data.click.call($t, e, $dlg);
 								}
 								return false;
@@ -368,7 +368,7 @@
 				function () { $(this).addClass(hoverClasses); },
 				function () { $(this).removeClass(hoverClasses); }
 			);
-			if ($.isFunction(mopt.beforeOpen)) { mopt.beforeOpen(); }
+			if ($.jgrid.isFunction(mopt.beforeOpen)) { mopt.beforeOpen(); }
 			jgrid.viewModal.call($t, "#info_dialog", {
 				onHide: function (h) {
 					h.w.hide().remove();
@@ -377,12 +377,12 @@
 				modal: mopt.modal,
 				jqm: jm
 			});
-			if ($.isFunction(mopt.afterOpen)) { mopt.afterOpen(); }
+			if ($.jgrid.isFunction(mopt.afterOpen)) { mopt.afterOpen(); }
 			try { $dlg.focus(); } catch (ignore) { }
 		},
 		bindEv: function (el, opt) {
 			var $t = this, p = $t.p;
-			if ($.isFunction(opt.dataInit)) {
+			if ($.jgrid.isFunction(opt.dataInit)) {
 				opt.dataInit.call($t, el, opt);
 			}
 			if (opt.dataEvents) {
@@ -455,7 +455,7 @@
 					if (vl === "" || vl == null) {
 						vl = !options.hasOwnProperty("defaultValue") ?
 								"false" :
-								$.isFunction(options.defaultValue) ?
+								$.jgrid.isFunction(options.defaultValue) ?
 									options.defaultValue.call($t, {
 										cellValue: vl,
 										options: options
@@ -525,15 +525,15 @@
 							};
 						setAttributes(elem, options, postData ? ["postData"] : undefined);
 						$.ajax($.extend({
-							url: $.isFunction(options.dataUrl) ? options.dataUrl.call($t, rowid, vl, String(options.name), ajaxContext) : options.dataUrl,
+							url: $.jgrid.isFunction(options.dataUrl) ? options.dataUrl.call($t, rowid, vl, String(options.name), ajaxContext) : options.dataUrl,
 							type: "GET",
 							dataType: "html",
-							data: $.isFunction(postData) ? postData.call($t, rowid, vl, String(options.name)) : postData,
+							data: $.jgrid.isFunction(postData) ? postData.call($t, rowid, vl, String(options.name)) : postData,
 							context: ajaxContext,
 							success: function (data, textStatus, jqXHR) {
 								var ovm1 = this.ovm, elem1 = this.elem, cm1 = this.cm, iCol1 = this.iCol,
 									options1 = $.extend({}, this.options), rowid1 = this.rowid, mode1 = this.mode,
-									a = $.isFunction(options1.buildSelect) ? options1.buildSelect.call($t, data, jqXHR, cm1, iCol1) : data;
+									a = $.jgrid.isFunction(options1.buildSelect) ? options1.buildSelect.call($t, data, jqXHR, cm1, iCol1) : data;
 								if (typeof a === "string") {
 									a = $($.trim(a)).html();
 								}
@@ -627,7 +627,7 @@
 				case "custom":
 					elem = document.createElement("span");
 					try {
-						if ($.isFunction(options.custom_element)) {
+						if ($.jgrid.isFunction(options.custom_element)) {
 							var celm = options.custom_element.call($t, vl, options);
 							if (celm instanceof jQuery || jgrid.isHTMLElement(celm) || typeof celm === "string") {
 								celm = $(celm).addClass("customelement").attr({ id: options.id, name: options.name });
@@ -747,7 +747,7 @@
 				editMsg = getGridRes.call($(g), "edit.msg"), ret,
 				getPropertyValue = function (propertyName) {
 					var propValue = edtrul[propertyName];
-					return $.isFunction(propValue) ? propValue.call(g, options) : propValue;
+					return $.jgrid.isFunction(propValue) ? propValue.call(g, options) : propValue;
 				},
 				dateMasks = getGridRes.call($(g), "formatter.date.masks");
 			if (customobject === undefined) {
@@ -823,13 +823,13 @@
 				}
 				if (edtrul.custom === true) {
 					if (!(rqfield === false && isEmpty(val))) {
-						if ($.isFunction(edtrul.custom_func)) {
+						if ($.jgrid.isFunction(edtrul.custom_func)) {
 							ret = edtrul.custom_func.call(g, val, nm, iCol);
 							return $.isArray(ret) ? ret : [false, editMsg.customarray, ""];
 						}
 						return [false, editMsg.customfcheck, ""];
 					}
-				} else if ($.isFunction(edtrul.custom)) {
+				} else if ($.jgrid.isFunction(edtrul.custom)) {
 					if (!(rqfield === false && isEmpty(val))) {
 						ret = edtrul.custom.call(g, options);
 						return $.isArray(ret) ? ret : [false, editMsg.customarray, ""];

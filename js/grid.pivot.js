@@ -90,7 +90,7 @@
 					self.result = Math.max(self.result, v);
 					break;
 				default:
-					if ($.isFunction(self.aggregator)) {
+					if ($.jgrid.isFunction(self.aggregator)) {
 						self.result = self.aggregator.call(self.context, {
 							previousResult: self.result,
 							value: v,
@@ -195,7 +195,7 @@
 					self.fieldCompare[iField] = numberCompare;
 					break;
 				default:
-					self.fieldCompare[iField] = $.isFunction(dimensionItem.compare) ? dimensionItem.compare : stringCompare;
+					self.fieldCompare[iField] = $.jgrid.isFunction(dimensionItem.compare) ? dimensionItem.compare : stringCompare;
 					break;
 			}
 			self.fieldSortDirection[iField] = dimensionItem.sortorder === "desc" ? -1 : 1;
@@ -357,7 +357,7 @@
 				iRows, agr, outputItem, previousY, groupHeaders, iRowsY, xIndex, yIndex, yIndexLength,
 				indexDataBy = function (dimension, skipSort, compareVectors) {
 					var index = new ArrayOfFieldsets(o.trimByCollect, o.caseSensitive, skipSort, dimension);
-					if ($.isFunction(compareVectors)) {
+					if ($.jgrid.isFunction(compareVectors)) {
 						index.compareVectorsEx = compareVectors;
 					}
 					index.createDataIndex(data);
@@ -378,7 +378,7 @@
 						default:
 							label = aggrlen > 1 ?
 									agr1.label || "{0}" :
-									($.isFunction(yDimension[level].label) ?
+									($.jgrid.isFunction(yDimension[level].label) ?
 										yDimension[level].label :
 										yIndex.getItem(iyData)[level]);
 							name = "y" + iyData;
@@ -386,7 +386,7 @@
 					}
 					cmItem = $.extend({}, agr1, {
 						name: name + (aggrlen > 1 ? "a" + iAggr : ""),
-						label: $.isFunction(label) ?
+						label: $.jgrid.isFunction(label) ?
 									(label.call(self, colType === 2 ?
 											{ aggregate: agr1, iAggregate: iAggr, pivotOptions: o } :
 											(colType === 1 ?
@@ -424,7 +424,7 @@
 							for (j = iLevel + 1; j <= headerLevels - 1; j++) {
 								colHeaders[j].groupHeaders.push({
 									titleText: ((headerOnTop && j === iLevel + 1) || (!headerOnTop && j === headerLevels - 1)) ?
-											($.isFunction(totalHeader) ?
+											($.jgrid.isFunction(totalHeader) ?
 													totalHeader.call(self, previousY1, iLevel) :
 													jgrid.template.call(self, String(totalHeader || ""), previousY1[iLevel], iLevel)) :
 											"",
@@ -529,7 +529,7 @@
 				cm = {
 					name: "x" + i,
 					label: x.label != null ?
-								($.isFunction(x.label) ? x.label.call(self, x, i, o) : x.label) :
+								($.jgrid.isFunction(x.label) ? x.label.call(self, x, i, o) : x.label) :
 								x.dataName,
 					frozen: o.frozenStaticCols
 				};
@@ -606,7 +606,7 @@
 				colHeaders.push({
 					useColSpanStyle: o.useColSpanStyle,
 					groupHeaders: [{
-						titleText: ($.isFunction(yDimension[k].label) ?
+						titleText: ($.jgrid.isFunction(yDimension[k].label) ?
 										yDimension[k].label.call(self, { yData: previousY[k], yIndex: previousY, yLevel: k, pivotOptions: o }) :
 										previousY[k]),
 						startColumnName: aggrlen === 1 ? "y0" : "y0a0",
@@ -624,7 +624,7 @@
 				// add column headers which corresponds the main data
 				for (k = headerLevels - 1; k >= i; k--) {
 					colHeaders[k].groupHeaders.push({
-						titleText: ($.isFunction(yDimension[k].label) ?
+						titleText: ($.jgrid.isFunction(yDimension[k].label) ?
 										yDimension[k].label.call(self, { yData: itemYData[k], yIndex: itemYData, yLevel: k, pivotOptions: o }) :
 										itemYData[k]),
 						startColumnName: "y" + iYData + (aggrlen === 1 ? "" : "a0"),
