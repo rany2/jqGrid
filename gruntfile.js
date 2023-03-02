@@ -28,7 +28,7 @@ module.exports = function (grunt) {
 			main: {
 				files: [
 					{
-						src: ["js/i18n/*"],
+						src: [ "js/i18n/*" ],
 						dest: "dist/i18n/",
 						//timestamp: true,
 						expand: true,
@@ -36,7 +36,7 @@ module.exports = function (grunt) {
 						flatten: true
 					},
 					{
-						src: ["js/i18n/min/*"],
+						src: [ "js/i18n/min/*" ],
 						dest: "dist/i18n/min/",
 						//timestamp: true,
 						expand: true,
@@ -44,7 +44,7 @@ module.exports = function (grunt) {
 						flatten: true
 					},
 					{
-						src: ["plugins/*"],
+						src: [ "plugins/*" ],
 						dest: "dist/plugins/",
 						//timestamp: true,
 						expand: true,
@@ -52,7 +52,7 @@ module.exports = function (grunt) {
 						flatten: true
 					},
 					{
-						src: ["plugins/min/*"],
+						src: [ "plugins/min/*" ],
 						dest: "dist/plugins/min/",
 						//timestamp: true,
 						expand: true,
@@ -60,7 +60,7 @@ module.exports = function (grunt) {
 						flatten: true
 					},
 					{
-						src: ["plugins/css/*"],
+						src: [ "plugins/css/*" ],
 						dest: "dist/plugins/css/",
 						//timestamp: true,
 						expand: true,
@@ -68,7 +68,7 @@ module.exports = function (grunt) {
 						flatten: true
 					},
 					{
-						src: ["css/*"],
+						src: [ "css/*" ],
 						dest: "dist/css/",
 						//timestamp: true,
 						expand: true,
@@ -76,7 +76,7 @@ module.exports = function (grunt) {
 						flatten: true
 					},
 					{
-						src: ["ts/*.d.ts"],
+						src: [ "ts/*.d.ts" ],
 						dest: "dist/ts/",
 						//timestamp: true,
 						expand: true,
@@ -84,7 +84,7 @@ module.exports = function (grunt) {
 						flatten: true
 					},
 					{
-						src: ["js/jquery.jqgrid.src.js", "js/jquery.jqgrid.min.js", "js/jquery.jqgrid.min*.map"],
+						src: [ "js/jquery.jqgrid.src.js", "js/jquery.jqgrid.min.js", "js/jquery.jqgrid.min*.map" ],
 						dest: "dist/",
 						expand: true,
 						flatten: true
@@ -182,9 +182,10 @@ module.exports = function (grunt) {
 		},
 		eslint: {
 			all: {
-				src: ["js/jquery.jqgrid.src.js"],
+				src: [ "js/jquery.jqgrid.src.js" ],
 			},
 			options: {
+				"fix": true,
 			}
 		},
 		tslint: {
@@ -202,10 +203,10 @@ module.exports = function (grunt) {
 		},
 		ts: {
 			all: {
-				src: ["ts/**/*.ts"],
+				src: [ "ts/**/*.ts" ],
 				options: {
 					target: "es5",
-					lib: ["es2015", "es2017", "dom"]
+					lib: [ "es2015", "es2017", "dom" ]
 				}
 			}
 		},
@@ -251,100 +252,100 @@ module.exports = function (grunt) {
 				"!js/i18n/grid.locale-*.min.js",
 				"!dist/**",
 				'!node_modules/**'
-				],
-			tasks: ["default"]
+			],
+			tasks: [ "default" ]
 		},
 		replace: {
 			cssmin_jqgrid: {
 				src: "css/ui.jqgrid.min.css.map",
 				dest: "./",
 				options: {
-					patterns: [{
+					patterns: [ {
 						// "sources":["css\\ui.jqgrid.css"]
 						match: /\"sources\":\[\"css\\\\ui\.jqgrid\.css\"\],/,
 						replacement: "\"sources\":[\"ui.jqgrid.css\"],"
-					}]
+					} ]
 				}
 			},
 			cssmin_multiselect: {
 				src: "plugins/css/ui.multiselect.min.css.map",
 				dest: "./",
 				options: {
-					patterns: [{
+					patterns: [ {
 						// "sources":["plugins\\css\\ui.multiselect.css"]
 						match: /\"sources\":\[\"plugins\\\\css\\\\ui\.multiselect\.css\"\],/,
 						replacement: "\"sources\":[\"ui.multiselect.css\"],"
-					}]
+					} ]
 				}
 			}
 		},
 		uglify: {
 			all: {
 				files: {
-					"js/min/grid.base.js": ["js/grid.base.js"],
-					"js/min/grid.celledit.js": ["js/grid.celledit.js"],
-					"js/min/grid.common.js": ["js/grid.common.js"],
-					"js/min/grid.custom.js": ["js/grid.custom.js"],
-					"js/min/grid.filter.js": ["js/grid.filter.js"],
-					"js/min/jsonxml.js": ["js/jsonxml.js"],
-					"js/min/grid.formedit.js": ["js/grid.formedit.js"],
-					"js/min/grid.grouping.js": ["js/grid.grouping.js"],
-					"js/min/grid.import.js": ["js/grid.import.js"],
-					"js/min/grid.inlinedit.js": ["js/grid.inlinedit.js"],
-					"js/min/grid.jqueryui.js": ["js/grid.jqueryui.js"],
-					"js/min/grid.pivot.js": ["js/grid.pivot.js"],
-					"js/min/grid.subgrid.js": ["js/grid.subgrid.js"],
-					"js/min/grid.tbltogrid.js": ["js/grid.tbltogrid.js"],
-					"js/min/grid.treegrid.js": ["js/grid.treegrid.js"],
-					"js/min/jqdnr.js": ["js/jqdnr.js"],
-					"js/min/jqmodal.js": ["js/jqmodal.js"],
-					"js/min/jquery.fmatter.js": ["js/jquery.fmatter.js"],
-					"plugins/min/grid.odata.js": ["plugins/grid.odata.js"],
-					"plugins/min/jquery.contextmenu-ui.js": ["plugins/jquery.contextmenu-ui.js"],
-					"plugins/min/jquery.contextmenu.js": ["plugins/jquery.contextmenu.js"],
-					"plugins/min/jquery.createcontexmenufromnavigatorbuttons.js": ["plugins/jquery.createcontexmenufromnavigatorbuttons.js"],
-					"plugins/min/jquery.jqgrid.showhidecolumnmenu.js": ["plugins/jquery.jqgrid.showhidecolumnmenu.js"],
-					"plugins/min/ui.multiselect.js": ["plugins/ui.multiselect.js"],
-					"js/i18n/min/grid.locale-ar.js": ["js/i18n/grid.locale-ar.js"],
-					"js/i18n/min/grid.locale-bg.js": ["js/i18n/grid.locale-bg.js"],
-					"js/i18n/min/grid.locale-ca.js": ["js/i18n/grid.locale-ca.js"],
-					"js/i18n/min/grid.locale-cn.js": ["js/i18n/grid.locale-cn.js"],
-					"js/i18n/min/grid.locale-cs.js": ["js/i18n/grid.locale-cs.js"],
-					"js/i18n/min/grid.locale-da.js": ["js/i18n/grid.locale-da.js"],
-					"js/i18n/min/grid.locale-de.js": ["js/i18n/grid.locale-de.js"],
-					"js/i18n/min/grid.locale-el.js": ["js/i18n/grid.locale-el.js"],
-					"js/i18n/min/grid.locale-en.js": ["js/i18n/grid.locale-en.js"],
-					"js/i18n/min/grid.locale-es.js": ["js/i18n/grid.locale-es.js"],
-					"js/i18n/min/grid.locale-fa.js": ["js/i18n/grid.locale-fa.js"],
-					"js/i18n/min/grid.locale-fi.js": ["js/i18n/grid.locale-fi.js"],
-					"js/i18n/min/grid.locale-fr.js": ["js/i18n/grid.locale-fr.js"],
-					"js/i18n/min/grid.locale-gl.js": ["js/i18n/grid.locale-gl.js"],
-					"js/i18n/min/grid.locale-he.js": ["js/i18n/grid.locale-he.js"],
-					"js/i18n/min/grid.locale-hr.js": ["js/i18n/grid.locale-hr.js"],
-					"js/i18n/min/grid.locale-hu.js": ["js/i18n/grid.locale-hu.js"],
-					"js/i18n/min/grid.locale-id.js": ["js/i18n/grid.locale-id.js"],
-					"js/i18n/min/grid.locale-is.js": ["js/i18n/grid.locale-is.js"],
-					"js/i18n/min/grid.locale-it.js": ["js/i18n/grid.locale-it.js"],
-					"js/i18n/min/grid.locale-ja.js": ["js/i18n/grid.locale-ja.js"],
-					"js/i18n/min/grid.locale-kr.js": ["js/i18n/grid.locale-kr.js"],
-					"js/i18n/min/grid.locale-lt.js": ["js/i18n/grid.locale-lt.js"],
-					"js/i18n/min/grid.locale-me.js": ["js/i18n/grid.locale-me.js"],
-					"js/i18n/min/grid.locale-nl.js": ["js/i18n/grid.locale-nl.js"],
-					"js/i18n/min/grid.locale-no.js": ["js/i18n/grid.locale-no.js"],
-					"js/i18n/min/grid.locale-pl.js": ["js/i18n/grid.locale-pl.js"],
-					"js/i18n/min/grid.locale-pt-br.js": ["js/i18n/grid.locale-pt-br.js"],
-					"js/i18n/min/grid.locale-pt.js": ["js/i18n/grid.locale-pt.js"],
-					"js/i18n/min/grid.locale-ro.js": ["js/i18n/grid.locale-ro.js"],
-					"js/i18n/min/grid.locale-ru.js": ["js/i18n/grid.locale-ru.js"],
-					"js/i18n/min/grid.locale-sk.js": ["js/i18n/grid.locale-sk.js"],
-					"js/i18n/min/grid.locale-sr.js": ["js/i18n/grid.locale-sr.js"],
-					"js/i18n/min/grid.locale-sv.js": ["js/i18n/grid.locale-sv.js"],
-					"js/i18n/min/grid.locale-th.js": ["js/i18n/grid.locale-th.js"],
-					"js/i18n/min/grid.locale-tr.js": ["js/i18n/grid.locale-tr.js"],
-					"js/i18n/min/grid.locale-tw.js": ["js/i18n/grid.locale-tw.js"],
-					"js/i18n/min/grid.locale-ua.js": ["js/i18n/grid.locale-ua.js"],
-					"js/i18n/min/grid.locale-vi.js": ["js/i18n/grid.locale-vi.js"],
-					"js/jquery.jqgrid.min.js": ["js/jquery.jqgrid.src.js"]
+					"js/min/grid.base.js": [ "js/grid.base.js" ],
+					"js/min/grid.celledit.js": [ "js/grid.celledit.js" ],
+					"js/min/grid.common.js": [ "js/grid.common.js" ],
+					"js/min/grid.custom.js": [ "js/grid.custom.js" ],
+					"js/min/grid.filter.js": [ "js/grid.filter.js" ],
+					"js/min/jsonxml.js": [ "js/jsonxml.js" ],
+					"js/min/grid.formedit.js": [ "js/grid.formedit.js" ],
+					"js/min/grid.grouping.js": [ "js/grid.grouping.js" ],
+					"js/min/grid.import.js": [ "js/grid.import.js" ],
+					"js/min/grid.inlinedit.js": [ "js/grid.inlinedit.js" ],
+					"js/min/grid.jqueryui.js": [ "js/grid.jqueryui.js" ],
+					"js/min/grid.pivot.js": [ "js/grid.pivot.js" ],
+					"js/min/grid.subgrid.js": [ "js/grid.subgrid.js" ],
+					"js/min/grid.tbltogrid.js": [ "js/grid.tbltogrid.js" ],
+					"js/min/grid.treegrid.js": [ "js/grid.treegrid.js" ],
+					"js/min/jqdnr.js": [ "js/jqdnr.js" ],
+					"js/min/jqmodal.js": [ "js/jqmodal.js" ],
+					"js/min/jquery.fmatter.js": [ "js/jquery.fmatter.js" ],
+					"plugins/min/grid.odata.js": [ "plugins/grid.odata.js" ],
+					"plugins/min/jquery.contextmenu-ui.js": [ "plugins/jquery.contextmenu-ui.js" ],
+					"plugins/min/jquery.contextmenu.js": [ "plugins/jquery.contextmenu.js" ],
+					"plugins/min/jquery.createcontexmenufromnavigatorbuttons.js": [ "plugins/jquery.createcontexmenufromnavigatorbuttons.js" ],
+					"plugins/min/jquery.jqgrid.showhidecolumnmenu.js": [ "plugins/jquery.jqgrid.showhidecolumnmenu.js" ],
+					"plugins/min/ui.multiselect.js": [ "plugins/ui.multiselect.js" ],
+					"js/i18n/min/grid.locale-ar.js": [ "js/i18n/grid.locale-ar.js" ],
+					"js/i18n/min/grid.locale-bg.js": [ "js/i18n/grid.locale-bg.js" ],
+					"js/i18n/min/grid.locale-ca.js": [ "js/i18n/grid.locale-ca.js" ],
+					"js/i18n/min/grid.locale-cn.js": [ "js/i18n/grid.locale-cn.js" ],
+					"js/i18n/min/grid.locale-cs.js": [ "js/i18n/grid.locale-cs.js" ],
+					"js/i18n/min/grid.locale-da.js": [ "js/i18n/grid.locale-da.js" ],
+					"js/i18n/min/grid.locale-de.js": [ "js/i18n/grid.locale-de.js" ],
+					"js/i18n/min/grid.locale-el.js": [ "js/i18n/grid.locale-el.js" ],
+					"js/i18n/min/grid.locale-en.js": [ "js/i18n/grid.locale-en.js" ],
+					"js/i18n/min/grid.locale-es.js": [ "js/i18n/grid.locale-es.js" ],
+					"js/i18n/min/grid.locale-fa.js": [ "js/i18n/grid.locale-fa.js" ],
+					"js/i18n/min/grid.locale-fi.js": [ "js/i18n/grid.locale-fi.js" ],
+					"js/i18n/min/grid.locale-fr.js": [ "js/i18n/grid.locale-fr.js" ],
+					"js/i18n/min/grid.locale-gl.js": [ "js/i18n/grid.locale-gl.js" ],
+					"js/i18n/min/grid.locale-he.js": [ "js/i18n/grid.locale-he.js" ],
+					"js/i18n/min/grid.locale-hr.js": [ "js/i18n/grid.locale-hr.js" ],
+					"js/i18n/min/grid.locale-hu.js": [ "js/i18n/grid.locale-hu.js" ],
+					"js/i18n/min/grid.locale-id.js": [ "js/i18n/grid.locale-id.js" ],
+					"js/i18n/min/grid.locale-is.js": [ "js/i18n/grid.locale-is.js" ],
+					"js/i18n/min/grid.locale-it.js": [ "js/i18n/grid.locale-it.js" ],
+					"js/i18n/min/grid.locale-ja.js": [ "js/i18n/grid.locale-ja.js" ],
+					"js/i18n/min/grid.locale-kr.js": [ "js/i18n/grid.locale-kr.js" ],
+					"js/i18n/min/grid.locale-lt.js": [ "js/i18n/grid.locale-lt.js" ],
+					"js/i18n/min/grid.locale-me.js": [ "js/i18n/grid.locale-me.js" ],
+					"js/i18n/min/grid.locale-nl.js": [ "js/i18n/grid.locale-nl.js" ],
+					"js/i18n/min/grid.locale-no.js": [ "js/i18n/grid.locale-no.js" ],
+					"js/i18n/min/grid.locale-pl.js": [ "js/i18n/grid.locale-pl.js" ],
+					"js/i18n/min/grid.locale-pt-br.js": [ "js/i18n/grid.locale-pt-br.js" ],
+					"js/i18n/min/grid.locale-pt.js": [ "js/i18n/grid.locale-pt.js" ],
+					"js/i18n/min/grid.locale-ro.js": [ "js/i18n/grid.locale-ro.js" ],
+					"js/i18n/min/grid.locale-ru.js": [ "js/i18n/grid.locale-ru.js" ],
+					"js/i18n/min/grid.locale-sk.js": [ "js/i18n/grid.locale-sk.js" ],
+					"js/i18n/min/grid.locale-sr.js": [ "js/i18n/grid.locale-sr.js" ],
+					"js/i18n/min/grid.locale-sv.js": [ "js/i18n/grid.locale-sv.js" ],
+					"js/i18n/min/grid.locale-th.js": [ "js/i18n/grid.locale-th.js" ],
+					"js/i18n/min/grid.locale-tr.js": [ "js/i18n/grid.locale-tr.js" ],
+					"js/i18n/min/grid.locale-tw.js": [ "js/i18n/grid.locale-tw.js" ],
+					"js/i18n/min/grid.locale-ua.js": [ "js/i18n/grid.locale-ua.js" ],
+					"js/i18n/min/grid.locale-vi.js": [ "js/i18n/grid.locale-vi.js" ],
+					"js/jquery.jqgrid.min.js": [ "js/jquery.jqgrid.src.js" ]
 				},
 				options: {
 					output: {
@@ -368,8 +369,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-newer");
 
-	grunt.registerTask("default", ["newer:concat:all", "eslint", "newer:tslint", "ts:all",
+	grunt.registerTask("default", [ "newer:concat:all", "eslint", "newer:tslint", "ts:all",
 		"newer:cssmin:target", "newer:replace:cssmin_jqgrid", "newer:replace:cssmin_multiselect", "uglify:all",
-		"copy"]);
-	grunt.registerTask("all", ["clean", "default"]);
+		"copy" ]);
+	grunt.registerTask("all", [ "clean", "default" ]);
 };
