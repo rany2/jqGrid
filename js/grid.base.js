@@ -1007,6 +1007,9 @@
 				resizer: "ui-jqgrid-bootstrap"
 			}
 		},
+		isFunction: function (value) {
+			return typeof value === "function";
+		},
 		htmlDecode: function (value) {
 			if (value && (value === "&nbsp;" ||
 							value === "&#160;" ||
