@@ -26,8 +26,7 @@
 	  ]
 }
 */
-/*jshint eqeqeq:false, eqnull:true, devel:true */
-/*jslint browser: true, devel: true, eqeq: true, plusplus: true, vars: true, white: true */
+
 /*global jQuery, define, exports, module, require */
 
 (function (global, factory) {

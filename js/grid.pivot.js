@@ -9,9 +9,8 @@
  * http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-/*jshint eqeqeq:false */
 /*global jQuery, define, exports, module, require */
-/*jslint eqeq: true, plusplus: true, continue: true, white: true */
+
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {

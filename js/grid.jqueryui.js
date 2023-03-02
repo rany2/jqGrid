@@ -8,9 +8,8 @@
  * depends on jQuery UI
 **/
 
-/*jshint evil:true, eqeqeq:false, eqnull:true, devel:true */
 /*global jQuery, define, exports, module, require */
-/*jslint browser: true, devel: true, eqeq: true, nomen: true, plusplus: true, unparam: true, vars: true, white: true */
+
 (function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {

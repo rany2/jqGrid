@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-eq-null */
 /**
  * jqGrid common function
  * Tony Tomov tony@trirand.com, http://trirand.com/blog/
@@ -7,9 +9,8 @@
  * http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-/*jshint eqeqeq:false */
 /*global jQuery, define, HTMLElement, exports, module, require */
-/*jslint browser: true, eqeq: true, plusplus: true, unparam: true, white: true, vars: true */
+
 (function (global, factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {

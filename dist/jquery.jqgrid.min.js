@@ -1,7 +1,8 @@
 /**
- * @license jqGrid 4.15.6-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.15.7 - free jqGrid: https://github.com/rany2/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ * Copyright (c) 2023, rany, ranygh@riseup.net
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html

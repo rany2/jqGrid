@@ -1,3 +1,5 @@
+/* eslint-disable no-eq-null */
+/* eslint-disable eqeqeq */
 /**
  * jqGrid extension for cellediting Grid Data
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
@@ -27,9 +29,8 @@
  * ajaxCellOptions
 **/
 
-/*jshint eqeqeq:false */
 /*global jQuery, define, exports, module, require */
-/*jslint browser: true, eqeq: true, plusplus: true, vars: true, white: true, todo: true */
+
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {

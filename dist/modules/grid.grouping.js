@@ -1,6 +1,5 @@
-/*jshint eqeqeq:false, eqnull:true */
 /*global jQuery, define, exports, module, require */
-/*jslint plusplus: true, unparam: true, eqeq: true, nomen: true, todo: true, continue: true */
+
 // Grouping module
 (function (factory) {
 	"use strict";
