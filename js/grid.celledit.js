@@ -52,8 +52,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			require("./grid.base");
 			require("./jquery.fmatter");
@@ -270,7 +270,7 @@
 
 					// The common approach is if nothing changed do not do anything
 					if (v !== savedRow[fr].v) {
-						vv = $self.triggerHandler("jqGridBeforeSaveCell", [rowid, nm, v, iRow, iCol]);
+						vv = $self.triggerHandler("jqGridBeforeSaveCell", [ rowid, nm, v, iRow, iCol ]);
 						if (vv !== undefined) {
 							v = vv;
 						}
@@ -294,7 +294,7 @@
 							}),
 							formatoptions = cm.formatoptions || {};
 						if (cv == null || cv === true || cv[0] === true) {
-							var addpost = $self.triggerHandler("jqGridBeforeSubmitCell", [rowid, nm, v, iRow, iCol]) || {};
+							var addpost = $self.triggerHandler("jqGridBeforeSubmitCell", [ rowid, nm, v, iRow, iCol ]) || {};
 							if ($.jgrid.isFunction(p.beforeSubmitCell)) {
 								addpost = p.beforeSubmitCell.call($t, rowid, nm, v, iRow, iCol);
 								if (!addpost) {
@@ -334,7 +334,7 @@
 										complete: function (jqXHR) {
 											grid.endReq.call($t);
 											if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
-												var ret = $self.triggerHandler("jqGridAfterSubmitCell", [$t, jqXHR, postdata.id, nm, v, iRow, iCol]) || [true, ""];
+												var ret = $self.triggerHandler("jqGridAfterSubmitCell", [ $t, jqXHR, postdata.id, nm, v, iRow, iCol ]) || [ true, "" ];
 												if (ret === true || (ret[0] === true && $.jgrid.isFunction(p.afterSubmitCell))) {
 													ret = p.afterSubmitCell.call($t, jqXHR, postdata.id, nm, v, iRow, iCol);
 												}
@@ -352,7 +352,7 @@
 											}
 										},
 										error: function (jqXHR, textStatus, errorThrown) {
-											$self.triggerHandler("jqGridErrorCell", [jqXHR, textStatus, errorThrown]);
+											$self.triggerHandler("jqGridErrorCell", [ jqXHR, textStatus, errorThrown ]);
 											if ($.jgrid.isFunction(p.errorCell)) {
 												p.errorCell.call($t, jqXHR, textStatus, errorThrown);
 												$self.jqGrid("restoreCell", iRow, iCol);

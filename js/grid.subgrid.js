@@ -30,8 +30,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			require("./grid.base");
 			factory($);
@@ -105,7 +105,7 @@
 					subGridOptions.hasSubgrid.call(self, { rowid: rowid, iRow: iRow, iCol: pos, data: item }) :
 					true;
 			return self.p == null ? "" :
-					"<td role='gridcell' class='" + base.getGuiStyles.call(this, "subgrid.tdStart", hasSubgrid ? "ui-sgcollapsed sgcollapsed" : "") + "' " +
+				"<td role='gridcell' class='" + base.getGuiStyles.call(this, "subgrid.tdStart", hasSubgrid ? "ui-sgcollapsed sgcollapsed" : "") + "' " +
 					self.formatCol(pos, iRow) + ">" +
 					(hasSubgrid ? "<div class='" + base.getGuiStyles.call(this, "subgrid.buttonDiv", "sgbutton-div") +
 						"'><a role='button' class='" + base.getGuiStyles.call(this, "subgrid.button", "sgbutton") +
@@ -187,8 +187,8 @@
 
 						for (i = 0; i < cm.name.length; i++) {
 							$th = $("<th class='" + thSubgridClasses + "'></th>")
-									.html(cm.name[i])
-									.width(cm.width[i]);
+								.html(cm.name[i])
+								.width(cm.width[i]);
 							$tr.append($th);
 						}
 						$tr.appendTo($table[0].tHead);
@@ -238,8 +238,8 @@
 										},
 										error: function (jqXHR, textStatus, errorThrown) {
 											var loadError = p.loadSubgridError === undefined ?
-													p.loadError :
-													p.loadSubgridError;
+												p.loadError :
+												p.loadSubgridError;
 
 											ts.grid.endReq.call(ts);
 											if ($.jgrid.isFunction(loadError)) {
@@ -282,7 +282,7 @@
 								$(tr).after("<tr role='row' class='" + rowClasses + "'>" + atd + "<td class='" + tdWithIconClasses +
 									"'><span class='" + iconClass("openicon") + "'></span></td><td colspan='" + parseInt(p.colNames.length - nhc, 10) +
 									"' class='" + tdDataClasses + "'><div id='" + subgridDivId + "' class='tablediv'></div></td></tr>");
-								$(ts).triggerHandler("jqGridSubGridRowExpanded", [subgridDivId, rowid]);
+								$(ts).triggerHandler("jqGridSubGridRowExpanded", [ subgridDivId, rowid ]);
 								if ($.jgrid.isFunction(p.subGridRowExpanded)) {
 									p.subGridRowExpanded.call(ts, subgridDivId, rowid);
 								} else {

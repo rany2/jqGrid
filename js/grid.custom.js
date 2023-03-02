@@ -41,8 +41,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			//console.log("grid.custom CommonJS: before require('./grid.base')");
 			require("./grid.base");
@@ -157,7 +157,7 @@
 				self.addJSONData = null;
 				self.grid = null;*/
 
-				var propOrMethods = ["formatCol", "sortData", "updatepager", "refreshIndex", "setHeadCheckBox", "constructTr", "clearToolbar", "fixScrollOffsetAndhBoxPadding", "rebuildRowIndexes", "modalAlert", "toggleToolbar", "triggerToolbar", "formatter", "addXmlData", "addJSONData", "ftoolbar", "_inlinenav", "nav", "grid", "p"];
+				var propOrMethods = [ "formatCol", "sortData", "updatepager", "refreshIndex", "setHeadCheckBox", "constructTr", "clearToolbar", "fixScrollOffsetAndhBoxPadding", "rebuildRowIndexes", "modalAlert", "toggleToolbar", "triggerToolbar", "formatter", "addXmlData", "addJSONData", "ftoolbar", "_inlinenav", "nav", "grid", "p" ];
 				l = propOrMethods.length;
 				for (i = 0; i < l; i++) {
 					if (hasOwnProperty.call(self, propOrMethods[i])) {
@@ -331,8 +331,8 @@
 									soptions = cm.searchoptions || {};
 									filter[cm.name] = {
 										op: soptions.sopt ?
-												soptions.sopt[0] :
-												(cm.stype === "select" || cm.stype === "checkbox") ? "eq" : o.defaultSearch,
+											soptions.sopt[0] :
+											(cm.stype === "select" || cm.stype === "checkbox") ? "eq" : o.defaultSearch,
 										data: soptions.defaultValue !== undefined ? soptions.defaultValue : ""
 									};
 								}
@@ -423,7 +423,7 @@
 								},
 								cutThousandsSeparator = function (val) {
 									var separator = getFormaterOption("thousandsSeparator")
-											.replace(/([\.\*\_\'\(\)\{\}\+\?\\])/g, "\\$1");
+										.replace(/([\.\*\_\'\(\)\{\}\+\?\\])/g, "\\$1");
 									return val.replace(new RegExp(separator, "g"), "");
 								};
 
@@ -473,7 +473,7 @@
 								switch (cm.formatter) {
 									case "integer":
 										v = cutThousandsSeparator(v)
-												.replace(getFormaterOption("decimalSeparator", "number"), ".");
+											.replace(getFormaterOption("decimalSeparator", "number"), ".");
 										if (v !== "") {
 											// normalize the strings like "010.01" to "10"
 											v = String(parseInt(v, 10));
@@ -481,7 +481,7 @@
 										break;
 									case "number":
 										v = cutThousandsSeparator(v)
-												.replace(getFormaterOption("decimalSeparator"), ".");
+											.replace(getFormaterOption("decimalSeparator"), ".");
 										if (v !== "" && String(v).charAt(0) === "0") {
 											// normalize the strings like "010.00" to "10"
 											// and "010.12" to "10.12"
@@ -498,7 +498,7 @@
 											v = v.substr(0, v.length - suffix.length);
 										}
 										v = cutThousandsSeparator(v)
-												.replace(getFormaterOption("decimalSeparator"), ".");
+											.replace(getFormaterOption("decimalSeparator"), ".");
 										if (v !== "") {
 											// normalize the strings like "010.00" to "10"
 											// and "010.12" to "10.12"
@@ -543,7 +543,7 @@
 							});
 							ruleGroup += "]}";
 							p.postData[o.sFilter] = ruleGroup;
-							$.each([o.sField, o.sValue, o.sOper], function (i, n) {
+							$.each([ o.sField, o.sValue, o.sOper ], function (i, n) {
 								if (p.postData.hasOwnProperty(n)) { delete p.postData[n]; }
 							});
 						} else {
@@ -558,7 +558,7 @@
 						if (!bsr && $.jgrid.isFunction(o.beforeSearch)) { bsr = o.beforeSearch.call($t); }
 						if (!bsr) {
 							$self.jqGrid("setGridParam", { search: sd })
-								.trigger("reloadGrid", [$.extend({ page: 1 }, o.reloadGridSearchOptions || {})]);
+								.trigger("reloadGrid", [ $.extend({ page: 1 }, o.reloadGridSearchOptions || {}) ]);
 						}
 						if (saveurl) { $self.jqGrid("setGridParam", { url: saveurl }); }
 						$self.triggerHandler("jqGridToolbarAfterSearch");
@@ -632,7 +632,7 @@
 							});
 							ruleGroup += "]}";
 							p.postData[o.sFilter] = ruleGroup;
-							$.each([o.sField, o.sValue, o.sOper], function (i, n) {
+							$.each([ o.sField, o.sValue, o.sOper ], function (i, n) {
 								if (p.postData.hasOwnProperty(n)) { delete p.postData[n]; }
 							});
 						} else {
@@ -648,7 +648,7 @@
 						if (!bcv) {
 							if (trigger) {
 								$self.jqGrid("setGridParam", { search: sd })
-									.trigger("reloadGrid", [$.extend({ page: 1 }, o.reloadGridResetOptions || {})]);
+									.trigger("reloadGrid", [ $.extend({ page: 1 }, o.reloadGridResetOptions || {}) ]);
 							}
 						}
 						if (saveurl) { $self.jqGrid("setGridParam", { url: saveurl }); }
@@ -730,7 +730,7 @@
 						).click(function () {
 							var v = $(this).attr("value"),
 								oper = $(this).data("oper");
-							$self.triggerHandler("jqGridToolbarSelectOper", [v, oper, elem]);
+							$self.triggerHandler("jqGridToolbarSelectOper", [ v, oper, elem ]);
 							$("#sopt_menu").hide();
 							$(elem).data("soper", v).text(oper);
 							if (o.autosearch === true) {
@@ -808,13 +808,13 @@
 						}
 						if (soptions.clearSearch) {
 							var csv = $.jgrid.isFunction(o.resetTitle) ?
-									o.resetTitle.call($t, {
-										options: o,
-										cm: cm,
-										cmName: cm.name,
-										iCol: ci
-									}) :
-									(getRes("search.resetTitle") || "Clear Search Value") + " " + jgrid.stripHtml(p.colNames[ci]);
+								o.resetTitle.call($t, {
+									options: o,
+									cm: cm,
+									cmName: cm.name,
+									iCol: ci
+								}) :
+								(getRes("search.resetTitle") || "Clear Search Value") + " " + jgrid.stripHtml(p.colNames[ci]);
 							$tdClear.append("<a title='" + csv + "' aria-label='" + csv + "' class='" +
 									getGuiStyles.call($t, "searchToolbar.clearButton", "clearsearchclass") +
 									"'><span>" + o.resetIcon + "</span></a>");
@@ -947,12 +947,12 @@
 										});
 										if (soptions.attr) { $elem.attr(soptions.attr); }
 										var isNoFilterValueExist = jgrid.fillSelectOptions(
-												elem,
-												oSv,
-												sep,
-												delim,
-												soptions.attr != null && soptions.attr.multiple
-											);
+											elem,
+											oSv,
+											sep,
+											delim,
+											soptions.attr != null && soptions.attr.multiple
+										);
 										if (!isNoFilterValueExist && typeof soptions.noFilterText === "string") {
 											var ov = document.createElement("option");
 											ov.value = "";
@@ -1119,10 +1119,10 @@
 					if (soper === "nu" || soper === "nn" || $.inArray(soper, p.customUnaryOperations) >= 0) {
 						// one need reset an unary operation to default search operation
 						v = sval.sopt ?
-								sval.sopt[0] :
-								(cm.stype === "select" || cm.stype === "checkbox") ?
-									"eq" :
-									o.defaultSearch;
+							sval.sopt[0] :
+							(cm.stype === "select" || cm.stype === "checkbox") ?
+								"eq" :
+								o.defaultSearch;
 
 						operText = customSortOperations != null && customSortOperations[v] != null ?
 							customSortOperations[v].operand :
@@ -1190,8 +1190,8 @@
 										}
 									}
 									$searchOper = $input.closest(".ui-search-input")
-											.siblings(".ui-search-oper")
-											.children(".soptclass");
+										.siblings(".ui-search-oper")
+										.children(".soptclass");
 									$searchOper.data("soper", filter.op);
 									$searchOper.text(o.operands[filter.op] || (p.customSortOperations[filter.op] || {}).operand);
 								}
@@ -1388,7 +1388,7 @@
 			return this.each(function () {
 				var $t = this, $self = $($t), p = $t.p, grid = $t.grid;
 				if (!grid || p == null || p.frozenColumns === true) { return; }
-				var cm = p.colModel, i, len = cm.length, maxfrozen = -1, frozen = false, frozenIds = [], $colHeaderRow,// nonFrozenIds = [],
+				var cm = p.colModel, i, len = cm.length, maxfrozen = -1, frozen = false, frozenIds = [], $colHeaderRow, // nonFrozenIds = [],
 					tid = jqID(p.id), // one can use p.idSel and remove "#"
 					hoverClasses = getGuiStyles.call($t, "states.hover");
 
@@ -1418,8 +1418,8 @@
 						sortable: {
 							options: {
 								items: frozenIds.length > 0 ?
-										">th:not(:has(" + frozenIds.join(",") + "),:hidden)" :
-										">th:not(:hidden)"
+									">th:not(:has(" + frozenIds.join(",") + "),:hidden)" :
+									">th:not(:hidden)"
 							}
 						}
 					});
@@ -1639,9 +1639,9 @@
 						$frozenBTable.appendTo(grid.fbDiv);
 						if (p.hoverrows === true) {
 							var hoverRows = function (tr, method, additionalRows) {
-									$(tr)[method](hoverClasses);
-									$(additionalRows[tr.rowIndex])[method](hoverClasses);
-								};
+								$(tr)[method](hoverClasses);
+								$(additionalRows[tr.rowIndex])[method](hoverClasses);
+							};
 							$(frozenRows).filter(".jqgrow").hover(
 								function () {
 									hoverRows(this, "addClass", rows);
@@ -1664,29 +1664,29 @@
 						if (grid.sDiv) { fixDiv(grid.fsDiv, grid.sDiv, 0, -1); }
 					});
 					var myResize = function (resizeOptions) {
-							$(grid.fbDiv).scrollTop($(grid.bDiv).scrollTop());
-							// TODO: the width of all column headers can be changed
-							// so one should recalculate frozenWidth in other way.
-							if (resizeOptions.header.resizeDiv) {
-								fixDiv(grid.fhDiv, grid.hDiv, resizeOptions.header.resizedRows.iRowStart, resizeOptions.header.resizedRows.iRowEnd);
-							}
-							if (resizeOptions.body.resizeDiv) {
-								fixDiv(grid.fbDiv, grid.bDiv, resizeOptions.body.resizedRows.iRowStart, resizeOptions.body.resizedRows.iRowEnd);
-							}
-							if (resizeOptions.resizeFooter && grid.sDiv && resizeOptions.resizeFooter) {
-								fixDiv(grid.fsDiv, grid.sDiv, 0, -1);
-							}
-							var frozenWidth = grid.fhDiv[0].clientWidth;
-							if (resizeOptions.header.resizeDiv && grid.fhDiv != null && grid.fhDiv.length >= 1) {
-								safeHeightSet($(grid.fhDiv), grid.hDiv.clientHeight);
-							}
-							if (resizeOptions.body.resizeDiv && grid.fbDiv != null && grid.fbDiv.length > 0) {
-								safeWidthSet($(grid.fbDiv), frozenWidth);
-							}
-							if (resizeOptions.resizeFooter && grid.fsDiv != null && grid.fsDiv.length >= 0) {
-								safeWidthSet($(grid.fsDiv), frozenWidth);
-							}
-						};
+						$(grid.fbDiv).scrollTop($(grid.bDiv).scrollTop());
+						// TODO: the width of all column headers can be changed
+						// so one should recalculate frozenWidth in other way.
+						if (resizeOptions.header.resizeDiv) {
+							fixDiv(grid.fhDiv, grid.hDiv, resizeOptions.header.resizedRows.iRowStart, resizeOptions.header.resizedRows.iRowEnd);
+						}
+						if (resizeOptions.body.resizeDiv) {
+							fixDiv(grid.fbDiv, grid.bDiv, resizeOptions.body.resizedRows.iRowStart, resizeOptions.body.resizedRows.iRowEnd);
+						}
+						if (resizeOptions.resizeFooter && grid.sDiv && resizeOptions.resizeFooter) {
+							fixDiv(grid.fsDiv, grid.sDiv, 0, -1);
+						}
+						var frozenWidth = grid.fhDiv[0].clientWidth;
+						if (resizeOptions.header.resizeDiv && grid.fhDiv != null && grid.fhDiv.length >= 1) {
+							safeHeightSet($(grid.fhDiv), grid.hDiv.clientHeight);
+						}
+						if (resizeOptions.body.resizeDiv && grid.fbDiv != null && grid.fbDiv.length > 0) {
+							safeWidthSet($(grid.fbDiv), frozenWidth);
+						}
+						if (resizeOptions.resizeFooter && grid.fsDiv != null && grid.fsDiv.length >= 0) {
+							safeWidthSet($(grid.fsDiv), frozenWidth);
+						}
+					};
 					$(p.gBox).on("resizestop.setFrozenColumns", function () {
 						setTimeout(function () {
 							myResize(fullResize);

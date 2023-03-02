@@ -58,8 +58,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			//console.log("grid.filter CommonJS: before require('./grid.base')");
 			require("./grid.base");
@@ -99,10 +99,10 @@
 			sopt: null,
 			ops: [],
 			operands: null,
-			numopts: ["eq", "ne", "lt", "le", "gt", "ge", "nu", "nn", "in", "ni"],
-			stropts: ["eq", "ne", "bw", "bn", "ew", "en", "cn", "nc", "nu", "nn", "in", "ni"],
-			strarr: ["text", "string", "blob"],
-			groupOps: [{ op: "AND", text: "AND" }, { op: "OR", text: "OR" }],
+			numopts: [ "eq", "ne", "lt", "le", "gt", "ge", "nu", "nn", "in", "ni" ],
+			stropts: [ "eq", "ne", "bw", "bn", "ew", "en", "cn", "nc", "nu", "nn", "in", "ni" ],
+			strarr: [ "text", "string", "blob" ],
+			groupOps: [ { op: "AND", text: "AND" }, { op: "OR", text: "OR" } ],
 			groupButton: true,
 			ruleButtons: true,
 			direction: "ltr"
@@ -193,7 +193,7 @@
 			 *
 			*/
 			var checkData = function (val, colModelItem) {
-				var ret = [true, ""], $t = getGrid();
+				var ret = [ true, "" ], $t = getGrid();
 				if (isFunction(colModelItem.searchrules)) {
 					ret = colModelItem.searchrules.call($t, val, colModelItem);
 				} else if (jgrid && jgrid.checkValues) {
@@ -428,12 +428,12 @@
 					delete editoptions.readonly;
 					delete editoptions.disabled;
 					var searchoptions = $.extend(
-							{},
-							editoptions || {},
-							columns.searchoptions || {},
-							getCmInfo(columns.cmName),
-							{ id: jgrid.randId(), name: columns.name, mode: "search" }
-						);
+						{},
+						editoptions || {},
+						columns.searchoptions || {},
+						getCmInfo(columns.cmName),
+						{ id: jgrid.randId(), name: columns.name, mode: "search" }
+					);
 					searchoptions.column = columns; // add reference to that.p.columns[k];
 					if (isIE && columns.inputtype === "text") {
 						if (!searchoptions.size) {
@@ -441,8 +441,8 @@
 						}
 					}
 					var elm = jgrid.createEl.call($t, columns.inputtype,
-								$.extend({}, searchoptions, searchoptions.attr || {}),
-								"", true, that.p.ajaxSelectOptions || {}, true);
+						$.extend({}, searchoptions, searchoptions.attr || {}),
+						"", true, that.p.ajaxSelectOptions || {}, true);
 					$(elm).addClass(getGuiStyles("searchDialog.elem", "input-elm"));
 					//that.createElement(rule, "");
 
@@ -498,8 +498,8 @@
 					$(".input-elm", trpar).on("change", searchoptions, function (e) {
 						var elem = e.target, column = e.data.column;
 						rule.data = column && column.inputtype === "custom" && isFunction(column.searchoptions.custom_value) ?
-								column.searchoptions.custom_value.call($t, $(this).find(".customelement").first(), "get") :
-								elem.value;
+							column.searchoptions.custom_value.call($t, $(this).find(".customelement").first(), "get") :
+							elem.value;
 						if ($(elem).is("input[type=checkbox]") && !$(elem).is(":checked")) {
 							// value of checkbox contains checked value
 							rule.data = $(elem).data("offval");
@@ -546,15 +546,15 @@
 				delete editoptions.readonly;
 				delete editoptions.disabled;
 				var searchoptions = $.extend(
-						{},
-						editoptions,
-						cm.searchoptions || {},
-						getCmInfo(cm.cmName),
-						{ id: jgrid.randId(), name: cm.name, mode: "search" });
+					{},
+					editoptions,
+					cm.searchoptions || {},
+					getCmInfo(cm.cmName),
+					{ id: jgrid.randId(), name: cm.name, mode: "search" });
 				searchoptions.column = cm;
 				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
-						$.extend({}, searchoptions, searchoptions.attr || {}),
-						rule.data, true, that.p.ajaxSelectOptions || {}, true);
+					$.extend({}, searchoptions, searchoptions.attr || {}),
+					rule.data, true, that.p.ajaxSelectOptions || {}, true);
 				if (rule.op === "nu" || rule.op === "nn" || $.inArray(rule.op, $t.p.customUnaryOperations) >= 0) {
 					$(ruleDataInput).attr("readonly", "true");
 					$(ruleDataInput).attr("disabled", "true");
@@ -629,8 +629,8 @@
 				$(ruleDataInput).addClass(getGuiStyles("searchDialog.elem", "input-elm"))
 					.on("change", function () {
 						rule.data = cm.inputtype === "custom" ?
-								cm.searchoptions.custom_value.call($t, $(this).find(".customelement").first(), "get") :
-								$(this).val();
+							cm.searchoptions.custom_value.call($t, $(this).find(".customelement").first(), "get") :
+							$(this).val();
 						if ($(this).is("input[type=checkbox]") && !$(this).is(":checked")) {
 							// value of checkbox contains checked value
 							rule.data = $(this).data("offval");
@@ -705,7 +705,7 @@
 				return s;
 			};
 			this.getStringForRule = function (rule) {
-				var operand = "", opC = "", i, cm, ret, val = rule.data, oper, numtypes = ["int", "integer", "float", "number", "currency"]; // jqGrid
+				var operand = "", opC = "", i, cm, ret, val = rule.data, oper, numtypes = [ "int", "integer", "float", "number", "currency" ]; // jqGrid
 				for (i = 0; i < p.ops.length; i++) {
 					if (p.ops[i].oper === rule.op) {
 						operand = p.operands.hasOwnProperty(rule.op) ? p.operands[rule.op] : "";

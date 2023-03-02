@@ -22,8 +22,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			require("./grid.base");
 			factory($);
@@ -127,6 +127,7 @@
 				var $t = this, p = $t.p, grp = p.groupingView, groups = grp.groups, counters = grp.counters,
 					lastvalues = grp.lastvalues, isInTheSameGroup = grp.isInTheSameGroup, groupLength = grp.groupField.length,
 					i, j, keys, newGroup, counter, fieldName, v, displayName, displayValue, changed = false,
+					// eslint-disable-next-line no-unused-vars
 					groupingCalculationsHandler = base.groupingCalculations.handler, key,
 					buildSummary = function () {
 						var iSummary, summary, st;
@@ -149,7 +150,7 @@
 							var cm = p.iColByName[cmOrPropName] !== undefined ?
 									p.colModel[p.iColByName[cmOrPropName]] :
 									p.additionalProperties[p.iPropByName[cmOrPropName]],
-									defaultValue;
+								defaultValue;
 
 							if (cm != null && cm.formatter != null) {
 								if (cm.formatoptions != null && cm.formatoptions.defaultValue !== undefined) {
@@ -240,8 +241,8 @@
 		getGroupHeaderIndex: function (hid, clickedElem) {
 			var $self = this, self = $self[0], p = self.p,
 				$tr = clickedElem ?
-						$(clickedElem).closest("tr.jqgroup") :
-						$("#" + jgrid.jqID(hid)),
+					$(clickedElem).closest("tr.jqgroup") :
+					$("#" + jgrid.jqID(hid)),
 				groupLevel = parseInt($tr.data("jqgrouplevel"), 10),
 				hPrefix = p.id + "ghead_" + groupLevel + "_";
 			if (isNaN(groupLevel) || !$tr.hasClass("jqgroup") || hid.length <= hPrefix.length) {
@@ -254,8 +255,8 @@
 				var $t = this, p = $t.p, grp = p.groupingView,
 					minusClasses = grp.minusicon, plusClasses = grp.plusicon,
 					$tr = clickedElem ?
-							$(clickedElem).closest("tr.jqgroup") :
-							$("#" + jgrid.jqID(hid)),
+						$(clickedElem).closest("tr.jqgroup") :
+						$("#" + jgrid.jqID(hid)),
 					getGroupHeaderIcon = function ($trElem) {
 						return $trElem.find(">td>span." + "tree-wrap");
 					},
@@ -336,7 +337,7 @@
 				$(rowsToHideOrShow).css("display", collapsed ? "none" : "");
 				// fix position of elements of frozen divs
 				if (p.frozenColumns) {
-					$($t).triggerHandler("jqGridResetFrozenHeights", [{
+					$($t).triggerHandler("jqGridResetFrozenHeights", [ {
 						header: {
 							resizeDiv: false,
 							resizedRows: {
@@ -352,13 +353,13 @@
 								iRowEnd: ($tr.length ? $tr[0].rowIndex - 1 : -1)
 							}
 						}
-					}]);
+					} ]);
 				}
 
 				// recalculate the width because vertical scrollbar can
 				// appears/disappears after expanding/collapsing
 				$t.fixScrollOffsetAndhBoxPadding();
-				$($t).triggerHandler("jqGridGroupingClickGroup", [hid, collapsed]);
+				$($t).triggerHandler("jqGridGroupingClickGroup", [ hid, collapsed ]);
 				if ($.jgrid.isFunction(p.onClickGroup)) {
 					p.onClickGroup.call($t, hid, collapsed);
 				}
@@ -630,7 +631,7 @@
 			return this.each(function () {
 				var $t = this, p = $t.p, grp = p.groupingView, i, cm;
 				if (typeof name === "string") {
-					name = [name];
+					name = [ name ];
 				}
 				p.grouping = true;
 				grp._locgr = false;

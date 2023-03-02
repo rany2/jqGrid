@@ -31,8 +31,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			require("./grid.base");
 			require("./jquery.fmatter");
@@ -53,12 +53,12 @@
 		};
 	// begin module grid.inlinedit
 	var editFeedback = function (o) {
-			var args = $.makeArray(arguments).slice(1);
-			args.unshift("");
-			args.unshift("Inline");
-			args.unshift(o);
-			return jgrid.feedback.apply(this, args);
-		};
+		var args = $.makeArray(arguments).slice(1);
+		args.unshift("");
+		args.unshift("Inline");
+		args.unshift(o);
+		return jgrid.feedback.apply(this, args);
+	};
 	jgrid.inlineEdit = jgrid.inlineEdit || {};
 	jgrid.extend({
 		//Editing
@@ -180,11 +180,11 @@
 									},
 									getFocusable = function (elem) {
 										return $(elem).find("input,textarea,select,button,object,*[tabindex]")
-												.filter(":input:visible:not(:disabled)");
+											.filter(":input:visible:not(:disabled)");
 									},
 									getFirstFocusable = function () {
 										return getFocusable(p.frozenColumns && nFrozenColumns > 0 ? $t.grid.fbRows[ind.rowIndex] : ind)
-												.first();
+											.first();
 									},
 									$fe = getFocusable(getTdByColIndex(focus));
 
@@ -296,10 +296,10 @@
 						tmp2[cm.name] = valueText.text;
 					}
 					cv = jgrid.checkValues.call($t, v, options.iCol, undefined, undefined,
-							$.extend(options, {
-								oldValue: editingInfo != null ? editingInfo.savedRow[cm.name] : null,
-								newValue: v,
-								oldRowData: editingInfo != null ? editingInfo.savedRow : null }));
+						$.extend(options, {
+							oldValue: editingInfo != null ? editingInfo.savedRow[cm.name] : null,
+							newValue: v,
+							oldRowData: editingInfo != null ? editingInfo.savedRow : null }));
 					if (cv != null && cv[0] === false) {
 						isError = true;
 						displayErrorMessage(cv[1], options.td);
@@ -336,14 +336,14 @@
 					tmp = $.extend({}, tmp, p.inlineData || {}, o.extraparam);
 				}
 				var validationOptions = {
-						options: o,
-						rowid: rowid,
-						tr: ind,
-						iRow: ind.rowIndex,
-						savedRow: editingInfo.savedRow,
-						newData: tmp,
-						mode: editOrAdd
-					};
+					options: o,
+					rowid: rowid,
+					tr: ind,
+					iRow: ind.rowIndex,
+					savedRow: editingInfo.savedRow,
+					newData: tmp,
+					mode: editOrAdd
+				};
 				if (!editFeedback.call($t, o, "saveRowValidation", validationOptions)) {
 					if (validationOptions.errorText) {
 						displayErrorMessage(validationOptions.errorText, ind);
@@ -385,9 +385,9 @@
 					$.ajax($.extend({
 						url: isFunction(o.url) ? o.url.call($t, postData[idname], editOrAdd, postData, o) : o.url,
 						data: jgrid.serializeFeedback.call($t,
-								isFunction(o.serializeSaveData) ? o.serializeSaveData : p.serializeRowData,
-								"jqGridInlineSerializeSaveData",
-								postData),
+							isFunction(o.serializeSaveData) ? o.serializeSaveData : p.serializeRowData,
+							"jqGridInlineSerializeSaveData",
+							postData),
 						type: isFunction(o.mtype) ? o.mtype.call($t, editOrAdd, o, postData[idname], postData) : o.mtype,
 						complete: function (jqXHR, textStatus) {
 							$self.jqGrid("progressBar", { method: "hide", loadtype: o.saveui });
@@ -395,8 +395,8 @@
 							// see the answer http://stackoverflow.com/a/3617710/315935 about xhr.readyState === 4 && xhr.status === 0
 							if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 								var ret, sucret, j;
-								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [jqXHR, rowid, o, editOrAdd, postData]);
-								if (sucret == null || sucret === true) { sucret = [true, tmp]; }
+								sucret = $self.triggerHandler("jqGridInlineSuccessSaveRow", [ jqXHR, rowid, o, editOrAdd, postData ]);
+								if (sucret == null || sucret === true) { sucret = [ true, tmp ]; }
 								if (sucret[0] && isFunction(o.successfunc)) { sucret = o.successfunc.call($t, jqXHR, rowid, o, editOrAdd, postData); }
 								if ($.isArray(sucret)) {
 									// expect array - status, data, rowid
@@ -437,7 +437,7 @@
 							}
 						},
 						error: function (res, stat, err) {
-							$self.triggerHandler("jqGridInlineErrorSaveRow", [rowid, res, stat, err, o]);
+							$self.triggerHandler("jqGridInlineErrorSaveRow", [ rowid, res, stat, err, o ]);
 							if (isFunction(o.errorfunc)) {
 								o.errorfunc.call($t, rowid, res, stat, err);
 							} else {

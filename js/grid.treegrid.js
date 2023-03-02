@@ -30,8 +30,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			require("./grid.base");
 			factory($);
@@ -113,7 +113,7 @@
 		setTreeGrid: function () {
 			return this.each(function () {
 				var $t = this, p = $t.p, nm, key, tkey, dupcols = [],
-					boolProp = ["leaf_field", "expanded_field", "loaded"];
+					boolProp = [ "leaf_field", "expanded_field", "loaded" ];
 				if (!p.treeGrid) { return; }
 				if (!p.treedatatype) { $.extend($t.p, { treedatatype: p.datatype }); }
 				p.subGrid = false;
@@ -410,33 +410,33 @@
 						p.datatype = p.treedatatype;
 						base.setGridParam.call($($t), {
 							postData: p.treeGridModel === "nested" ?
-									{
-										nodeid: id,
-										n_level: rc[treeReader.level_field],
-										n_left: rc[treeReader.left_field],
-										n_right: rc[treeReader.right_field]
-									} :
-									{
-										nodeid: id,
-										n_level: rc[treeReader.level_field],
-										parentid: rc[treeReader.parent_id_field]
-									}
+								{
+									nodeid: id,
+									n_level: rc[treeReader.level_field],
+									n_left: rc[treeReader.left_field],
+									n_right: rc[treeReader.right_field]
+								} :
+								{
+									nodeid: id,
+									n_level: rc[treeReader.level_field],
+									parentid: rc[treeReader.parent_id_field]
+								}
 						});
 						$($t).trigger("reloadGrid");
 						rc[treeReader.loaded] = true;
 						base.setGridParam.call($($t), {
 							postData: p.treeGridModel === "nested" ?
-									{
-										nodeid: "",
-										n_level: "",
-										n_left: "",
-										n_right: ""
-									} :
-									{
-										nodeid: "",
-										n_level: "",
-										parentid: ""
-									}
+								{
+									nodeid: "",
+									n_level: "",
+									n_left: "",
+									n_right: ""
+								} :
+								{
+									nodeid: "",
+									n_level: "",
+									parentid: ""
+								}
 						});
 					}
 					treeGridFeedback.call($t, "afterExpandNode", { rowid: id, item: rc });

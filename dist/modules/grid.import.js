@@ -32,8 +32,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			require("./grid.base");
 			require("./jsonxml");
@@ -121,7 +121,7 @@
 							complete: function (jqXHR) {
 								if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 									xmlConvert(jqXHR.responseXML, this);
-									$($t).triggerHandler("jqGridImportComplete", [jqXHR, this]);
+									$($t).triggerHandler("jqGridImportComplete", [ jqXHR, this ]);
 									if ($.jgrid.isFunction(this.importComplete)) {
 										this.importComplete(jqXHR);
 									}
@@ -135,7 +135,7 @@
 							xmld = $.parseXML(o.impstring);
 							if (xmld) {
 								xmlConvert(xmld, o);
-								$($t).triggerHandler("jqGridImportComplete", [xmld, o]);
+								$($t).triggerHandler("jqGridImportComplete", [ xmld, o ]);
 								if ($.jgrid.isFunction(o.importComplete)) {
 									o.importComplete(xmld);
 								}
@@ -154,7 +154,7 @@
 								try {
 									if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 										jsonConvert(jqXHR.responseText, this);
-										$($t).triggerHandler("jqGridImportComplete", [jqXHR, this]);
+										$($t).triggerHandler("jqGridImportComplete", [ jqXHR, this ]);
 										if ($.jgrid.isFunction(this.importComplete)) {
 											this.importComplete(jqXHR);
 										}
@@ -166,7 +166,7 @@
 					case "jsonstring":
 						if (o.impstring && typeof o.impstring === "string") {
 							jsonConvert(o.impstring, o);
-							$($t).triggerHandler("jqGridImportComplete", [o.impstring, o]);
+							$($t).triggerHandler("jqGridImportComplete", [ o.impstring, o ]);
 							if ($.jgrid.isFunction(o.importComplete)) {
 								o.importComplete(o.impstring);
 							}

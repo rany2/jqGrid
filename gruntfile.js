@@ -183,6 +183,9 @@ module.exports = function (grunt) {
 		eslint: {
 			all: {
 				src: ["js/jquery.jqgrid.src.js"],
+			},
+			options: {
+				"fix": true,
 			}
 		},
 		tslint: {

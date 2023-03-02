@@ -40,8 +40,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			require("./grid.base");
 			//require("../plugins/ui.multiselect");
@@ -321,8 +321,8 @@
 					placeholder: {
 						element: function (item) {
 							var el = $(document.createElement(item[0].nodeName))
-									.addClass(item[0].className + " ui-sortable-placeholder ui-state-highlight")
-									.removeClass("ui-sortable-helper")[0];
+								.addClass(item[0].className + " ui-sortable-placeholder ui-state-highlight")
+								.removeClass("ui-sortable-helper")[0];
 							return el;
 						},
 						update: function (self, o) {
@@ -426,7 +426,7 @@
 				   "destroy")
 				   */
 				dlog: function (options) {
-					if (options == "destroy") {
+					if (options === "destroy") {
 						jgrid.hideModal.call($self, selector);
 						return;
 					}
@@ -438,11 +438,11 @@
 							$self.jqGrid("getGuiStyles", "dialog.fmButton" + name),
 							$self.jqGrid("getGuiStyles", "dialog.defaultCorner" + name)
 						) + '">' + label + '</button>').on("click", cb)
-						.hover(
-							function () { $(this).addClass(hoverClasses); },
-							function () { $(this).removeClass(hoverClasses); },
-						)
-						.appendTo(footer);
+							.hover(
+								function () { $(this).addClass(hoverClasses); },
+								function () { $(this).removeClass(hoverClasses); }
+							)
+							.appendTo(footer);
 					});
 					jgrid.createModal.call($self, {
 						themodal: "colchooser_" + p.id,
@@ -599,14 +599,14 @@
 					for (j = 0; j < ghItem.numberOfColumns; j++) {
 						iCol = p.iColByName[ghItem.startColumnName] + j;
 						colHeader[iCol] = $.jgrid.isFunction(opts.buildItemText) ?
-								opts.buildItemText.call($self[0], {
-									iCol: iCol,
-									cm: colModel[iCol],
-									cmName: colModel[iCol].name,
-									colName: colNames[iCol],
-									groupTitleText: ghItem.titleText
-								}) :
-								$.jgrid.stripHtml(ghItem.titleText) + ": " +
+							opts.buildItemText.call($self[0], {
+								iCol: iCol,
+								cm: colModel[iCol],
+								cmName: colModel[iCol].name,
+								colName: colNames[iCol],
+								groupTitleText: ghItem.titleText
+							}) :
+							$.jgrid.stripHtml(ghItem.titleText) + ": " +
 									$.jgrid.stripHtml(colNames[iCol] === "" ? colModel[iCol].name : colNames[iCol]);
 					}
 				}
@@ -615,14 +615,14 @@
 			for (iCol = 0; iCol < nCol; iCol++) {
 				if (colHeader[iCol] === undefined) {
 					colHeader[iCol] = $.jgrid.isFunction(opts.buildItemText) ?
-							opts.buildItemText.call($self[0], {
-								iCol: iCol,
-								cm: colModel[iCol],
-								cmName: colModel[iCol].name,
-								colName: colNames[iCol],
-								groupTitleText: null
-							}) :
-							$.jgrid.stripHtml(colNames[iCol]);
+						opts.buildItemText.call($self[0], {
+							iCol: iCol,
+							cm: colModel[iCol],
+							cmName: colModel[iCol].name,
+							colName: colNames[iCol],
+							groupTitleText: null
+						}) :
+						$.jgrid.stripHtml(colNames[iCol]);
 				}
 			}
 			$.each(colModel, function (i) {
@@ -725,7 +725,7 @@
 							} catch (ignore) { }
 						}
 						if (opts._start_) {
-							opts._start_.apply(this, [ev, ui]);
+							opts._start_.apply(this, [ ev, ui ]);
 						}
 					};
 					opts.update = function (ev, ui) {
@@ -736,7 +736,7 @@
 							});
 						}
 						if (opts._update_) {
-							opts._update_.apply(this, [ev, ui]);
+							opts._update_.apply(this, [ ev, ui ]);
 						}
 					};
 					$($t).sortable(opts);

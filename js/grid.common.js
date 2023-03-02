@@ -39,8 +39,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			//console.log("grid.common CommonJS: before require('./grid.base')");
 			require("./grid.base");
@@ -388,10 +388,10 @@
 			if (opt.dataEvents) {
 				$.each(opt.dataEvents, function () {
 					var data = this.data === undefined ?
-							$.extend({ gridId: p.id, gridIdSel: p.idSel }, opt) :
-							(typeof this.data === "object" && this.data !== null ?
-								$.extend(true, { gridId: p.id, gridIdSel: p.idSel }, opt, this.data) :
-								this.data);
+						$.extend({ gridId: p.id, gridIdSel: p.idSel }, opt) :
+						(typeof this.data === "object" && this.data !== null ?
+							$.extend(true, { gridId: p.id, gridIdSel: p.idSel }, opt, this.data) :
+							this.data);
 					$(el).on(this.type, data, this.fn);
 				});
 			}
@@ -403,25 +403,25 @@
 				errcap = getRes("errors.errcap"), edit = getRes("edit"), editMsg = edit.msg, bClose = edit.bClose;
 			function setAttributes(elm, atr, exl) {
 				var exclude = [
-						"dataInit",
-						"dataEvents",
-						"dataUrl",
-						"buildSelect",
-						"sopt",
-						"searchhidden",
-						"defaultValue",
-						"attr",
-						"custom_element",
-						"custom_value",
-						"generateValue",
-						"postData",
-						"selectFilled",
-						"rowId",
-						"column",
-						"mode",
-						"cm",
-						"iCol"
-					];
+					"dataInit",
+					"dataEvents",
+					"dataUrl",
+					"buildSelect",
+					"sopt",
+					"searchhidden",
+					"defaultValue",
+					"attr",
+					"custom_element",
+					"custom_value",
+					"generateValue",
+					"postData",
+					"selectFilled",
+					"rowId",
+					"column",
+					"mode",
+					"cm",
+					"iCol"
+				];
 				if (exl !== undefined && $.isArray(exl)) {
 					$.merge(exclude, exl);
 				}
@@ -454,13 +454,13 @@
 					elem.type = "checkbox";
 					if (vl === "" || vl == null) {
 						vl = !options.hasOwnProperty("defaultValue") ?
-								"false" :
-								$.jgrid.isFunction(options.defaultValue) ?
-									options.defaultValue.call($t, {
-										cellValue: vl,
-										options: options
-									}) :
-									options.defaultValue;
+							"false" :
+							$.jgrid.isFunction(options.defaultValue) ?
+								options.defaultValue.call($t, {
+									cellValue: vl,
+									options: options
+								}) :
+								options.defaultValue;
 					}
 					if (!options.value) {
 						var vl1 = String(vl).toLowerCase();
@@ -481,7 +481,7 @@
 						elem.value = vl;
 						$(elem).data("offval", cbval[1]);
 					}
-					setAttributes(elem, options, ["value"]);
+					setAttributes(elem, options, [ "value" ]);
 					$(elem).attr({ role: "checkbox", "aria-checked": elem.checked ? "true" : "false" });
 					break;
 				case "select":
@@ -523,7 +523,7 @@
 								iCol: options.iCol,
 								ovm: ovm
 							};
-						setAttributes(elem, options, postData ? ["postData"] : undefined);
+						setAttributes(elem, options, postData ? [ "postData" ] : undefined);
 						$.ajax($.extend({
 							url: $.jgrid.isFunction(options.dataUrl) ? options.dataUrl.call($t, rowid, vl, String(options.name), ajaxContext) : options.dataUrl,
 							type: "GET",
@@ -584,7 +584,7 @@
 							vl
 						);
 
-						setAttributes(elem, options, ["value"]);
+						setAttributes(elem, options, [ "value" ]);
 						jgrid.fullBoolFeedback.call($t, options.selectFilled, "jqGridSelectFilled", {
 							elem: elem,
 							options: options,
@@ -691,7 +691,7 @@
 			} else {
 				yln = -1;
 			}
-			var strDate, daysInMonth = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+			var strDate, daysInMonth = [ 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 			if (j === -1) {
 				return false;
 			}
@@ -755,7 +755,7 @@
 					iCol = p.iColByName[iCol];
 				}
 				if (iCol === undefined || iCol < 0) {
-					return [true, "", ""];
+					return [ true, "", "" ];
 				}
 				cm = colModel[iCol];
 				edtrul = cm.editrules;
@@ -768,33 +768,33 @@
 			if (edtrul) {
 				if (!nm) { nm = p.colNames != null ? p.colNames[iCol] : cm.label; }
 				if (getPropertyValue("required") === true) {
-					if (isEmpty(val)) { return [false, nm + ": " + editMsg.required, ""]; }
+					if (isEmpty(val)) { return [ false, nm + ": " + editMsg.required, "" ]; }
 				}
 				// force required
 				var rqfield = getPropertyValue("required") === false ? false : true;
 				if (getPropertyValue("number") === true) {
 					if (!(rqfield === false && isEmpty(val))) {
-						if (isNaN(val)) { return [false, nm + ": " + editMsg.number, ""]; }
+						if (isNaN(val)) { return [ false, nm + ": " + editMsg.number, "" ]; }
 					}
 				}
 				if (edtrul.minValue !== undefined && !isNaN(edtrul.minValue)) {
-					if (parseFloat(val) < parseFloat(edtrul.minValue)) { return [false, nm + ": " + editMsg.minValue + " " + edtrul.minValue, ""]; }
+					if (parseFloat(val) < parseFloat(edtrul.minValue)) { return [ false, nm + ": " + editMsg.minValue + " " + edtrul.minValue, "" ]; }
 				}
 				if (edtrul.maxValue !== undefined && !isNaN(edtrul.maxValue)) {
-					if (parseFloat(val) > parseFloat(edtrul.maxValue)) { return [false, nm + ": " + editMsg.maxValue + " " + edtrul.maxValue, ""]; }
+					if (parseFloat(val) > parseFloat(edtrul.maxValue)) { return [ false, nm + ": " + editMsg.maxValue + " " + edtrul.maxValue, "" ]; }
 				}
 				var filter;
 				if (getPropertyValue("email") === true) {
 					if (!(rqfield === false && isEmpty(val))) {
 						// taken from $ Validate plugin
 						filter = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i;
-						if (!filter.test(val)) { return [false, nm + ": " + editMsg.email, ""]; }
+						if (!filter.test(val)) { return [ false, nm + ": " + editMsg.email, "" ]; }
 					}
 				}
 				if (getPropertyValue("integer") === true) {
 					if (!(rqfield === false && isEmpty(val))) {
-						if (isNaN(val)) { return [false, nm + ": " + editMsg.integer, ""]; }
-						if ((val % 1 !== 0) || (val.indexOf(".") !== -1)) { return [false, nm + ": " + editMsg.integer, ""]; }
+						if (isNaN(val)) { return [ false, nm + ": " + editMsg.integer, "" ]; }
+						if ((val % 1 !== 0) || (val.indexOf(".") !== -1)) { return [ false, nm + ": " + editMsg.integer, "" ]; }
 					}
 				}
 				if (getPropertyValue("date") === true) {
@@ -807,36 +807,36 @@
 						} else {
 							dft = colModel[iCol].datefmt || "Y-m-d";
 						}
-						if (!jgrid.checkDate(dft, val)) { return [false, nm + ": " + editMsg.date + " - " + dft, ""]; }
+						if (!jgrid.checkDate(dft, val)) { return [ false, nm + ": " + editMsg.date + " - " + dft, "" ]; }
 					}
 				}
 				if (getPropertyValue("time") === true) {
 					if (!(rqfield === false && isEmpty(val))) {
-						if (!jgrid.checkTime(val)) { return [false, nm + ": " + editMsg.date + " - hh:mm (am/pm)", ""]; }
+						if (!jgrid.checkTime(val)) { return [ false, nm + ": " + editMsg.date + " - hh:mm (am/pm)", "" ]; }
 					}
 				}
 				if (getPropertyValue("url") === true) {
 					if (!(rqfield === false && isEmpty(val))) {
 						filter = /^(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i;
-						if (!filter.test(val)) { return [false, nm + ": " + editMsg.url, ""]; }
+						if (!filter.test(val)) { return [ false, nm + ": " + editMsg.url, "" ]; }
 					}
 				}
 				if (edtrul.custom === true) {
 					if (!(rqfield === false && isEmpty(val))) {
 						if ($.jgrid.isFunction(edtrul.custom_func)) {
 							ret = edtrul.custom_func.call(g, val, nm, iCol);
-							return $.isArray(ret) ? ret : [false, editMsg.customarray, ""];
+							return $.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
 						}
-						return [false, editMsg.customfcheck, ""];
+						return [ false, editMsg.customfcheck, "" ];
 					}
 				} else if ($.jgrid.isFunction(edtrul.custom)) {
 					if (!(rqfield === false && isEmpty(val))) {
 						ret = edtrul.custom.call(g, options);
-						return $.isArray(ret) ? ret : [false, editMsg.customarray, ""];
+						return $.isArray(ret) ? ret : [ false, editMsg.customarray, "" ];
 					}
 				}
 			}
-			return [true, "", ""];
+			return [ true, "", "" ];
 		}
 	});
 	// end module grid.common

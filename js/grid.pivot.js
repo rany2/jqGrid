@@ -33,8 +33,8 @@
 				// that require this pattern but the window provided is a noop
 				// if it's defined (how jquery works)
 				$ = typeof window !== "undefined" ?
-						require("jquery") :
-						require("jquery")(root);
+					require("jquery") :
+					require("jquery")(root);
 			}
 			require("./jquery.fmatter");
 			require("./grid.grouping");
@@ -264,7 +264,7 @@
 			iMax = items.length - 1;
 			if (iMax < 0) {
 				items.push(values);
-				indexesOfSourceData.push([iRow]);
+				indexesOfSourceData.push([ iRow ]);
 				continue;
 			}
 			compareResult = self.compareVectors(values, items[iMax]);
@@ -276,7 +276,7 @@
 				// in case of the empty array this.items or if the values is larger as the
 				// the max (last) element of this.items: append values to the array this.items
 				items.push(values);
-				indexesOfSourceData.push([iRow]);
+				indexesOfSourceData.push([ iRow ]);
 				continue;
 			}
 			compareResult = self.compareVectors(items[0], values);
@@ -284,7 +284,7 @@
 				// if the min (first) element values is larger as the values:
 				// insert the values as the first element of the array this.items
 				items.unshift(values);
-				indexesOfSourceData.unshift([iRow]);
+				indexesOfSourceData.unshift([ iRow ]);
 				continue;
 			}
 			if (compareResult === 0) {
@@ -296,7 +296,7 @@
 				if (iMax - iMin < 2) {
 					// no identical items are found we need to insert the item at i index
 					items.splice(iMax, 0, values); // insert after iMin
-					indexesOfSourceData.splice(iMax, 0, [iRow]);
+					indexesOfSourceData.splice(iMax, 0, [ iRow ]);
 					break;
 				}
 				i = Math.floor((iMin + iMax) / 2); // | 0 means Math.floor, but it's faster sometimes.
@@ -351,7 +351,7 @@
 				aggrlen = isArray(aggregates) ? aggregates.length : 0,
 				headerLevels = ylen - (aggrlen === 1 ? 1 : 0),
 				colHeaders = [], hasGroupTotal = [], colModel = [], outputItems = [],
-				additionalProperties = ["pivotInfos"],
+				additionalProperties = [ "pivotInfos" ],
 				aggrContextTotalRows = new Array(aggrlen), aggrContextGroupTotalRows = new Array(ylen),
 				xIndexLength, indexesOfDataWithTheSameXValues, iYData, itemYData, indexesOfDataWithTheSameYValues,
 				iRows, agr, outputItem, previousY, groupHeaders, iRowsY, xIndex, yIndex, yIndexLength,
@@ -377,24 +377,24 @@
 						//case 0: // standard column
 						default:
 							label = aggrlen > 1 ?
-									agr1.label || "{0}" :
-									($.jgrid.isFunction(yDimension[level].label) ?
-										yDimension[level].label :
-										yIndex.getItem(iyData)[level]);
+								agr1.label || "{0}" :
+								($.jgrid.isFunction(yDimension[level].label) ?
+									yDimension[level].label :
+									yIndex.getItem(iyData)[level]);
 							name = "y" + iyData;
 							break;
 					}
 					cmItem = $.extend({}, agr1, {
 						name: name + (aggrlen > 1 ? "a" + iAggr : ""),
 						label: $.jgrid.isFunction(label) ?
-									(label.call(self, colType === 2 ?
-											{ aggregate: agr1, iAggregate: iAggr, pivotOptions: o } :
-											(colType === 1 ?
-												{ yIndex: yIndex.getItem(iyData), aggregate: agr1, iAggregate: iAggr, yLevel: level, pivotOptions: o } :
-												{ yData: yIndex.getItem(iyData)[level], yIndex: yIndex.getItem(iyData), yLevel: level, pivotOptions: o }))) :
-									(jgrid.template.apply(self, colType === 2 ?
-											[String(label), agr1.aggregator, agr1.member, iAggr] :
-											[String(label), agr1.aggregator, agr1.member, yIndex.getItem(iyData)[level], level]))
+							(label.call(self, colType === 2 ?
+								{ aggregate: agr1, iAggregate: iAggr, pivotOptions: o } :
+								(colType === 1 ?
+									{ yIndex: yIndex.getItem(iyData), aggregate: agr1, iAggregate: iAggr, yLevel: level, pivotOptions: o } :
+									{ yData: yIndex.getItem(iyData)[level], yIndex: yIndex.getItem(iyData), yLevel: level, pivotOptions: o }))) :
+							(jgrid.template.apply(self, colType === 2 ?
+								[ String(label), agr1.aggregator, agr1.member, iAggr ] :
+								[ String(label), agr1.aggregator, agr1.member, yIndex.getItem(iyData)[level], level ]))
 					});
 					delete cmItem.member;
 					delete cmItem.aggregator;
@@ -424,10 +424,10 @@
 							for (j = iLevel + 1; j <= headerLevels - 1; j++) {
 								colHeaders[j].groupHeaders.push({
 									titleText: ((headerOnTop && j === iLevel + 1) || (!headerOnTop && j === headerLevels - 1)) ?
-											($.jgrid.isFunction(totalHeader) ?
-													totalHeader.call(self, previousY1, iLevel) :
-													jgrid.template.call(self, String(totalHeader || ""), previousY1[iLevel], iLevel)) :
-											"",
+										($.jgrid.isFunction(totalHeader) ?
+											totalHeader.call(self, previousY1, iLevel) :
+											jgrid.template.call(self, String(totalHeader || ""), previousY1[iLevel], iLevel)) :
+										"",
 									startColumnName: "y" + (iyData - 1) + "t" + iLevel + (aggrlen === 1 ? "" : "a0"),
 									numberOfColumns: aggrlen
 								});
@@ -529,8 +529,8 @@
 				cm = {
 					name: "x" + i,
 					label: x.label != null ?
-								($.jgrid.isFunction(x.label) ? x.label.call(self, x, i, o) : x.label) :
-								x.dataName,
+						($.jgrid.isFunction(x.label) ? x.label.call(self, x, i, o) : x.label) :
+						x.dataName,
 					frozen: o.frozenStaticCols
 				};
 				if (i < xlen - 1 && !x.skipGrouping && !x.additionalProperty) {
@@ -605,13 +605,13 @@
 			for (k = 0; k < headerLevels; k++) {
 				colHeaders.push({
 					useColSpanStyle: o.useColSpanStyle,
-					groupHeaders: [{
+					groupHeaders: [ {
 						titleText: ($.jgrid.isFunction(yDimension[k].label) ?
-										yDimension[k].label.call(self, { yData: previousY[k], yIndex: previousY, yLevel: k, pivotOptions: o }) :
-										previousY[k]),
+							yDimension[k].label.call(self, { yData: previousY[k], yIndex: previousY, yLevel: k, pivotOptions: o }) :
+							previousY[k]),
 						startColumnName: aggrlen === 1 ? "y0" : "y0a0",
 						numberOfColumns: aggrlen
-					}]
+					} ]
 				});
 			}
 			for (iYData = 1; iYData < yIndexLength; iYData++) {
@@ -625,8 +625,8 @@
 				for (k = headerLevels - 1; k >= i; k--) {
 					colHeaders[k].groupHeaders.push({
 						titleText: ($.jgrid.isFunction(yDimension[k].label) ?
-										yDimension[k].label.call(self, { yData: itemYData[k], yIndex: itemYData, yLevel: k, pivotOptions: o }) :
-										itemYData[k]),
+							yDimension[k].label.call(self, { yData: itemYData[k], yIndex: itemYData, yLevel: k, pivotOptions: o }) :
+							itemYData[k]),
 						startColumnName: "y" + iYData + (aggrlen === 1 ? "" : "a0"),
 						numberOfColumns: aggrlen
 					});
