@@ -1009,6 +1009,9 @@
 		isFunction: function (value) {
 			return typeof value === "function";
 		},
+		trim: function (value) {
+			return String.prototype.trim.call(value);
+		},
 		htmlDecode: function (value) {
 			if (value && (value === "&nbsp;" ||
 							value === "&#160;" ||
