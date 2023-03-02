@@ -205,7 +205,7 @@
 					title: option.text(),
 					'data-selected-value': option.val()
 				})
-				.append('<span class="ui-icon">'+option.html()+'</span><a href="#" class="action"><span class="ui-corner-all ui-icon"></span></a></li>')
+				.append('<span class="ui-icon"></span>'+option.html()+'<a href="#" class="action"><span class="ui-corner-all ui-icon"></span></a></li>')
 				.hide();
 			node.data('optionLink', option);
 			return node;
