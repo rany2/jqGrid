@@ -8,7 +8,9 @@
  *
  * The work is inspired from this Stefan Pirvu
  * http://www.codeproject.com/KB/scripting/json-filtering.aspx
- *
+ **/
+
+/**
  * The filter uses JSON entities to hold filter rules and groups. Here is an example of a filter:
 
 { "groupOp": "AND",
@@ -26,6 +28,7 @@
 	  ]
 }
 */
+
 /*jshint eqeqeq:false, eqnull:true, devel:true */
 /*jslint browser: true, devel: true, eqeq: true, plusplus: true, vars: true, white: true */
 /*global jQuery, define, exports, module, require */

@@ -2,9 +2,10 @@
 // @compilation_level SIMPLE_OPTIMIZATIONS
 
 /**
- * @license jqGrid 4.15.6-pre - free jqGrid: https://github.com/free-jqgrid/jqGrid
+ * @license jqGrid 4.15.8 - free jqGrid: https://github.com/rany2/jqGrid
  * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
  * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ * Copyright (c) 2023, rany2, ranygh@riseup.net
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
@@ -381,7 +382,7 @@
 
 	$.extend(true, jgrid, {
 		/** @const */
-		version: "4.15.6-pre",
+		version: "4.15.8",
 		/** @const */
 		productName: "free jqGrid",
 		defaults: {},
@@ -11651,24 +11652,7 @@
 	 *
 	 * The work is inspired from this Stefan Pirvu
 	 * http://www.codeproject.com/KB/scripting/json-filtering.aspx
-	 *
-	 * The filter uses JSON entities to hold filter rules and groups. Here is an example of a filter:
-
-	{ "groupOp": "AND",
-		  "groups" : [
-			{ "groupOp": "OR",
-				"rules": [
-					{ "field": "name", "op": "eq", "data": "England" },
-					{ "field": "id", "op": "le", "data": "5"}
-				 ]
-			}
-		  ],
-		  "rules": [
-			{ "field": "name", "op": "eq", "data": "Romania" },
-			{ "field": "id", "op": "le", "data": "1"}
-		  ]
-}
-	*/
+	 **/
 	// begin module grid.filter
 	$.fn.jqFilter = function (arg) {
 		if (typeof arg === "string") {
@@ -12482,26 +12466,26 @@
 	// end module grid.filter
 
 	/**
-		The below work is licensed under Creative Commons GNU LGPL License.
-
-		Original work:
-
-		License:     http://creativecommons.org/licenses/LGPL/2.1/
-		Author:      Stefan Goessner/2006
-		Web:         http://goessner.net/
-
-		Modifications made:
-
-		Version:     0.9-p5
-		Description: Restructured code, JSLint validated (no strict whitespaces),
-					 added handling of empty arrays, empty strings, and int/floats values.
-		Author:      Michael Schøler/2008-01-29
-		Web:         http://michael.hinnerup.net/blog/2008/01/26/converting-json-to-xml-and-xml-to-json/
-
-		Description: json2xml added support to convert functions as CDATA
-					 so it will be easy to write characters that cause some problems when convert
-		Author:      Tony Tomov
-	*/
+	 * The below work is licensed under Creative Commons GNU LGPL License.
+	 *
+	 * Original work:
+	 *
+	 * License:     http://creativecommons.org/licenses/LGPL/2.1/
+	 * Author:      Stefan Goessner/2006
+	 * Web:         http://goessner.net/
+	 *
+	 * Modifications made:
+	 * Version:     0.9-p5
+	 * Description: Restructured code, JSLint validated (no strict whitespaces),
+	 *  			added handling of empty arrays, empty strings, and int/floats values.
+	 * Author:      Michael Schøler/2008-01-29
+	 * Web:         http://michael.hinnerup.net/blog/2008/01/26/converting-json-to-xml-and-xml-to-json/
+	 *
+	 * Description: json2xml added support to convert functions as CDATA
+	 * so it will be easy to write characters that cause some problems when convert
+	 *
+	 * Author:      Tony Tomov
+	 **/
 	// begin module jsonxml
 	var xmlJsonClass = {
 			// Param "xml": Element or document DOM node.
