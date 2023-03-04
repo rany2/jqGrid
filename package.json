@@ -1,6 +1,6 @@
 {
-  "name": "free-jqgrid",
-  "npmName": "free-jqgrid",
+  "name": "free-jqgrid-fork",
+  "npmName": "free-jqgrid-fork",
   "npmFileMap": [
     {
       "basePath": "/",
@@ -20,7 +20,7 @@
   ],
   "title": "free jqGrid",
   "version": "4.15.8",
-  "description": "grid as jQuery plugin - fork of jqGrid before licensing change",
+  "description": "maintained version of free-jqGrid",
   "main": "js/jquery.jqgrid.src.js",
   "style": "css/ui.jqgrid.css",
   "types": "ts/free-jqgrid.d.ts",
@@ -30,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/free-jqgrid/jqGrid.git"
+    "url": "https://github.com/rany2/jqGrid.git"
   },
   "keywords": [
     "jqGrid",
@@ -53,7 +53,7 @@
   "bugs": {
     "url": "https://github.com/rany2/jqGrid/issues"
   },
-  "homepage": "https://github.com/free-jqgrid/jqGrid",
+  "homepage": "https://github.com/rany2/jqGrid",
   "devDependencies": {
     "@types/jquery": "^3.3.29",
     "@types/jqueryui": "^1.12.6",

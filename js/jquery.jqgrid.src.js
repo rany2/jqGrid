@@ -9,7 +9,6 @@
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
- * Date: 2019-01-16
  */
 //jsHint options
 /*jshint eqnull:true */
@@ -1006,6 +1005,12 @@
 				bottom: "ui-jqgrid-bootstrap-corner-bottom",
 				resizer: "ui-jqgrid-bootstrap"
 			}
+		},
+		isFunction: function (value) {
+			return typeof value === "function";
+		},
+		trim: function (value) {
+			return String.prototype.trim.call(value);
 		},
 		htmlDecode: function (value) {
 			if (value && (value === "&nbsp;" ||
@@ -8515,6 +8520,7 @@
 	 * jqGrid extension for cellediting Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
 	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2023, rany2, ranygh@riseup.net
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -9117,6 +9123,7 @@
 	 * jqGrid common function
 	 * Tony Tomov tony@trirand.com, http://trirand.com/blog/
 	 * Changed by Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Maintained by rany2, ranygh@riseup.net
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -9909,6 +9916,7 @@
 	 *
 	 * Wildraid wildraid@mail.ru
 	 * Oleg Kiriljuk oleg.kiriljuk@ok-soft-gmbh.com
+	 * rany2, ranygh@riseup.net
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -11646,6 +11654,7 @@
 	 * jqFilter  jQuery jqGrid filter addon.
 	 * Copyright (c) 2011-2014, Tony Tomov, tony@trirand.com
 	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2023, rany2, ranygh@riseup.net
 	 * Dual licensed under the MIT and GPL licenses
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -12085,6 +12094,9 @@
 					});
 					setTimeout(function () { //IE, Opera, Chrome
 						rule.data = $(elm).val();
+						if (cm.inputtype === 'select' && cm.searchoptions.multiple && Array.isArray(rule.data)) {
+							rule.data = rule.data.join(",");
+						}
 						that.onchange();  // signals that the filter has changed
 					}, 0);
 				});
@@ -12768,6 +12780,7 @@
 	 * jqGrid extension for form editing Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
 	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2023, rany2, ranygh@riseup.net
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -16153,6 +16166,7 @@
 	 * jqGrid extension for manipulating Grid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com,  http://trirand.com/blog/
 	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2023, rany2, ranygh@riseup.net
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -16891,6 +16905,7 @@
 	 * jqGrid addons using jQuery UI
 	 * Author: Mark Williams
 	 * Changed by Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Maintained by rany2, ranygh@riseup.net
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -17801,7 +17816,8 @@
 	 * jqGrid pivot functions
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com, http://trirand.com/blog/
 	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
-	 * The modul is created initially by Tony Tomov and it's full rewritten
+	 * Copyright (c) 2023, rany2, ranygh@riseup.net
+	 * The module is created initially by Tony Tomov and it's full rewritten
 	 * for free jqGrid: https://github.com/free-jqgrid/jqGrid by Oleg Kiriljuk
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
@@ -18622,6 +18638,7 @@
 	 * jqGrid extension for SubGrid Data
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
 	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2023, rany2, ranygh@riseup.net
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html
@@ -19065,6 +19082,7 @@
 	 * jqGrid extension - Tree Grid
 	 * Copyright (c) 2008-2014, Tony Tomov, tony@trirand.com
 	 * Copyright (c) 2014-2019, Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+	 * Copyright (c) 2023, rany2, ranygh@riseup.net
 	 * Dual licensed under the MIT and GPL licenses:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 * http://www.gnu.org/licenses/gpl-2.0.html

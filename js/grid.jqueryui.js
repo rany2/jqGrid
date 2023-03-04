@@ -2,6 +2,7 @@
  * jqGrid addons using jQuery UI
  * Author: Mark Williams
  * Changed by Oleg Kiriljuk, oleg.kiriljuk@ok-soft-gmbh.com
+ * Maintained by rany2, ranygh@riseup.net
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl-2.0.html
