@@ -73,8 +73,8 @@
 					colNames.push("__selection__");
 				} else {
 					colModel.push({
-						name: $(this).attr("id") || $.trim($.jgrid.stripHtml($(this).html())).split(" ").join("_"),
-						index: $(this).attr("id") || $.trim($.jgrid.stripHtml($(this).html())).split(" ").join("_"),
+						name: $(this).attr("id") || $.jgrid.trim($.jgrid.stripHtml($(this).html())).split(" ").join("_"),
+						index: $(this).attr("id") || $.jgrid.trim($.jgrid.stripHtml($(this).html())).split(" ").join("_"),
 						width: $(this).width() || 150
 					});
 					colNames.push($(this).html());

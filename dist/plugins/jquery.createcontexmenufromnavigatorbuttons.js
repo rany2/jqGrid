@@ -109,7 +109,7 @@
 						if ($div.length === 1) {
 							text = $div.children(".ui-pg-button-text").html();
 							$td = $div.parent();
-							if ($.trim(text) === "") {
+							if ($.jgrid.trim(text) === "") {
 								text = $td.attr("title");
 							}
 							if (this.id !== "" && text !== "") {

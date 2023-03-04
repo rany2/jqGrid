@@ -1948,7 +1948,7 @@
 					/** @private */
 					this._toStr = function (phrase) {
 						if (_trim) {
-							phrase = $.trim(phrase);
+							phrase = $.jgrid.trim(phrase);
 						}
 						phrase = phrase.toString().replace(/\\/g, "\\\\").replace(/"/g, "\\\"");
 						return _usecase ? phrase : phrase.toUpperCase();
@@ -2080,7 +2080,7 @@
 							findSortKey = type;
 						} else {
 							findSortKey = function ($cell) {
-								$cell = $cell != null ? $.trim(String($cell)) : "";
+								$cell = $cell != null ? $.jgrid.trim(String($cell)) : "";
 								return _usecase ? $cell : $cell.toUpperCase();
 							};
 						}
@@ -2313,7 +2313,7 @@
 					};
 					this.startsWith = function (f, v) {
 						var val = (v == null) ? f : v,
-							length = _trim ? $.trim(val.toString()).length : val.toString().length;
+							length = _trim ? $.jgrid.trim(val.toString()).length : val.toString().length;
 
 						self._append(self._getStr(f) + ".substr(0," + length + ") == " + self._getStr("\"" + self._toStr(v) + "\""));
 						self._setCommand(self.startsWith, f);
@@ -2322,7 +2322,7 @@
 					};
 					this.endsWith = function (f, v) {
 						var val = (v == null) ? f : v,
-							length = _trim ? $.trim(val.toString()).length : val.toString().length;
+							length = _trim ? $.jgrid.trim(val.toString()).length : val.toString().length;
 						self._append(self._getStr(f) + ".substr(" + self._getStr(f) + ".length-" + length + "," + length + ") == \"" + self._toStr(v) + "\"");
 						self._setCommand(self.endsWith, f);
 						self._resetNegate();
@@ -2341,7 +2341,7 @@
 						return self._getGroup(_data, by, dir, type, datefmt);
 					};
 					this.orderBy = function (by, dir, stype, dfmt, sfunc) {
-						dir = dir == null ? "a" : $.trim(dir.toString().toLowerCase());
+						dir = dir == null ? "a" : $.jgrid.trim(dir.toString().toLowerCase());
 						if (stype == null) { stype = "text"; }
 						if (dfmt == null) { dfmt = "Y-m-d"; }
 						if (sfunc == null) { sfunc = false; }
@@ -2654,8 +2654,8 @@
 					optionInfos.push({
 						value: sv[0],
 						innerHtml: sv[1],
-						selectValue: $.trim(sv[0]),
-						selectText: $.trim(sv[1]),
+						selectValue: $.jgrid.trim(sv[0]),
+						selectText: $.jgrid.trim(sv[1]),
 						selected: false
 					});
 					if (sv[0] === "") {
@@ -2667,8 +2667,8 @@
 					optionInfos.push({
 						value: value[i][0],
 						innerHtml: value[i][1],
-						selectValue: $.trim(value[i][0]),
-						selectText: $.trim(value[i][1]),
+						selectValue: $.jgrid.trim(value[i][0]),
+						selectText: $.jgrid.trim(value[i][1]),
 						selected: false
 					});
 				}
@@ -2678,8 +2678,8 @@
 						optionInfos.push({
 							value: key,
 							innerHtml: value[key],
-							selectValue: $.trim(key),
-							selectText: $.trim(value[key]),
+							selectValue: $.jgrid.trim(key),
+							selectText: $.jgrid.trim(value[key]),
 							selected: false
 						});
 					}
@@ -2691,10 +2691,10 @@
 
 			if (typeof valuesToSelect === "string") {
 				ovm = isMultiple ?
-						$.map(valuesToSelect.split(","), function (n) { return $.trim(n); }) :
-						[$.trim(valuesToSelect)];
+						$.map(valuesToSelect.split(","), function (n) { return $.jgrid.trim(n); }) :
+						[$.jgrid.trim(valuesToSelect)];
 
-				valuesToSelect = $.trim(valuesToSelect);
+				valuesToSelect = $.jgrid.trim(valuesToSelect);
 
 				// mark selection
 				// 1) first by value
@@ -2781,7 +2781,7 @@
 			// en-US or some other which exist
 			var ts = this, localData, localDataStr, $self0 = $(ts),
 				isFunction = $.jgrid.isFunction, isArray = $.isArray, extend = $.extend, inArray = $.inArray,
-				trim = $.trim, each = $.each, setSelection = $j.setSelection, getGridRes = $j.getGridRes,
+				trim = $.jgrid.trim, each = $.each, setSelection = $j.setSelection, getGridRes = $j.getGridRes,
 				fatalErrorFunction = isFunction(defaults.fatalError) ? defaults.fatalError : alert,
 				locale = pin.locale || defaults.locale || "en-US",
 				direction = locales[locale] != null && typeof locales[locale].isRTL === "boolean" ? (locales[locale].isRTL ? "rtl" : "ltr") : "ltr",
@@ -2813,7 +2813,7 @@
 								msg = div.innerHTML;
 								try {
 									// remove HTML, if it has no text
-									if ($.trim($(msg).text()) === "") {
+									if ($.jgrid.trim($(msg).text()) === "") {
 										msg = "";
 									}
 								}
@@ -5114,7 +5114,7 @@
 					// sortNames, sortDirs MUST be initialized to [] and {} before
 					// process sortname
 					each((p.sortname + " " + p.sortorder).split(","), function () {
-						var s = $.trim(this).split(" ");
+						var s = $.jgrid.trim(this).split(" ");
 						if (s.length === 2) {
 							sortNames.push(s[0]);
 						}
@@ -7355,7 +7355,7 @@
 						if ($.inArray(nm, p.reservedColumnNames) < 0) {
 							if (data !== false) {
 								vl = $(cells[iCol]).text();
-								if ($.trim(vl)) {
+								if ($.jgrid.trim(vl)) {
 									res[nm] = vl;
 								}
 							} else {
@@ -9556,10 +9556,10 @@
 						elem.multiple = "multiple";
 						$(elem).attr("aria-multiselectable", "true");
 						ovm = vl.split(",");
-						ovm = $.map(ovm, function (n) { return $.trim(n); });
+						ovm = $.map(ovm, function (n) { return $.jgrid.trim(n); });
 					} else {
 						msl = false;
-						ovm[0] = $.trim(vl);
+						ovm[0] = $.jgrid.trim(vl);
 					}
 					if (options.size === undefined) {
 						options.size = msl ? 3 : 1;
@@ -9597,7 +9597,7 @@
 									options1 = $.extend({}, this.options), rowid1 = this.rowid, mode1 = this.mode,
 									a = $.jgrid.isFunction(options1.buildSelect) ? options1.buildSelect.call($t, data, jqXHR, cm1, iCol1) : data;
 								if (typeof a === "string") {
-									a = $($.trim(a)).html();
+									a = $($.jgrid.trim(a)).html();
 								}
 								if (a) {
 									//$(elem1).empty(); // ???
@@ -9608,7 +9608,7 @@
 											//if(i===0) { this.selected = false; }
 											// fix IE8/IE7 problem with selecting of the first item on multiple=true
 											if (iOpt === 0 && elem1.multiple) { this.selected = false; }
-											if ($.inArray($.trim($(this).val()), ovm1) > -1) {
+											if ($.inArray($.jgrid.trim($(this).val()), ovm1) > -1) {
 												// this.setAttribute("selected", "selected");
 												this.selected = true;
 												isSelected1 = true;
@@ -9616,7 +9616,7 @@
 										});
 										if (!isSelected1) {
 											$("option", elem1).each(function () {
-												if ($.inArray($.trim($(this).text()), ovm1) > -1) {
+												if ($.inArray($.jgrid.trim($(this).text()), ovm1) > -1) {
 													// this.setAttribute("selected", "selected");
 													this.selected = true;
 												}
@@ -10319,7 +10319,7 @@
 										break;
 								}
 							} else {
-								v = $.trim($elem.val());
+								v = $.jgrid.trim($elem.val());
 								switch (cm.formatter) {
 									case "integer":
 										v = cutThousandsSeparator(v)
@@ -11035,7 +11035,7 @@
 										if (filter.data === "" && searchoptions.defaultValue !== undefined) {
 											filter.data = searchoptions.defaultValue;
 										}
-										if ($.trim($input.val()) !== String(filter.data)) {
+										if ($.jgrid.trim($input.val()) !== String(filter.data)) {
 											$input.val(filter.data);
 										}
 									}
@@ -12901,7 +12901,7 @@
 						});
 					};
 				if (typeof defaultFilters === "string") {
-					defaultFilters = $.trim(defaultFilters) !== "" ? $.parseJSON(defaultFilters) : undefined;
+					defaultFilters = $.jgrid.trim(defaultFilters) !== "" ? $.parseJSON(defaultFilters) : undefined;
 				}
 				$(themodalSelector).remove();
 				function showFilter($filter) {
@@ -13504,14 +13504,14 @@
 									break;
 								case "select":
 									var valuesToSelect = tmp.split(",");
-									valuesToSelect = $.map(valuesToSelect, function (n) { return $.trim(n); });
+									valuesToSelect = $.map(valuesToSelect, function (n) { return $.jgrid.trim(n); });
 									// first of all we try to select options testing the valuesToSelect,
 									// we will remove the values from valuesToSelect, which will be found by value
 									// In the next step we go through all options once more time and select the options
 									// testing there by text. In other words selection by text will be used only for
 									// values from valuesToSelect, which not exist as option by value
 									$(nm + " option", fmid).each(function () {
-										var selOpt = this, $selOpt = $(selOpt), optVal = $.trim($selOpt.val()), iVal;
+										var selOpt = this, $selOpt = $(selOpt), optVal = $.jgrid.trim($selOpt.val()), iVal;
 										if (!cm[i].editoptions.multiple && valuesToSelect[0] === optVal) {
 											valuesToSelect.splice(0, 1);
 											selOpt.selected = true;
@@ -13530,8 +13530,8 @@
 									});
 									if (valuesToSelect.length > 0) {
 										$(nm + " option", fmid).each(function () {
-											var selOpt = this, $selOpt = $(selOpt), optText = $.trim($selOpt.text()), iVal;
-											if (!cm[i].editoptions.multiple && ($.trim(tmp) === optText || valuesToSelect[0] === optText)) {
+											var selOpt = this, $selOpt = $(selOpt), optText = $.jgrid.trim($selOpt.text()), iVal;
+											if (!cm[i].editoptions.multiple && ($.jgrid.trim(tmp) === optText || valuesToSelect[0] === optText)) {
 												valuesToSelect.splice(0, 1);
 												selOpt.selected = true;
 											} else if (cm[i].editoptions.multiple) {
@@ -13645,7 +13645,7 @@
 						oper = opers.oper;
 						idname = url === "clientArray" && p.keyName !== false ? p.keyName : opers.id;
 						// we add to pos data array the action - the name is oper
-						postdata[oper] = ($.trim(postdata[gridId + "_id"]) === "_empty") ? opers.addoper : opers.editoper;
+						postdata[oper] = ($.jgrid.trim(postdata[gridId + "_id"]) === "_empty") ? opers.addoper : opers.editoper;
 						if (postdata[oper] !== opers.addoper) {
 							postdata[idname] = postdata[gridId + "_id"];
 						} else {
@@ -14985,7 +14985,7 @@
 					stdButtonActivation = function (name, id, onClick) {
 						var $button = $("<div class='" + navButtonClass + "' tabindex='0' role='button'></div>"),
 							iconClass = o[name + "icon"],
-							iconText = $.trim(o[name + "text"]);
+							iconText = $.jgrid.trim(o[name + "text"]);
 						$button.append("<div class='ui-pg-div'><span class='" +
 							(o.iconsOverText ?
 									mergeCssClasses("ui-pg-button-icon-over-text", commonIconClass, iconClass) :
@@ -17720,7 +17720,7 @@
 
 				if (!opts.connectWith) { return; }
 				opts.connectWith = opts.connectWith.split(",");
-				opts.connectWith = $.map(opts.connectWith, function (n) { return $.trim(n); });
+				opts.connectWith = $.map(opts.connectWith, function (n) { return $.jgrid.trim(n); });
 				$.data($t, "dnd", opts);
 
 				if ($t.p.reccount !== 0 && !$t.p.jqgdnd) {
@@ -17775,7 +17775,7 @@
 				if (opts.handles) {
 					// test for "e, w"
 					var ar = $.map(String(opts.handles).split(","), function (item) {
-						return $.trim(item);
+						return $.jgrid.trim(item);
 					});
 					if (ar.length === 2 && ((ar[0] === "e" && ar[1] === "w") || (ar[1] === "e" && ar[1] === "w"))) {
 						sel = p.gView + ">div:not(.frozen-div)";
@@ -18010,7 +18010,7 @@
 				v = item[fieldNames[iField]];
 				if (v !== undefined) {
 					if (typeof v === "string" && self.trimByCollect) {
-						v = $.trim(v);
+						v = $.jgrid.trim(v);
 					}
 					values[iField] = v;
 				}
@@ -18996,8 +18996,8 @@
 					colNames.push("__selection__");
 				} else {
 					colModel.push({
-						name: $(this).attr("id") || $.trim($.jgrid.stripHtml($(this).html())).split(" ").join("_"),
-						index: $(this).attr("id") || $.trim($.jgrid.stripHtml($(this).html())).split(" ").join("_"),
+						name: $(this).attr("id") || $.jgrid.trim($.jgrid.stripHtml($(this).html())).split(" ").join("_"),
+						index: $(this).attr("id") || $.jgrid.trim($.jgrid.stripHtml($(this).html())).split(" ").join("_"),
 						width: $(this).width() || 150
 					});
 					colNames.push($(this).html());
@@ -20311,7 +20311,7 @@
 			if (!this.isValue(o)) {
 				return true;
 			}
-			o = $.trim(o).replace(/&nbsp;/ig, "").replace(/&#160;/ig, "");
+			o = $.jgrid.trim(o).replace(/&nbsp;/ig, "").replace(/&#160;/ig, "");
 			return o === "";
 		},
 		NumberFormat: function (nData, opts) {
@@ -20674,7 +20674,7 @@
 			var msl = op.multiple === true ? true : false, scell = [], sv,
 			mapFunc = function (n, j) { if (j > 0) { return n; } };
 			if (msl) {
-				scell = $.map(String(cellval).split(","), function (n) { return $.trim(n); });
+				scell = $.map(String(cellval).split(","), function (n) { return $.jgrid.trim(n); });
 			}
 			if (typeof oSelect === "string") {
 				// maybe here we can use some caching with care ????
@@ -20684,7 +20684,7 @@
 					if (sv.length > 2) {
 						sv[1] = $.map(sv, mapFunc).join(sep);
 					}
-					v = $.trim(sv[0]);
+					v = $.jgrid.trim(sv[0]);
 					if (op.defaultValue === v) {
 						defaultValue = sv[1];
 					}
@@ -20692,7 +20692,7 @@
 						if ($.inArray(v, scell) > -1) {
 							ret.push(sv[1]);
 						}
-					} else if (v === $.trim(cellval)) {
+					} else if (v === $.jgrid.trim(cellval)) {
 						ret = [sv[1]];
 						break;
 					}
@@ -20729,7 +20729,7 @@
 				if (sv.length > 2) {
 					sv[1] = $.map(sv, mapFunc).join(sep);
 				}
-				selOptions[$.trim(sv[0])] = sv[1];
+				selOptions[$.jgrid.trim(sv[0])] = sv[1];
 			}
 		} else if (fmatter.isObject(oSelect)) {
 			selOptions = oSelect;
@@ -20744,7 +20744,7 @@
 		return isMultiple ?
 			function (cellValue) {
 				var ret = [], iOpt,
-					splitedCell = $.map(String(cellValue).split(","), function (n) { return $.trim(n); });
+					splitedCell = $.map(String(cellValue).split(","), function (n) { return $.jgrid.trim(n); });
 				for (iOpt = 0; iOpt < splitedCell.length; iOpt++) {
 					cellValue = splitedCell[iOpt];
 					if (selOptions.hasOwnProperty(cellValue)) {
@@ -21076,7 +21076,7 @@
 			var oSelect = typeof op.value === "function" ? op.value() : op.value,
 				msl = op.multiple === true ? true : false,
 				scell = [], sv, mapFunc = function (n, k) { if (k > 0) { return n; } };
-			if (msl) { scell = cell.split(","); scell = $.map(scell, function (n) { return $.trim(n); }); }
+			if (msl) { scell = cell.split(","); scell = $.map(scell, function (n) { return $.jgrid.trim(n); }); }
 			if (typeof oSelect === "string") {
 				var so = oSelect.split(delim), j = 0, i;
 				for (i = 0; i < so.length; i++) {
@@ -21085,11 +21085,11 @@
 						sv[1] = $.map(sv, mapFunc).join(sep);
 					}
 					if (msl) {
-						if ($.inArray($.trim(sv[1]), scell) > -1) {
+						if ($.inArray($.jgrid.trim(sv[1]), scell) > -1) {
 							ret[j] = sv[0];
 							j++;
 						}
-					} else if ($.trim(sv[1]) === $.trim(cell)) {
+					} else if ($.jgrid.trim(sv[1]) === $.jgrid.trim(cell)) {
 						ret[0] = sv[0];
 						break;
 					}

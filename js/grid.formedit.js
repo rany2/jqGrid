@@ -194,7 +194,7 @@
 						});
 					};
 				if (typeof defaultFilters === "string") {
-					defaultFilters = $.trim(defaultFilters) !== "" ? $.parseJSON(defaultFilters) : undefined;
+					defaultFilters = $.jgrid.trim(defaultFilters) !== "" ? $.parseJSON(defaultFilters) : undefined;
 				}
 				$(themodalSelector).remove();
 				function showFilter($filter) {
@@ -797,14 +797,14 @@
 									break;
 								case "select":
 									var valuesToSelect = tmp.split(",");
-									valuesToSelect = $.map(valuesToSelect, function (n) { return $.trim(n); });
+									valuesToSelect = $.map(valuesToSelect, function (n) { return $.jgrid.trim(n); });
 									// first of all we try to select options testing the valuesToSelect,
 									// we will remove the values from valuesToSelect, which will be found by value
 									// In the next step we go through all options once more time and select the options
 									// testing there by text. In other words selection by text will be used only for
 									// values from valuesToSelect, which not exist as option by value
 									$(nm + " option", fmid).each(function () {
-										var selOpt = this, $selOpt = $(selOpt), optVal = $.trim($selOpt.val()), iVal;
+										var selOpt = this, $selOpt = $(selOpt), optVal = $.jgrid.trim($selOpt.val()), iVal;
 										if (!cm[i].editoptions.multiple && valuesToSelect[0] === optVal) {
 											valuesToSelect.splice(0, 1);
 											selOpt.selected = true;
@@ -823,8 +823,8 @@
 									});
 									if (valuesToSelect.length > 0) {
 										$(nm + " option", fmid).each(function () {
-											var selOpt = this, $selOpt = $(selOpt), optText = $.trim($selOpt.text()), iVal;
-											if (!cm[i].editoptions.multiple && ($.trim(tmp) === optText || valuesToSelect[0] === optText)) {
+											var selOpt = this, $selOpt = $(selOpt), optText = $.jgrid.trim($selOpt.text()), iVal;
+											if (!cm[i].editoptions.multiple && ($.jgrid.trim(tmp) === optText || valuesToSelect[0] === optText)) {
 												valuesToSelect.splice(0, 1);
 												selOpt.selected = true;
 											} else if (cm[i].editoptions.multiple) {
@@ -938,7 +938,7 @@
 						oper = opers.oper;
 						idname = url === "clientArray" && p.keyName !== false ? p.keyName : opers.id;
 						// we add to pos data array the action - the name is oper
-						postdata[oper] = ($.trim(postdata[gridId + "_id"]) === "_empty") ? opers.addoper : opers.editoper;
+						postdata[oper] = ($.jgrid.trim(postdata[gridId + "_id"]) === "_empty") ? opers.addoper : opers.editoper;
 						if (postdata[oper] !== opers.addoper) {
 							postdata[idname] = postdata[gridId + "_id"];
 						} else {
@@ -2278,7 +2278,7 @@
 					stdButtonActivation = function (name, id, onClick) {
 						var $button = $("<div class='" + navButtonClass + "' tabindex='0' role='button'></div>"),
 							iconClass = o[name + "icon"],
-							iconText = $.trim(o[name + "text"]);
+							iconText = $.jgrid.trim(o[name + "text"]);
 						$button.append("<div class='ui-pg-div'><span class='" +
 							(o.iconsOverText ?
 									mergeCssClasses("ui-pg-button-icon-over-text", commonIconClass, iconClass) :

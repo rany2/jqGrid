@@ -251,7 +251,7 @@
 				v = item[fieldNames[iField]];
 				if (v !== undefined) {
 					if (typeof v === "string" && self.trimByCollect) {
-						v = $.trim(v);
+						v = $.jgrid.trim(v);
 					}
 					values[iField] = v;
 				}

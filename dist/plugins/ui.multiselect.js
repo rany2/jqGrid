@@ -277,7 +277,7 @@ $.widget("ui.multiselect", {
 				return $(this).text().toLowerCase();
 			});
 		
-		var term = $.trim(input.val().toLowerCase()), scores = [];
+		var term = $.jgrid.trim(input.val().toLowerCase()), scores = [];
 
 		if (!term) {
 			rows.show();
