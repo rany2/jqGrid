@@ -458,7 +458,7 @@
 						.removeClass(icons.expanded)
 						.addClass(icons.common)
 						.addClass(icons.collapsed);
-					if (p.unloadNodeOnCollapse === true || ($.isFunction(p.unloadNodeOnCollapse) && p.unloadNodeOnCollapse.call($t, rc))) {
+					if (p.unloadNodeOnCollapse === true || ($.jgrid.isFunction(p.unloadNodeOnCollapse) && p.unloadNodeOnCollapse.call($t, rc))) {
 						rc[p.treeReader.loaded] = false;
 						$($t).jqGrid("delTreeNode", id, true);
 					}

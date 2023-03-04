@@ -736,7 +736,7 @@
                             if (col.name === searchField) {
                                 if (col.odata.nosearch) { return; }
                                 if (col.odata.unformat) {
-                                    searchField = $.isFunction(col.odata.unformat) ? col.odata.unformat(searchField, searchString, searchOper) : col.odata.unformat;
+                                    searchField = $.jgrid.isFunction(col.odata.unformat) ? col.odata.unformat(searchField, searchString, searchOper) : col.odata.unformat;
                                     if (!searchField) { return; }
                                 }
                                 if (!col.searchrules || (!col.searchrules.integer && !col.searchrules.number && !col.searchrules.date)) {
@@ -1165,7 +1165,7 @@
                 if (o.datatype === 'jsonp') { o.callback = "jsonpCallback"; }
 
                 if (!o.entitySet) {
-                    if ($.isFunction(o.errorfunc)) { o.errorfunc({}, 'entitySet cannot be empty', 0); }
+                    if ($.jgrid.isFunction(o.errorfunc)) { o.errorfunc({}, 'entitySet cannot be empty', 0); }
                     return;
                 }
                 if (o.gencolumns) {
@@ -1213,7 +1213,7 @@
             if (o.metadatatype === 'jsonp') { o.callback = "jsonpCallback"; }
 
             if (!o.entitySet) {
-                if ($.isFunction(o.errorfunc)) { o.errorfunc({}, 'entitySet cannot be empty', 0); }
+                if ($.jgrid.isFunction(o.errorfunc)) { o.errorfunc({}, 'entitySet cannot be empty', 0); }
                 return;
             }
 
@@ -1236,12 +1236,12 @@
                 //var data = $.parseXML(data.responseText);
                 if (o.metadatatype === 'json' || o.metadatatype === 'jsonp') { data = $.jgrid.odataHelper.resolveJsonReferences(data); }
                 mdata = $self.triggerHandler("jqGridODataParseMetadata", data);
-                if (!mdata && $.isFunction(o.parsemetadatafunc)) { mdata = o.parsemetadatafunc(data, st, xhr); }
+                if (!mdata && $.jgrid.isFunction(o.parsemetadatafunc)) { mdata = o.parsemetadatafunc(data, st, xhr); }
                 if (!mdata) {
                     mdata = $.jgrid.odataHelper.parseMetadata(data, o.metadatatype);
                     if (mdata) {
                         coldata = $self.triggerHandler("jqGridODataParseColumns", [o, mdata]);
-                        if (!coldata && $.isFunction(o.parsecolfunc)) { coldata = o.parsecolfunc(o, mdata); }
+                        if (!coldata && $.jgrid.isFunction(o.parsecolfunc)) { coldata = o.parsecolfunc(o, mdata); }
                         if (!coldata) {
                             coldata = {};
                             for (i in mdata) {
@@ -1272,22 +1272,22 @@
 
                     p.colModel = coldata[o.entitySet];
                     if (!p.colModel) {
-                        if ($.isFunction(o.errorfunc)) { o.errorfunc({ data: data, status: st, xhr: xhr }, 'EntitySet ' + o.entitySet + ' is not found'); }
+                        if ($.jgrid.isFunction(o.errorfunc)) { o.errorfunc({ data: data, status: st, xhr: xhr }, 'EntitySet ' + o.entitySet + ' is not found'); }
                     }
 
                     if (!p.odata) { p.odata = { iscollection: true }; }
                     p.odata.subgridCols = coldata;
 
-                    if ($.isFunction(o.successfunc)) {
+                    if ($.jgrid.isFunction(o.successfunc)) {
                         o.successfunc();
                     }
                 }
                 else {
-                    if ($.isFunction(o.errorfunc)) { o.errorfunc({ data: data, status: st, xhr: xhr }, 'parse $metadata error'); }
+                    if ($.jgrid.isFunction(o.errorfunc)) { o.errorfunc({ data: data, status: st, xhr: xhr }, 'parse $metadata error'); }
                 }
             })
             .fail(function (xhr, err, code) {
-                if ($.isFunction(o.errorfunc)) {
+                if ($.jgrid.isFunction(o.errorfunc)) {
                     var parsedError = $.jgrid.odataHelper.loadError(xhr, err, code);
                     o.errorfunc({ xhr: xhr, error: err, code: code }, parsedError);
                 }
@@ -1303,7 +1303,7 @@
                 type: 'HEAD'
              })
              .done(function (data, st, xhr) {
-                if($.isFunction(callback)) {
+                if($.jgrid.isFunction(callback)) {
                     var result = [];
                     callback(result);
                 }

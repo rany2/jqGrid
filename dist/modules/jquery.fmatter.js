@@ -230,7 +230,7 @@
 	$.extend(fmatter, {
 		// one can consider to use $.type instead of some functions below (see http://api.jquery.com/jQuery.type/)
 		isObject: function (o) {
-			return (o && (typeof o === "object" || $.isFunction(o))) || false;
+			return (o && (typeof o === "object" || $.jgrid.isFunction(o))) || false;
 		},
 		isNumber: function (o) {
 			// probably Number.isFinite can be used instead.
@@ -315,7 +315,7 @@
 	$.fn.fmatter = $FnFmatter;
 	$FnFmatter.getCellBuilder = function (formatType, opts, act) {
 		var cellBuilder = $.fn.fmatter[formatType] != null ? $.fn.fmatter[formatType].getCellBuilder : null;
-		return $.isFunction(cellBuilder) ?
+		return $.jgrid.isFunction(cellBuilder) ?
 			cellBuilder.call(this, $.extend({}, getGridRes.call($(this), "formatter"), opts), act) :
 			null;
 	};
@@ -396,7 +396,7 @@
 			idParam,
 			addParam,
 			getOptionValue = function (option) {
-				return $.isFunction(option) ?
+				return $.jgrid.isFunction(option) ?
 						option.call(self, {
 							cellValue: cellval,
 							rowid: opts.rowId,
@@ -424,10 +424,10 @@
 		if (idUrl === "") {
 			idUrl = getOptionValue(op.hrefDefaultValue);
 		}
-		if (typeof cellval === "string" || fmatter.isNumber(cellval) || $.isFunction(op.cellValue)) {
+		if (typeof cellval === "string" || fmatter.isNumber(cellval) || $.jgrid.isFunction(op.cellValue)) {
 			//add this one even if cellval is blank string
 			return "<a " + target + " href='" + encodeAttr(idUrl) + "'>" +
-				($.isFunction(op.cellValue) ? getOptionValue(op.cellValue) : cellval) +
+				($.jgrid.isFunction(op.cellValue) ? getOptionValue(op.cellValue) : cellval) +
 				"</a>";
 		}
 		// the code below will be called typically for undefined cellval or
@@ -453,7 +453,7 @@
 		return function (cellval, opts, rowData) {
 			var self = this, rowid = opts.rowId, target = "", idUrl, idParam, addParam,
 				getOptionValue = function (option) {
-					return $.isFunction(option) ?
+					return $.jgrid.isFunction(option) ?
 							option.call(self, {
 								cellValue: cellval,
 								rowid: rowid,
@@ -476,10 +476,10 @@
 			if (idUrl === "") {
 				idUrl = getOptionValue(op.hrefDefaultValue);
 			}
-			if (typeof cellval === "string" || fmatter.isNumber(cellval) || $.isFunction(op.cellValue)) {
+			if (typeof cellval === "string" || fmatter.isNumber(cellval) || $.jgrid.isFunction(op.cellValue)) {
 				//add this one even if cellval is blank string
 				return "<a " + target + " href='" + encodeAttr(idUrl) + "'>" +
-					($.isFunction(op.cellValue) ? getOptionValue(op.cellValue) : cellval) +
+					($.jgrid.isFunction(op.cellValue) ? getOptionValue(op.cellValue) : cellval) +
 					"</a>";
 			}
 			// the code below will be called typically for undefined cellval or
@@ -507,7 +507,7 @@
 					});
 				}
 			};
-		if (cm.formatoptions != null && $.isFunction(cm.formatoptions.onClick)) {
+		if (cm.formatoptions != null && $.jgrid.isFunction(cm.formatoptions.onClick)) {
 			for (iRow = 0; iRow < nRows; iRow++) {
 				row = rows[iRow];
 				if ($(row).hasClass("jqgrow")) {
@@ -761,7 +761,7 @@
 					n = op.custom.length;
 					for (i = 0; i < n; i++) {
 						customAction = op.custom[i];
-						if (customAction.action === act && $.isFunction(customAction.onClick)) {
+						if (customAction.action === act && $.jgrid.isFunction(customAction.onClick)) {
 							customAction.onClick.call($t, { rowid: rid, event: e, action: act, options: customAction });
 						}
 					}
@@ -820,7 +820,7 @@
 
 		if (rowid === undefined || fmatter.isEmpty(rowid)) { return ""; }
 
-		if ($.isFunction(op.isDisplayButtons)) {
+		if ($.jgrid.isFunction(op.isDisplayButtons)) {
 			try {
 				displayMask = op.isDisplayButtons.call(this, op, rwd, act) || {};
 			} catch (ignore) {}
@@ -947,7 +947,7 @@
 		if (colModel.autoResizable && cellval != null && $(cellval.firstChild).hasClass(p.autoResizing.wrapperClassName)) {
 			cellval = cellval.firstChild;
 		}
-		if (unformatFunc !== undefined && $.isFunction(unformatFunc)) {
+		if (unformatFunc !== undefined && $.jgrid.isFunction(unformatFunc)) {
 			ret = unformatFunc.call(this, $(cellval).text(), options, cellval);
 		} else if (formatType !== undefined && typeof formatType === "string") {
 			//var opts = $.extend(true, {}, getRes(locales[p.locale], "formatter"), jgrid.formatter || {}), stripTag;

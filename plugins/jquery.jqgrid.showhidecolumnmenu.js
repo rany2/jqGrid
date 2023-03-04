@@ -92,7 +92,7 @@
 									for (j = 0; j < ghItem.numberOfColumns; j++) {
 										iCol = iColByName[ghItem.startColumnName] + j;
 										cm = colModel[iCol];
-										colHeader[iCol] = $.isFunction(options.buildItemText) ?
+										colHeader[iCol] = $.jgrid.isFunction(options.buildItemText) ?
 												options.buildItemText.call($self[0], {
 													iCol: iCol,
 													cm: cm,
@@ -109,7 +109,7 @@
 							for (iCol = 0; iCol < nCol; iCol++) {
 								if (colHeader[iCol] === undefined) {
 									cm = colModel[iCol];
-									colHeader[iCol] = $.isFunction(options.buildItemText) ?
+									colHeader[iCol] = $.jgrid.isFunction(options.buildItemText) ?
 											options.buildItemText.call($self[0], {
 												iCol: iCol,
 												cm: cm,

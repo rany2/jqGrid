@@ -549,7 +549,7 @@
 							cm = iCol !== undefined ? colModel[iCol] || {} : {},
 							editoptions = cm.editoptions || {},
 							formatoptions, newformat, type;
-						if ($celm.length && $.isFunction(editoptions.custom_value)) {
+						if ($celm.length && $.jgrid.isFunction(editoptions.custom_value)) {
 							try {
 								postdata[nm] = editoptions.custom_value.call($t, $("#" + jqID(nm), frmtb), "get");
 								if (postdata[nm] === undefined) { throw "e1"; }
@@ -616,7 +616,7 @@
 					$(colModel).each(function (iCol) {
 						var cm = this, nm = cm.name, $td, hc, trdata, tmp, elc, editable = cm.editable, disabled = false, readonly = false,
 							mode = rowid1 === "_empty" ? "addForm" : "editForm";
-						if ($.isFunction(editable)) {
+						if ($.jgrid.isFunction(editable)) {
 							editable = editable.call($t, {
 								rowid: rowid1,
 								iCol: iCol,
@@ -663,7 +663,7 @@
 								rp = parseInt(frmopt.rowpos, 10) || cnt + 1,
 								cp = parseInt((parseInt(frmopt.colpos, 10) || 1) * 2, 10);
 							if (rowid1 === "_empty" && opt.defaultValue) {
-								tmp = $.isFunction(opt.defaultValue) ? opt.defaultValue.call($t) : opt.defaultValue;
+								tmp = $.jgrid.isFunction(opt.defaultValue) ? opt.defaultValue.call($t) : opt.defaultValue;
 							}
 							if (!cm.edittype) { cm.edittype = "text"; }
 							if (p.autoEncodeOnEdit) { tmp = jgrid.oldDecodePostedData(tmp); }
@@ -707,7 +707,7 @@
 							} else if (readonly) {
 								$(elc).prop("readonly", true);
 							}
-							if (cm.edittype === "custom" && $.isFunction(opt.custom_value)) {
+							if (cm.edittype === "custom" && $.jgrid.isFunction(opt.custom_value)) {
 								opt.custom_value.call($t, $("#" + jqID(nm), frmgr), "set", tmp);
 							}
 							jgrid.bindEv.call($t, elc, opt);
@@ -738,10 +738,10 @@
 							fld = $("#" + jqID(nm), fmid);
 							if (fld && fld.length && fld[0] !== null) {
 								vl = "";
-								if (this.edittype === "custom" && $.isFunction(opt.custom_value)) {
+								if (this.edittype === "custom" && $.jgrid.isFunction(opt.custom_value)) {
 									opt.custom_value.call($t, fld, "set", vl);
 								} else if (opt.defaultValue) {
-									vl = $.isFunction(opt.defaultValue) ? opt.defaultValue.call($t) : opt.defaultValue;
+									vl = $.jgrid.isFunction(opt.defaultValue) ? opt.defaultValue.call($t) : opt.defaultValue;
 									if (fld[0].type === "checkbox") {
 										vlc = vl.toLowerCase();
 										if (vlc.search(/(false|f|0|no|n|off|undefined)/i) < 0 && vlc !== "") {
@@ -851,7 +851,7 @@
 									break;
 								case "custom":
 									try {
-										if (cm[i].editoptions && $.isFunction(cm[i].editoptions.custom_value)) {
+										if (cm[i].editoptions && $.jgrid.isFunction(cm[i].editoptions.custom_value)) {
 											cm[i].editoptions.custom_value.call($t, $(nm, fmid), "set", tmp);
 										} else { throw "e1"; }
 									} catch (e) {
@@ -894,7 +894,7 @@
 
 					iRow = iRow === false ? -1 : iRow;
 
-					if ($.isFunction(o.beforeCheckValues)) {
+					if ($.jgrid.isFunction(o.beforeCheckValues)) {
 						retvals = o.beforeCheckValues.call($t, postdata, $(frmgr), editOrAdd);
 						if (retvals && typeof retvals === "object") { postdata = retvals; }
 					}
@@ -920,12 +920,12 @@
 					setNullsOrUnformat();
 					if (ret[0]) {
 						onClickSubmitResult = $self.triggerHandler("jqGridAddEditClickSubmit", [o, postdata, editOrAdd]);
-						if (onClickSubmitResult === undefined && $.isFunction(o.onclickSubmit)) {
+						if (onClickSubmitResult === undefined && $.jgrid.isFunction(o.onclickSubmit)) {
 							onClickSubmitResult = o.onclickSubmit.call($t, o, postdata, editOrAdd) || {};
 						}
 						ret = $self.triggerHandler("jqGridAddEditBeforeSubmit", [postdata, $(frmgr), editOrAdd]);
 						if (ret == null || ret === true) { ret = successResult; }
-						if (ret[0] && $.isFunction(o.beforeSubmit)) {
+						if (ret[0] && $.jgrid.isFunction(o.beforeSubmit)) {
 							ret = o.beforeSubmit.call($t, postdata, $(frmgr), editOrAdd);
 							if (ret == null || ret === true) { ret = successResult; }
 						}
@@ -967,18 +967,18 @@
 						postdata[idname] = jgrid.stripPref(p.idPrefix, postdata[idname]);
 						if (p.autoEncodeOnEdit) {
 							$.each(postdata, function (n, v) {
-								if (!$.isFunction(v)) {
+								if (!$.jgrid.isFunction(v)) {
 									postdata[n] = jgrid.oldEncodePostedData(v);
 								}
 							});
 						}
 
 						var ajaxOptions = $.extend({
-								url: $.isFunction(url) ? url.call($t, postdata[idname], editOrAdd, postdata, o) : url,
-								type: $.isFunction(o.mtype) ? o.mtype.call($t, editOrAdd, o, postdata[idname], postdata) : o.mtype,
-								//data: $.isFunction(o.serializeEditData) ? o.serializeEditData.call($t,postdata) :  postdata,
+								url: $.jgrid.isFunction(url) ? url.call($t, postdata[idname], editOrAdd, postdata, o) : url,
+								type: $.jgrid.isFunction(o.mtype) ? o.mtype.call($t, editOrAdd, o, postdata[idname], postdata) : o.mtype,
+								//data: $.jgrid.isFunction(o.serializeEditData) ? o.serializeEditData.call($t,postdata) :  postdata,
 								data: jgrid.serializeFeedback.call($t,
-									$.isFunction(o.serializeEditData) ? o.serializeEditData : p.serializeEditData,
+									$.jgrid.isFunction(o.serializeEditData) ? o.serializeEditData : p.serializeEditData,
 									"jqGridAddEditSerializeEditData",
 									postdata),
 								complete: function (jqXHR, textStatus) {
@@ -988,7 +988,7 @@
 									if ((jqXHR.status >= 300 && jqXHR.status !== 304) || (jqXHR.status === 0 && jqXHR.readyState === 4)) {
 										ret[0] = false;
 										ret[1] = $self.triggerHandler("jqGridAddEditErrorTextFormat", [jqXHR, editOrAdd]);
-										if ($.isFunction(o.errorTextFormat)) {
+										if ($.jgrid.isFunction(o.errorTextFormat)) {
 											ret[1] = o.errorTextFormat.call($t, jqXHR, editOrAdd);
 										} else {
 											ret[1] = textStatus + " Status: '" + jqXHR.statusText + "'. Error code: " + jqXHR.status;
@@ -998,7 +998,7 @@
 										// execute aftersubmit with the returned data from server
 										ret = $self.triggerHandler("jqGridAddEditAfterSubmit", [jqXHR, postdata, editOrAdd]);
 										if (ret == null || ret === true) { ret = successResult; }
-										if (ret[0] && $.isFunction(o.afterSubmit)) {
+										if (ret[0] && $.jgrid.isFunction(o.afterSubmit)) {
 											ret = o.afterSubmit.call($t, jqXHR, postdata, editOrAdd);
 											if (ret == null || ret === true) { ret = successResult; }
 										}
@@ -1057,7 +1057,7 @@
 												hideModal();
 											}
 										}
-										if ($.isFunction(o.afterComplete)) {
+										if ($.jgrid.isFunction(o.afterComplete)) {
 											var copydata = jqXHR;
 											setTimeout(function () {
 												$self.triggerHandler("jqGridAddEditAfterComplete", [copydata, postdata, $(frmgr), editOrAdd]);
@@ -1088,7 +1088,7 @@
 							}, jgrid.ajaxOptions, o.ajaxEditOptions);
 
 						if (!ajaxOptions.url && !o.useDataProxy) {
-							if ($.isFunction(p.dataProxy)) {
+							if ($.jgrid.isFunction(p.dataProxy)) {
 								o.useDataProxy = true;
 							} else {
 								ret[0] = false;
@@ -1877,8 +1877,8 @@
 							postdata = $delData.text(), //the pair is name=val1,val2,...
 							formRowIds = $delData.data("rowids"),
 							cs = {};
-						if ($.isFunction(o.onclickSubmit)) { cs = o.onclickSubmit.call($t, o, postdata, formRowIds) || {}; }
-						if ($.isFunction(o.beforeSubmit)) { ret = o.beforeSubmit.call($t, postdata, formRowIds) || ret; }
+						if ($.jgrid.isFunction(o.onclickSubmit)) { cs = o.onclickSubmit.call($t, o, postdata, formRowIds) || {}; }
+						if ($.jgrid.isFunction(o.beforeSubmit)) { ret = o.beforeSubmit.call($t, postdata, formRowIds) || ret; }
 						if (ret[0] && !o.processing) {
 							o.processing = true;
 							opers = p.prmNames;
@@ -1897,16 +1897,16 @@
 							$(this).addClass(activeClass);
 							var url = o.url || p.editurl,
 								ajaxOptions = $.extend({
-									url: $.isFunction(url) ? url.call($t, postd[idname], postd, o, formRowIds) : url,
+									url: $.jgrid.isFunction(url) ? url.call($t, postd[idname], postd, o, formRowIds) : url,
 									type: o.mtype,
-									data: $.isFunction(o.serializeDelData) ? o.serializeDelData.call($t, postd, formRowIds) : postd,
+									data: $.jgrid.isFunction(o.serializeDelData) ? o.serializeDelData.call($t, postd, formRowIds) : postd,
 									complete: function (jqXHR, textStatus) {
 										var i;
 										$self.jqGrid("progressBar", { method: "hide", loadtype: o.delui });
 										$("#dData", dtbl + "_2").removeClass(activeClass);
 										if ((jqXHR.status >= 300 && jqXHR.status !== 304) || (jqXHR.status === 0 && jqXHR.readyState === 4)) {
 											ret[0] = false;
-											if ($.isFunction(o.errorTextFormat)) {
+											if ($.jgrid.isFunction(o.errorTextFormat)) {
 												ret[1] = o.errorTextFormat.call($t, jqXHR);
 											} else {
 												ret[1] = textStatus + " Status: '" + jqXHR.statusText + "'. Error code: " + jqXHR.status;
@@ -1914,7 +1914,7 @@
 										} else {
 											// data is posted successful
 											// execute aftersubmit with the returned data from server
-											if ($.isFunction(o.afterSubmit)) {
+											if ($.jgrid.isFunction(o.afterSubmit)) {
 												ret = o.afterSubmit.call($t, jqXHR, postd, formRowIds) || [true];
 											}
 										}
@@ -1953,7 +1953,7 @@
 
 
 							if (!ajaxOptions.url && !o.useDataProxy) {
-								if ($.isFunction(p.dataProxy)) {
+								if ($.jgrid.isFunction(p.dataProxy)) {
 									o.useDataProxy = true;
 								} else {
 									ret[0] = false;
@@ -2188,7 +2188,7 @@
 					},
 					onAdd = function () {
 						if (!hasOneFromClasses(this, disabledClass)) {
-							if ($.isFunction(o.addfunc)) {
+							if ($.jgrid.isFunction(o.addfunc)) {
 								o.addfunc.call($t, pAdd);
 							} else {
 								base.editGridRow.call($self, "new", pAdd);
@@ -2200,7 +2200,7 @@
 						if (!hasOneFromClasses(this, disabledClass)) {
 							var sr = p.selrow;
 							if (sr) {
-								if ($.isFunction(func)) {
+								if ($.jgrid.isFunction(func)) {
 									func.call($t, sr, param);
 								} else {
 									base[methodName].call($self, sr, param);
@@ -2227,7 +2227,7 @@
 								dr = p.selrow;
 							}
 							if (dr) {
-								if ($.isFunction(o.delfunc)) {
+								if ($.jgrid.isFunction(o.delfunc)) {
 									o.delfunc.call($t, dr, pDel);
 								} else {
 									base.delGridRow.call($self, dr, pDel);
@@ -2240,7 +2240,7 @@
 					},
 					onSearch = function () {
 						if (!hasOneFromClasses(this, disabledClass)) {
-							if ($.isFunction(o.searchfunc)) {
+							if ($.jgrid.isFunction(o.searchfunc)) {
 								o.searchfunc.call($t, pSearch);
 							} else {
 								base.searchGrid.call($self, pSearch);
@@ -2250,7 +2250,7 @@
 					},
 					onRefresh = function () {
 						if (!hasOneFromClasses(this, disabledClass)) {
-							if ($.isFunction(o.beforeRefresh)) { o.beforeRefresh.call($t); }
+							if ($.jgrid.isFunction(o.beforeRefresh)) { o.beforeRefresh.call($t); }
 							p.search = false;
 							p.resetsearch = true;
 							try {
@@ -2259,7 +2259,7 @@
 									try {
 										$("#fbox_" + gridIdEscaped.substr(1)).jqFilter("resetFilter");
 									} catch (ignore) { }
-									if ($.isFunction($t.clearToolbar)) { $t.clearToolbar(false); }
+									if ($.jgrid.isFunction($t.clearToolbar)) { $t.clearToolbar(false); }
 								}
 							} catch (ignore) { }
 							switch (o.refreshstate) {
@@ -2271,7 +2271,7 @@
 									$self.trigger("reloadGrid", [$.extend({}, o.reloadGridOptions || {}, { current: true })]);
 									break;
 							}
-							if ($.isFunction(o.afterRefresh)) { o.afterRefresh.call($t); }
+							if ($.jgrid.isFunction(o.afterRefresh)) { o.afterRefresh.call($t); }
 						}
 						return false;
 					},
@@ -2435,7 +2435,7 @@
 						.attr("title", o.title || "")
 						.click(function (e) {
 							if (!hasOneFromClasses(this, disabledClass)) {
-								if ($.isFunction(o.onClickButton)) { o.onClickButton.call($t, o, e); }
+								if ($.jgrid.isFunction(o.onClickButton)) { o.onClickButton.call($t, o, e); }
 							}
 							return false;
 						})

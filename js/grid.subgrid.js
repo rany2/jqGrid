@@ -101,7 +101,7 @@
 		},
 		addSubGridCell: function (pos, iRow, rowid, item) {
 			var self = this[0], subGridOptions = self.p.subGridOptions,
-				hasSubgrid = $.isFunction(subGridOptions.hasSubgrid) ?
+				hasSubgrid = $.jgrid.isFunction(subGridOptions.hasSubgrid) ?
 					subGridOptions.hasSubgrid.call(self, { rowid: rowid, iRow: iRow, iCol: pos, data: item }) :
 					true;
 			return self.p == null ? "" :
@@ -215,7 +215,7 @@
 							if (!p.subgridtype) {
 								p.subgridtype = p.datatype;
 							}
-							if ($.isFunction(p.subgridtype)) {
+							if ($.jgrid.isFunction(p.subgridtype)) {
 								p.subgridtype.call(ts, dp);
 							} else {
 								p.subgridtype = p.subgridtype.toLowerCase();
@@ -225,7 +225,7 @@
 								case "json":
 									$.ajax($.extend({
 										type: p.mtype,
-										url: $.isFunction(p.subGridUrl) ? p.subGridUrl.call(ts, dp) : p.subGridUrl,
+										url: $.jgrid.isFunction(p.subGridUrl) ? p.subGridUrl.call(ts, dp) : p.subGridUrl,
 										dataType: p.subgridtype,
 										context: sid,
 										data: jgrid.serializeFeedback.call(ts, p.serializeSubGridData, "jqGridSerializeSubGridData", dp),
@@ -242,7 +242,7 @@
 													p.loadSubgridError;
 
 											ts.grid.endReq.call(ts);
-											if ($.isFunction(loadError)) {
+											if ($.jgrid.isFunction(loadError)) {
 												loadError.call(ts, jqXHR, textStatus, errorThrown);
 											}
 											// for compatibility only
@@ -283,7 +283,7 @@
 									"'><span class='" + iconClass("openicon") + "'></span></td><td colspan='" + parseInt(p.colNames.length - nhc, 10) +
 									"' class='" + tdDataClasses + "'><div id='" + subgridDivId + "' class='tablediv'></div></td></tr>");
 								$(ts).triggerHandler("jqGridSubGridRowExpanded", [subgridDivId, rowid]);
-								if ($.isFunction(p.subGridRowExpanded)) {
+								if ($.jgrid.isFunction(p.subGridRowExpanded)) {
 									p.subGridRowExpanded.call(ts, subgridDivId, rowid);
 								} else {
 									populatesubgrid(tr);

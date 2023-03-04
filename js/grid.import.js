@@ -90,7 +90,7 @@
 								}
 							}
 						} else {
-							(jgrid.defaults != null && $.isFunction(jgrid.defaults.fatalError) ? jgrid.defaults.fatalError : alert)("xml2json or parse are not present");
+							(jgrid.defaults != null && $.jgrid.isFunction(jgrid.defaults.fatalError) ? jgrid.defaults.fatalError : alert)("xml2json or parse are not present");
 						}
 					},
 					jsonConvert = function (jsonstr, options) {
@@ -122,7 +122,7 @@
 								if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 									xmlConvert(jqXHR.responseXML, this);
 									$($t).triggerHandler("jqGridImportComplete", [jqXHR, this]);
-									if ($.isFunction(this.importComplete)) {
+									if ($.jgrid.isFunction(this.importComplete)) {
 										this.importComplete(jqXHR);
 									}
 								}
@@ -136,7 +136,7 @@
 							if (xmld) {
 								xmlConvert(xmld, o);
 								$($t).triggerHandler("jqGridImportComplete", [xmld, o]);
-								if ($.isFunction(o.importComplete)) {
+								if ($.jgrid.isFunction(o.importComplete)) {
 									o.importComplete(xmld);
 								}
 								o.impstring = null;
@@ -155,7 +155,7 @@
 									if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
 										jsonConvert(jqXHR.responseText, this);
 										$($t).triggerHandler("jqGridImportComplete", [jqXHR, this]);
-										if ($.isFunction(this.importComplete)) {
+										if ($.jgrid.isFunction(this.importComplete)) {
 											this.importComplete(jqXHR);
 										}
 									}
@@ -167,7 +167,7 @@
 						if (o.impstring && typeof o.impstring === "string") {
 							jsonConvert(o.impstring, o);
 							$($t).triggerHandler("jqGridImportComplete", [o.impstring, o]);
-							if ($.isFunction(o.importComplete)) {
+							if ($.jgrid.isFunction(o.importComplete)) {
 								o.importComplete(o.impstring);
 							}
 							o.impstring = null;

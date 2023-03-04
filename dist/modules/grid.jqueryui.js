@@ -311,7 +311,7 @@
 		sortableColumns: function (tblrow) {
 			return this.each(function () {
 				var ts = this, p = ts.p, tid = jqID(p.id);
-				if (!p || !p.sortable || !$.isFunction($.fn.sortable)) { return; }
+				if (!p || !p.sortable || !$.jgrid.isFunction($.fn.sortable)) { return; }
 				function start() { p.disableClick = true; }
 				var sortableOpts = {
 					tolerance: "pointer",
@@ -344,7 +344,7 @@
 						});
 
 						$(ts).jqGrid("remapColumns", permutation, true, true);
-						if ($.isFunction(p.sortable.update)) {
+						if ($.jgrid.isFunction(p.sortable.update)) {
 							p.sortable.update(permutation);
 						}
 						setTimeout(function () { p.disableClick = false; }, 50);
@@ -352,7 +352,7 @@
 				};
 				if (p.sortable.options) {
 					$.extend(sortableOpts, p.sortable.options);
-				} else if ($.isFunction(p.sortable)) {
+				} else if ($.jgrid.isFunction(p.sortable)) {
 					p.sortable = { "update": p.sortable };
 				}
 				if (sortableOpts.start) {
@@ -392,7 +392,7 @@
 					if ($.fn[fn]) {
 						$.fn[fn].apply(obj, $.makeArray(arguments).slice(2));
 					}
-				} else if ($.isFunction(fn)) {
+				} else if ($.jgrid.isFunction(fn)) {
 					fn.apply(obj, $.makeArray(arguments).slice(2));
 				}
 			}
@@ -490,7 +490,7 @@
 					if (opts.done) {
 						opts.done.call($self, perm);
 					}
-					if (p.groupHeader && (typeof p.groupHeader === "object" || $.isFunction(p.groupHeader))) {
+					if (p.groupHeader && (typeof p.groupHeader === "object" || $.jgrid.isFunction(p.groupHeader))) {
 						$self.jqGrid("destroyGroupHeader", false);
 						p.groupHeader.groupHeaders = multiselectData.gh; // use modified groupHeader
 						if (p.pivotOptions != null && p.pivotOptions.colHeaders != null && p.pivotOptions.colHeaders.length > 1) {
@@ -532,7 +532,7 @@
 				if ($UiMultiselect && $UiMultiselect.defaults) {
 					if (!jgrid._multiselect) {
 						// should be in language file
-						(jgrid.defaults != null && $.isFunction(jgrid.defaults.fatalError) ? jgrid.defaults.fatalError : alert)("Multiselect plugin loaded after jqGrid. Please load the plugin before the jqGrid!");
+						(jgrid.defaults != null && $.jgrid.isFunction(jgrid.defaults.fatalError) ? jgrid.defaults.fatalError : alert)("Multiselect plugin loaded after jqGrid. Please load the plugin before the jqGrid!");
 						return;
 					}
 					// ??? the next line uses $.ui.multiselect.defaults which will be typically undefined
@@ -564,7 +564,7 @@
 					ghItem = gh[k];
 					for (j = 0; j < ghItem.numberOfColumns; j++) {
 						iCol = p.iColByName[ghItem.startColumnName] + j;
-						colHeader[iCol] = $.isFunction(opts.buildItemText) ?
+						colHeader[iCol] = $.jgrid.isFunction(opts.buildItemText) ?
 								opts.buildItemText.call($self[0], {
 									iCol: iCol,
 									cm: colModel[iCol],
@@ -580,7 +580,7 @@
 			// fill colHeader for all other columns
 			for (iCol = 0; iCol < nCol; iCol++) {
 				if (colHeader[iCol] === undefined) {
-					colHeader[iCol] = $.isFunction(opts.buildItemText) ?
+					colHeader[iCol] = $.jgrid.isFunction(opts.buildItemText) ?
 							opts.buildItemText.call($self[0], {
 								iCol: iCol,
 								cm: colModel[iCol],
@@ -599,9 +599,9 @@
 				}
 			});
 
-			dopts = $.isFunction(opts.dlog_opts) ? opts.dlog_opts.call($self, opts) : opts.dlog_opts;
+			dopts = $.jgrid.isFunction(opts.dlog_opts) ? opts.dlog_opts.call($self, opts) : opts.dlog_opts;
 			call(opts.dlog, selector, dopts);
-			mopts = $.isFunction(opts.msel_opts) ? opts.msel_opts.call($self, opts) : opts.msel_opts;
+			mopts = $.jgrid.isFunction(opts.msel_opts) ? opts.msel_opts.call($self, opts) : opts.msel_opts;
 			call(opts.msel, select, mopts);
 
 			// fix height of elements of the multiselect widget
@@ -657,12 +657,12 @@
 							parseInt(ui.item.data("optionLink").val(), 10)
 						);
 						ui.item.css({ width: "", height: "" });
-						if ($.isFunction(opts.sortUpdate)) {
+						if ($.jgrid.isFunction(opts.sortUpdate)) {
 							opts.sortUpdate.call(self, e, ui);
 						}
 					});
 				}
-				if ($.isFunction(opts.init)) {
+				if ($.jgrid.isFunction(opts.init)) {
 					opts.init.call(self, multiselectData);
 				}
 			}
@@ -681,11 +681,11 @@
 						items: ">tbody>.jqgrow"
 					},
 					opts || {});
-					if (opts.start && $.isFunction(opts.start)) {
+					if (opts.start && $.jgrid.isFunction(opts.start)) {
 						opts._start_ = opts.start;
 						delete opts.start;
 					} else { opts._start_ = false; }
-					if (opts.update && $.isFunction(opts.update)) {
+					if (opts.update && $.jgrid.isFunction(opts.update)) {
 						opts._update_ = opts.update;
 						delete opts.update;
 					} else { opts._update_ = false; }
@@ -716,7 +716,7 @@
 						}
 					};
 					$($t).sortable(opts);
-					/*if ($.isFunction($.fn.disableSelection)) {
+					/*if ($.jgrid.isFunction($.fn.disableSelection)) {
 						// The method disableSelection exists starting with jQuery UI 1.6,
 						// but it's declared as deprecated since jQuery UI 1.9
 						// see http://jqueryui.com/upgrade-guide/1.9/#deprecated-disableselection-and-enableselection
@@ -742,7 +742,7 @@
 				if (!$.fn.draggable || !$.fn.droppable) { return; }
 				function updateDnD() {
 					var datadnd = $.data($t, "dnd");
-					$("tr.jqgrow:not(.ui-draggable)", $t).draggable($.isFunction(datadnd.drag) ? datadnd.drag.call($($t), datadnd) : datadnd.drag);
+					$("tr.jqgrow:not(.ui-draggable)", $t).draggable($.jgrid.isFunction(datadnd.drag) ? datadnd.drag.call($($t), datadnd) : datadnd.drag);
 				}
 				var appender = "<table id='jqgrid_dnd' class='ui-jqgrid-dnd'></table>";
 				if ($("#jqgrid_dnd")[0] === undefined) {
@@ -777,7 +777,7 @@
 								$("td", ui.helper).each(function (iCol) {
 									this.style.width = $t.grid.headers[iCol].width + "px";
 								});
-								if (opts1.onstart && $.isFunction(opts1.onstart)) { opts1.onstart.call($($t), ev, ui); }
+								if (opts1.onstart && $.jgrid.isFunction(opts1.onstart)) { opts1.onstart.call($($t), ev, ui); }
 							},
 							stop: function (ev, ui) {
 								var i, ids;
@@ -790,7 +790,7 @@
 								for (i = 0; i < $.data($t, "dnd").connectWith.length; i++) {
 									$($.data($t, "dnd").connectWith[i]).jqGrid("delRowData", "jqg_empty_row");
 								}
-								if (opts1.onstop && $.isFunction(opts1.onstop)) { opts1.onstop.call($($t), ev, ui); }
+								if (opts1.onstop && $.jgrid.isFunction(opts1.onstop)) { opts1.onstop.call($($t), ev, ui); }
 							}
 						}, opts1.drag_opts || {});
 					},
@@ -833,7 +833,7 @@
 									} catch (ignore) { }
 								}
 								ui.helper.dropped = true;
-								if (opts1.beforedrop && $.isFunction(opts1.beforedrop)) {
+								if (opts1.beforedrop && $.jgrid.isFunction(opts1.beforedrop)) {
 									//parameters to this callback - event, element, data to be inserted, sender, reciever
 									// should return object which will be inserted into the reciever
 									var datatoinsert = opts1.beforedrop.call(this, ev, ui, getdata, $("#" + jqID($t.p.id)), $(this));
@@ -842,7 +842,7 @@
 								if (ui.helper.dropped) {
 									var grid;
 									if (opts1.autoid) {
-										if ($.isFunction(opts1.autoid)) {
+										if ($.jgrid.isFunction(opts1.autoid)) {
 											grid = opts1.autoid.call(this, getdata, {
 												rowid: rowid,
 												ev: ev,
@@ -857,7 +857,7 @@
 									$("#" + jqID(this.id)).jqGrid("addRowData", grid, getdata, opts1.droppos);
 									getdata[$t.p.localReader.id] = grid;
 								}
-								if (opts1.ondrop && $.isFunction(opts1.ondrop)) { opts1.ondrop.call(this, ev, ui, getdata); }
+								if (opts1.ondrop && $.jgrid.isFunction(opts1.ondrop)) { opts1.ondrop.call(this, ev, ui, getdata); }
 							}
 						}, opts1.drop_opts || {});
 					},
@@ -894,7 +894,7 @@
 				$t.p.jqgdnd = true;
 				for (j = 0; j < opts.connectWith.length; j++) {
 					cn = opts.connectWith[j];
-					$(cn).droppable($.isFunction(opts.drop) ? opts.drop.call($($t), opts) : opts.drop);
+					$(cn).droppable($.jgrid.isFunction(opts.drop) ? opts.drop.call($($t), opts) : opts.drop);
 				}
 			});
 		},
@@ -909,7 +909,7 @@
 				} else {
 					opts._alsoResize_ = false;
 				}
-				if (opts.stop && $.isFunction(opts.stop)) {
+				if (opts.stop && $.jgrid.isFunction(opts.stop)) {
 					opts._stop_ = opts.stop;
 					delete opts.stop;
 				} else {

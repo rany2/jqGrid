@@ -115,7 +115,7 @@
 			return this.each(function () {
 				var self = this, p = self.p, grid = self.grid, propOrMethod, clearArray = jgrid.clearArray,
 					hasOwnProperty = Object.prototype.hasOwnProperty;
-				if ($.isFunction(grid.emptyRows)) {
+				if ($.jgrid.isFunction(grid.emptyRows)) {
 					grid.emptyRows.call(self, true, true); // this work quick enough and reduce the size of memory leaks if we have someone
 				}
 
@@ -439,7 +439,7 @@
 							 * $elem.val() instead of $elem.text() used in the common case of
 							 * formatter. So we have to make manual conversion of searching filed
 							 * used for integer/number/currency. The code will be duplicate */
-							if (cm.stype === "custom" && $.isFunction(searchoptions.custom_value) && $elem.length > 0 && $elem[0].nodeName.toUpperCase() === "SPAN") {
+							if (cm.stype === "custom" && $.jgrid.isFunction(searchoptions.custom_value) && $elem.length > 0 && $elem[0].nodeName.toUpperCase() === "SPAN") {
 								v = searchoptions.custom_value.call($t, $elem.children(".customelement").first(), "get");
 							} else if (cm.stype === "select") {
 								if ($elem.prop("multiple")) {
@@ -555,14 +555,14 @@
 							$self.jqGrid("setGridParam", { url: p.searchurl });
 						}
 						var bsr = $self.triggerHandler("jqGridToolbarBeforeSearch") === "stop" ? true : false;
-						if (!bsr && $.isFunction(o.beforeSearch)) { bsr = o.beforeSearch.call($t); }
+						if (!bsr && $.jgrid.isFunction(o.beforeSearch)) { bsr = o.beforeSearch.call($t); }
 						if (!bsr) {
 							$self.jqGrid("setGridParam", { search: sd })
 								.trigger("reloadGrid", [$.extend({ page: 1 }, o.reloadGridSearchOptions || {})]);
 						}
 						if (saveurl) { $self.jqGrid("setGridParam", { url: saveurl }); }
 						$self.triggerHandler("jqGridToolbarAfterSearch");
-						if ($.isFunction(o.afterSearch)) { o.afterSearch.call($t); }
+						if ($.jgrid.isFunction(o.afterSearch)) { o.afterSearch.call($t); }
 					},
 					clearToolbar = function (trigger) {
 						var sdata = {}, j = 0, nm;
@@ -608,7 +608,7 @@
 									}
 									break;
 								case "custom":
-									if ($.isFunction(searchoptions.custom_value) && $elem.length > 0 && $elem[0].nodeName.toUpperCase() === "SPAN") {
+									if ($.jgrid.isFunction(searchoptions.custom_value) && $elem.length > 0 && $elem[0].nodeName.toUpperCase() === "SPAN") {
 										if (v === undefined) {
 											v = "";
 										}
@@ -644,7 +644,7 @@
 							$self.jqGrid("setGridParam", { url: p.searchurl });
 						}
 						var bcv = $self.triggerHandler("jqGridToolbarBeforeClear") === "stop" ? true : false;
-						if (!bcv && $.isFunction(o.beforeClear)) { bcv = o.beforeClear.call($t); }
+						if (!bcv && $.jgrid.isFunction(o.beforeClear)) { bcv = o.beforeClear.call($t); }
 						if (!bcv) {
 							if (trigger) {
 								$self.jqGrid("setGridParam", { search: sd })
@@ -653,7 +653,7 @@
 						}
 						if (saveurl) { $self.jqGrid("setGridParam", { url: saveurl }); }
 						$self.triggerHandler("jqGridToolbarAfterClear");
-						if ($.isFunction(o.afterClear)) { o.afterClear.call($t); }
+						if ($.jgrid.isFunction(o.afterClear)) { o.afterClear.call($t); }
 					},
 					toggleToolbar = function () {
 						var trow = $("tr.ui-search-toolbar", grid.hDiv),
@@ -807,7 +807,7 @@
 							soptions.clearSearch = this.stype === "text" ? true : false;
 						}
 						if (soptions.clearSearch) {
-							var csv = $.isFunction(o.resetTitle) ?
+							var csv = $.jgrid.isFunction(o.resetTitle) ?
 									o.resetTitle.call($t, {
 										options: o,
 										cm: cm,
@@ -1035,7 +1035,7 @@
 							case "custom":
 								$tdInput.append("<span style='width:100%;padding:0;box-sizing:border-box;' name='" + (cm.index || cm.name) + "' id='" + getId(cm.name) + "'/>");
 								try {
-									if ($.isFunction(soptions.custom_element)) {
+									if ($.jgrid.isFunction(soptions.custom_element)) {
 										var celm = soptions.custom_element.call($t, soptions.defaultValue !== undefined ? soptions.defaultValue : "", soptions);
 										if (celm) {
 											celm = $(celm).addClass("customelement");
@@ -1170,7 +1170,7 @@
 												1 :
 												(filter.data === onOffValue.off ? 0 : -1)
 										);
-									} else if ($input.find(".customelement").length > 0 && $.isFunction(searchoptions.custom_value)) {
+									} else if ($input.find(".customelement").length > 0 && $.jgrid.isFunction(searchoptions.custom_value)) {
 										var oldValue = searchoptions.custom_value.call($t, $input.find(".customelement").first(), "get");
 										if (filter.data === "" && searchoptions.defaultValue !== undefined) {
 											filter.data = searchoptions.defaultValue;
@@ -1542,7 +1542,7 @@
 						$(grid.fbDiv).scrollTop($(this).scrollTop());
 					});
 					$(grid.fbDiv).on("mousewheel.setFrozenColumns DOMMouseScroll.setFrozenColumns", function (e) {
-						grid.bDiv.scrollTop += $.isFunction(o.mouseWheel) ?
+						grid.bDiv.scrollTop += $.jgrid.isFunction(o.mouseWheel) ?
 							o.mouseWheel.call($t, e) :
 							e.type === "mousewheel" ?
 								-e.originalEvent.wheelDelta / 10 :

@@ -70,14 +70,14 @@
 				oMuligrid = args[0];
 			} else {
 				if (keys !== undefined) { oMuligrid.keys = keys; }
-				if ($.isFunction(oneditfunc)) { oMuligrid.oneditfunc = oneditfunc; }
-				if ($.isFunction(successfunc)) { oMuligrid.successfunc = successfunc; }
+				if ($.jgrid.isFunction(oneditfunc)) { oMuligrid.oneditfunc = oneditfunc; }
+				if ($.jgrid.isFunction(successfunc)) { oMuligrid.successfunc = successfunc; }
 				if (url !== undefined) { oMuligrid.url = url; }
 				if (extraparam != null) { oMuligrid.extraparam = extraparam; }
-				if ($.isFunction(aftersavefunc)) { oMuligrid.aftersavefunc = aftersavefunc; }
-				if ($.isFunction(errorfunc)) { oMuligrid.errorfunc = errorfunc; }
-				if ($.isFunction(afterrestorefunc)) { oMuligrid.afterrestorefunc = afterrestorefunc; }
-				if ($.isFunction(beforeEditRow)) { oMuligrid.beforeEditRow = beforeEditRow; }
+				if ($.jgrid.isFunction(aftersavefunc)) { oMuligrid.aftersavefunc = aftersavefunc; }
+				if ($.jgrid.isFunction(errorfunc)) { oMuligrid.errorfunc = errorfunc; }
+				if ($.jgrid.isFunction(afterrestorefunc)) { oMuligrid.afterrestorefunc = afterrestorefunc; }
+				if ($.jgrid.isFunction(beforeEditRow)) { oMuligrid.beforeEditRow = beforeEditRow; }
 				// last two not as param, but as object (sorry)
 				//if (restoreAfterError !== undefined) { oMuligrid.restoreAfterError = restoreAfterError; }
 				//if (mtype !== undefined) { oMuligrid.mtype = mtype || "POST"; }
@@ -228,7 +228,7 @@
 			// Compatible mode old versions
 			var args = $.makeArray(arguments).slice(1), o = {}, $t = this[0], $self = $($t),
 				p = $t != null ? $t.p : null, editOrAdd, infoDialog = jgrid.info_dialog,
-				isFunction = $.isFunction,
+				isFunction = $.jgrid.isFunction,
 				fatalErrorFunction = jgrid.defaults != null && isFunction(jgrid.defaults.fatalError) ? jgrid.defaults.fatalError : alert;
 			if (!$t.grid || p == null) { return; }
 
@@ -464,7 +464,7 @@
 			if ($.type(args[0]) === "object") {
 				oMuligrid = args[0];
 			} else {
-				if ($.isFunction(afterrestorefunc)) { oMuligrid.afterrestorefunc = afterrestorefunc; }
+				if ($.jgrid.isFunction(afterrestorefunc)) { oMuligrid.afterrestorefunc = afterrestorefunc; }
 			}
 
 			// End compatible
@@ -486,7 +486,7 @@
 					}
 				}
 				if (fr >= 0) {
-					if ($.isFunction($.fn.datepicker)) {
+					if ($.jgrid.isFunction($.fn.datepicker)) {
 						try {
 							$("input.hasDatepicker", "#" + jgrid.jqID(ind.id)).datepicker("hide");
 						} catch (ignore) { }
@@ -534,12 +534,12 @@
 					}, jgrid.inlineEdit, p.inlineEditing || {}, oMuligrid || {});
 				if (!editFeedback.call($t, o, "beforeAddRow", o.addRowParams)) { return; }
 
-				o.rowID = $.isFunction(o.rowID) ? o.rowID.call($t, o) : ((o.rowID != null) ? o.rowID : jgrid.randId());
+				o.rowID = $.jgrid.isFunction(o.rowID) ? o.rowID.call($t, o) : ((o.rowID != null) ? o.rowID : jgrid.randId());
 				if (o.useDefValues === true) {
 					$(p.colModel).each(function () {
 						if (this.editoptions && this.editoptions.defaultValue) {
 							var opt = this.editoptions.defaultValue;
-							o.initdata[this.name] = $.isFunction(opt) ? opt.call($t, o) : opt;
+							o.initdata[this.name] = $.jgrid.isFunction(opt) ? opt.call($t, o) : opt;
 						}
 					});
 				}

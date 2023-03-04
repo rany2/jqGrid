@@ -1608,7 +1608,7 @@
 			return true;
 		},
 		detectRowEditing: function (rowid) {
-			//var i, savedRowInfo, tr, self = this, rows = self.rows, p = self.p, isFunction = $.isFunction;
+			//var i, savedRowInfo, tr, self = this, rows = self.rows, p = self.p, isFunction = $.jgrid.isFunction;
 			if (!this.grid || this.p == null || this.p.editingInfo == null || this.p.editingInfo[rowid] == null) {
 				return null; // this is not a grid or the row is not editing now
 			}
@@ -1649,7 +1649,7 @@
 		},
 		enumEditableCells: function (tr, mode, callback) {
 			var self = this, grid = self.grid, rows = self.rows, p = self.p;
-			if (grid == null || rows == null || p == null || tr == null || tr.rowIndex == null || !tr.id || !$.isFunction(callback)) {
+			if (grid == null || rows == null || p == null || tr == null || tr.rowIndex == null || !tr.id || !$.jgrid.isFunction(callback)) {
 				return null; // this is not a grid or tr is not tr
 			}
 			var iCol, colModel = p.colModel, nCol = colModel.length, cm, nm, options, id, pos, item,
@@ -1711,7 +1711,7 @@
 							isEditable = p.editingInfo[tr.id].editable[nm];
 						} else {
 							isEditable = cm.editable;
-							isEditable = $.isFunction(isEditable) ?
+							isEditable = $.jgrid.isFunction(isEditable) ?
 									isEditable.call(self, options) :
 									isEditable;
 						}
@@ -1770,7 +1770,7 @@
 					break;
 				case "custom":
 					try {
-						if ($.isFunction(customValue)) {
+						if ($.jgrid.isFunction(customValue)) {
 							result = customValue.call($t, $dataFiled.find(".customelement"), "get");
 							if (result === undefined) {
 								throw "e2";
@@ -1791,10 +1791,10 @@
 								errorText = e.message;
 								break;
 						}
-						if (infoDialog && $.isFunction(infoDialog)) {
+						if (infoDialog && $.jgrid.isFunction(infoDialog)) {
 							infoDialog.call($t, getRes("errors.errcap"), errorText, getRes("edit.bClose"));
 						} else {
-							($.isFunction(defaults.fatalError) ? defaults.fatalError : alert)(errorText);
+							($.jgrid.isFunction(defaults.fatalError) ? defaults.fatalError : alert)(errorText);
 						}
 					}
 					break;
@@ -1811,7 +1811,7 @@
 		},
 		getAccessor: function (obj, expr) {
 			var ret, p, prm = [], i;
-			if ($.isFunction(expr)) { return expr(obj); }
+			if ($.jgrid.isFunction(expr)) { return expr(obj); }
 			if (obj != null && obj.hasOwnProperty(expr)) {
 				return obj[expr];
 			}
@@ -1836,7 +1836,7 @@
 		},
 		getXmlData: function (obj, expr, returnObj) {
 			var m = typeof expr === "string" ? expr.match(/^(.*)\[(\w+)\]$/) : null;
-			if ($.isFunction(expr)) { return expr(obj); }
+			if ($.jgrid.isFunction(expr)) { return expr(obj); }
 			if (m && m[2]) {
 				// m[2] is the attribute selector
 				// m[1] is an optional element selector
@@ -2079,7 +2079,7 @@
 							findSortKey = function ($cell) {
 								return jgrid.parseDateToNumber.call(context, dfmt, $cell);
 							};
-						} else if ($.isFunction(type)) {
+						} else if ($.jgrid.isFunction(type)) {
 							findSortKey = type;
 						} else {
 							findSortKey = function ($cell) {
@@ -2093,7 +2093,7 @@
 							ab = findSortKey.call(context, ab, v);
 							_sortData.push({ vSort: ab, data: v, index: index });
 						});
-						if ($.isFunction(sfunc)) {
+						if ($.jgrid.isFunction(sfunc)) {
 							_sortData.sort(function (a, b) {
 								return sfunc.call(context, a.vSort, b.vSort, newDir, a.data, b.data);
 							});
@@ -2184,7 +2184,7 @@
 					};
 					this.select = function (f) {
 						self.execute();
-						if ($.isFunction(f)) {
+						if ($.jgrid.isFunction(f)) {
 							var results = [];
 							$.each(_data, function (i, v) {
 								results.push(f(v));
@@ -2398,13 +2398,13 @@
 			if (eventResult == null || typeof eventResult !== "object") {
 				eventResult = postData; // uses original postData
 			}
-			return $.isFunction(callback) ? callback.call(self, eventResult) : eventResult;
+			return $.jgrid.isFunction(callback) ? callback.call(self, eventResult) : eventResult;
 		},
 		fullBoolFeedback: function (callback, eventName) {
 			var self = this, args = $.makeArray(arguments).slice(2), result = $(self).triggerHandler(eventName, args);
 
 			result = (result === false || result === "stop") ? false : true;
-			if ($.isFunction(callback)) {
+			if ($.jgrid.isFunction(callback)) {
 				var callbackResult = callback.apply(self, args);
 				if (callbackResult === false || callbackResult === "stop") {
 					result = false;
@@ -2439,10 +2439,10 @@
 				disabledStateClasses = $self.jqGrid("getGuiStyles", "states.disabled"),
 				getClasses = function (ascOrDesc) {
 					var cm = p.colModel[iCol],
-						sortIconFunc = cm != null && $.isFunction(cm.sortIconName) ?
+						sortIconFunc = cm != null && $.jgrid.isFunction(cm.sortIconName) ?
 							cm.sortIconName :
 							p.sortIconName;
-					var sortIconName = $.isFunction(sortIconFunc) ?
+					var sortIconName = $.jgrid.isFunction(sortIconFunc) ?
 							sortIconFunc.call(ts, {
 								order: ascOrDesc,
 								iCol: iCol,
@@ -2494,7 +2494,7 @@
 			if (p == null) {
 				return nData;
 			}
-			if ($.isFunction(cm.convertOnSave)) {
+			if ($.jgrid.isFunction(cm.convertOnSave)) {
 				return cm.convertOnSave.call(this, { newValue: nData, cm: cm, oldValue: oData, id: id, item: item, iCol: iCol });
 			}
 			if (typeof oData !== "boolean" && typeof oData !== "number") {
@@ -2543,11 +2543,11 @@
 				addMulti = function (rowid, pos, irow, checked, item) {
 					var checkboxHtml = "&nbsp;", hasCbox = true,
 						callbackParams = { rowid: rowid, iRow: irow, iCol: pos, data: item, checked: checked };
-					if ($.isFunction(p.hasMultiselectCheckBox)) {
+					if ($.jgrid.isFunction(p.hasMultiselectCheckBox)) {
 						hasCbox = p.hasMultiselectCheckBox.call(self, callbackParams);
 					}
 					if (hasCbox) {
-						checkboxHtml = $.isFunction(p.checkboxHtml) ?
+						checkboxHtml = $.jgrid.isFunction(p.checkboxHtml) ?
 							p.checkboxHtml.call(self, callbackParams) :
 							"<input type='checkbox' id='jqg_" + p.id + "_" + rowid +
 							"' class='cbox' name='jqg_" + p.id + "_" + rowid + "'" +
@@ -2602,7 +2602,7 @@
 					if ($j.groupingPrepare && !grp._locgr) {
 						$j.groupingPrepare.call($self, rd, i);
 					}
-					hiderow = $.isFunction(grp.groupCollapse) ?
+					hiderow = $.jgrid.isFunction(grp.groupCollapse) ?
 						grp.groupCollapse.call(self, {
 							group: grp.groups[grp.groups.length - 1],
 							rowid: idr,
@@ -2783,7 +2783,7 @@
 			// TODO: verify that pin.locale exists in locales. If it's not exist then change it to
 			// en-US or some other which exist
 			var ts = this, localData, localDataStr, $self0 = $(ts),
-				isFunction = $.isFunction, isArray = $.isArray, extend = $.extend, inArray = $.inArray,
+				isFunction = $.jgrid.isFunction, isArray = $.isArray, extend = $.extend, inArray = $.inArray,
 				trim = $.trim, each = $.each, setSelection = $j.setSelection, getGridRes = $j.getGridRes,
 				fatalErrorFunction = isFunction(defaults.fatalError) ? defaults.fatalError : alert,
 				locale = pin.locale || defaults.locale || "en-US",
@@ -4828,7 +4828,7 @@
 									url: p.url,
 									type: p.mtype,
 									dataType: dt,
-									//data: $.isFunction(p.serializeGridData)? p.serializeGridData.call(self,p.postData) : p.postData,
+									//data: $.jgrid.isFunction(p.serializeGridData)? p.serializeGridData.call(self,p.postData) : p.postData,
 									data: jgrid.serializeFeedback.call(ts, p.serializeGridData, "jqGridSerializeGridData", p.postData),
 									success: function (data, textStatus, jqXHR) {
 										p.jqXhr = null;
@@ -6854,7 +6854,7 @@
 					cm = $t.p.colModel[iCol],
 					isEditable = cm.editable;
 
-				if ($.isFunction(isEditable)) {
+				if ($.jgrid.isFunction(isEditable)) {
 					isEditable = isEditable.call($t, {
 						rowid: rowid,
 						id: stripPref($t.p.idPrefix, rowid),
@@ -7020,7 +7020,7 @@
 							if (vl !== undefined) {
 								if (p.datatype === "local" && oData != null) {
 									vl = convertOnSaveLocally.call(t, vl, cm, oData[nm], id, oData, i);
-									if ($.isFunction(cm.saveLocally)) {
+									if ($.jgrid.isFunction(cm.saveLocally)) {
 										cm.saveLocally.call(t, { newValue: vl, newItem: lcdata, oldItem: oData, id: id, cm: cm, cmName: nm, iCol: i });
 									} else {
 										lcdata[nm] = vl;
@@ -7216,7 +7216,7 @@
 							nm = cm.name;
 							if (nm !== "rn" && nm !== "cb" && nm !== "subgrid") {
 								v = convertOnSaveLocally.call(t, getAccessor(data, nm), cm, undefined, id, {}, i);
-								if ($.isFunction(cm.saveLocally)) {
+								if ($.jgrid.isFunction(cm.saveLocally)) {
 									cm.saveLocally.call(t, { newValue: v, newItem: lcdata, oldItem: {}, id: id, rowid: rowid, cm: cm, cmName: nm, iCol: i });
 								} else if (v !== undefined) {
 									lcdata[nm] = v;
@@ -7409,7 +7409,7 @@
 				var $self = $(this), p = this.p, i, iCol, th, $th, thHeight, columnNameOrIndex,
 					$thDiv, $inconsDiv, $textWrapper, $sortOrder, widthIcon, widthText,
 					thPaddingLeft, thPaddingRight, thPaddingTop, thPaddingBottom,
-					nColFrozen = p.frozenColumns && $.isFunction(base.getNumberOfFrozenColumns) ? $self.jqGrid("getNumberOfFrozenColumns") : 0,
+					nColFrozen = p.frozenColumns && $.jgrid.isFunction(base.getNumberOfFrozenColumns) ? $self.jqGrid("getNumberOfFrozenColumns") : 0,
 					removeInconsDiv = function () {
 						$inconsDiv.detach();
 						/*$inconsDiv.each(function () {
@@ -7518,7 +7518,7 @@
 				options = options || {};
 
 				var sw = show === "" ? true : false, groupHeader = p.groupHeader,
-					gh = groupHeader && (typeof groupHeader === "object" || $.isFunction(groupHeader));
+					gh = groupHeader && (typeof groupHeader === "object" || $.jgrid.isFunction(groupHeader));
 
 				if (gh && !options.skipSetGroupHeaders) {
 					base.destroyGroupHeader.call($self, false);
@@ -8064,7 +8064,7 @@
 
 							if (item != null) { // p.datatype === "local"
 								v = convertOnSaveLocally.call($t, nData, cm, item[cm.name], id, item, iCol);
-								if ($.isFunction(cm.saveLocally)) {
+								if ($.jgrid.isFunction(cm.saveLocally)) {
 									cm.saveLocally.call($t, { newValue: v, newItem: item, oldItem: item, id: id, cm: cm, cmName: cm.name, iCol: iCol });
 								} else {
 									item[cm.name] = v;
@@ -8243,7 +8243,7 @@
 							// no onUpKey or onDownKey and the corresponding events
 							var callback = o["on" + name + (callbackSuffix || "")];
 							$self.triggerHandler("jqGridKey" + name, [p.selrow]);
-							if ($.isFunction(callback)) {
+							if ($.jgrid.isFunction(callback)) {
 								callback.call($t, p.selrow);
 							}
 						},
