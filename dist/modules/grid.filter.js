@@ -638,7 +638,7 @@
 							// value of checkbox contains checked value
 							rule.data = $(this).data("offval");
 						}
-						if ($.isArray(rule.data)) {
+						if (Array.isArray(rule.data)) {
 							rule.data = rule.data.join(p.inFilterSeparator || ",");
 						}
 						that.onchange(); // signals that the filter has changed

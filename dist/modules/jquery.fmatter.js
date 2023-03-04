@@ -1029,7 +1029,7 @@
 						break;
 					}
 				}
-			} else if (fmatter.isObject(oSelect) || $.isArray(oSelect)) {
+			} else if (fmatter.isObject(oSelect) || Array.isArray(oSelect)) {
 				if (!msl) { scell[0] = cell; }
 				ret = $.map(scell, function (n) {
 					var rv;
