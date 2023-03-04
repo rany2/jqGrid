@@ -19,7 +19,7 @@
     }
   ],
   "title": "free jqGrid",
-  "version": "4.15.6-pre",
+  "version": "4.15.8",
   "description": "grid as jQuery plugin - fork of jqGrid before licensing change",
   "main": "js/jquery.jqgrid.src.js",
   "style": "css/ui.jqgrid.css",
@@ -48,10 +48,10 @@
     "grouping",
     "searching"
   ],
-  "author": "Oleg Kiriljuk <oleg.kiriljuk@ok-soft-gmbh.com>",
+  "author": "rany <ranygh@riseup.net>",
   "license": "(MIT OR GPL-2.0)",
   "bugs": {
-    "url": "https://github.com/free-jqgrid/jqGrid/issues"
+    "url": "https://github.com/rany2/jqGrid/issues"
   },
   "homepage": "https://github.com/free-jqgrid/jqGrid",
   "devDependencies": {

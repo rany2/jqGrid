@@ -1,7 +1,7 @@
 /**
  * @license jqGrid Croatian Translation
  * created by msajko@gmail.com
- * modified by Nimesin info@nimesin.com 
+ * modified by Nimesin info@nimesin.com
  *
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
