@@ -1,7 +1,7 @@
 {
   "name": "free-jqgrid-fork",
   "description": "maintained version of free-jqGrid",
-  "version": "4.15.8",
+  "version": "4.15.9",
   "main": [
     "js/jquery.jqgrid.min.js",
     "js/jquery.jqgrid.src.js",

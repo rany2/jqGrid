@@ -1,5 +1,5 @@
 # maintained version of free-jqGrid
-[![npm version](https://img.shields.io/npm/v/free-jqgrid-fork.svg?style=flat)](https://www.npmjs.com/package/free-jqgrid-fork)&nbsp;[![CDNJS](https://img.shields.io/cdnjs/v/free-jqgrid.svg)](https://cdnjs.com/libraries/free-jqgrid-fork/)&nbsp;
+[![npm version](https://img.shields.io/npm/v/free-jqgrid-fork.svg?style=flat)](https://www.npmjs.com/package/free-jqgrid-fork)&nbsp;
 ---
 jqGrid is a popular jQuery Plugin for displaying and editing data in tabular form. It has some other more sophisticated features, like subgrids, TreeGrids, grouping and so on.
 
@@ -15,15 +15,15 @@ Read [Wiki](https://github.com/free-jqgrid/jqGrid/wiki) for more detailed inform
 
 One can install the package with respect of [npm](https://www.npmjs.com/package/free-jqgrid-fork) by using "npm install free-jqgrid-fork".
 
-Free jqGrid is is available from [jsDelivr CDN](https://www.jsdelivr.com/projects/free-jqgrid-fork) and [cdnjs](https://cdnjs.com/libraries/free-jqgrid-fork). Thus one can use it directly from Internet by including for example the URLs like
+Free jqGrid is is available from [jsDelivr CDN](https://www.jsdelivr.com/projects/free-jqgrid-fork) and [unpkg](https://unpkg.com/free-jqgrid-fork). Thus one can use it directly from Internet by including for example the URLs like
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid-fork@4.15.8/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/npm/free-jqgrid-fork@4.15.8/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid-fork@4.15.9/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/npm/free-jqgrid-fork@4.15.9/js/jquery.jqgrid.min.js"></script>
 ```
 or
 ```html
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid-fork/4.15.8/css/ui.jqgrid.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid-fork/4.15.8/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/free-jqgrid-fork@4.15.9/css/ui.jqgrid.min.css">
+<script src="https://unpkg.com/free-jqgrid-fork@4.15.9/js/jquery.jqgrid.min.js"></script>
 ```
 **The locale file is optional**. One can, but one don't need to include `grid.locale-en.min.js`, because the same information is already included in the `jquery.jqgrid.min.js` (or `jquery.jqgrid.src.js`).
 
