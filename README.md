@@ -17,13 +17,13 @@ One can install the package with respect of [npm](https://www.npmjs.com/package/
 
 Free jqGrid is is available from [jsDelivr CDN](https://www.jsdelivr.com/projects/free-jqgrid-fork) and [unpkg](https://unpkg.com/free-jqgrid-fork). Thus one can use it directly from Internet by including for example the URLs like
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid-fork@4.15.9/css/ui.jqgrid.min.css">
-<script src="https://cdn.jsdelivr.net/npm/free-jqgrid-fork@4.15.9/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid-fork@4.15.11/css/ui.jqgrid.min.css">
+<script src="https://cdn.jsdelivr.net/npm/free-jqgrid-fork@4.15.11/js/jquery.jqgrid.min.js"></script>
 ```
 or
 ```html
-<link rel="stylesheet" href="https://unpkg.com/free-jqgrid-fork@4.15.9/css/ui.jqgrid.min.css">
-<script src="https://unpkg.com/free-jqgrid-fork@4.15.9/js/jquery.jqgrid.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/free-jqgrid-fork@4.15.11/css/ui.jqgrid.min.css">
+<script src="https://unpkg.com/free-jqgrid-fork@4.15.11/js/jquery.jqgrid.min.js"></script>
 ```
 **The locale file is optional**. One can, but one don't need to include `grid.locale-en.min.js`, because the same information is already included in the `jquery.jqgrid.min.js` (or `jquery.jqgrid.src.js`).
 
