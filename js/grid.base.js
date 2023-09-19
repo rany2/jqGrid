@@ -1010,7 +1010,7 @@
 			return typeof value === "function";
 		},
 		trim: function (value) {
-			return String.prototype.trim.call(value);
+ 		    return value ? String.prototype.trim.call(value) : "";
 		},
 		htmlDecode: function (value) {
 			if (value && (value === "&nbsp;" ||
