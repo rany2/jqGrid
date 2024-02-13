@@ -129,9 +129,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-# misc build stuff
-/js/jquery.jqgrid.src.js
-*.map
-*.min.*
-min
